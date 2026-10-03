@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Estilos Globais -->
-  <link rel="stylesheet" href="css/style.css?v=2.9">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
 </head>
 <body>
 
@@ -121,11 +121,14 @@
     <!-- Sidebar de Navegação -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <img src="assets/brasao_goa.png" alt="Brasão GOA" class="sidebar-logo">
-        <div class="sidebar-brand">
-          <h1>SISGER DBM1/GOA</h1>
-          <span>DBM 1 • CBMERJ</span>
+        <div class="sidebar-header-brand" style="display: flex; align-items: center; gap: 12px; flex: 1;">
+          <img src="assets/brasao_goa.png" alt="Brasão GOA" class="sidebar-logo">
+          <div class="sidebar-brand">
+            <h1>SISGER DBM1/GOA</h1>
+            <span>DBM 1 • CBMERJ</span>
+          </div>
         </div>
+        <button type="button" class="btn-icon mobile-sidebar-close" id="mobile-sidebar-close" aria-label="Fechar menu" title="Fechar menu">✕</button>
       </div>
 
       <nav class="sidebar-nav">
@@ -199,14 +202,21 @@
       </div>
     </aside>
 
+    <!-- Backdrop escuro para fechar o menu no celular ao tocar fora -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
     <!-- Área Principal de Conteúdo -->
     <main class="main-wrapper">
 
       <!-- Topbar -->
       <header class="topbar">
         <div class="topbar-left">
-          <button class="btn-icon" id="mobile-menu-toggle" style="display: none;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <button type="button" class="btn-icon mobile-hamburger-btn" id="mobile-menu-toggle" aria-label="Abrir menu de navegação" title="Menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
           </button>
           <h2 class="topbar-title" id="topbar-page-title">SISGER DBM1/GOA</h2>
           <div class="topbar-status">
@@ -1695,9 +1705,9 @@
   </div>
 
   <!-- Scripts do Portal -->
-  <script src="js/config.js?v=2.9"></script>
-  <script src="js/aero_weather.js?v=2.9"></script>
-  <script src="js/app.js?v=2.9"></script>
-  <script src="js/cms.js?v=2.9"></script>
+  <script src="js/config.js?v=3.0"></script>
+  <script src="js/aero_weather.js?v=3.0"></script>
+  <script src="js/app.js?v=3.0"></script>
+  <script src="js/cms.js?v=3.0"></script>
 </body>
 </html>

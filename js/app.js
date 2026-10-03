@@ -45,14 +45,54 @@ function initRouter() {
     });
   });
 
-  // Mobile menu toggle
+  // Gerenciamento do Menu Mobile Clássico (Hamburguer)
   const mobileToggle = document.getElementById("mobile-menu-toggle");
   const sidebar = document.querySelector(".sidebar");
-  if (mobileToggle && sidebar) {
-    mobileToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
+  const backdrop = document.getElementById("sidebar-backdrop");
+  const closeBtn = document.getElementById("mobile-sidebar-close");
+
+  function openMobileMenu() {
+    if (sidebar) sidebar.classList.add("open");
+    if (backdrop) backdrop.classList.add("active");
+    document.body.classList.add("menu-mobile-open");
+  }
+
+  function closeMobileMenu() {
+    if (sidebar) sidebar.classList.remove("open");
+    if (backdrop) backdrop.classList.remove("active");
+    document.body.classList.remove("menu-mobile-open");
+  }
+
+  window.fecharMenuMobile = closeMobileMenu;
+
+  if (mobileToggle) {
+    mobileToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (sidebar && sidebar.classList.contains("open")) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
     });
   }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeMobileMenu();
+    });
+  }
+
+  if (backdrop) {
+    backdrop.addEventListener("click", closeMobileMenu);
+  }
+
+  // Fechar ao pressionar tecla Esc
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sidebar && sidebar.classList.contains("open")) {
+      closeMobileMenu();
+    }
+  });
 }
 
 function navigateTo(viewId) {
@@ -73,9 +113,9 @@ function navigateTo(viewId) {
     topbarTitle.textContent = text;
   }
 
-  const sidebar = document.querySelector(".sidebar");
-  if (sidebar && sidebar.classList.contains("open")) {
-    sidebar.classList.remove("open");
+  // Fechar o menu automaticamente ao selecionar qualquer tela no celular
+  if (window.fecharMenuMobile) {
+    window.fecharMenuMobile();
   }
 
   // Lazy loaders
