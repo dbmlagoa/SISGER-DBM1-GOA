@@ -272,22 +272,22 @@
           <!-- Card de Status do Checklist em Tempo Real -->
           <div class="checklist-status-card" id="checklist-card-box">
             <div class="checklist-info">
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+              <div class="checklist-title-row">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: var(--orange-rescue); flex-shrink: 0;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14h6"></path><path d="M9 18h6"></path><path d="M9 10h.01"></path></svg>
-                <h3 style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #fff;">Check List - Material de Pronto Emprego</h3>
+                <h3>Check List - Material de Pronto Emprego</h3>
               </div>
-              <p id="checklist-status-desc" style="margin: 0; font-size: 0.86rem; color: var(--text-secondary);">
+              <p id="checklist-status-desc">
                 Consultando planilha de prontidão operacional no Google Drive...
               </p>
             </div>
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div class="checklist-actions">
               <div id="checklist-live-badge" class="status-indicator-badge badge-warning">
                 <span class="pulse-dot"></span> CHECANDO PLANILHA...
               </div>
-              <button type="button" class="btn-secondary" onclick="verificarChecklistManual()" style="padding: 9px 14px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;" title="Consultar planilha agora">
+              <button type="button" class="btn-secondary btn-verificar-chk" onclick="verificarChecklistManual()" title="Consultar planilha agora">
                 🔄 Verificar
               </button>
-              <a href="https://forms.gle/SuLZ4WrT7N7UUVRQ7" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 10px 20px; font-size: 0.88rem; font-weight: 700; box-shadow: 0 4px 14px rgba(255, 107, 0, 0.3);">
+              <a href="https://forms.gle/SuLZ4WrT7N7UUVRQ7" target="_blank" rel="noopener noreferrer" class="btn-primary btn-preencher-chk">
                 Preencher Formulário ↗
               </a>
             </div>
