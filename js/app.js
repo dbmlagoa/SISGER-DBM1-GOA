@@ -938,7 +938,11 @@ async function enviarManutencao() {
       document.getElementById("mnt-fotos-preview").innerHTML = "";
       setTimeout(fecharFormManutencao, 2500);
     } else {
-      mostrarStatusManutencao("Erro: " + (json.message || "falha ao registrar."), "erro");
+      let msg = json.message || "falha ao registrar.";
+      if (msg.includes("SpreadsheetApp") || msg.includes("permissão") || msg.includes("auth/spreadsheets")) {
+        msg = "⚠️ Autorização pendente no Google Apps Script: abra o Apps Script e execute a função 'autorizarCriarPlanilhaObras' para liberar o acesso ao Google Planilhas.";
+      }
+      mostrarStatusManutencao(msg, "erro");
     }
   } catch (err) {
     console.error(err);
