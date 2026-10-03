@@ -1,0 +1,771 @@
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIG-Aeromédico - Gestão de Insumos</title>
+    
+    <!-- 1. ESCUDO DE PROTEÇÃO PARA GOOGLE SITES (Evita crash fatal de LocalStorage em iframes restritos) -->
+    <script>
+        try { window.localStorage.getItem(''); } catch (e) {
+            Object.defineProperty(window, 'localStorage', { value: { getItem: function() { return null; }, setItem: function() {}, removeItem: function() {} } });
+        }
+        try { window.sessionStorage.getItem(''); } catch (e) {
+            Object.defineProperty(window, 'sessionStorage', { value: { getItem: function() { return null; }, setItem: function() {}, removeItem: function() {} } });
+        }
+        
+        // Detetor visual de erros críticos para não deixar o utilizador num carregamento infinito
+        window.addEventListener('error', function(event) {
+            const root = document.getElementById('root');
+            if(root && root.innerHTML.includes('A estabelecer ligação')) {
+                root.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#f8fafc;padding:2rem;"><div style="background:#fee2e2;color:#991b1b;padding:2rem;border-radius:1rem;text-align:center;font-family:sans-serif;max-width:400px;"><b>Erro Crítico no Carregamento:</b><br/><br/>' + event.message + '<br/><br/><span style="font-size:11px;color:#ef4444;">Por favor, verifique a sua ligação à internet ou limpe a cache do navegador.</span></div></div>';
+            }
+        });
+    </script>
+
+    <!-- 2. BIBLIOTECAS ATUALIZADAS PARA SERVIDORES DE ALTA ESTABILIDADE (CDNJS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        #root { min-height: 100vh; display: flex; flex-direction: column; }
+        @media (max-width: 768px) {
+            .modal-content { border-radius: 1.5rem 1.5rem 0 0 !important; }
+        }
+        input, select, textarea { font-size: 16px !important; }
+        .pointer-events-none { pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="flex h-screen items-center justify-center bg-slate-50">
+            <div class="text-center">
+                <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-blue-900 font-bold animate-pulse uppercase tracking-tighter">A estabelecer ligação...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        // O SEU URL DE IMPLANTAÇÃO DO GOOGLE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsRBEHsZ6ngBlmLpB6_52Ho1iJwvcM1tL14O0RHuFfs2PEk4mr-mkZGSJqB57QEMp7/exec";
+
+        const Icon = ({ name, className = "w-5 h-5" }) => {
+            const paths = {
+                dashboard: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10",
+                package: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z M12 22V12",
+                history: "M12 8v4l3 3 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
+                plus: "M12 5v14 M5 12h14",
+                search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
+                alert: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
+                shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+                x: "M18 6L6 18 M6 6l12 12",
+                sync: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
+                clock: "M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
+                edit: "M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z",
+                wrench: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
+                menu: "M4 6h16M4 12h16M4 18h16",
+                download: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            };
+            return (
+                <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d={paths[name] || ""}></path>
+                </svg>
+            );
+        };
+
+        const App = () => {
+            const [currentUser, setCurrentUser] = useState(null);
+            const [authMode, setAuthMode] = useState('login'); 
+            const [authLoading, setAuthLoading] = useState(false);
+
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [items, setItems] = useState([]);
+            const [transactions, setTransactions] = useState([]);
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState(null);
+            
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const isSubmittingRef = useRef(false);
+
+            const [isModalOpen, setIsModalOpen] = useState(false);
+            const [modalType, setModalType] = useState('item');
+            const [selectedItem, setSelectedItem] = useState(null);
+            const [movementType, setMovementType] = useState('saída');
+            const [searchTerm, setSearchTerm] = useState('');
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+            const formatBRDate = (dateString) => {
+                if (!dateString) return '---';
+                const [year, month, day] = dateString.split('T')[0].split('-');
+                if (!year || !month || !day) return dateString;
+                return `${day}/${month}/${year}`;
+            };
+
+            const stats = useMemo(() => {
+                const currentYear = new Date().getFullYear();
+                const criticalItems = items.filter(i => Number(i.currentStock) < Number(i.minStock));
+                const expiredItems = items.filter(i => {
+                    if (!i.expirationDate) return false;
+                    const [year, month, day] = i.expirationDate.split('-');
+                    if (!year || !month || !day) return false;
+                    const expDate = new Date(year, month - 1, day);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); 
+                    return expDate < today;
+                });
+                const damageReports = transactions.filter(t => t.type === 'AVARIA' || t.type === 'ALTERAÇÃO' || t.type === 'MANUTENÇÃO');
+                return { totalItems: items.length, criticalItems, expiredItems, totalMovements: transactions.length, damageReports };
+            }, [items, transactions]);
+
+            const handleAuth = async (e) => {
+                e.preventDefault();
+                setAuthLoading(true);
+                const f = e.target;
+                const payload = authMode === 'login' ? 
+                    { rg: f.rg.value, password: f.password.value } : 
+                    { rg: f.rg.value, warName: f.warName.value, graduation: f.graduation.value, password: f.password.value };
+                
+                try {
+                    const action = authMode === 'login' ? 'loginUser' : 'registerUser';
+                    const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, [authMode === 'login' ? 'credentials' : 'user']: payload }) });
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        if (authMode === 'login') {
+                            setCurrentUser(data.user);
+                        } else {
+                            alert('Cadastro realizado com sucesso! Faça o login.');
+                            setAuthMode('login');
+                        }
+                    } else {
+                        alert(data.message || 'Erro de autenticação');
+                    }
+                } catch (err) {
+                    alert("Erro de conexão ao servidor.");
+                } finally {
+                    setAuthLoading(false);
+                }
+            };
+
+            const fetchData = async () => {
+                setLoading(true);
+                setError(null);
+                
+                try {
+                    const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
+                    const data = await response.json();
+                    
+                    if (data.items) {
+                        setItems(data.items.map(row => ({
+                            id: row[0], name: String(row[1]), manufacturer: row[2], 
+                            expirationDate: row[3] ? String(row[3]).split('T')[0] : '', 
+                            lifespan: row[4], serialLot: row[5], 
+                            currentStock: Number(row[6]) || 0, minStock: Number(row[7]) || 0
+                        })));
+                    }
+                    if (data.transactions) {
+                        setTransactions(data.transactions.map(row => ({
+                            movementDate: row[0], itemName: row[1], type: row[2], quantity: Number(row[3]),
+                            bearer: { graduation: row[4], warName: row[5], rg: row[6] },
+                            recorder: { warName: row[7], rg: row[9] || "Não Inf." },
+                            reason: row[8]
+                        })).reverse());
+                    }
+                } catch (e) { setError("Erro de ligação à base de dados. Tente novamente."); } 
+                finally { setLoading(false); }
+            };
+
+            useEffect(() => { 
+                if (currentUser) { fetchData(); }
+            }, [currentUser]);
+
+            const handleAction = async (action, payload) => {
+                if (isSubmittingRef.current) return;
+                isSubmittingRef.current = true;
+                setIsSubmitting(true);
+                
+                try {
+                    if (action === 'registerMovement') {
+                        setItems(prev => prev.map(i => i.id === payload.trans.itemId ? { ...i, currentStock: payload.newStock } : i));
+                        setTransactions(prev => [{
+                            ...payload.trans,
+                            recorder: { ...payload.trans.recorder, rg: payload.trans.recorder.rg || "Não Inf." }
+                        }, ...prev]);
+                    } else if (action === 'saveItem') {
+                        setItems(prev => {
+                            const exists = prev.find(i => i.id === payload.item.id);
+                            if (exists) return prev.map(i => i.id === payload.item.id ? payload.item : i);
+                            return [...prev, payload.item];
+                        });
+                    }
+
+                    await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, ...payload }) });
+                    setIsModalOpen(false);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    await fetchData();
+                } catch (err) { 
+                    alert("Falha na operação. Verifique a sua conexão."); 
+                    await fetchData(); 
+                } finally {
+                    isSubmittingRef.current = false;
+                    setIsSubmitting(false);
+                }
+            };
+
+            const saveItem = (e) => {
+                e.preventDefault();
+                if (isSubmittingRef.current) return;
+                const f = e.target;
+                const item = {
+                    id: selectedItem?.id || "ID-" + Date.now(),
+                    name: f.name.value, manufacturer: f.manufacturer.value,
+                    expirationDate: f.expirationDate.value, lifespan: 0,
+                    serialLot: f.serialLot.value, currentStock: Number(f.currentStock.value), minStock: Number(f.minStock.value)
+                };
+                handleAction("saveItem", { item });
+            };
+
+            const registerMovement = (e) => {
+                e.preventDefault();
+                if (isSubmittingRef.current) return;
+                
+                const f = e.target;
+                const item = items.find(i => i.id === f.itemId.value);
+                const qty = Number(f.quantity.value);
+                const finalType = modalType === 'damage' ? f.type_alt.value : movementType;
+                
+                const newStock = (finalType === 'AVARIA' || finalType === 'ALTERAÇÃO' || finalType === 'MANUTENÇÃO') 
+                    ? item.currentStock : (finalType === 'entrada' ? item.currentStock + qty : item.currentStock - qty);
+                
+                if (newStock < 0) {
+                    alert("Erro: Carga insuficiente para efetuar saída.");
+                    return;
+                }
+
+                const trans = {
+                    itemId: item.id, itemName: item.name, type: finalType,
+                    quantity: qty, reason: f.reason.value, movementDate: f.movementDate.value,
+                    bearer: { graduation: f.b_grad?.value || "---", warName: f.b_name?.value || "N/A", rg: f.b_rg?.value || "---" },
+                    recorder: { warName: currentUser.warName, rg: currentUser.rg }
+                };
+                
+                handleAction("registerMovement", { trans, newStock });
+            };
+
+            const filteredItems = useMemo(() => {
+                const term = String(searchTerm || '').toLowerCase();
+                return items.filter(i => 
+                    String(i.name || '').toLowerCase().includes(term) || 
+                    String(i.manufacturer || '').toLowerCase().includes(term) ||
+                    String(i.serialLot || '').toLowerCase().includes(term)
+                );
+            }, [items, searchTerm]);
+
+            const navigateToInventoryAndSearch = (term) => {
+                setSearchTerm(String(term || ''));
+                setActiveTab('inventory');
+            };
+
+            const generatePDF = () => {
+                setIsGeneratingPDF(true);
+                
+                setTimeout(async () => {
+                    const reportElement = document.getElementById('pdf-formal-report');
+                    
+                    const opt = {
+                        margin:       10, 
+                        filename:     `Relatorio_Necessidades_SIG-Aeromedico_${new Date().toISOString().split('T')[0]}.pdf`,
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2, useCORS: true },
+                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+                    
+                    try {
+                        await window.html2pdf().set(opt).from(reportElement).save();
+                    } catch (error) {
+                        alert('Erro ao gerar o relatório PDF. Verifique a ligação à internet.');
+                    } finally {
+                        setIsGeneratingPDF(false); 
+                    }
+                }, 500);
+            };
+
+            const NavItems = () => (
+                <div className="space-y-2">
+                    {[{id:'dashboard', l:'Início', i:'dashboard'}, {id:'inventory', l:'Prontuário', i:'package'}, {id:'movements', l:'Registros', i:'history'}].map(t => (
+                        <button key={t.id} onClick={() => { setActiveTab(t.id); setIsMobileMenuOpen(false); }} className={`flex items-center gap-3 w-full p-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === t.id ? 'bg-blue-800 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>
+                            <Icon name={t.i} /> {t.l}
+                        </button>
+                    ))}
+                </div>
+            );
+
+            if (!currentUser) {
+                return (
+                    <div className="flex h-screen items-center justify-center bg-slate-900 px-4">
+                        <div className="bg-white w-full max-w-md rounded-[2rem] p-8 shadow-2xl animate-in fade-in zoom-in duration-500">
+                            <div className="flex justify-center mb-6">
+                                <div className="bg-blue-900 p-4 rounded-2xl shadow-lg"><Icon name="shield" className="text-white w-8 h-8" /></div>
+                            </div>
+                            <h2 className="text-2xl font-black text-center text-slate-800 uppercase tracking-tighter mb-2">SIG-Aeromédico</h2>
+                            <p className="text-center text-xs font-bold text-slate-400 uppercase mb-8">{authMode === 'login' ? 'Acesso Restrito' : 'Registo de Militar'}</p>
+                            
+                            <form onSubmit={handleAuth} className="space-y-4">
+                                {authMode === 'register' && (
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <input name="graduation" required disabled={authLoading} placeholder="Graduação (Ex: Sgt)" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50" />
+                                        <input name="warName" required disabled={authLoading} placeholder="Nome de Guerra" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50" />
+                                    </div>
+                                )}
+                                <input name="rg" required disabled={authLoading} type="text" inputMode="numeric" pattern="[0-9]*" onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} placeholder="RG do Militar (Apenas Números)" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:ring-4 focus:ring-blue-50" />
+                                <input name="password" required disabled={authLoading} type="password" placeholder="Senha" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:ring-4 focus:ring-blue-50" />
+                                
+                                <button type="submit" disabled={authLoading} className="w-full py-4 bg-blue-900 text-white rounded-2xl font-black uppercase text-xs shadow-xl flex items-center justify-center gap-2 mt-2 hover:bg-blue-800 transition-colors disabled:opacity-50">
+                                    {authLoading ? <Icon name="sync" className="animate-spin w-4 h-4" /> : null}
+                                    {authLoading ? 'Aguarde...' : (authMode === 'login' ? 'Entrar no Sistema' : 'Criar Cadastro')}
+                                </button>
+                            </form>
+                            
+                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} disabled={authLoading} className="w-full mt-6 text-[10px] font-bold text-blue-600 uppercase tracking-widest hover:underline disabled:opacity-50">
+                                {authMode === 'login' ? 'Não tem acesso? Cadastre-se' : 'Voltar para o Login'}
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="flex h-screen overflow-hidden text-slate-800 bg-slate-50 flex-col lg:flex-row relative">
+                    
+                    {/* Header Mobile */}
+                    <header className="lg:hidden bg-slate-900 text-white p-4 flex items-center justify-between z-50">
+                        <div className="flex items-center gap-2"><Icon name="shield" className="text-blue-500" /><h1 className="font-black text-sm uppercase">SIG-Aeromédico</h1></div>
+                        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2"><Icon name={isMobileMenuOpen ? "x" : "menu"} /></button>
+                    </header>
+
+                    {isMobileMenuOpen && (
+                        <div className="lg:hidden fixed inset-0 z-40 bg-slate-900/95 pt-20 px-6 animate-in slide-in-from-top duration-300">
+                            <div className="mb-6 bg-slate-800 p-4 rounded-2xl border border-slate-700 text-center">
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Logado como</p>
+                                <p className="font-black text-sm text-white uppercase">{currentUser.graduation} {currentUser.warName}</p>
+                                <p className="text-[10px] font-bold text-slate-500 tracking-tighter mt-1">RG: {currentUser.rg}</p>
+                                <button onClick={() => setCurrentUser(null)} className="mt-4 w-full py-3 bg-red-900/40 text-red-400 hover:text-white hover:bg-red-600 rounded-xl text-[10px] font-black uppercase transition-colors">Encerrar Sessão</button>
+                            </div>
+                            <NavItems />
+                            <button onClick={fetchData} disabled={loading} className="w-full flex items-center justify-center gap-2 p-4 bg-slate-800 text-white rounded-xl text-[9px] font-bold uppercase border border-slate-700 mt-6 disabled:opacity-50">
+                                <Icon name="sync" className={loading ? "animate-spin" : ""} /> Sincronizar Banco
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Sidebar Desktop */}
+                    <aside className="w-64 bg-slate-900 text-white flex flex-col p-6 hidden lg:flex shadow-2xl">
+                        <div className="flex items-center gap-3 mb-10"><div className="bg-blue-600 p-2 rounded-xl shadow-lg"><Icon name="shield" /></div><h1 className="font-black text-xl tracking-tighter uppercase">SIG-Aeromédico</h1></div>
+                        <NavItems />
+                        
+                        <div className="mt-auto">
+                            <div className="mb-4 bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Militar Autenticado</p>
+                                <p className="font-black text-[11px] uppercase text-blue-400">{currentUser.graduation} {currentUser.warName}</p>
+                                <p className="text-[9px] font-bold text-slate-500 tracking-tighter mt-1">RG: {currentUser.rg}</p>
+                                <button onClick={() => setCurrentUser(null)} className="mt-3 w-full py-2 bg-slate-900 text-slate-400 hover:text-white hover:bg-red-900/80 rounded-lg text-[9px] font-black uppercase transition-colors">Sair / Logout</button>
+                            </div>
+                            <button onClick={fetchData} disabled={loading} className="w-full flex items-center justify-center gap-2 p-4 bg-slate-800 rounded-xl text-[9px] font-bold uppercase border border-slate-700 hover:bg-slate-700 transition-all disabled:opacity-50">
+                                <Icon name="sync" className={loading ? "animate-spin" : ""} /> Sincronizar Banco
+                            </button>
+                        </div>
+                    </aside>
+
+                    <main className="flex-1 flex flex-col overflow-hidden relative">
+                        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scrollbar">
+                            {error && <div className="bg-red-600 text-white p-4 text-center text-[10px] font-black uppercase rounded-2xl animate-pulse">{error}</div>}
+
+                            {activeTab === 'dashboard' && (
+                                <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in duration-500">
+                                    <div className="flex justify-between items-center bg-white p-4 md:p-6 rounded-[2rem] border shadow-sm">
+                                        <div>
+                                            <h2 className="text-sm md:text-lg font-black text-slate-800 uppercase tracking-tighter">Painel Operacional</h2>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase">Resumo da situação de carga</p>
+                                        </div>
+                                        <button 
+                                            onClick={generatePDF} 
+                                            disabled={isGeneratingPDF}
+                                            className="bg-blue-900 text-white px-4 py-3 rounded-xl text-[10px] font-black uppercase flex items-center gap-2 shadow-lg hover:bg-blue-800 transition-colors disabled:opacity-50"
+                                        >
+                                            {isGeneratingPDF ? <Icon name="sync" className="animate-spin w-4 h-4" /> : <Icon name="download" className="w-4 h-4" />}
+                                            <span className="hidden md:inline">{isGeneratingPDF ? 'A Gerar PDF...' : 'Emitir Relatório PDF'}</span>
+                                            <span className="md:hidden">PDF</span>
+                                        </button>
+                                    </div>
+
+                                    <div id="dashboard-content" className="space-y-6 pb-4 pt-2 px-2 md:px-0 rounded-2xl">
+                                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6">
+                                            {[
+                                                {l:'Carga', v:stats.totalItems, c:'blue-900'},
+                                                {l:'Crítico', v:stats.criticalItems.length, c:'red-600', a:stats.criticalItems.length > 0},
+                                                {l:'Vencidos', v:stats.expiredItems.length, c:'amber-700', a:stats.expiredItems.length > 0},
+                                                {l:'Avarias', v:stats.damageReports.length, c:'orange-600', a:stats.damageReports.length > 0},
+                                                {l:'Livro', v:stats.totalMovements, c:'slate-800'}
+                                            ].map((s,i)=>(
+                                                <div key={i} className={`bg-white p-5 rounded-[1.5rem] border shadow-sm text-center ${s.a?'bg-red-50/20 border-red-100 animate-pulse':''}`}>
+                                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">{s.l}</p>
+                                                    <p className={`text-2xl font-black text-${s.c}`}>{s.v}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm break-inside-avoid">
+                                                <h3 className="text-[10px] font-black uppercase text-red-600 mb-6 flex items-center gap-2"><Icon name="alert" /> Reposição Urgente</h3>
+                                                <div className="space-y-3">
+                                                    {stats.criticalItems.length > 0 ? stats.criticalItems.map(i=>(
+                                                        <button key={i.id} onClick={() => navigateToInventoryAndSearch(i.serialLot || i.name)} className="w-full text-left p-4 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer rounded-2xl flex justify-between items-center mb-2 border border-red-100 focus:outline-none focus:ring-2 focus:ring-red-200">
+                                                            <div><p className="font-black text-[10px] text-red-900 uppercase leading-none">{i.name}</p><p className="text-[8px] text-red-400 mt-1 uppercase font-bold">Mínimo: {i.minStock}</p></div>
+                                                            <span className="bg-red-600 text-white px-3 py-1.5 rounded-xl font-black text-xs">{i.currentStock} un</span>
+                                                        </button>
+                                                    )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Saldos em conformidade</p>}
+                                                </div>
+                                            </div>
+                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm border-amber-100 bg-amber-50/5 break-inside-avoid">
+                                                <h3 className="text-[10px] font-black uppercase text-amber-600 mb-6 flex items-center gap-2"><Icon name="clock" /> Validade Operacional</h3>
+                                                <div className="space-y-3">
+                                                    {stats.expiredItems.length > 0 ? stats.expiredItems.map(i=>(
+                                                        <button key={i.id} onClick={() => navigateToInventoryAndSearch(i.serialLot || i.name)} className="w-full text-left p-4 bg-white hover:bg-amber-50 transition-colors cursor-pointer rounded-2xl flex justify-between items-center mb-2 border border-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-200">
+                                                            <div>
+                                                                <p className="font-black text-[10px] text-amber-900 uppercase leading-none">{i.name}</p>
+                                                                <p className="text-[8px] text-amber-600 mt-1 uppercase font-bold">Vencimento: {formatBRDate(i.expirationDate)}</p>
+                                                            </div>
+                                                            <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[8px] font-black uppercase">Substituir</span>
+                                                        </button>
+                                                    )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Prazos regularizados</p>}
+                                                </div>
+                                            </div>
+                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm break-inside-avoid">
+                                                <h3 className="text-[10px] font-black uppercase text-orange-600 mb-6 flex items-center gap-2"><Icon name="wrench" /> Avarias Ativas</h3>
+                                                <div className="space-y-3">
+                                                    {stats.damageReports.length > 0 ? stats.damageReports.slice(0,4).map((t,idx)=>(
+                                                        <button key={idx} onClick={() => navigateToInventoryAndSearch(t.itemName)} className="w-full text-left p-4 bg-orange-50 hover:bg-orange-100 transition-colors cursor-pointer rounded-2xl border border-orange-100 mb-2 focus:outline-none focus:ring-2 focus:ring-orange-200">
+                                                            <p className="font-black text-[10px] text-orange-900 uppercase leading-none">{t.itemName}</p>
+                                                            <p className="text-[8px] italic text-orange-700 mt-1 leading-tight">{t.reason}</p>
+                                                        </button>
+                                                    )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Sem avarias relatadas</p>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* SOBREPOSIÇÃO DURANTE A GERAÇÃO DO PDF */}
+                                    {isGeneratingPDF && (
+                                        <div className="fixed inset-0 z-[200] flex">
+                                            {/* TELA DE LOADING (Esconde o processo do usuário) */}
+                                            <div className="absolute inset-0 z-[210] bg-slate-50 flex flex-col items-center justify-center">
+                                                <div className="w-16 h-16 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mb-6"></div>
+                                                <h2 className="text-2xl font-black text-blue-900 uppercase tracking-tighter">A Formatar Documento</h2>
+                                                <p className="text-slate-500 text-[10px] font-bold mt-2 uppercase tracking-widest">Aguarde o download do PDF...</p>
+                                            </div>
+
+                                            {/* TEMPLATE DO RELATÓRIO (Fica atrás da tela de loading, mas perfeitamente visível para a captura de PDF) */}
+                                            <div className="absolute top-0 left-0 w-full z-[205] bg-white pointer-events-none flex justify-center">
+                                                <div id="pdf-formal-report" className="bg-white text-black p-6 w-[190mm] min-h-[297mm]">
+                                                    <div className="border-b-2 border-slate-800 pb-4 mb-8 text-center">
+                                                        <h1 className="text-2xl font-black uppercase mb-1">SIG-Aeromédico</h1>
+                                                        <h2 className="text-sm font-bold text-slate-600 uppercase tracking-widest">Relatório de Alterações e Necessidades Logísticas</h2>
+                                                        <div className="mt-4 flex justify-between text-[10px] text-slate-500">
+                                                            <span><strong>Data de Emissão:</strong> {new Date().toLocaleDateString('pt-PT')}</span>
+                                                            <span><strong>Militar Responsável:</strong> {currentUser?.graduation} {currentUser?.warName} (RG: {currentUser?.rg})</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-10">
+                                                        {/* Seção 1: Reposição */}
+                                                        <section>
+                                                            <h3 className="text-xs font-black uppercase text-red-700 border-b border-red-200 pb-2 mb-3">1. Solicitação de Reposição Urgente (Abaixo do Mínimo)</h3>
+                                                            {stats.criticalItems.length > 0 ? (
+                                                                <table className="w-full table-fixed text-left text-[10px] border-collapse break-words">
+                                                                    <thead>
+                                                                        <tr className="bg-red-50 text-red-900">
+                                                                            <th className="border border-red-200 p-2 w-[30%]">Insumo / Equipamento</th>
+                                                                            <th className="border border-red-200 p-2 w-[20%]">Marca</th>
+                                                                            <th className="border border-red-200 p-2 w-[20%]">Lote / Série</th>
+                                                                            <th className="border border-red-200 p-2 w-[15%] text-center">Carga Atual</th>
+                                                                            <th className="border border-red-200 p-2 w-[15%] text-center">Mínimo</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {stats.criticalItems.map(i => (
+                                                                            <tr key={i.id}>
+                                                                                <td className="border border-slate-200 p-2 font-bold">{i.name}</td>
+                                                                                <td className="border border-slate-200 p-2">{i.manufacturer || 'N/A'}</td>
+                                                                                <td className="border border-slate-200 p-2">{i.serialLot || 'N/A'}</td>
+                                                                                <td className="border border-slate-200 p-2 text-center text-red-600 font-bold">{i.currentStock} un</td>
+                                                                                <td className="border border-slate-200 p-2 text-center">{i.minStock} un</td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            ) : <p className="text-[10px] italic text-slate-500">Nenhum item em estado crítico no momento.</p>}
+                                                        </section>
+
+                                                        {/* Seção 2: Validade */}
+                                                        <section>
+                                                            <h3 className="text-xs font-black uppercase text-amber-700 border-b border-amber-200 pb-2 mb-3">2. Itens com Validade Operacional Excedida (Descarte/Troca)</h3>
+                                                            {stats.expiredItems.length > 0 ? (
+                                                                <table className="w-full table-fixed text-left text-[10px] border-collapse break-words">
+                                                                    <thead>
+                                                                        <tr className="bg-amber-50 text-amber-900">
+                                                                            <th className="border border-amber-200 p-2 w-[35%]">Insumo / Equipamento</th>
+                                                                            <th className="border border-amber-200 p-2 w-[20%]">Marca</th>
+                                                                            <th className="border border-amber-200 p-2 w-[20%]">Lote / Série</th>
+                                                                            <th className="border border-amber-200 p-2 w-[25%] text-center">Vencimento</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {stats.expiredItems.map(i => (
+                                                                            <tr key={i.id}>
+                                                                                <td className="border border-slate-200 p-2 font-bold">{i.name}</td>
+                                                                                <td className="border border-slate-200 p-2">{i.manufacturer || 'N/A'}</td>
+                                                                                <td className="border border-slate-200 p-2">{i.serialLot || 'N/A'}</td>
+                                                                                <td className="border border-slate-200 p-2 text-center text-amber-700 font-bold">{formatBRDate(i.expirationDate)}</td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            ) : <p className="text-[10px] italic text-slate-500">Nenhum item vencido detectado.</p>}
+                                                        </section>
+
+                                                        {/* Seção 3: Avarias */}
+                                                        <section>
+                                                            <h3 className="text-xs font-black uppercase text-orange-700 border-b border-orange-200 pb-2 mb-3">3. Relatório de Avarias e Alterações (Para Manutenção)</h3>
+                                                            {stats.damageReports.length > 0 ? (
+                                                                <table className="w-full table-fixed text-left text-[10px] border-collapse break-words">
+                                                                    <thead>
+                                                                        <tr className="bg-orange-50 text-orange-900">
+                                                                            <th className="border border-orange-200 p-2 w-[15%]">Data</th>
+                                                                            <th className="border border-orange-200 p-2 w-[30%]">Equipamento Relatado</th>
+                                                                            <th className="border border-orange-200 p-2 w-[35%]">Motivo / Descrição do Dano</th>
+                                                                            <th className="border border-orange-200 p-2 w-[20%]">Registrado por</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {stats.damageReports.map((t, idx) => (
+                                                                            <tr key={idx}>
+                                                                                <td className="border border-slate-200 p-2">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
+                                                                                <td className="border border-slate-200 p-2 font-bold">{t.itemName}</td>
+                                                                                <td className="border border-slate-200 p-2">{t.reason}</td>
+                                                                                <td className="border border-slate-200 p-2">{t.recorder?.warName} (RG: {t.recorder?.rg})</td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            ) : <p className="text-[10px] italic text-slate-500">Nenhuma avaria ativa relatada.</p>}
+                                                        </section>
+                                                    </div>
+                                                    
+                                                    {/* Assinatura */}
+                                                    <div className="mt-20 text-center break-inside-avoid">
+                                                        <div className="w-64 border-b border-slate-800 mx-auto mb-2"></div>
+                                                        <p className="text-[10px] font-bold uppercase">{currentUser?.graduation} {currentUser?.warName}</p>
+                                                        <p className="text-[9px] text-slate-500 uppercase">Responsável pela Emissão - RG: {currentUser?.rg}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+                            )}
+
+                            {activeTab === 'inventory' && (
+                                <div className="max-w-6xl mx-auto space-y-6">
+                                    <div className="flex flex-col md:flex-row gap-3">
+                                        <input type="text" placeholder="Filtrar por nome, lote ou marca..." className="flex-1 p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50 shadow-sm h-14" value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} />
+                                        <button onClick={()=>{setModalType('item'); setSelectedItem(null); setIsModalOpen(true);}} className="bg-blue-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase flex items-center gap-2 justify-center h-14 shadow-lg"><Icon name="plus" /> Novo Insumo</button>
+                                    </div>
+                                    <div className="bg-white rounded-[1.5rem] border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar">
+                                        <table className="w-full text-left min-w-[600px]">
+                                            <thead className="bg-slate-50 border-b text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                                <tr><th className="px-6 py-5">Material Detalhado</th><th className="px-6 py-5 text-center">Carga</th><th className="px-6 py-5 text-right">Ações</th></tr>
+                                            </thead>
+                                            <tbody className="divide-y text-[10px]">
+                                                {filteredItems.map(i=>(
+                                                    <tr key={i.id} className="hover:bg-slate-50 transition-colors">
+                                                        <td className="px-6 py-5">
+                                                            <p className="font-black text-slate-900 uppercase text-[11px] leading-tight">{i.name}</p>
+                                                            <p className="text-[8px] text-blue-500 font-bold uppercase mt-1">Validade: {formatBRDate(i.expirationDate)} | Marca: {i.manufacturer} | Lote: {i.serialLot}</p>
+                                                            { (() => {
+                                                                if(!i.expirationDate) return null;
+                                                                const [y, m, d] = i.expirationDate.split('-');
+                                                                const exp = new Date(y, m-1, d);
+                                                                const now = new Date();
+                                                                now.setHours(0,0,0,0);
+                                                                return exp < now ? <span className="inline-block mt-1 px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[7px] font-black uppercase">Validade Excedida</span> : null;
+                                                            })() }
+                                                        </td>
+                                                        <td className="px-6 py-5 text-center whitespace-nowrap">
+                                                            <span className={`px-4 py-1.5 rounded-xl font-black ${Number(i.currentStock) < Number(i.minStock) ? 'bg-red-100 text-red-700 animate-pulse' : 'bg-slate-100 text-slate-800'}`}>{i.currentStock} / {i.minStock}</span>
+                                                        </td>
+                                                        <td className="px-6 py-5 text-right space-x-1.5 whitespace-nowrap">
+                                                            <button onClick={()=>{setSelectedItem(i); setModalType('movement'); setMovementType('saída'); setIsModalOpen(true);}} className="p-3 bg-blue-50 text-blue-900 rounded-xl" title="Cautela/Retorno"><Icon name="history" /></button>
+                                                            <button onClick={()=>{setSelectedItem(i); setModalType('damage'); setIsModalOpen(true);}} className="p-3 bg-orange-50 text-orange-600 rounded-xl" title="Avaria"><Icon name="wrench" /></button>
+                                                            <button onClick={()=>{setSelectedItem(i); setModalType('item'); setIsModalOpen(true);}} className="p-3 bg-slate-100 text-slate-400 rounded-xl" title="Editar"><Icon name="edit" /></button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'movements' && (
+                                <div className="max-w-6xl mx-auto bg-white rounded-[1.5rem] border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar animate-in slide-in-from-bottom duration-300">
+                                    <table className="w-full text-left min-w-[800px]">
+                                        <thead className="bg-slate-50 border-b text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                            <tr><th className="px-6 py-5">Data</th><th className="px-6 py-5">Insumo</th><th className="px-6 py-5">Portador (Retirada)</th><th className="px-6 py-5">Fiel (Reg.)</th><th className="px-6 py-5 text-center">Fluxo</th></tr>
+                                        </thead>
+                                        <tbody className="divide-y text-[10px]">
+                                            {transactions.map((t, idx)=>(
+                                                <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                                                    <td className="px-6 py-6 font-bold text-slate-400 whitespace-nowrap">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
+                                                    <td className="px-6 py-6">
+                                                        <p className="font-black text-slate-900 uppercase leading-tight">{t.itemName}</p>
+                                                        <p className="text-[8px] font-normal italic opacity-60 mt-0.5">{t.reason}</p>
+                                                    </td>
+                                                    <td className="px-6 py-6 leading-tight whitespace-nowrap">
+                                                        <p className="font-black uppercase">{t.bearer.graduation} {t.bearer.warName}</p>
+                                                        <p className="text-[8px] font-bold text-slate-400 tracking-tighter">RG: {t.bearer.rg}</p>
+                                                    </td>
+                                                    <td className="px-6 py-6 leading-tight whitespace-nowrap">
+                                                        <p className="font-bold text-blue-900 uppercase">{t.recorder.warName}</p>
+                                                        <p className="text-[8px] font-bold text-slate-400 tracking-tighter">RG: {t.recorder.rg}</p>
+                                                    </td>
+                                                    <td className="px-6 py-6 text-center whitespace-nowrap">
+                                                        <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[8px] border ${t.type === 'entrada' ? 'bg-green-100 text-green-700' : (t.type.includes('AVARIA') || t.type.includes('ALTERAÇÃO') ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700')}`}>{t.type} ({t.quantity})</span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    </main>
+
+                    {/* MODAIS (Criação/Edição e Movimentação) */}
+                    {isModalOpen && (
+                        <div className="fixed inset-0 z-[300] bg-slate-900/80 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
+                            <div className="bg-white rounded-t-[2rem] md:rounded-[3rem] w-full max-w-xl p-6 md:p-10 shadow-2xl overflow-y-auto max-h-[95vh] border border-white/20 modal-content custom-scrollbar">
+                                <div className="flex justify-between items-center mb-8 sticky top-0 bg-white pb-4 z-20">
+                                    <h2 className="text-xl font-black text-blue-900 uppercase tracking-tighter">
+                                        {modalType === 'item' ? (selectedItem ? 'Atualizar Prontuário' : 'Novo Insumo') : 
+                                         modalType === 'damage' ? 'Reportar Alteração' : 'Registo em Livro'}
+                                    </h2>
+                                    <button onClick={()=>setIsModalOpen(false)} disabled={isSubmitting} className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-50"><Icon name="x" className="w-8 h-8" /></button>
+                                </div>
+
+                                {modalType === 'item' ? (
+                                    <form onSubmit={saveItem} className="space-y-4">
+                                        <div className="space-y-1"><label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Descrição</label><input name="name" required disabled={isSubmitting} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50 h-14 disabled:opacity-50" defaultValue={selectedItem?.name} /></div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <input name="manufacturer" required disabled={isSubmitting} placeholder="Marca" className="p-4 bg-slate-50 border rounded-2xl text-xs font-bold uppercase h-14 disabled:opacity-50" defaultValue={selectedItem?.manufacturer} />
+                                            <input name="serialLot" required disabled={isSubmitting} placeholder="Lote / Nº Série" className="p-4 bg-slate-50 border rounded-2xl text-xs font-bold uppercase h-14 disabled:opacity-50" defaultValue={selectedItem?.serialLot} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black text-slate-400 uppercase">Data de Validade (Vencimento)</label>
+                                            <input name="expirationDate" required disabled={isSubmitting} type="date" className="w-full p-4 bg-slate-50 border rounded-2xl text-xs font-bold h-14 disabled:opacity-50 outline-none" defaultValue={selectedItem?.expirationDate || ''} />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 text-center pt-2">
+                                            <div className="p-4 bg-blue-50 rounded-[1.5rem] border border-blue-100 shadow-inner"><label className="text-[9px] font-black text-blue-900 uppercase block mb-1">Carga Atual</label><input name="currentStock" required disabled={isSubmitting} type="number" className="w-full bg-transparent font-black text-xl text-center outline-none disabled:opacity-50" defaultValue={selectedItem?.currentStock || 0} /></div>
+                                            <div className="p-4 bg-red-50 rounded-[1.5rem] border border-red-100 shadow-inner"><label className="text-[9px] font-black text-red-600 uppercase block mb-1">Qtd Crítica</label><input name="minStock" required disabled={isSubmitting} type="number" className="w-full bg-transparent font-black text-xl text-center outline-none disabled:opacity-50" defaultValue={selectedItem?.minStock || 1} /></div>
+                                        </div>
+                                        <button type="submit" disabled={isSubmitting} className={`w-full py-5 bg-blue-900 text-white rounded-3xl font-black uppercase text-[11px] shadow-xl flex items-center justify-center gap-2 h-16 mt-4 transition-all ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]'}`}>
+                                            {isSubmitting ? <Icon name="sync" className="animate-spin w-4 h-4" /> : <Icon name="edit" className="w-4 h-4" />}
+                                            {isSubmitting ? 'A PROCESSAR...' : (selectedItem ? 'Gravar Alterações' : 'Confirmar Registo')}
+                                        </button>
+                                    </form>
+                                ) : (
+                                    <form onSubmit={registerMovement} className="space-y-5">
+                                        {modalType === 'damage' ? (
+                                            <div className="space-y-4">
+                                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-2xl text-[10px] font-black uppercase text-orange-900">{selectedItem?.name}</div>
+                                                <select name="type_alt" disabled={isSubmitting} className="w-full p-4 bg-orange-50 border border-orange-200 rounded-2xl text-[10px] font-black uppercase h-14 disabled:opacity-50">
+                                                    <option value="AVARIA">Avaria / Dano</option>
+                                                    <option value="ALTERAÇÃO">Alteração Técnica</option>
+                                                    <option value="MANUTENÇÃO">Manutenção</option>
+                                                </select>
+                                            </div>
+                                        ) : (
+                                            <div className={`flex bg-slate-100 p-1.5 rounded-3xl gap-2 shadow-inner border ${isSubmitting ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <label className="flex-1">
+                                                    <input type="radio" name="type" value="saída" checked={movementType === 'saída'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
+                                                    <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-red-700 shadow-sm text-slate-400">SAÍDA</div>
+                                                </label>
+                                                <label className="flex-1">
+                                                    <input type="radio" name="type" value="entrada" checked={movementType === 'entrada'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
+                                                    <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-green-700 shadow-sm text-slate-400">RETORNO</div>
+                                                </label>
+                                            </div>
+                                        )}
+                                        <div className="space-y-4">
+                                            <select name="itemId" required disabled={isSubmitting} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-black uppercase h-14 outline-none disabled:opacity-50" defaultValue={selectedItem?.id}>
+                                                {items.map(it=><option key={it.id} value={it.id}>{it.name} (Lote: {it.serialLot})</option>)}
+                                            </select>
+                                            <input name="movementDate" required disabled={isSubmitting} type="date" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold h-14 disabled:opacity-50 outline-none" defaultValue={new Date().toISOString().split('T')[0]} />
+                                            
+                                            {modalType === 'movement' && (
+                                                <div className={`p-5 bg-slate-50 rounded-[2rem] border space-y-3 shadow-inner ${isSubmitting ? 'opacity-50' : ''}`}>
+                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center border-b pb-2 mb-2 leading-none">Militar Portador (Retirada)</p>
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <input name="b_grad" required disabled={isSubmitting} placeholder="Graduação" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold uppercase h-12 outline-none" />
+                                                        <input name="b_rg" required disabled={isSubmitting} type="text" inputMode="numeric" pattern="[0-9]*" onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} placeholder="RG Militar" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 outline-none" />
+                                                    </div>
+                                                    <input name="b_name" required disabled={isSubmitting} placeholder="Nome Guerra do Portador" className="w-full p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 uppercase outline-none" />
+                                                </div>
+                                            )}
+
+                                            <div className={`p-5 bg-blue-50/50 rounded-[2rem] border border-blue-100 space-y-3 shadow-sm ${isSubmitting ? 'opacity-50' : ''}`}>
+                                                <p className="text-[9px] font-black text-blue-900 uppercase tracking-widest text-center border-b border-blue-100 pb-2 mb-2 leading-none">Militar Registrador (Fiel)</p>
+                                                <div className="text-center bg-white p-3 rounded-xl border border-blue-100">
+                                                    <p className="font-black text-blue-900 uppercase text-xs">{currentUser.graduation} {currentUser.warName}</p>
+                                                    <p className="text-[10px] font-bold text-slate-500 mt-0.5 tracking-tighter">RG: {currentUser.rg}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex gap-3">
+                                                <div className="w-24">
+                                                    <label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Qtd</label>
+                                                    <input name="quantity" required disabled={isSubmitting} type="number" min="1" className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-center font-black text-lg h-14 outline-none disabled:opacity-50" defaultValue={1} />
+                                                </div>
+                                                <div className="flex-1">
+                                                    <label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Finalidade / Detalhes</label>
+                                                    <input name="reason" required disabled={isSubmitting} placeholder="Ex: Patrulhamento / Missão..." className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-medium h-14 outline-none disabled:opacity-50" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" disabled={isSubmitting} className={`w-full py-5 text-white rounded-3xl font-black uppercase text-[11px] shadow-xl h-16 flex items-center justify-center gap-2 ${modalType==='damage'?'bg-orange-600 shadow-orange-200':'bg-blue-900 shadow-blue-200'} ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                            {isSubmitting && <Icon name="sync" className="animate-spin w-4 h-4" />}
+                                            {isSubmitting ? 'A PROCESSAR...' : 'Confirmar Lançamento'}
+                                        </button>
+                                    </form>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>

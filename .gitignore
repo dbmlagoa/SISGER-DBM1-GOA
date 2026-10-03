@@ -1,0 +1,20 @@
+# Arquivos temporários do Office e sistema
+~$*
+*.tmp
+*.temp
+*.docx
+
+# Mídia pesada (> 100MB não permitida no GitHub)
+*.mp4
+
+# Scripts temporários de desenvolvimento
+scratch_*.py
+copy_assets.py
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE e logs
+.vscode/
+*.log

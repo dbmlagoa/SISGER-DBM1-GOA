@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISGER DBM1/GOA - CBMERJ | Portal Operacional</title>
+  
+  <!-- Favicon Oficial -->
+  <link rel="icon" type="image/png" href="assets/brasao_goa.png">
+
+  <!-- Tipografia Moderna (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Estilos Globais -->
+  <link rel="stylesheet" href="css/style.css?v=2.9">
+</head>
+<body>
+
+  <!-- ========================================================================
+       MODO TOTEM / TV VERTICAL (Exibição contínua para TV no salão de prontidão)
+       ======================================================================== -->
+  <div class="tv-kiosk-container" id="tv-kiosk-view">
+    <div class="tv-header">
+      <div class="tv-brand">
+        <img src="assets/brasao_goa.png" alt="Brasão GOA">
+        <img src="assets/distintivo_horus.jpg" alt="Distintivo Horus" style="border-radius: 50%;">
+        <div>
+          <h2>SISGER DBM1/GOA</h2>
+          <span>MURAL OPERACIONAL & PRONTIDÃO • CBMERJ</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <div id="tv-checklist-badge" class="status-indicator-badge badge-warning">
+          <span class="pulse-dot"></span> CHECKLIST PENDENTE
+        </div>
+        <div class="tv-clock">
+          <div class="tv-clock-time" id="tv-clock-time">06:00:00</div>
+          <div class="tv-clock-date" id="tv-clock-date">Sexta-feira, 3 de Outubro de 2026</div>
+        </div>
+        <button class="tv-exit-btn" id="btn-exit-tv-mode" onclick="ativarModoTv(false)" title="Sair do Modo TV (Esc)">
+          ✕ Sair da TV
+        </button>
+      </div>
+    </div>
+
+    <div class="tv-body-vertical">
+      <!-- 1. Banner de Avisos com Rotação Automática -->
+      <div class="tv-urgent-banner">
+        <div class="tv-urgent-text">
+          <div id="tv-aviso-badge" class="mural-badge badge-danger">AVISO OPERACIONAL</div>
+          <h3 id="tv-aviso-titulo">Checklist Eletrônico de Pronto Emprego</h3>
+          <p id="tv-aviso-texto">Conferência diária de material operacional após o briefing das 06:20h.</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="pulse-dot" style="width: 12px; height: 12px; background: var(--orange-rescue);"></span>
+          <span style="font-size: 0.85rem; font-weight: 800; color: #fff; text-transform: uppercase;">Ao Vivo</span>
+        </div>
+      </div>
+
+      <!-- 2. Linha Central: Vídeo Oficial de Recomendações de Segurança em Loop Contínuo -->
+      <div class="tv-video-full-card" id="tv-video-wrapper">
+        <video id="tv-video-player" src="assets/video_recomendacoes_goa.mp4" autoplay loop muted playsinline controls preload="auto" style="width: 100%; height: 100%; object-fit: contain; background: #000; border: none;"></video>
+      </div>
+
+      <!-- 3. Timeline da Rotina Diária Oficial -->
+      <div class="tv-routine-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: #fff; font-weight: 700;">Rotina da Escala Oficial</h3>
+          <span class="card-badge badge-info">Hoje</span>
+        </div>
+        <div class="tv-routine-list" id="tv-rotina-container">
+          <!-- Injetado dinamicamente: 06:00 Assunção, 06:20 Briefing, 06:40 Checklist, etc. -->
+        </div>
+      </div>
+
+      <!-- 4. Rodapé da TV: QR Codes Rápidos para as Tripulações -->
+      <div class="tv-footer-qr">
+        <div class="tv-qr-box">
+          <img class="tv-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fforms.gle%2FSuLZ4WrT7N7UUVRQ7" alt="QR Checklist">
+          <div class="tv-qr-desc">
+            <h4>Checklist Pronto Emprego</h4>
+            <p>Conferência obrigatória realizada após o briefing.</p>
+          </div>
+        </div>
+
+        <div class="tv-qr-box">
+          <img class="tv-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLSfJwFw_1cXWmDELPyB6v_aaVWKt3GfIDqwuEYj5qprN35EHjA%2Fviewform" alt="QR Experiência">
+          <div class="tv-qr-desc">
+            <h4>Experiência Operacional</h4>
+            <p>Registro de horas de voo, missões e ocorrências da tripulação.</p>
+          </div>
+        </div>
+
+        <div class="tv-qr-box">
+          <img class="tv-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fdocs.google.com%2Fforms%2Fd%2Fe%2F1FAIpQLSfD7BpVW84JEsywaFGiBd-U7zSv86pkfxcZuWfM5XZKIKbe5Q%2Fviewform" alt="QR Cautela EPI">
+          <div class="tv-qr-desc">
+            <h4>Cautela de EPIs</h4>
+            <p>Retirada de short john, long john, botas e luvas.</p>
+          </div>
+        </div>
+
+        <div class="tv-qr-box">
+          <img class="tv-qr-img" id="tv-qr-manutencao-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http%3A%2F%2Flocalhost%3A8080%2F%3Fform%3Dmanutencao" alt="QR Manutenção">
+          <div class="tv-qr-desc">
+            <h4>Manutenção / Obras</h4>
+            <p>Solicitação de reparos prediais e necessidades da rotina.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       APLICAÇÃO PADRÃO (DESKTOP / LAPTOP / CELULARES)
+       ======================================================================== -->
+  <div class="app-container">
+
+    <!-- Sidebar de Navegação -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="assets/brasao_goa.png" alt="Brasão GOA" class="sidebar-logo">
+        <div class="sidebar-brand">
+          <h1>SISGER DBM1/GOA</h1>
+          <span>DBM 1 • CBMERJ</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Mural & Prontidão</div>
+        <a class="nav-link active" data-view="mural">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Mural & Início</span>
+          <span class="badge">TV</span>
+        </a>
+
+        <a class="nav-link" data-view="sigmat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          <span>Controle DMOP (SIG-MAT)</span>
+        </a>
+
+        <a class="nav-link" data-view="aeromedico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+          <span>Controle Aeromédico</span>
+        </a>
+
+        <div class="nav-section-title">Operações & Voo</div>
+        <a class="nav-link" data-view="briefing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+          <span>Briefing Matinal (Met/NOTAM)</span>
+        </a>
+
+        <a class="nav-link" data-view="cardapio">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+          <span>Cardápio da Base</span>
+        </a>
+
+        <a class="nav-link" data-view="pop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span>POP-GOA (Manuais)</span>
+        </a>
+
+        <a class="nav-link" data-view="operacoes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          <span>Operações</span>
+        </a>
+
+        <div class="nav-section-title">Gestão & Institucional</div>
+        <!-- Nome Exato: Administração -->
+        <a class="nav-link" data-view="administracao">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span>Administração</span>
+        </a>
+
+        <a class="nav-link" data-view="planejamento">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Planejamento Estratégico</span>
+        </a>
+
+        <!-- Separados: Notícias e Histórico -->
+        <a class="nav-link" data-view="noticias">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+          <span>Notícias</span>
+        </a>
+
+        <a class="nav-link" data-view="historico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span>Histórico</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-tv-mode" id="btn-enter-tv-mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          Modo Mural TV
+        </button>
+      </div>
+    </aside>
+
+    <!-- Área Principal de Conteúdo -->
+    <main class="main-wrapper">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="btn-icon" id="mobile-menu-toggle" style="display: none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="topbar-title" id="topbar-page-title">SISGER DBM1/GOA</h2>
+          <div class="topbar-status">
+            <span class="pulse-dot"></span>
+            Prontidão Ativa
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="clock-display">
+            <span class="clock-time" id="topbar-time">06:00</span>
+            <span class="clock-date" id="topbar-date">Sexta-feira, 3 de Outubro</span>
+          </div>
+
+          <button class="btn-icon" id="btn-fullscreen-toggle" title="Tela Cheia">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          </button>
+
+          <button class="btn-icon" id="btn-open-cms" title="Painel de Gestão & Edição Fácil">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Conteúdo das Telas -->
+      <div class="page-content">
+
+        <!-- ==================================================================
+             TELA 1: MURAL & INÍCIO (HOMEPAGE)
+             ================================================================== -->
+        <section class="view-section active" id="view-mural">
+          <!-- Hero Banner Tático com Imagem Real do GOA -->
+          <div class="hero-banner">
+            <img src="assets/goa_hero_real.jpg" alt="Operações Aéreas CBMERJ / GOA" class="hero-banner-img">
+            <div class="hero-content">
+              <h2 class="hero-title">SISGER DBM1/GOA</h2>
+              <p class="hero-desc">
+                Portal de pronta resposta, controle de prontidão de aeronaves, insumos aeromédicos e acompanhamento de rotina das tripulações do CBMERJ.
+              </p>
+              <div class="hero-actions">
+                <button class="btn-primary" onclick="ativarModoTv(true)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                  Exibir no Mural da TV
+                </button>
+                <a href="#video-anchor" class="btn-secondary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  Recomendações de Segurança
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card de Status do Checklist em Tempo Real -->
+          <div class="checklist-status-card" id="checklist-card-box">
+            <div class="checklist-info">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: var(--orange-rescue); flex-shrink: 0;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14h6"></path><path d="M9 18h6"></path><path d="M9 10h.01"></path></svg>
+                <h3 style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #fff;">Check List - Material de Pronto Emprego</h3>
+              </div>
+              <p id="checklist-status-desc" style="margin: 0; font-size: 0.86rem; color: var(--text-secondary);">
+                Consultando planilha de prontidão operacional no Google Drive...
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <div id="checklist-live-badge" class="status-indicator-badge badge-warning">
+                <span class="pulse-dot"></span> CHECANDO PLANILHA...
+              </div>
+              <button type="button" class="btn-secondary" onclick="verificarChecklistManual()" style="padding: 9px 14px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;" title="Consultar planilha agora">
+                🔄 Verificar
+              </button>
+              <a href="https://forms.gle/SuLZ4WrT7N7UUVRQ7" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 10px 20px; font-size: 0.88rem; font-weight: 700; box-shadow: 0 4px 14px rgba(255, 107, 0, 0.3);">
+                Preencher Formulário ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Grid de Prontidão: Mural de Avisos & Rotina Diária Oficial -->
+          <div class="mural-rotina-grid">
+            <!-- Coluna 1: Mural de Avisos com Últimas Notícias Autênticas -->
+            <div class="card" id="mural-card" style="display: flex; flex-direction: column;">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                  Mural de Notícias & Comunicados
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div class="mural-nav-btns">
+                    <button type="button" class="btn-icon" id="btn-mural-prev" title="Aviso Anterior" style="width: 28px; height: 28px; font-size: 0.8rem;">❮</button>
+                    <button type="button" class="btn-icon" id="btn-mural-next" title="Próximo Aviso" style="width: 28px; height: 28px; font-size: 0.8rem;">❯</button>
+                  </div>
+                </div>
+              </div>
+              <div class="mural-carousel" id="mural-carousel-box" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                <div id="mural-slides-container">
+                  <!-- Notícia 1 (Ativa por padrão no carregamento) -->
+                  <div class="mural-slide active" data-index="0">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span class="mural-badge badge-success">
+                            <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                            OPERACIONAL • SALVAMENTO AQUÁTICO
+                          </span>
+                        </div>
+                        <h3 style="color: #fff; font-size: 1.12rem; font-weight: 800; margin-bottom: 4px; line-height: 1.35;">Padronização de EPI - Aquisição de Short John</h3>
+                        <div class="mural-slide-sub">Utilização de Short John para Salvamento no Mar • GOA</div>
+                        <p class="mural-slide-text">Após processo de aquisição de EPIs para salvamento aquático, fica padronizada a correta equipagem do fiel: Short John (roupa de neoprene curta), luvas de neoprene e botas de neoprene. Cautela de kits completa disponível no DMOP.</p>
+                        <div class="mural-slide-action">
+                          <button type="button" class="btn-secondary" onclick="navigateTo('noticias')" style="padding: 7px 16px; font-size: 0.82rem; border-color: rgba(255,107,0,0.4); color: #fff; display: inline-flex; align-items: center; gap: 6px;">
+                            Ler Matéria Completa ↗
+                          </button>
+                        </div>
+                      </div>
+                      <img src="assets/noticias/noticias_img_10.jpg" alt="Padronização de EPI" style="width: 110px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex-shrink: 0;" loading="lazy">
+                    </div>
+                  </div>
+
+                  <!-- Notícia 2 -->
+                  <div class="mural-slide" data-index="1">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span class="mural-badge badge-info">
+                            <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                            INFRAESTRUTURA • 1ª FASE DE OBRAS
+                          </span>
+                        </div>
+                        <h3 style="color: #fff; font-size: 1.12rem; font-weight: 800; margin-bottom: 4px; line-height: 1.35;">Início das Obras de Reforma e Readequação do DBM 1/GOA</h3>
+                        <div class="mural-slide-sub">Alojamento Provisório Feminino e Almoxarifado Médico</div>
+                        <p class="mural-slide-text">Instalados 3 containers provisórios para abrigar alojamento feminino, almoxarifado médico e sanitários dos colaboradores da empresa Argal para início das reformas estruturais do destacamento.</p>
+                        <div class="mural-slide-action">
+                          <button type="button" class="btn-secondary" onclick="navigateTo('noticias')" style="padding: 7px 16px; font-size: 0.82rem; border-color: rgba(255,107,0,0.4); color: #fff; display: inline-flex; align-items: center; gap: 6px;">
+                            Ler Matéria Completa ↗
+                          </button>
+                        </div>
+                      </div>
+                      <img src="assets/noticias/noticias_img_9.jpg" alt="Obras DBM 1/GOA" style="width: 110px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex-shrink: 0;" loading="lazy">
+                    </div>
+                  </div>
+
+                  <!-- Notícia 3 -->
+                  <div class="mural-slide" data-index="2">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span class="mural-badge badge-success">
+                            <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                            SISTEMA • CONTROLE DMOP
+                          </span>
+                        </div>
+                        <h3 style="color: #fff; font-size: 1.12rem; font-weight: 800; margin-bottom: 4px; line-height: 1.35;">Operação do SIG-MAT (Controle DMOP)</h3>
+                        <div class="mural-slide-sub">Fase Final do Estabelecimento de Controle de Material Operacional</div>
+                        <p class="mural-slide-text">Concluída a entrada definitiva em operação do Sistema Integrado de Gestão de Material Operacional para controle rigoroso de carga, conferência diária e cautelas individuais da unidade.</p>
+                        <div class="mural-slide-action">
+                          <button type="button" class="btn-secondary" onclick="navigateTo('sigmat')" style="padding: 7px 16px; font-size: 0.82rem; border-color: rgba(255,107,0,0.4); color: #fff; display: inline-flex; align-items: center; gap: 6px;">
+                            Acessar Sistema SIG-MAT ↗
+                          </button>
+                        </div>
+                      </div>
+                      <img src="assets/noticias/noticias_img_1.jpg" alt="SIG-MAT" style="width: 110px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex-shrink: 0;" loading="lazy">
+                    </div>
+                  </div>
+
+                  <!-- Notícia 4 -->
+                  <div class="mural-slide" data-index="3">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span class="mural-badge badge-danger">
+                            <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                            URGENTE • SISGEO & ONCALL
+                          </span>
+                        </div>
+                        <h3 style="color: #fff; font-size: 1.12rem; font-weight: 800; margin-bottom: 4px; line-height: 1.35;">Orientações para Preenchimento do Quesito Eletrônico</h3>
+                        <div class="mural-slide-sub">Responsabilidades no Processo de Confecção do Quesito</div>
+                        <p class="mural-slide-text">Preenchimento obrigatório pelo Chefe de Guarnição (SAR/Aeromédico) e assinatura do Comandante da Aeronave. Atenção ao correto lançamento de atribuições no sistema Oncall.</p>
+                        <div class="mural-slide-action">
+                          <button type="button" class="btn-secondary" onclick="navigateTo('noticias')" style="padding: 7px 16px; font-size: 0.82rem; border-color: rgba(255,107,0,0.4); color: #fff; display: inline-flex; align-items: center; gap: 6px;">
+                            Ler Instruções na Íntegra ↗
+                          </button>
+                        </div>
+                      </div>
+                      <img src="assets/noticias/noticias_img_12.jpg" alt="Quesito Eletrônico" style="width: 110px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex-shrink: 0;" loading="lazy">
+                    </div>
+                  </div>
+
+                  <!-- Notícia 5 -->
+                  <div class="mural-slide" data-index="4">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span class="mural-badge badge-warning">
+                            <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                            PROCEDIMENTO • SISGEO VIATURAS
+                          </span>
+                        </div>
+                        <h3 style="color: #fff; font-size: 1.12rem; font-weight: 800; margin-bottom: 4px; line-height: 1.35;">Mudança na Realização do Check List de Pronto Emprego</h3>
+                        <div class="mural-slide-sub">Conferência na Linha DMOP001 e Alimentação da Base</div>
+                        <p class="mural-slide-text">Novo procedimento para conferência do material operacional via SISGEO na linha DMOP001, com cópia da mensagem padronizada para o formulário eletrônico do DBM 1/GOA.</p>
+                        <div class="mural-slide-action">
+                          <button type="button" class="btn-secondary" onclick="navigateTo('noticias')" style="padding: 7px 16px; font-size: 0.82rem; border-color: rgba(255,107,0,0.4); color: #fff; display: inline-flex; align-items: center; gap: 6px;">
+                            Ver Passo a Passo ↗
+                          </button>
+                        </div>
+                      </div>
+                      <img src="assets/noticias/noticias_img_3.jpg" alt="Checklist SISGEO" style="width: 110px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex-shrink: 0;" loading="lazy">
+                    </div>
+                  </div>
+
+                  <!-- Notícia 6 -->
+                  <div class="mural-slide" data-index="5">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                      <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span class="mural-badge badge-info">
+                            <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                            MODERNIZAÇÃO • PROCESSO SEI Nº 124235079
+                          </span>
+                        </div>
+                        <h3 style="color: #fff; font-size: 1.12rem; font-weight: 800; margin-bottom: 4px; line-height: 1.35;">Material Operacional Adquirido pelo DBM 1/GOA</h3>
+                        <div class="mural-slide-sub">Equipamentos Têxteis e Materiais para Resgate Aeromédico</div>
+                        <p class="mural-slide-text">Concluída a aquisição e distribuição de novos materiais para salvamento em altura e resgate aeromédico, elevando a segurança e pronta resposta do Grupamento de Operações Aéreas.</p>
+                        <div class="mural-slide-action">
+                          <button type="button" class="btn-secondary" onclick="navigateTo('noticias')" style="padding: 7px 16px; font-size: 0.82rem; border-color: rgba(255,107,0,0.4); color: #fff; display: inline-flex; align-items: center; gap: 6px;">
+                            Consultar Especificações ↗
+                          </button>
+                        </div>
+                      </div>
+                      <img src="assets/noticias/noticias_img_2.jpg" alt="Material Operacional" style="width: 110px; height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex-shrink: 0;" loading="lazy">
+                    </div>
+                  </div>
+                </div>
+                <div class="mural-footer-bar">
+                  <div class="mural-dots" id="mural-dots-container"></div>
+                  <div class="mural-progress">
+                    <div class="mural-progress-bar" id="mural-progress-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coluna 2: Rotina Diária Oficial (Atividade Atual em Destaque) -->
+            <div class="card" style="display: flex; flex-direction: column;">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  Rotina Diária Oficial
+                </div>
+                <span class="card-badge badge-info" id="rotina-live-badge">24h Operacional</span>
+              </div>
+
+              <div class="rotina-timeline" id="rotina-timeline-container" style="flex: 1;"></div>
+            </div>
+          </div>
+
+          <!-- Formulários Operacionais da Unidade (Estilo e Botões Exatos do Site Original) -->
+          <div class="quick-forms-section-centered">
+            <div class="quick-forms-header-centered">
+              <div class="section-tag-center">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                ROTINA & CONTROLE OPERACIONAL
+              </div>
+              <h3 class="section-title-center">Formulários Operacionais</h3>
+              <p class="section-desc-center">
+                Acesso direto aos formulários operacionais oficiais da unidade assim como dispostos na página inicial original.
+              </p>
+            </div>
+
+            <div class="operational-banners-container">
+              <!-- Banner 1: Check List - Material de pronto emprego -->
+              <div class="op-banner-strip">
+                <div class="op-banner-left">
+                  <div class="op-banner-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                      <path d="M9 14h6"></path><path d="M9 18h6"></path><path d="M9 10h.01"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="op-banner-title">Check List - Material de pronto emprego</h4>
+                    <p class="op-banner-desc">Conferência diária obrigatória da carga operacional da aeronave após o briefing matinal (06:20h).</p>
+                  </div>
+                </div>
+                <div class="op-banner-actions">
+                  <a href="https://forms.gle/SuLZ4WrT7N7UUVRQ7" target="_blank" rel="noopener noreferrer" class="op-form-btn-white">
+                    Preencher Formulário ↗
+                  </a>
+                  <button type="button" class="op-form-btn-qr" onclick="abrirModalQRCode('Check List - Material de Pronto Emprego', 'https://forms.gle/SuLZ4WrT7N7UUVRQ7', 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=' + encodeURIComponent('https://forms.gle/SuLZ4WrT7N7UUVRQ7'))" title="Ver QR Code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    QR Code
+                  </button>
+                </div>
+              </div>
+
+              <!-- Banner 2: Registro de experiência operacional -->
+              <div class="op-banner-strip">
+                <div class="op-banner-left">
+                  <div class="op-banner-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="op-banner-title">Registro de experiência operacional</h4>
+                    <p class="op-banner-desc">Lançamento de horas de voo, missões SAR, resgates aeromédicos e ocorrências da tripulação.</p>
+                  </div>
+                </div>
+                <div class="op-banner-actions">
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJwFw_1cXWmDELPyB6v_aaVWKt3GfIDqwuEYj5qprN35EHjA/viewform?usp=sharing&ouid=111973117430697468606" target="_blank" rel="noopener noreferrer" class="op-form-btn-white">
+                    Preencher Formulário ↗
+                  </a>
+                  <button type="button" class="op-form-btn-qr" onclick="abrirModalQRCode('Registro de Experiência Operacional', 'https://docs.google.com/forms/d/e/1FAIpQLSfJwFw_1cXWmDELPyB6v_aaVWKt3GfIDqwuEYj5qprN35EHjA/viewform?usp=sharing&ouid=111973117430697468606', 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=' + encodeURIComponent('https://docs.google.com/forms/d/e/1FAIpQLSfJwFw_1cXWmDELPyB6v_aaVWKt3GfIDqwuEYj5qprN35EHjA/viewform?usp=sharing&ouid=111973117430697468606'))" title="Ver QR Code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    QR Code
+                  </button>
+                </div>
+              </div>
+
+              <!-- Banner 3: Cautela de EPI -->
+              <div class="op-banner-strip">
+                <div class="op-banner-left">
+                  <div class="op-banner-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="op-banner-title">Cautela de EPI</h4>
+                    <p class="op-banner-desc">Cautela e devolução de kits de Long John, Short John, luvas e botas de neoprene no DMOP.</p>
+                  </div>
+                </div>
+                <div class="op-banner-actions">
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfD7BpVW84JEsywaFGiBd-U7zSv86pkfxcZuWfM5XZKIKbe5Q/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="op-form-btn-white">
+                    Preencher Formulário ↗
+                  </a>
+                  <button type="button" class="op-form-btn-qr" onclick="abrirModalQRCode('Cautela de EPIs', 'https://docs.google.com/forms/d/e/1FAIpQLSfD7BpVW84JEsywaFGiBd-U7zSv86pkfxcZuWfM5XZKIKbe5Q/viewform?usp=header', 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=' + encodeURIComponent('https://docs.google.com/forms/d/e/1FAIpQLSfD7BpVW84JEsywaFGiBd-U7zSv86pkfxcZuWfM5XZKIKbe5Q/viewform?usp=header'))" title="Ver QR Code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    QR Code
+                  </button>
+                </div>
+              </div>
+
+              <!-- Banner 4: Solicitação de Manutenção / Necessidades do DBM1/GOA (grava na planilha da pasta Obras) -->
+              <div class="op-banner-strip">
+                <div class="op-banner-left">
+                  <div class="op-banner-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="op-banner-title">Solicitação de Manutenção / Obras</h4>
+                    <p class="op-banner-desc">Relate problemas de manutenção predial ou qualquer necessidade da rotina do DBM 1/GOA, com fotos opcionais.</p>
+                  </div>
+                </div>
+                <div class="op-banner-actions">
+                  <button type="button" class="op-form-btn-white" onclick="abrirFormManutencao()">
+                    Preencher Formulário ↗
+                  </button>
+                  <button type="button" class="op-form-btn-qr" onclick="abrirQRManutencao()" title="Ver QR Code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    QR Code
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             TELA 2: CONTROLE DMOP (SIG-MAT)
+             ================================================================== -->
+        <section class="view-section" id="view-sigmat">
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: #fff; font-weight: 800;">
+                  SIG-MAT • Gestão de Carga Operacional
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Controle integrado de materiais de resgate, equipamentos helitransportados e cautelas do DBM 1/GOA.
+                </p>
+              </div>
+              <div style="display: flex; gap: 12px;">
+                <button class="btn-secondary" onclick="document.getElementById('sigmat-frame').src += ''">
+                  🔄 Recarregar Dados
+                </button>
+                <a href="modules/sigmat.html" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                  ↗ Abrir em Janela Dedicada
+                </a>
+              </div>
+            </div>
+          </div>
+          <iframe id="sigmat-frame" class="embed-full-frame" src="modules/sigmat.html"></iframe>
+        </section>
+
+        <!-- ==================================================================
+             TELA 3: CONTROLE AEROMÉDICO (SIG-AEROMÉDICO)
+             ================================================================== -->
+        <section class="view-section" id="view-aeromedico">
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: #fff; font-weight: 800;">
+                  SIG-Aeromédico • Gestão de Insumos e Medicamentos
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Monitoramento de validade, estoque crítico, relatórios em PDF e controle de movimentações médicas.
+                </p>
+              </div>
+              <div style="display: flex; gap: 12px;">
+                <button class="btn-secondary" onclick="document.getElementById('aeromedico-frame').src += ''">
+                  🔄 Recarregar Dados
+                </button>
+                <a href="modules/aeromedico.html" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                  ↗ Abrir em Janela Dedicada
+                </a>
+              </div>
+            </div>
+          </div>
+          <iframe id="aeromedico-frame" class="embed-full-frame" src="modules/aeromedico.html"></iframe>
+        </section>
+
+        <!-- ==================================================================
+             TELA 4: BRIEFING MATINAL (REDEMET / WINDY / NOTAMs SBWJ)
+             ================================================================== -->
+        <section class="view-section" id="view-briefing">
+          <!-- Banner Superior de Briefing -->
+          <div class="hero-banner" style="margin-bottom: 24px;">
+            <div class="hero-content">
+              <div class="hero-tag">
+                <span class="pulse-dot"></span>
+                METEOROLOGIA AERONÁUTICA & NOTAMs OPERACIONAIS
+              </div>
+              <h2 class="hero-title">Briefing Matinal de Voo • GOA</h2>
+              <p class="hero-desc">
+                Condições de voo visual (VFR) para helicópteros no Estado do Rio de Janeiro, monitoramento de ventos, teto, visibilidade e restrições ativas para <strong>SBJR (Jacarepaguá)</strong> e TMA-RJ.
+              </p>
+              <div class="hero-actions">
+                <a href="https://redemet.decea.mil.br/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                  Acessar REDEMET Oficial ↗
+                </a>
+                <a href="https://aisweb.decea.mil.br/?i=notam&id=SBJR" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                  Consultar NOTAM SBJR (AISWEB) ↗
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estações METAR REDEMET Decodificadas -->
+          <div style="margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #fff;">
+                Condições Meteorológicas nos Aeródromos do RJ (REDEMET / DECEA)
+              </h3>
+              <span class="card-badge badge-success">Atualizado • VFR Aberto</span>
+            </div>
+            <div class="metar-grid" id="metar-cards-container">
+              <!-- Injetado por aero_weather.js -->
+            </div>
+          </div>
+
+          <!-- Radar & Ventos Windy.com Interativo -->
+          <div class="card" style="margin-bottom: 28px;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: #fff; font-weight: 700;">
+                  Monitoramento Dinâmico de Tempo & Ventos (Windy.com - TMA Rio)
+                </h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+                  Centrado nas coordenadas da Base do GOA / Aeródromo de Jacarepaguá (-22.987, -43.370).
+                </p>
+              </div>
+
+              <!-- Seletor de Camadas do Windy -->
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn-secondary btn-windy-layer active" data-layer="wind" onclick="alterarCamadaWindy('wind')" style="padding: 6px 12px; font-size: 0.78rem;">
+                  🌬️ Vento & Rajadas
+                </button>
+                <button type="button" class="btn-secondary btn-windy-layer" data-layer="radar" onclick="alterarCamadaWindy('radar')" style="padding: 6px 12px; font-size: 0.78rem;">
+                  🌧️ Radar & Chuva
+                </button>
+                <button type="button" class="btn-secondary btn-windy-layer" data-layer="clouds" onclick="alterarCamadaWindy('clouds')" style="padding: 6px 12px; font-size: 0.78rem;">
+                  ☁️ Teto & Nuvens
+                </button>
+                <button type="button" class="btn-secondary btn-windy-layer" data-layer="visibility" onclick="alterarCamadaWindy('visibility')" style="padding: 6px 12px; font-size: 0.78rem;">
+                  👁️ Visibilidade
+                </button>
+              </div>
+            </div>
+
+            <div class="windy-container">
+              <iframe id="windy-iframe" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=kt&zoom=10&overlay=wind&product=ecmwf&level=surface&lat=-22.987&lon=-43.370&message=true"></iframe>
+            </div>
+          </div>
+
+          <!-- NOTAMs Ativos para SBJR e Relevantes para o GOA (AISWEB DECEA) -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: #fff; font-weight: 700;">
+                  NOTAMs Ativos: SBJR (Jacarepaguá) & TMA-RJ
+                </h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+                  Informações essenciais para segurança de voo, restrições e obstáculos para aeronaves de asa rotativa (helicópteros).
+                </p>
+              </div>
+              <a href="https://aisweb.decea.mil.br/?i=notam&id=SBJR" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 14px;">
+                Consultar AISWEB Oficial ↗
+              </a>
+            </div>
+
+            <div class="notam-list" id="notam-list-container">
+              <!-- Injetado por aero_weather.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             TELA 5: CARDÁPIO DA BASE (LOOKER STUDIO)
+             ================================================================== -->
+        <section class="view-section" id="view-cardapio">
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: #fff; font-weight: 800;">
+                  Cardápio da Base - DBM 1 / GOA
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Escala de refeições, almoço e jantar das tripulações de serviço.
+                </p>
+              </div>
+              <a href="https://datastudio.google.com/reporting/8db989e0-5255-4226-9af9-e48869fcc0d6/page/p_bykjmpwrwd" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                ↗ Abrir no Looker Studio
+              </a>
+            </div>
+          </div>
+          <iframe class="embed-full-frame" src="https://datastudio.google.com/embed/reporting/8db989e0-5255-4226-9af9-e48869fcc0d6/page/p_bykjmpwrwd"></iframe>
+        </section>
+
+        <!-- ==================================================================
+             TELA 6: POP-GOA (MANUAIS E PROCEDIMENTOS PADRONIZADOS)
+             ================================================================== -->
+        <section class="view-section" id="view-pop">
+          <div class="hero-banner" style="margin-bottom: 24px;">
+            <div class="hero-content">
+              <div class="hero-tag">PROCEDIMENTOS OPERACIONAIS</div>
+              <h2 class="hero-title">POP-GOA / CBMERJ</h2>
+              <p class="hero-desc">
+                Procedimentos Operacionais Padronizados de salvamento aquático, rapel, guincho elétrico, resgate helitransportado e manobras táticas de emergência.
+              </p>
+              <a href="https://sites.google.com/view/pop-goacbmerj/pops" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                Acessar Portal Dedicado de POPs ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="quick-forms-grid">
+            <div class="card">
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">POP - Salvamento Aquático</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Técnicas de salto e içamento em operações marítimas com aeronaves de asa rotativa.</p>
+              <a href="https://sites.google.com/view/pop-goacbmerj/pops" target="_blank" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">Consultar Documento</a>
+            </div>
+            <div class="card">
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">POP - Operações de Guincho</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Conferência de carga, limites mecânicos e procedimentos de corte de cabo.</p>
+              <a href="https://sites.google.com/view/pop-goacbmerj/pops" target="_blank" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">Consultar Documento</a>
+            </div>
+            <div class="card">
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">POP - Transporte Aeromédico</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Padronização de triagem, estabilização e oxigenioterapia a bordo.</p>
+              <a href="https://sites.google.com/view/pop-goacbmerj/pops" target="_blank" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">Consultar Documento</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             TELA 7: OPERAÇÕES & SEI
+             ================================================================== -->
+        <section class="view-section" id="view-operacoes">
+          <div class="card" style="margin-bottom: 24px;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: #fff; font-weight: 800; margin-bottom: 6px;">
+              Operações • DBM 1 / GOA
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              Sistemas e controles operacionais integrados: SISGEO, Google Earth e processos administrativos no SEI-RJ.
+            </p>
+          </div>
+
+          <div class="quick-forms-grid">
+            <div class="card">
+              <div class="card-badge badge-info" style="margin-bottom: 10px;">Google Earth 3D</div>
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">Catálogo Operacional de Helipontos</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Mapeamento 3D de áreas de pouso, obstáculos e pontos de captação de água no RJ.</p>
+              <a href="https://earth.google.com/earth/d/1OBvGM0g77umCGpn_nGAGL4XFzSuIj5BZ?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size: 0.85rem;">
+                Abrir no Google Earth ↗
+              </a>
+            </div>
+
+            <div class="card">
+              <div class="card-badge badge-warning" style="margin-bottom: 10px;">SISGEO CBMERJ</div>
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">Mapa Termal de Eventos</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Concentração de ocorrências aéreas, buscas, resgates e incêndios florestais.</p>
+              <a href="https://sisgeo.cbmerj.rj.gov.br/Sisgeo/Mapa" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size: 0.85rem;">
+                Acessar SISGEO Mapa ↗
+              </a>
+            </div>
+
+            <div class="card">
+              <div class="card-badge badge-success" style="margin-bottom: 10px;">SEI-RJ nº 127583227</div>
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">Controle de Instruções</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Processo de registro das instruções de voo, horas ministradas e avaliações de proficiência.</p>
+              <a href="https://sei.rj.gov.br/sei/controlador.php?acao=procedimento_trabalhar&id_procedimento=127583227" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size: 0.85rem;">
+                Abrir Processo SEI ↗
+              </a>
+            </div>
+
+            <div class="card">
+              <div class="card-badge badge-danger" style="margin-bottom: 10px;">SEI-RJ nº 99796560</div>
+              <h4 style="font-weight: 700; color: #fff; margin-bottom: 8px;">Operações Simuladas (2022-2024)</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Relatórios e avaliações pós-exercício dos simulados operacionais com tripulações.</p>
+              <a href="https://sei.rj.gov.br/sei/controlador.php?acao=procedimento_trabalhar&id_procedimento=99796560" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size: 0.85rem;">
+                Abrir Processo SEI ↗
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             TELA 8: ADMINISTRAÇÃO (ESTRUTURA EXATA DO SITE ORIGINAL)
+             ================================================================== -->
+        <section class="view-section" id="view-administracao">
+          <!-- Cabeçalho -->
+          <div class="card" style="margin-bottom: 28px;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; font-weight: 800;">
+                  Administração • DBM 1 / GOA
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Gestão financeira, plano de chamada, bens patrimoniais, rádios e controle sanitário.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1. CONTROLE FINANCEIRO -->
+          <div class="admin-section-block">
+            <h3 class="admin-section-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              Controle financeiro
+            </h3>
+            <div class="admin-cards-row">
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSfj4ptk-X8rqi3T_Yh11or6qqAW2-_XbmRKEHGyDVHLNCOmJA/viewform" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(16, 185, 129, 0.15); color: var(--green-ready);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                  </div>
+                  <h4>Lançamento de informações</h4>
+                  <p>Compras ou Crédito em conta</p>
+                </div>
+                <div class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Preencher Formulário ↗
+                </div>
+              </a>
+
+              <a href="https://docs.google.com/spreadsheets/d/1P1sOqpBGC_NIpHOysAmsZvQSrg6R1MiRyeitcExrCos/edit?gid=1759977811#gid=1759977811" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(6, 182, 212, 0.15); color: var(--cyan-tactical);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                  </div>
+                  <h4>Balancete Interno</h4>
+                  <p>Planilha de prestação de contas e fluxo financeiro</p>
+                </div>
+                <div class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Abrir Planilha ↗
+                </div>
+              </a>
+
+              <a href="https://www.ne12.bradesconetempresa.b.br/ibpjlogin/login.jsf" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(239, 68, 68, 0.15); color: var(--red-alert);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <h4>Bradesco</h4>
+                  <p>Net Empresa Bradesco</p>
+                </div>
+                <div class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Acessar Banco ↗
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- 2. PLANO DE CHAMADA -->
+          <div class="admin-section-block">
+            <h3 class="admin-section-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Plano de chamada
+            </h3>
+            <div class="admin-cards-row">
+              <a href="https://drive.google.com/file/d/1vqL6_PK9DkvgCWIvrXCE7GmcSEiSDWlW/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(245, 158, 11, 0.15); color: var(--gold-wings);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <h4>Plano de chamada</h4>
+                  <p>Documento oficial de acionamento extraordinário das tripulações do DBM1/GOA</p>
+                </div>
+                <div class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Visualizar Documento ↗
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- 3. BENS PATRIMONIAIS -->
+          <div class="admin-section-block">
+            <h3 class="admin-section-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+              Bens patrimoniais
+            </h3>
+            <div class="admin-cards-row">
+              <a href="https://drive.google.com/drive/folders/1zSEMPDeWycPb0l76wrjDw1Pgq0yb7hI8" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(255, 85, 0, 0.15); color: var(--orange-rescue);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                  </div>
+                  <h4>Arrolamento</h4>
+                  <p>Pasta do Google Drive com arquivos e termos de arrolamento de bens do DBM1/GOA</p>
+                </div>
+                <div class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Abrir Pasta no Drive ↗
+                </div>
+              </a>
+
+              <a href="https://docs.google.com/spreadsheets/d/14SSXdj1QgdX7qSSx6WJ74KQ8iPUYJ-WxFTQVILRFrmE/edit?usp=share_link" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(6, 182, 212, 0.15); color: var(--cyan-tactical);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                  </div>
+                  <h4>Controle de rádios</h4>
+                  <p>Planilha de controle patrimonial de transceptores portáteis e veiculares</p>
+                </div>
+                <div class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Abrir Planilha ↗
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- 4. CONTROLE SANITÁRIO (REALOCADO CONFORME SOLICITADO) -->
+          <div class="admin-section-block">
+            <h3 class="admin-section-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              Controle sanitário
+            </h3>
+            <div class="admin-cards-row">
+              <a href="https://drive.google.com/file/d/1KOWe1KmjD-mSWR-NWzw3jKk1nccSk_4W/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(6, 182, 212, 0.15); color: var(--cyan-tactical);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <h4>Laudo de Potabilidade</h4>
+                  <p>Laudo técnico de potabilidade da água das instalações do DBM1/GOA</p>
+                </div>
+                <div class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Visualizar Laudo ↗
+                </div>
+              </a>
+
+              <a href="https://drive.google.com/file/d/1VEgPqFrL8pdRwt-Gt1TjS7PEy_ymiYPb/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="admin-link-card">
+                <div>
+                  <div class="form-icon" style="margin-bottom: 12px; background: rgba(245, 158, 11, 0.15); color: var(--gold-wings);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </div>
+                  <h4>Laudo de desratização e dedetização</h4>
+                  <p>Certificado de controle de pragas e dedetização do destacamento</p>
+                </div>
+                <div class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem; text-align: center;">
+                  Visualizar Laudo ↗
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             TELA 9: PLANEJAMENTO ESTRATÉGICO (GAMMA APP)
+             ================================================================== -->
+        <section class="view-section" id="view-planejamento">
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: #fff; font-weight: 800;">
+                  Reestruturação e Planejamento Estratégico GOA 2026
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Diretrizes de expansão, modernização de frota e readequação de infraestrutura.
+                </p>
+              </div>
+              <a href="https://reestruturacaogoa2026-t067zym.gamma.site/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                ↗ Abrir Apresentação Externa
+              </a>
+            </div>
+          </div>
+          <iframe class="embed-full-frame" src="https://reestruturacaogoa2026-t067zym.gamma.site/"></iframe>
+        </section>
+
+        <!-- ==================================================================
+             TELA 10: NOTÍCIAS (CONTEÚDO INTEGRAL DA VERSÃO ORIGINAL)
+             ================================================================== -->
+        <section class="view-section" id="view-noticias">
+          <div class="card" style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; font-weight: 800;">
+                  Notícias e Boletins Operacionais • DBM 1 / GOA
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Histórico completo de comunicados, aquisições, reformas, instruções e padronizações da unidade.
+                </p>
+              </div>
+              <button type="button" class="btn-primary" onclick="const p = document.getElementById('news-publish-card'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; if(p.style.display !== 'none') document.getElementById('new-post-title').focus();">
+                ✍️ Nova Postagem (Gestor)
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================================
+               FERRAMENTA DO GESTOR: PUBLICAÇÃO PRÁTICA E PADRONIZADA DE NOTÍCIAS
+               ================================================================== -->
+          <div class="news-publish-card" id="news-publish-card">
+            <div class="news-publish-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="mural-badge badge-warning">ESPAÇO DE EDIÇÃO DO SITE</span>
+                <h4 style="font-family: var(--font-heading); font-size: 1.15rem; color: #fff; font-weight: 800; margin: 0;">
+                  Publicar Nova Notícia Padronizada
+                </h4>
+              </div>
+              <button type="button" class="btn-icon" onclick="document.getElementById('news-publish-card').style.display='none'" title="Recolher formulário">✕</button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 6px;">
+              Preencha os campos abaixo. A notícia será formatada automaticamente no padrão visual do portal com a data correspondente.
+            </p>
+
+            <form class="news-publish-form" onsubmit="event.preventDefault(); publicarNovaNoticia();">
+              <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label for="new-post-title">Título da Notícia *</label>
+                  <input type="text" id="new-post-title" placeholder="Ex: Aquisição de Novos Equipamentos de Salvamento em Altura" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-post-date">Data da Publicação *</label>
+                  <input type="date" id="new-post-date" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="new-post-category">Subtítulo / Categoria</label>
+                <input type="text" id="new-post-category" placeholder="Ex: Material Operacional • DMOP / Instrução Especializada">
+              </div>
+
+              <div class="form-group">
+                <label for="new-post-body">Texto / Conteúdo da Notícia *</label>
+                <textarea id="new-post-body" rows="4" placeholder="Descreva aqui o informativo, orientações operacionais, detalhes de materiais ou novidades..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Foto / Imagem Ilustrativa da Notícia</label>
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;">
+                  <input type="text" id="new-post-img-url" placeholder="Cole a URL da imagem ou anexe um arquivo ao lado...">
+                  <label class="btn-secondary" style="padding: 10px 18px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+                    📁 Escolher Imagem
+                    <input type="file" id="new-post-img-file" accept="image/*" style="display: none;">
+                  </label>
+                </div>
+                <div id="new-post-img-preview-box" style="display: none; margin-top: 10px;">
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Pré-visualização da imagem:</span>
+                  <img id="new-post-img-preview" src="" alt="Preview da Imagem" style="max-height: 200px; border-radius: var(--radius-sm); border: 1px solid var(--border-active);">
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+                <button type="button" class="btn-secondary" onclick="document.getElementById('news-publish-card').style.display='none'">Cancelar</button>
+                <button type="submit" class="btn-primary" style="padding: 10px 24px; font-weight: 800;">
+                  📢 Publicar Notícia no Portal
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- FEED DE NOTÍCIAS PUBLICADAS PELO GESTOR (LOCALSTORAGE / APPS SCRIPT) -->
+          <div id="custom-news-feed"></div>
+
+          <!-- ==================================================================
+               ACERVO DE NOTÍCIAS HISTÓRICAS E RECENTES COM IMAGENS ORIGINAIS
+               ================================================================== -->
+
+          <!-- Artigo 1: Mudança no Checklist SISGEO -->
+          <article class="news-article-card">
+            <h3>Mudança na realização do check list de material de pronto emprego do DBM1/GOA</h3>
+            <div class="meta">Procedimento Operacional • SISGEO Viaturas</div>
+            <p><strong>Acesso ao SISGEO:</strong> Faça o login no SISGEO, clique na aba controle e selecione a opção viaturas.</p>
+            <p><strong>DMOP001:</strong> Encontre a linha DMOP001.</p>
+            <p><strong>Checklist:</strong> Selecione a opção checklist da viatura clicando no ícone indicado.</p>
+            <p><strong>Conferência de material:</strong> Clique na opção conferência de material e realize o checklist, da mesma maneira praticada para as viaturas.</p>
+            <p><strong>Copiar mensagem padronizada:</strong> Copie a mensagem clicando no botão mensagem ao término da conferência do material operacional.</p>
+            <p><strong>Alimentando a base de dados do DBM1/GOA:</strong> Clique na opção preencher formulário e cole a mensagem extraída do SISGEO no espaço indicado no formulário.</p>
+            
+            <div class="news-img-grid">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_3.jpg" alt="Acesso ao SISGEO" loading="lazy">
+                <div class="news-img-caption">Passo 1: Acesso ao SISGEO e aba Viaturas</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_4.jpg" alt="Tela de login e menu" loading="lazy">
+                <div class="news-img-caption">Passo 2: Navegação no menu de controle</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_5.jpg" alt="Localização DMOP001" loading="lazy">
+                <div class="news-img-caption">Passo 3: Localizar a linha DMOP001</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_6.jpg" alt="Checklist de viatura" loading="lazy">
+                <div class="news-img-caption">Passo 4: Ícone do checklist</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_7.jpg" alt="Conferência de material operacional" loading="lazy">
+                <div class="news-img-caption">Passo 5: Conferência de itens operacionais</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_8.jpg" alt="Copiar mensagem padronizada" loading="lazy">
+                <div class="news-img-caption">Passo 6: Cópia da mensagem para formulário</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 2: Obras de Reforma -->
+          <article class="news-article-card">
+            <h3>Início das obras de reforma e readequação do DBM1/GOA</h3>
+            <div class="meta">Primeira fase - Reforma do alojamento feminino e almoxarifado médico</div>
+            <p>Para a primeira fase de obras nas dependências do DBM1/GOA, foram instalados 3 containers com as seguintes funções: Alojamento provisório feminino, almoxarifado médico provisório e banheiros para os colaboradores da empresa Argal.</p>
+            <p>O próximo passo é a realização da liberação do alojamento feminino e almoxarifado médico para início da reforma.</p>
+            <img src="assets/noticias/noticias_img_9.jpg" alt="Containers instalados para reforma do DBM1/GOA" class="news-img-banner" loading="lazy">
+          </article>
+
+          <!-- Artigo 3: Padronização de EPI -->
+          <article class="news-article-card">
+            <h3>Padronização de EPI - Aquisição de Short John</h3>
+            <div class="meta">Utilização de short john para salvamento aquático</div>
+            <p>Após longo processo de aquisição de EPI's para salvamento aquático, tornou-se viável a implementação da padronização para este tipo de atividade. Fica o registro da maneira correta de equipagem do fiel: Short john (roupa curta de neoprene), luvas de neoprene e botas de neoprene.</p>
+            <p><strong>Cautela de EPI - Long John, botas e luvas de neoprene:</strong> Encontram-se disponíveis para cautela no DMOP do DBM1/GOA kit contendo Long John, par de botas e luvas de neoprene. Para realizar a cautela procure o militar de serviço de dia ao depósito e preencha o formulário descrito na página inicial deste site.</p>
+            <div class="news-img-grid" style="grid-template-columns: 1fr 1fr;">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_10.jpg" alt="Equipagem com Short John, luvas e botas de neoprene" style="height: 260px;" loading="lazy">
+                <div class="news-img-caption">Fiel equipado: Short John, botas e luvas de neoprene para salvamento aquático</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_11.jpg" alt="Cautela de EPIs no DMOP" style="height: 260px;" loading="lazy">
+                <div class="news-img-caption">Kits de Long John, botas e luvas disponíveis para cautela no DMOP</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 4: Quesito Eletrônico -->
+          <article class="news-article-card">
+            <h3>Orientações para preenchimento do quesito eletrônico</h3>
+            <div class="meta">Responsabilidades no processo de confecção do quesito eletrônico</div>
+            <p>Devido a inconsistência e falhas nos lançamentos de eventos no SISGEO, reforço o procedimento a ser adotado seguindo a norma vigente para lançamento das informações no SISGEO e Oncall, além do preenchimento de quesitos:</p>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+              <li>1️⃣ <strong>Militar responsável pelo preenchimento:</strong> CHEFE DE GUARNIÇÃO - (SAR - FIEL) / AEROMÉDICO - (MÉDICO).<br><small style="color: var(--gold-wings);">⚠️ Obs.: A responsabilidade pode ser delegada, mas o fiel registro das informações continua sob responsabilidade do chefe de guarnição.</small></li>
+              <li>2️⃣ <strong>Militar responsável pela assinatura:</strong> COMANDANTE DO SOCORRO - (SAR - COMANDANTE DA AERONAVE) / (AEROMÉDICO - COMANDANTE DA AERONAVE).</li>
+              <li>3️⃣ <strong>Responsáveis pela conferência:</strong> SUBCOMANDANTE OPERACIONAL SENDO DELEGÁVEL AO CHEFE DA SOP.</li>
+              <li>⚠️ <em>Em eventos onde haja somente piloto e copiloto, a responsabilidade de preenchimento é do copiloto e assinatura do comandante da aeronave.</em></li>
+            </ul>
+            <p><strong>Orientações ao operador da SsCO - Atenção às funções no Oncall:</strong><br>
+            🔴 Comandante da Aeronave = Comandante do socorro<br>
+            🔴 Operador de Suporte Médico (Médico de serviço) = Chefe de guarnição<br>
+            🔴 Operador Aerotático (Fiel) = Chefe de guarnição</p>
+            <div class="news-img-grid" style="grid-template-columns: 1fr 1fr;">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_12.jpg" alt="Fluxo do Quesito Eletrônico" style="height: 240px;" loading="lazy">
+                <div class="news-img-caption">Fluxograma e responsabilidades de confecção do Quesito Eletrônico</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_13.jpg" alt="Lançamento no Oncall" style="height: 240px;" loading="lazy">
+                <div class="news-img-caption">Padronização de funções a bordo no sistema Oncall</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 5: Vídeos Oficiais do SIG-MAT -->
+          <article class="news-article-card">
+            <h3>Operação do SIG-MAT (Controle DMOP)</h3>
+            <div class="meta">Fase final do estabelecimento do controle de material operacional</div>
+            <p>Como previsto, foi concluída a entrada definitiva em operação do SIG-MAT (Sistema de Gerenciamento de Material Operacional). Após as várias etapas e com apoio total da tropa, foi possível estabelecer a rotina e o controle necessário para embasamento de decisões estratégicas na aquisição e controle dos equipamentos que garantem a segurança de nossos operadores e da população.</p>
+            <img src="assets/noticias/noticias_img_14.jpg" alt="Depósito de Material Operacional do DBM1/GOA" class="news-img-banner" style="max-height: 280px;" loading="lazy">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px;">
+              <iframe width="100%" height="240" src="https://www.youtube.com/embed/-zFhjY0cmx0" frameborder="0" allowfullscreen style="border-radius: var(--radius-sm);"></iframe>
+              <iframe width="100%" height="240" src="https://www.youtube.com/embed/Afc4AipbFcY" frameborder="0" allowfullscreen style="border-radius: var(--radius-sm);"></iframe>
+            </div>
+          </article>
+
+          <!-- Artigo 6: Aquisição de Material Operacional -->
+          <article class="news-article-card">
+            <h3>Material operacional adquirido pelo DBM1/GOA</h3>
+            <div class="meta">Relatório encaminhado ao CBA VIII • Processo SEI nº 124235079</div>
+            <p>Em coordenação do comando do DBM1/GOA com órgãos responsáveis, foram adquiridos materiais operacionais com objetivo de suprir necessidade gerada pelo fim da vida útil de diversos equipamentos, principalmente têxteis. O processo de catalogação bem como de organização foi liderado pelos Subten Roque e Sgt Wander que identificaram e catalogaram todos os materiais recebidos e deram início ao processo de reorganização do depósito de material operacional.</p>
+            <a href="https://sei.rj.gov.br/sei/controlador.php?acao=procedimento_trabalhar&id_procedimento=124235079" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size: 0.85rem;">
+              Abrir Processo SEI nº 124235079 ↗
+            </a>
+          </article>
+
+          <!-- Artigo 7: Treinamento Físico e Esteira -->
+          <article class="news-article-card">
+            <h3>Aquisição de esteira ergométrica profissional Xtreme XT025</h3>
+            <div class="meta">Projeto de Treinamento Físico • Calistenia e Corrida</div>
+            <p>Como parte do projeto de implementação do treinamento físico constante, que contempla calistenia orientada pelo Cap BM Leandro, esteira ergométrica e teqball, foi adquirida através do CBMERJ uma esteira profissional para propiciar oportunidade de treinos de corrida às equipes de serviço sem comprometer a prontidão.</p>
+            <img src="assets/noticias/noticias_img_17.jpg" alt="Esteira Ergométrica Xtreme XT025 no DBM1/GOA" class="news-img-banner" style="max-height: 320px;" loading="lazy">
+          </article>
+
+          <!-- Artigo 8: Identificação e Reforma do DMOP -->
+          <article class="news-article-card">
+            <h3>Identificação individual de material operacional e 2ª Fase de Reformas</h3>
+            <div class="meta">Subten Lemos • Gravação de Numeração e Instalações UASA</div>
+            <p>Cada material recebeu número de identificação individual permitindo rastreio de cautelas e possíveis avarias. Contemplando a readequação do corredor de acesso ao DMOP e organização do depósito, teve início a segunda fase com recursos próprios e mão de obra das alas de serviço.</p>
+            <p>Com a perda do espaço onde funcionava a UASA por demolição no antigo SAER, a Unidade Avançada foi realocada provisoriamente para dedicação exclusiva ao suporte de saúde.</p>
+            <div class="news-img-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_18.jpg" alt="Subten Lemos gravando numeração" loading="lazy">
+                <div class="news-img-caption">Subten Lemos durante o processo de gravação individual dos equipamentos</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_19.jpg" alt="Novos sofás para a sala de briefing" loading="lazy">
+                <div class="news-img-caption">Novos sofás recebidos para a sala de briefing</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_20.jpg" alt="Corredor de acesso ao DMOP" loading="lazy">
+                <div class="news-img-caption">Corredor de acesso ao DMOP revitalizado</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_21.jpg" alt="Instalações provisórias da UASA" loading="lazy">
+                <div class="news-img-caption">Espaço adaptado para a Unidade Avançada de Suporte Aeromédico (UASA)</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 9: Estudo de Déficit de Efetivo -->
+          <article class="news-article-card">
+            <h3>Estudo de déficit de efetivo no GOA e DBM1/GOA</h3>
+            <div class="meta">Análise Operacional de Postos de Trabalho e Aeronaves Esquilo / AW169</div>
+            <p>Levantamento dos 11 postos de trabalho diários ocupados por praças. Para a escala de 2 aeronaves Esquilo (salvamento e aeromédico) e sobreaviso do AW169, demonstrou-se a dependência do RAS e a iminência de reservas remuneradas:</p>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
+              <li>➡️ Déficit imediato com dinâmica atual: <strong>aprox. 14 militares</strong>.</li>
+              <li>➡️ Déficit com a passagem dos aptos à reserva: <strong>aprox. 26 militares</strong>.</li>
+              <li>➡️ Déficit contemplando operadores de SsCO exclusivos, apoio de solo no GOA e equipe dedicada ao AW169: <strong>aprox. 90 militares</strong>.</li>
+            </ul>
+            <div class="news-img-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_22.jpg" alt="Tabela de postos de serviço" loading="lazy">
+                <div class="news-img-caption">Quadro de distribuição das escalas de serviço</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_23.jpg" alt="Gráfico de efetivo" loading="lazy">
+                <div class="news-img-caption">Projeção da necessidade de tripulações SAR e Aeromédico</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_24.jpg" alt="Quadro de reservas remuneradas" loading="lazy">
+                <div class="news-img-caption">Estatística de militares aptos à reserva remunerada</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_25.jpg" alt="Demanda de apoio de solo" loading="lazy">
+                <div class="news-img-caption">Demanda operacional de apoio de solo no heliponto</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_26.jpg" alt="Balanço consolidado de efetivo" loading="lazy">
+                <div class="news-img-caption">Síntese consolidada do déficit por postos de prontidão</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 10: Instrução à Marinha do Brasil -->
+          <article class="news-article-card">
+            <h3>Excelência em salvamento em altura: Marinha do Brasil e Bombeiros-RJ</h3>
+            <div class="meta">Curso Especial de Tripulante Aéreo de Resgate da Marinha</div>
+            <p>Instrução especializada de salvamento em altura ministrada pelo GOA aos militares da Marinha do Brasil no DBM 1/GOA: técnicas de descida em corda (rapel) a partir da aeronave, procedimentos de segurança e coordenação ar-terra em ambiente urbano complexo. <em>Para que outros possam viver!</em></p>
+            <div class="news-img-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_27.jpg" alt="Instrução aos militares da Marinha" loading="lazy">
+                <div class="news-img-caption">Briefing e alinhamento prático de salvamento em altura</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_28.jpg" alt="Treinamento com aeronave" loading="lazy">
+                <div class="news-img-caption">Técnicas de descida em corda a partir do helicóptero</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_29.jpg" alt="Guarnição conjunta CBMERJ e Marinha" loading="lazy">
+                <div class="news-img-caption">Equipes do GOA e futuros tripulantes aéreos de resgate da Marinha</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_30.jpg" alt="Instrução prática no DBM1/GOA" loading="lazy">
+                <div class="news-img-caption">Conclusão da instrução técnica de prontidão aérea</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 11: Fim da 1ª Fase e Monitor Dinâmico -->
+          <article class="news-article-card">
+            <h3>Fim da primeira fase de reformas e Quadro de Avisos Dinâmico</h3>
+            <div class="meta">Sala de Briefing • Gabinete do Comando • Monitor Externo</div>
+            <p>A sala de briefing e o gabinete receberam pintura, tratamento de infiltração, elétrica nova e mobiliário. Foi instalado monitor voltado para fora da SsCO para exibição diária de avisos e segurança operacional, dando origem à concepção do SisGer DBM1/GOA capitaneada pelo Maj BM Barbosa.</p>
+            <div class="news-img-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_31.jpg" alt="Sala de briefing reformada" loading="lazy">
+                <div class="news-img-caption">Sala de briefing após obras de revitalização</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_32.jpg" alt="Ambiente de briefing" loading="lazy">
+                <div class="news-img-caption">Espaço readequado para os briefings matinais e operacionais</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_33.jpg" alt="Gabinete do Comando" loading="lazy">
+                <div class="news-img-caption">Gabinete do comando com nova funcionalidade e suporte administrativo</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_34.jpg" alt="Monitor externo SsCO" loading="lazy">
+                <div class="news-img-caption">Monitor externo instalado para avisos dinâmicos à tropa</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/noticias/noticias_img_35.jpg" alt="Interface SisGer DBM1/GOA" loading="lazy">
+                <div class="news-img-caption">Portal SisGer DBM1/GOA em operação no monitor externo</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Artigo 12: Demanda e Inspeção de Material -->
+          <article class="news-article-card">
+            <h3>Inspeção técnica e catálogo do material operacional</h3>
+            <div class="meta">Relatório de Demandas e Proposta de Expansão • DBM 1 / GOA</div>
+            <p>Devido a inconsistências nas informações referentes ao material operacional, foi iniciado o projeto de catalogação e inspeção minuciosa de cada lote de salvamento e resgate aéreo, subsidiando a proposta técnica de expansão da infraestrutura e aquisições estratégicas.</p>
+            <img src="assets/noticias/noticias_img_38.jpg" alt="Inspeção e catálogo do material operacional" class="news-img-banner" style="max-height: 320px;" loading="lazy">
+          </article>
+
+          <!-- Artigo 13: Homenagem O Navio de Teseu -->
+          <article class="news-article-card">
+            <h3>O Navio de Teseu • Símbolo de reconhecimento e história</h3>
+            <div class="meta">Homenagem ao Major Rodolfo Augusto • Maj BM Igor Liborio de Azevedo (2025)</div>
+            <div class="news-quote-box">
+              "Assim como no paradoxo do Navio de Teseu, onde mesmo em uma jornada longa e árdua sua identidade permanece inalterada ante a substituição das inúmeras partes que o compunham, também permanece o Grupamento de Operações Aéreas... Ao honrar aqueles que partiram e aqueles que estiveram conosco em cada salvamento, reconhecemos que cada tábua foi fundamental para a jornada do GOA. Leve consigo uma lembrança física do amor e bravura com que se dedica a nobre arte de voar, pairar e salvar!"
+            </div>
+            <p>A lembrança é, em essência, confeccionada com uma parte real de aeronave desativada que fez parte da história do socorro público aéreo fluminense.</p>
+            <img src="assets/noticias/noticias_img_39.jpg" alt="Lembrança O Navio de Teseu com peça de aeronave" class="news-img-banner" style="max-height: 340px;" loading="lazy">
+          </article>
+
+          <!-- Artigo 14: Programa de Treinamento de Condutores de ATC -->
+          <article class="news-article-card">
+            <h3>PTO - Capacitação de condutores para viaturas tipo Auto Tanque de Combustível</h3>
+            <div class="meta">Operação Extinctus • Maj BM Barbosa</div>
+            <p>Capacitação de militares do CBA VIII para operação das viaturas ATC do GOA, abastecimento de campo e segurança nas operações helitransportadas durante combate a incêndios florestais no Estado do Rio de Janeiro.</p>
+            <img src="assets/noticias/noticias_img_40.jpg" alt="Capacitação de condutores para viaturas ATC no GOA" class="news-img-banner" style="max-height: 320px;" loading="lazy">
+          </article>
+        </section>
+
+        <!-- ==================================================================
+             TELA 11: HISTÓRICO (MEMORIAL COMPLETO DO GOA, CTO, CCOA, CEVANT)
+             ================================================================== -->
+        <section class="view-section" id="view-historico">
+          <div class="card" style="margin-bottom: 28px;">
+            <div class="card-header">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <img src="assets/brasao_goa.png" alt="Brasão GOA" style="width: 56px; height: 56px;">
+                <div>
+                  <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; font-weight: 800;">
+                    Histórico Memorial do DBM 1 / GOA
+                  </h3>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
+                    Corpo de Bombeiros Militar do Estado do Rio de Janeiro • Quatro décadas de asas salvadoras.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Histórico da Aviação no RJ -->
+          <article class="news-article-card">
+            <h3>Histórico da aviação no Estado do Rio de Janeiro</h3>
+            <div class="meta">1985 • Coordenadoria Geral de Operações Aéreas (CGOA)</div>
+            <p>
+              Em 1985 foi criada a Coordenadoria Geral de Operações Aéreas (CGOA), órgão subordinado à Secretaria de Governo do Estado do Rio de Janeiro, oriunda da fusão entre a Assessoria Aeropolicial da Secretaria de Segurança Pública e a Assessoria de Operações Aéreas do DER. À CGOA competia realizar Operações Aéreas Policiais, Resgate no Mar, Defesa Civil, Combate a Incêndio, Transporte de Autoridades e Transporte Aeromédico.
+            </p>
+            <p>
+              Na CGOA reuniam-se pilotos, mecânicos e tripulantes operacionais do CBMERJ, PMERJ, PCERJ e DER. Em 2002 as corporações estaduais iniciaram o processo de criação de suas próprias Unidades de Aviação Pública (UAP), surgindo o GAM na PMERJ, o SAER na PCERJ, a SAOA/DGOA no governo e o <strong>GOA no CBMERJ</strong>.
+            </p>
+            <div class="news-img-grid" style="grid-template-columns: 1fr 1fr;">
+              <div class="news-img-item">
+                <img src="assets/historico/historico_img_3.jpg" alt="CGOA 1985 - Criação das Operações Aéreas" style="height: 240px;" loading="lazy">
+                <div class="news-img-caption">Criação da Coordenadoria Geral de Operações Aéreas (CGOA) em 1985</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/historico/historico_img_4.jpg" alt="Pioneiros da Aviação de Segurança Pública" style="height: 240px;" loading="lazy">
+                <div class="news-img-caption">Aeronaves e equipes pioneiras da aviação pública no Estado do Rio</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Histórico do GOA -->
+          <article class="news-article-card">
+            <h3>Histórico do GOA</h3>
+            <div class="meta">Seção de Apoio Aéreo (1985) • 2º DBS (2001) • Esquadrão Grifon (Decreto 34.214/2003)</div>
+            <p>
+              O primeiro contato do CBMERJ com a aviação remonta a 08 de janeiro de 1985, com a criação da Seção de Apoio Aéreo do Grupamento Marítimo (SAA), realizando patrulhamento e lançamento de boias para vítimas de afogamento.
+            </p>
+            <p>
+              Em 2001 foi criado no antigo CGOA o 2º Destacamento de Busca e Salvamento, subordinado ao GBS para gerenciar os Tripulantes Operacionais do CBMERJ. Em 2003 o serviço foi absorvido pela estrutura do CBMERJ sendo subordinado ao recém-criado Grupamento de Operações Aéreas. O antigo 1º DBS passou a ser denominado <strong>DBM1/GOA</strong>.
+            </p>
+            <p>
+              O GOA uniu a aviação de asa fixa e rotativa através do Decreto Estadual nº 34.214, de 29 de outubro de 2003 (Esquadrão Grifon), inaugurado em 15 de fevereiro de 2004.
+            </p>
+            <div class="news-img-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+              <div class="news-img-item">
+                <img src="assets/historico/historico_img_5.jpg" alt="Seção de Apoio Aéreo (SAA 1985)" loading="lazy">
+                <div class="news-img-caption">Seção de Apoio Aéreo (SAA/1985) - Pioneirismo no salvamento marítimo</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/historico/historico_img_6.jpg" alt="2º Destacamento de Busca e Salvamento (2001)" loading="lazy">
+                <div class="news-img-caption">2º DBS (2001) subordinado ao Grupamento de Busca e Salvamento (GBS)</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/historico/historico_img_7.jpg" alt="Operações de Salvamento com Asas Rotativas" loading="lazy">
+                <div class="news-img-caption">Missões de resgate em altura e marítimo com helicópteros</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/historico/historico_img_8.jpg" alt="Criação do Esquadrão Grifon (2003)" loading="lazy">
+                <div class="news-img-caption">Inauguração do GOA - Esquadrão Grifon (Decreto nº 34.214/2003)</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Histórico do CTO -->
+          <article class="news-article-card">
+            <h3>Histórico do CTO • Curso de Tripulante Operacional</h3>
+            <div class="meta">Boletim SEDEC de 20/09/2010 • 8 Turmas • 156 Militares Formados</div>
+            <p>
+              Criado para atender à necessidade de padronização técnica voltada para resgates no mar, montanha, altura e missões aeromédicas. O curso habilita médicos, enfermeiros, técnicos de enfermagem e especialistas em salvamento a ingressarem no GOA.
+            </p>
+            <p>
+              O currículo contempla salvamento aquático, rapel, guincho, montanha, CRM (Crew Resource Management), APH tático, medicina aeroespacial e regulamentos. Ao todo formou 8 turmas e 156 especialistas, sendo pioneiro nacional ao capacitar tripulações mistas com equipes de saúde a bordo.
+            </p>
+            <div class="news-img-item" style="max-width: 600px; margin: 14px auto 0;">
+              <img src="assets/historico/historico_img_9.jpg" alt="Instrução do Curso de Tripulante Operacional (CTO)" style="height: 300px;" loading="lazy">
+              <div class="news-img-caption">Turma de formação de Tripulantes Operacionais do CBMERJ em exercício técnico</div>
+            </div>
+          </article>
+
+          <!-- Histórico do CCOA -->
+          <article class="news-article-card">
+            <h3>Histórico do CCOA • Curso de Comandante de Operações Aéreas</h3>
+            <div class="meta">Portaria CBMERJ nº 1158 de 06/10/2021 • Regulamento RBAC nº 90</div>
+            <p>
+              Instituído para consolidar a formação própria de pilotos combatentes do CBMERJ em conformidade com as exigências da ANAC e do RBAC 90, capacitando oficiais para liderarem missões complexas de resgate, combate a incêndios e aeromédico sob condições extremas.
+            </p>
+          </article>
+
+          <!-- Histórico do CEVANT -->
+          <article class="news-article-card">
+            <h3>Histórico do CEVANT • Especialização em Veículos Aéreos Não Tripulados</h3>
+            <div class="meta">Portaria CBMERJ nº 882 de 13/01/2016 • COVANT • 142 Alunos Formados</div>
+            <p>
+              Criado para regulamentar e padronizar o emprego de drones em operações de socorro, mapeamento de desastres e busca e salvamento no CBMERJ. A COVANT já formou 6 turmas totalizando 142 operadores capacitados.
+            </p>
+          </article>
+
+          <!-- Galeria Operacional Real: Asas que Salvam -->
+          <article class="news-article-card" style="background: linear-gradient(135deg, rgba(16, 26, 48, 0.9), rgba(7, 11, 20, 0.95)); border: 1px solid var(--border-active);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span class="mural-badge badge-warning">GALERIA OPERACIONAL HISTÓRICA</span>
+              <h3 style="margin: 0;">Legado em Ação • Asas que Salvam</h3>
+            </div>
+            <p>
+              Registros autênticos das missões reais desempenhadas pelo 1º DBM / GOA em todo o território fluminense: salvamentos aquáticos na orla, resgates verticais em encostas e montanhas, missões aeromédicas e a prontidão constante de nossas aeronaves e tripulantes.
+            </p>
+            <div class="news-img-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+              <div class="news-img-item">
+                <img src="assets/goa_pp_ece_sunset.jpg" alt="Esquilo PP-ECE no heliponto da Lagoa" style="height: 220px;" loading="lazy">
+                <div class="news-img-caption">Aeronave Esquilo PP-ECE no heliponto da Lagoa Rodrigo de Freitas ao pôr do sol</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/goa_rapel_operacional.jpg" alt="Salvamento em encosta com rapel" style="height: 220px;" loading="lazy">
+                <div class="news-img-caption">Resgate tático em encosta com içamento e rapel duplo na montanha</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/goa_resgate_praia.jpg" alt="Salvamento marítimo na praia" style="height: 220px;" loading="lazy">
+                <div class="news-img-caption">Salvamento marítimo com lançamento de tripulante operacional na água</div>
+              </div>
+              <div class="news-img-item">
+                <img src="assets/goa_dois_irmaos_sunset.jpg" alt="Patrulhamento Morro Dois Irmãos" style="height: 220px;" loading="lazy">
+                <div class="news-img-caption">Patrulhamento ao entardecer com o Morro Dois Irmãos ao fundo</div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================
+       MODAL DE GESTÃO DO PORTAL (CMS FÁCIL)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="cms-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3>Painel de Gestão & Edição Fácil</h3>
+          <p style="font-size: 0.8rem; color: var(--text-secondary);">
+            Atualize o Quadro de Trabalho, avisos e conexões sem mexer em código.
+          </p>
+        </div>
+        <button class="btn-icon" id="btn-close-cms">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>ID ou Link do Quadro de Trabalho (Google Drive)</label>
+          <input type="text" id="cms-quadro-id" placeholder="Cole o link ou ID do arquivo no Google Drive">
+          <span class="form-help">Basta colar o link de compartilhamento do PDF/Documento no Google Drive.</span>
+        </div>
+
+        <div class="form-group">
+          <label>URL do Google Apps Script (Opção 1 - Drive Bridge)</label>
+          <input type="text" id="cms-script-url" placeholder="https://script.google.com/macros/s/.../exec">
+          <span class="form-help">URL do WebApp implantado no Google Apps Script sob a conta dbmlagoa@gmail.com.</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label>Link do Google Form (Checklist)</label>
+            <input type="text" id="cms-checklist-form">
+          </div>
+          <div class="form-group">
+            <label>Link da Planilha CSV Publicada</label>
+            <input type="text" id="cms-checklist-csv">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label>Avisos no Mural da TV Vertical</label>
+            <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovoAvisoCMS()">
+              + Adicionar Novo Aviso
+            </button>
+          </div>
+          <div id="cms-avisos-list"></div>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label>Horários da Rotina Diária Oficial</label>
+            <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovaRotinaCMS()">
+              + Adicionar Horário
+            </button>
+          </div>
+          <div id="cms-rotinas-list"></div>
+        </div>
+
+        <!-- Gestão de Notícias no CMS -->
+        <div style="background: rgba(255, 85, 0, 0.08); border: 1px solid var(--border-active); border-radius: var(--radius-sm); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h5 style="color: #fff; font-weight: 700; margin-bottom: 2px;">Publicação de Notícias & Comunicados</h5>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);">Crie comunicados oficiais com fotos e data padronizada no portal.</span>
+          </div>
+          <button type="button" class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="document.getElementById('cms-modal').classList.remove('active'); navigateTo('noticias'); const p = document.getElementById('news-publish-card'); p.style.display = 'block'; document.getElementById('new-post-title').focus();">
+            ✍️ Publicar Notícia
+          </button>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h5 style="color: #fff; font-weight: 700; margin-bottom: 2px;">Backup de Segurança</h5>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Transfira ou guarde as configurações do portal em 1 clique.</span>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="exportarBackupJSON()">
+              📥 Baixar Backup (.json)
+            </button>
+            <label class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem; cursor: pointer;">
+              📤 Restaurar
+              <input type="file" accept=".json" style="display: none;" onchange="importarBackupJSON(event)">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="document.getElementById('cms-modal').classList.remove('active')">
+          Cancelar
+        </button>
+        <button type="button" class="btn-primary" onclick="salvarAlteracoesCMS()">
+          💾 Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SOLICITAÇÃO DE MANUTENÇÃO / OBRAS (grava na planilha da pasta Obras do Drive) -->
+  <div class="modal-backdrop" id="manutencao-modal">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>🛠️ Solicitação de Manutenção / Obras</h3>
+        <button type="button" class="btn-icon" onclick="fecharFormManutencao()">✕</button>
+      </div>
+      <form id="manutencao-form" onsubmit="event.preventDefault(); enviarManutencao();">
+        <div class="modal-body">
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Informe problemas de manutenção predial ou qualquer necessidade da rotina do DBM 1/GOA. O registro é salvo automaticamente na planilha da pasta <strong>Obras</strong> do Drive da unidade.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="mnt-posto">Posto / Graduação *</label>
+              <select id="mnt-posto" required>
+                <option value="">Selecione...</option>
+                <option>Coronel</option><option>Tenente-Coronel</option><option>Major</option><option>Capitão</option>
+                <option>1º Tenente</option><option>2º Tenente</option><option>Aspirante a Oficial</option>
+                <option>Subtenente</option><option>1º Sargento</option><option>2º Sargento</option><option>3º Sargento</option>
+                <option>Cabo</option><option>Soldado</option><option>Outro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mnt-rg">RG *</label>
+              <input type="text" id="mnt-rg" inputmode="numeric" placeholder="Ex: 012345" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="mnt-nome">Nome *</label>
+            <input type="text" id="mnt-nome" placeholder="Nome completo ou de guerra" required>
+          </div>
+          <div class="form-group">
+            <label for="mnt-descricao">Descrição do problema encontrado *</label>
+            <textarea id="mnt-descricao" rows="4" placeholder="Descreva o problema, o local e a urgência..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Deseja enviar fotos?</label>
+            <div style="display: flex; gap: 18px; margin-bottom: 8px;">
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="radio" name="mnt-fotos-opt" value="nao" checked onchange="alternarFotosManutencao()"> Não</label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="radio" name="mnt-fotos-opt" value="sim" onchange="alternarFotosManutencao()"> Sim</label>
+            </div>
+            <div id="mnt-fotos-box" style="display: none;">
+              <label class="btn-secondary" style="padding: 10px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+                📷 Escolher / Tirar Fotos (máx. 6)
+                <input type="file" id="mnt-fotos-input" accept="image/*" multiple style="display: none;" onchange="previewFotosManutencao()">
+              </label>
+              <div id="mnt-fotos-preview" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;"></div>
+            </div>
+          </div>
+          <div id="mnt-status" style="display: none; font-size: 0.88rem; font-weight: 700; padding: 10px 12px; border-radius: var(--radius-sm);"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="fecharFormManutencao()">Cancelar</button>
+          <button type="submit" class="btn-primary" id="mnt-submit-btn">📨 Enviar Solicitação</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE QR CODE RÁPIDO -->
+  <div class="modal-backdrop" id="qr-modal">
+    <div class="modal-card" style="max-width: 400px; text-align: center;">
+      <div class="modal-header">
+        <h3 id="qr-modal-title">QR Code</h3>
+        <button class="btn-icon" onclick="fecharModalQRCode()">✕</button>
+      </div>
+      <div class="modal-body" style="align-items: center;">
+        <img id="qr-modal-img" src="" alt="QR Code" style="width: 220px; height: 220px; background: #fff; padding: 10px; border-radius: var(--radius-sm); margin: 10px auto;">
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Aponte a câmera do seu smartphone para abrir o formulário imediatamente.
+        </p>
+        <a id="qr-modal-link" href="#" target="_blank" style="font-size: 0.8rem; color: var(--cyan-tactical); word-break: break-all; margin-top: 8px;"></a>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn-secondary" onclick="fecharModalQRCode()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts do Portal -->
+  <script src="js/config.js?v=2.9"></script>
+  <script src="js/aero_weather.js?v=2.9"></script>
+  <script src="js/app.js?v=2.9"></script>
+  <script src="js/cms.js?v=2.9"></script>
+</body>
+</html>
