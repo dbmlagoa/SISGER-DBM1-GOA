@@ -223,6 +223,7 @@ async function verificarChecklistStatus() {
   }
 
   // Atualizar visual na interface
+  const cardBox = document.getElementById("checklist-card-box");
   if (conferido || valorB2 === "1") {
     const successHTML = `<span class="pulse-dot" style="background-color: #22c55e;"></span> ✅ PRONTO EMPREGO (CONFERIDO)`;
     if (badge) {
@@ -233,8 +234,12 @@ async function verificarChecklistStatus() {
       tvBadge.className = "status-indicator-badge badge-success";
       tvBadge.innerHTML = successHTML;
     }
+    if (cardBox) {
+      cardBox.classList.add("status-conferido");
+      cardBox.classList.remove("status-pendente");
+    }
     if (desc) {
-      desc.textContent = "Conferência diária de material REALIZADA com sucesso na planilha oficial. Carga e aeronave prontas para acionamento operacional.";
+      desc.textContent = "Conferência diária de material realizada com sucesso na planilha oficial.";
     }
   } else {
     const warningHTML = `<span class="pulse-dot" style="background-color: var(--gold-wings);"></span> ❌ CHECKLIST PENDENTE`;
@@ -246,8 +251,12 @@ async function verificarChecklistStatus() {
       tvBadge.className = "status-indicator-badge badge-warning";
       tvBadge.innerHTML = warningHTML;
     }
+    if (cardBox) {
+      cardBox.classList.add("status-pendente");
+      cardBox.classList.remove("status-conferido");
+    }
     if (desc) {
-      desc.textContent = "Conferência diária de material ainda NÃO registrada hoje na planilha. Tripulação deve realizar o checklist após o briefing das 06:20h.";
+      desc.textContent = "Conferência diária de material ainda não registrada hoje na planilha oficial.";
     }
   }
 }
