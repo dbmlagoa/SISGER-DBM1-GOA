@@ -1116,6 +1116,7 @@ body.tv-mode-active .tv-kiosk-container {
   display: flex;
   align-items: center;
   gap: 6px;
+  pointer-events: none;
 }
 
 .tv-routine-container {
