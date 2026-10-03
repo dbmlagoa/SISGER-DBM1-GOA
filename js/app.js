@@ -732,21 +732,29 @@ function initTvModeHandlers() {
     tvMntQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(link);
   }
 
-  // Fallback do vídeo oficial: se o arquivo local MP4 não for encontrado (ex: no GitHub Pages), toca direto do Google Drive
-  const tvVideoEl = document.getElementById("tv-video-player");
-  if (tvVideoEl) {
-    tvVideoEl.addEventListener("error", () => {
+  // Modo TV Vídeo: suporte duplo (Drive Embed para Nuvem/GitHub Pages e Local MP4 para localhost)
+  const isLocal = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+  if (isLocal) {
+    const testVid = document.createElement("video");
+    testVid.src = "assets/video_recomendacoes_goa.mp4";
+    testVid.onloadeddata = function() {
       const wrapper = document.getElementById("tv-video-wrapper");
-      if (wrapper && !wrapper.querySelector("iframe")) {
-        wrapper.innerHTML = `<iframe src="https://drive.google.com/file/d/1x5rcnA3uGS-BICz-KsjbRdXVSWH4XSfp/preview" style="width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
+      if (wrapper && !wrapper.querySelector("video")) {
+        wrapper.innerHTML = `
+          <div class="tv-video-tag">🎥 RECOMENDAÇÕES DE SEGURANÇA • GOA</div>
+          <video id="tv-video-player" src="assets/video_recomendacoes_goa.mp4" autoplay loop muted playsinline controls preload="auto" style="width: 100%; height: 100%; object-fit: contain; background: #000; border: none;"></video>
+        `;
+        const v = document.getElementById("tv-video-player");
+        if (v && document.body.classList.contains("tv-mode-active")) {
+          v.play().catch(() => {});
+        }
       }
-    });
+    };
   }
 }
 
 function ativarModoTv(ativar) {
   const tvContainer = document.getElementById("tv-kiosk-view");
-  const tvVideo = document.getElementById("tv-video-player");
 
   if (ativar) {
     document.body.classList.add("tv-mode-active");
@@ -762,8 +770,9 @@ function ativarModoTv(ativar) {
     if (typeof renderRotinaDiaria === "function") {
       renderRotinaDiaria();
     }
-    // Iniciar vídeo oficial em loop na TV
-    if (tvVideo) {
+    // Iniciar vídeo oficial em loop na TV (se for player de vídeo HTML5)
+    const tvVideo = document.getElementById("tv-video-player");
+    if (tvVideo && typeof tvVideo.play === "function") {
       tvVideo.muted = true;
       try {
         const playPromise = tvVideo.play();
@@ -784,7 +793,8 @@ function ativarModoTv(ativar) {
         document.exitFullscreen().catch(() => {});
       } catch (err) {}
     }
-    if (tvVideo) {
+    const tvVideo = document.getElementById("tv-video-player");
+    if (tvVideo && typeof tvVideo.pause === "function") {
       try {
         tvVideo.pause();
       } catch (e) {}
