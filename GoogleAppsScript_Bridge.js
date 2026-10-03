@@ -222,23 +222,83 @@ function getOrCreateObrasFolder() {
   return DriveApp.createFolder(OBRAS_FOLDER_NAME);
 }
 
+/**
+ * ============================================================================
+ * FUNÇÃO DE AUTORIZAÇÃO / INICIALIZAÇÃO DA PLANILHA (EXECUTE 1 VEZ NO EDITOR)
+ * ============================================================================
+ * 1. Abra o script no Google Apps Script (script.google.com).
+ * 2. Cole este código atualizado.
+ * 3. Na barra superior (ao lado de 'Depurar'), selecione a função:
+ *    👉 autorizarCriarPlanilhaObras
+ * 4. Clique em ▶️ "Executar".
+ * 5. O Google solicitará autorização para usar o Google Planilhas (Spreadsheets).
+ *    Clique em "Revisar permissões" -> escolha sua conta -> "Avançado" -> "Acessar (não seguro)" -> "Permitir".
+ * 6. Pronto! A pasta "Obras" e a planilha "Solicitações de Manutenção DBM1-GOA" serão
+ *    criadas imediatamente no seu Drive, e o formulário do portal passará a gravar com sucesso!
+ * 7. Em seguida, clique em "Implantar" -> "Gerenciar implantações" -> Editar (ícone lápis) -> Nova versão -> Implantar.
+ */
+function autorizarCriarPlanilhaObras() {
+  var obras = getOrCreateObrasFolder();
+  var ss = getOrCreateManutencaoSheet(obras);
+  Logger.log("==================================================");
+  Logger.log("✅ AUTORIZAÇÃO E CRIAÇÃO CONCLUÍDAS COM SUCESSO!");
+  Logger.log("Pasta no Drive: " + obras.getName() + " -> " + obras.getUrl());
+  Logger.log("Planilha criada: " + ss.getName() + " -> " + ss.getUrl());
+  Logger.log("==================================================");
+  return {
+    status: "success",
+    pastaNome: obras.getName(),
+    pastaUrl: obras.getUrl(),
+    planilhaNome: ss.getName(),
+    planilhaUrl: ss.getUrl()
+  };
+}
+
 function getOrCreateManutencaoSheet(obrasFolder) {
+  // Procura se já existe dentro da pasta Obras
   var files = obrasFolder.getFilesByName(MANUTENCAO_SHEET_NAME);
   if (files.hasNext()) {
     return SpreadsheetApp.open(files.next());
   }
+
+  // Verifica se porventura foi criada na raiz do Drive anteriormente
+  var rootFiles = DriveApp.getFilesByName(MANUTENCAO_SHEET_NAME);
+  if (rootFiles.hasNext()) {
+    var rf = rootFiles.next();
+    try {
+      rf.moveTo(obrasFolder);
+    } catch(e) {
+      obrasFolder.addFile(rf);
+    }
+    return SpreadsheetApp.open(rf);
+  }
+
+  // Cria a nova planilha
   var ss = SpreadsheetApp.create(MANUTENCAO_SHEET_NAME);
   var file = DriveApp.getFileById(ss.getId());
-  obrasFolder.addFile(file);
-  DriveApp.getRootFolder().removeFile(file);
+  try {
+    file.moveTo(obrasFolder);
+  } catch (e) {
+    obrasFolder.addFile(file);
+    try { DriveApp.getRootFolder().removeFile(file); } catch (err) {}
+  }
+
   var sheet = ss.getSheets()[0];
   sheet.setName("Solicitações");
   sheet.appendRow(MANUTENCAO_HEADERS);
   sheet.getRange(1, 1, 1, MANUTENCAO_HEADERS.length)
-       .setFontWeight("bold").setBackground("#FF6B00").setFontColor("#FFFFFF");
+       .setFontWeight("bold")
+       .setBackground("#FF6B00")
+       .setFontColor("#FFFFFF");
   sheet.setFrozenRows(1);
-  sheet.setColumnWidth(5, 420);
-  sheet.setColumnWidth(6, 300);
+  sheet.setColumnWidth(1, 150); // Data/Hora
+  sheet.setColumnWidth(2, 140); // Posto
+  sheet.setColumnWidth(3, 200); // Nome
+  sheet.setColumnWidth(4, 100); // RG
+  sheet.setColumnWidth(5, 420); // Descrição
+  sheet.setColumnWidth(6, 300); // Links das Fotos
+  sheet.setColumnWidth(7, 90);  // Qtd Fotos
+  sheet.setColumnWidth(8, 120); // Situação
   return ss;
 }
 
@@ -276,7 +336,17 @@ function registrarManutencao(data) {
     }
 
     sheet.appendRow([carimbo, posto, nome, rg, descricao, linksFotos.join("\n"), linksFotos.length, "Pendente"]);
-    return { status: "success", message: "Solicitação registrada com sucesso!", planilha: ss.getUrl(), fotos: linksFotos.length };
+    return { 
+      status: "success", 
+      message: "Solicitação registrada com sucesso!", 
+      planilha: ss.getUrl(), 
+      fotos: linksFotos.length 
+    };
+  } catch(err) {
+    return { 
+      status: "error", 
+      message: "Erro no Apps Script: " + err.toString() + ". Se for erro de permissão, execute a função autorizarCriarPlanilhaObras no editor do Google Apps Script." 
+    };
   } finally {
     lock.releaseLock();
   }
