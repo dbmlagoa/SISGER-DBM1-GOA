@@ -31,9 +31,10 @@
  * ============================================================================
  */
 
-// Nome da pasta raiz criada automaticamente no seu Google Drive
-var FOLDER_ROOT_NAME = "[SISGER GOA] - Sistema de Gestão";
+// Nome da pasta raiz criada automaticamente no seu Google Drive (dbmlagoa@gmail.com)
+var FOLDER_ROOT_NAME = "SisGer DBM 1/GOA";
 var CONFIG_FILE_NAME = "config_portal_sisger.json";
+var MANUAL_FILE_NAME = "MANUAL_DE_GESTAO_E_EDICAO_SISGER.md";
 
 /**
  * Endpoint de Leitura (GET)
@@ -50,6 +51,10 @@ function doGet(e) {
       var folderId = params.folderId;
       return jsonResponse(listFilesFromFolder(folderId));
     } 
+    else if (action === "saveManualToDrive") {
+      var res = salvarManualNaPastaSisGer();
+      return jsonResponse({ status: "success", message: "Manual salvo na pasta 'SisGer DBM 1/GOA' do Drive!", url: res.url });
+    }
     else if (action === "checkChecklist") {
       var csvUrl = params.csvUrl || "https://docs.google.com/spreadsheets/d/e/2PACX-1vTu4q9jr-xN_divraeeFmyyDeoANph3559wXe3sXl54Oek2LvNt9zVhttk5Uivh_rKGlhfrgUTtCTOW/pub?output=csv";
       var resp = UrlFetchApp.fetch(csvUrl + "&t=" + new Date().getTime());
@@ -65,7 +70,7 @@ function doGet(e) {
       return jsonResponse({ status: "success", conferido: conferido, valor: valorB2, raw: linhas[0] || "" });
     }
     else if (action === "ping") {
-      return jsonResponse({ status: "success", message: "Ponte SISGER Ativa", account: Session.getActiveUser().getEmail() });
+      return jsonResponse({ status: "success", message: "Ponte SISGER Ativa", account: Session.getActiveUser().getEmail(), folder: FOLDER_ROOT_NAME });
     }
     
     return jsonResponse({ status: "error", message: "Ação inválida: " + action });
@@ -86,6 +91,10 @@ function doPost(e) {
     if (action === "saveConfig") {
       saveConfigToDrive(data.config);
       return jsonResponse({ status: "success", message: "Configurações salvas no Google Drive com sucesso!" });
+    }
+    else if (action === "saveManualToDrive") {
+      var manualRes = salvarManualNaPastaSisGer(data.manualContent);
+      return jsonResponse({ status: "success", message: "Manual salvo na pasta 'SisGer DBM 1/GOA' do Google Drive!", url: manualRes.url });
     }
     else if (action === "addAviso") {
       var cfg = loadOrCreateConfig();
@@ -108,6 +117,32 @@ function doPost(e) {
   } catch (err) {
     return jsonResponse({ status: "error", message: err.toString() });
   }
+}
+
+/**
+ * Salva o Manual de Gestão na pasta "SisGer DBM 1/GOA"
+ */
+function salvarManualNaPastaSisGer(conteudoPersonalizado) {
+  var rootFolder = getOrCreateRootFolder();
+  var files = rootFolder.getFilesByName(MANUAL_FILE_NAME);
+  var file;
+  var conteudo = conteudoPersonalizado || (
+    "# MANUAL DE GESTÃO & EDIÇÃO DO SISGER DBM 1 / GOA\n\n" +
+    "**Conta Institucional:** dbmlagoa@gmail.com\n" +
+    "**Pasta no Drive:** SisGer DBM 1/GOA\n\n" +
+    "## CREDENCIAIS DE ACESSO AO PAINEL DE EDIÇÃO:\n" +
+    "- **Usuário / Login:** dbmlagoa\n" +
+    "- **Senha:** salvamento193\n\n" +
+    "Consulte o arquivo completo de instruções sincronizado pelo SISGER."
+  );
+
+  if (files.hasNext()) {
+    file = files.next();
+    file.setContent(conteudo);
+  } else {
+    file = rootFolder.createFile(MANUAL_FILE_NAME, conteudo, MimeType.PLAIN_TEXT);
+  }
+  return { id: file.getId(), url: file.getUrl() };
 }
 
 /**

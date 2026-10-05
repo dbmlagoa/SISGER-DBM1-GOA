@@ -1075,7 +1075,7 @@
                   Histórico completo de comunicados, aquisições, reformas, instruções e padronizações da unidade.
                 </p>
               </div>
-              <button type="button" class="btn-primary" onclick="const p = document.getElementById('news-publish-card'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; if(p.style.display !== 'none') document.getElementById('new-post-title').focus();">
+              <button type="button" class="btn-primary" onclick="if(window.isGestorAutenticado && !window.isGestorAutenticado()){ window.abrirModalLoginGestor(); } else { const p = document.getElementById('news-publish-card'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; if(p.style.display !== 'none') document.getElementById('new-post-title').focus(); }">
                 ✍️ Nova Postagem (Gestor)
               </button>
             </div>
@@ -1560,98 +1560,293 @@
   </div>
 
   <!-- ========================================================================
-       MODAL DE GESTÃO DO PORTAL (CMS FÁCIL)
+       MODAL DE LOGIN ADMINISTRATIVO (ACESSO RESTRITO AO PAINEL DE GESTÃO)
        ======================================================================== -->
-  <div class="modal-backdrop" id="cms-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div>
-          <h3>Painel de Gestão & Edição Fácil</h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary);">
-            Atualize o Quadro de Trabalho, avisos e conexões sem mexer em código.
-          </p>
+  <div class="modal-backdrop" id="cms-login-modal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header" style="border-bottom: 1px solid rgba(255, 107, 0, 0.25);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 38px; height: 38px; background: rgba(255, 107, 0, 0.15); border: 1px solid var(--orange-rescue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            🔐
+          </div>
+          <div>
+            <h3 style="font-size: 1.15rem; margin: 0; color: #fff;">Acesso à Gestão</h3>
+            <span style="font-size: 0.72rem; color: var(--orange-rescue); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;">Painel de Edição • DBM 1/GOA</span>
+          </div>
         </div>
-        <button class="btn-icon" id="btn-close-cms">✕</button>
+        <button type="button" class="btn-icon" id="btn-close-cms-login" onclick="fecharLoginCMS()">✕</button>
       </div>
+      <form id="cms-login-form" onsubmit="event.preventDefault(); submeterLoginCMS();">
+        <div class="modal-body" style="padding: 24px; gap: 14px;">
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0 0 4px 0; line-height: 1.45;">
+            Área restrita à gestão do DBM 1/GOA. Insira o usuário e senha autorizados para acessar o painel de edição.
+          </p>
 
-      <div class="modal-body">
-        <div class="form-group">
-          <label>ID ou Link do Quadro de Trabalho (Google Drive)</label>
-          <input type="text" id="cms-quadro-id" placeholder="Cole o link ou ID do arquivo no Google Drive">
-          <span class="form-help">Basta colar o link de compartilhamento do PDF/Documento no Google Drive.</span>
-        </div>
-
-        <div class="form-group">
-          <label>URL do Google Apps Script (Opção 1 - Drive Bridge)</label>
-          <input type="text" id="cms-script-url" placeholder="https://script.google.com/macros/s/.../exec">
-          <span class="form-help">URL do WebApp implantado no Google Apps Script sob a conta dbmlagoa@gmail.com.</span>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group">
-            <label>Link do Google Form (Checklist)</label>
-            <input type="text" id="cms-checklist-form">
+            <label for="cms-user-input" style="font-weight: 700; font-size: 0.82rem; color: #fff;">Usuário / Login *</label>
+            <input type="text" id="cms-user-input" autocomplete="username" placeholder="dbmlagoa" required style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #fff; font-size: 0.95rem;">
           </div>
+
           <div class="form-group">
-            <label>Link da Planilha CSV Publicada</label>
-            <input type="text" id="cms-checklist-csv">
+            <label for="cms-pass-input" style="font-weight: 700; font-size: 0.82rem; color: #fff;">Senha de Acesso *</label>
+            <div style="position: relative;">
+              <input type="password" id="cms-pass-input" autocomplete="current-password" placeholder="Digite a senha..." required style="width: 100%; padding: 10px 42px 10px 14px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #fff; font-size: 0.95rem;">
+              <button type="button" onclick="toggleVisibilidadeSenhaCMS()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; padding: 4px;" title="Mostrar/Ocultar Senha">
+                👁️
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label>Avisos no Mural da TV Vertical</label>
-            <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovoAvisoCMS()">
-              + Adicionar Novo Aviso
-            </button>
-          </div>
-          <div id="cms-avisos-list"></div>
-        </div>
-
-        <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label>Horários da Rotina Diária Oficial</label>
-            <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovaRotinaCMS()">
-              + Adicionar Horário
-            </button>
-          </div>
-          <div id="cms-rotinas-list"></div>
-        </div>
-
-        <!-- Gestão de Notícias no CMS -->
-        <div style="background: rgba(255, 85, 0, 0.08); border: 1px solid var(--border-active); border-radius: var(--radius-sm); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <h5 style="color: #fff; font-weight: 700; margin-bottom: 2px;">Publicação de Notícias & Comunicados</h5>
-            <span style="font-size: 0.75rem; color: var(--text-secondary);">Crie comunicados oficiais com fotos e data padronizada no portal.</span>
-          </div>
-          <button type="button" class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="document.getElementById('cms-modal').classList.remove('active'); navigateTo('noticias'); const p = document.getElementById('news-publish-card'); p.style.display = 'block'; document.getElementById('new-post-title').focus();">
-            ✍️ Publicar Notícia
-          </button>
-        </div>
-
-        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <h5 style="color: #fff; font-weight: 700; margin-bottom: 2px;">Backup de Segurança</h5>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Transfira ou guarde as configurações do portal em 1 clique.</span>
-          </div>
-          <div style="display: flex; gap: 10px;">
-            <button type="button" class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="exportarBackupJSON()">
-              📥 Baixar Backup (.json)
-            </button>
-            <label class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem; cursor: pointer;">
-              📤 Restaurar
-              <input type="file" accept=".json" style="display: none;" onchange="importarBackupJSON(event)">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer;">
+              <input type="checkbox" id="cms-remember-check" checked style="accent-color: var(--orange-rescue);">
+              Lembrar neste navegador
             </label>
           </div>
+
+          <div id="cms-login-msg" style="display: none; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.82rem;"></div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);">
+            Entrar no Painel de Gestão ➔
+          </button>
         </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL DE GESTÃO DO PORTAL (CMS ESTRUTURADO POR ABAS)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="cms-modal">
+    <div class="modal-card" style="max-width: 880px;">
+      <div class="modal-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2px;">
+            <h3 style="margin: 0;">Painel de Gestão & Edição Fácil</h3>
+            <span class="cms-auth-badge">🟢 Gestor Ativo: dbmlagoa</span>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">
+            Gerencie a TV vertical, notícias, rotina diária, formulários operacionais e sincronização com o Google Drive.
+          </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="cms-logout-btn" onclick="logoutGestorCMS()" title="Encerrar Sessão">
+            Sair 🚪
+          </button>
+          <button class="btn-icon" id="btn-close-cms">✕</button>
+        </div>
+      </div>
+
+      <!-- Abas de Navegação Superior do CMS -->
+      <div class="cms-tabs-nav">
+        <button type="button" class="cms-tab-btn active" onclick="switchCmsTab('tv')">
+          📺 TV Vertical & Telão
+        </button>
+        <button type="button" class="cms-tab-btn" onclick="switchCmsTab('rotina')">
+          🕒 Rotina Diária
+        </button>
+        <button type="button" class="cms-tab-btn" onclick="switchCmsTab('forms')">
+          📱 Formulários & QR Codes
+        </button>
+        <button type="button" class="cms-tab-btn" onclick="switchCmsTab('drive')">
+          ☁️ Google Drive
+        </button>
+        <button type="button" class="cms-tab-btn" onclick="switchCmsTab('backup')">
+          💾 Backup & Manual
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 20px 24px;">
+
+        <!-- ABA 1: TV VERTICAL & TELÃO -->
+        <div class="cms-tab-pane active" id="cms-tab-tv">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>🎥 Vídeo Oficial de Recomendações de Segurança (TV)</h4>
+              <span class="card-badge badge-success">Loop Contínuo</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              O portal reproduz nativamente o vídeo oficial <strong>assets/video_recomendacoes_goa.mp4</strong> (48.8 MB) em alta definição na TV. Caso deseje substituir por outro link ou ID do Google Drive / YouTube, informe abaixo:
+            </p>
+            <div class="form-group">
+              <label>ID ou Link do Vídeo Alternativo (Google Drive ou MP4)</label>
+              <input type="text" id="cms-quadro-id" placeholder="Cole o link ou ID do vídeo no Google Drive (opcional)">
+              <span class="form-help">Deixe em branco para utilizar sempre o vídeo oficial local de alta performance.</span>
+            </div>
+          </div>
+
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>📢 Matérias do Carrossel de Notícias na TV</h4>
+              <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovoAvisoCMS()">
+                + Nova Matéria para o Carrossel
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Estas matérias rotacionam automaticamente no topo da TV vertical acompanhadas de imagem correspondente.
+            </p>
+            <div id="cms-avisos-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+        </div>
+
+        <!-- ABA 2: ROTINA DIÁRIA OFICIAL -->
+        <div class="cms-tab-pane" id="cms-tab-rotina">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>🕒 Atividades da Rotina Diária Oficial</h4>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="restaurarRotinaPadraoCMS()" title="Restaura os horários da escala oficial do DBM 1/GOA">
+                  ↺ Restaurar Padrão
+                </button>
+                <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovaRotinaCMS()">
+                  + Adicionar Atividade
+                </button>
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              O sistema compara o horário atual do dia com os horários informados abaixo e <strong>destaca na TV vertical apenas a atividade do momento presente</strong>. Utilize o formato <code>HH:MM - HH:MM</code> ou <code>HH:MM</code>.
+            </p>
+            <div id="cms-rotinas-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+        </div>
+
+        <!-- ABA 3: FORMULÁRIOS & QR CODES -->
+        <div class="cms-tab-pane" id="cms-tab-forms">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>📱 QR Codes da TV Vertical & Formulários Operacionais</h4>
+              <span class="card-badge badge-info">Sincronização Automática</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Ao atualizar qualquer um dos links abaixo, os QR codes correspondentes exibidos logo abaixo da rotina diária na TV vertical e na página inicial são atualizados automaticamente:
+            </p>
+
+            <div class="form-group">
+              <label>1. Link do Formulário: Checklist de Pronto Emprego</label>
+              <input type="text" id="cms-checklist-form" placeholder="https://forms.gle/...">
+            </div>
+
+            <div class="form-group">
+              <label>2. Link do Formulário: Registro de Experiência Operacional (Horas de Voo)</label>
+              <input type="text" id="cms-experiencia-form" placeholder="https://docs.google.com/forms/d/e/.../viewform">
+            </div>
+
+            <div class="form-group">
+              <label>3. Link do Formulário: Cautela de EPIs (Neoprene, Botas, Luvas)</label>
+              <input type="text" id="cms-cautela-form" placeholder="https://docs.google.com/forms/d/e/.../viewform">
+            </div>
+
+            <div class="form-group">
+              <label>4. Link da Planilha CSV do Checklist (Conferência de Status do Dia)</label>
+              <input type="text" id="cms-checklist-csv" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+              <span class="form-help">Utilizada para acender automaticamente a luz verde ("Checklist Realizado") no cabeçalho da TV.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 4: GOOGLE DRIVE & NUVEM -->
+        <div class="cms-tab-pane" id="cms-tab-drive">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>☁️ Conexão com Google Drive da Unidade (dbmlagoa@gmail.com)</h4>
+              <span class="card-badge badge-warning">Pasta: SisGer DBM 1/GOA</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Com a ponte do Google Apps Script ativa, qualquer alteração feita neste painel pode ser salva na nuvem dentro da pasta <strong>SisGer DBM 1/GOA</strong> no Google Drive da conta <code>dbmlagoa@gmail.com</code>.
+            </p>
+
+            <div class="form-group">
+              <label>URL do WebApp Google Apps Script</label>
+              <input type="text" id="cms-script-url" placeholder="https://script.google.com/macros/s/.../exec">
+              <span class="form-help">URL do WebApp implantado sob a conta dbmlagoa@gmail.com conforme instruções do manual.</span>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 6px;">
+              <button type="button" class="btn-secondary" style="padding: 8px 16px; font-size: 0.82rem;" onclick="testarConexaoAppsScript()">
+                🔄 Testar Comunicação (Ping)
+              </button>
+              <button type="button" class="btn-primary" style="padding: 8px 16px; font-size: 0.82rem; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #38bdf8;" onclick="salvarManualNoGoogleDriveCMS()">
+                ☁️ Salvar Manual na Pasta SisGer DBM 1/GOA do Drive
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 5: BACKUP & MANUAL -->
+        <div class="cms-tab-pane" id="cms-tab-backup">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>📖 Manual do Gestor do SISGER</h4>
+              <span class="card-badge badge-info">Login & Instruções</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Manual completo de operação, edição do portal, comandos da TV vertical e credenciais de acesso (Usuário: <code>dbmlagoa</code> / Senha: <code>salvamento193</code>).
+            </p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button type="button" class="btn-secondary" style="padding: 10px 18px; font-size: 0.85rem;" onclick="abrirLeitorManualCMS()">
+                👁️ Ler Manual na Tela
+              </button>
+              <button type="button" class="btn-primary" style="padding: 10px 18px; font-size: 0.85rem;" onclick="baixarManualMarkdownCMS()">
+                📥 Baixar Manual (.md)
+              </button>
+            </div>
+          </div>
+
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>💾 Backup & Restauração de Configurações</h4>
+              <span class="card-badge badge-warning">Segurança</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Guarde uma cópia de segurança de todas as notícias, links, horários e rotinas do portal para transferir entre computadores ou recuperar instantaneamente.
+            </p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button type="button" class="btn-secondary" style="padding: 10px 18px; font-size: 0.85rem;" onclick="exportarBackupJSON()">
+                📥 Baixar Backup (.json)
+              </button>
+              <label class="btn-secondary" style="padding: 10px 18px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                📤 Restaurar Backup (.json)
+                <input type="file" accept=".json" style="display: none;" onchange="importarBackupJSON(event)">
+              </label>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn-secondary" onclick="document.getElementById('cms-modal').classList.remove('active')">
           Cancelar
         </button>
-        <button type="button" class="btn-primary" onclick="salvarAlteracoesCMS()">
-          💾 Salvar Alterações
+        <button type="button" class="btn-primary" onclick="salvarAlteracoesCMS()" style="padding: 10px 22px; font-weight: 800; box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);">
+          💾 Salvar Todas as Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: VISUALIZADOR DO MANUAL DE GESTÃO -->
+  <div class="modal-backdrop" id="manual-viewer-modal">
+    <div class="modal-card" style="max-width: 820px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.4rem;">📖</span>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem;">Manual de Gestão & Edição • SISGER DBM 1/GOA</h3>
+            <span style="font-size: 0.74rem; color: var(--orange-rescue); font-weight: 700;">Login: dbmlagoa | Senha: salvamento193</span>
+          </div>
+        </div>
+        <button type="button" class="btn-icon" onclick="document.getElementById('manual-viewer-modal').classList.remove('active')">✕</button>
+      </div>
+      <div class="modal-body" id="manual-viewer-content" style="padding: 24px; font-size: 0.9rem; line-height: 1.6; color: #cbd5e1; max-height: 70vh;">
+        <!-- Preenchido dinamicamente com o conteúdo do manual formatado -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="document.getElementById('manual-viewer-modal').classList.remove('active')">
+          Fechar
+        </button>
+        <button type="button" class="btn-primary" onclick="baixarManualMarkdownCMS()">
+          📥 Baixar Manual (.md)
         </button>
       </div>
     </div>

@@ -1,46 +1,249 @@
 /**
  * SISGER DBM 1 / GOA - CBMERJ
- * Painel de Gestão e Edição Simples (CMS Amigável para Próximos Gestores)
+ * Painel de Gestão & Edição Fácil (CMS Amigável com Autenticação do Gestor)
+ * Conta Oficial: dbmlagoa@gmail.com
+ * Pasta no Drive: "SisGer DBM 1/GOA"
  */
+
+// Credenciais Oficiais de Acesso ao Painel de Edição
+const CMS_AUTH_USER = "dbmlagoa";
+const CMS_AUTH_PASS = "salvamento193";
+
+const STORAGE_KEY_AUTH = "SISGER_GESTOR_AUTH";
+
+// Grade Oficial Padrão de Horários da Rotina Diária do DBM 1/GOA
+const ROTINA_PADRAO_GOA = [
+  { time: "05:00 - 05:30", title: "Transporte de refeição matinal", desc: "Designação de militar para buscar pães para o desjejum matinal." },
+  { time: "05:45 - 06:00", title: "ESTABELECIMENTO DAS AERONAVES NO SPOT E ATIVAÇÃO DO SERVIÇO", desc: "Estabelecer aeronaves nos Spots configuradas e abastecidas (50% SAR / 60% Aeromédico). Rendição da equipe saindo de serviço, ativação e início da equipagem das aeronaves." },
+  { time: "06:20 - 07:00", title: "Formatura e Briefing matinal", desc: "Formatura com todo o efetivo de serviço no DBM 1/GOA e retirada de faltas. Reunião conduzida pelo oficial piloto mais antigo: apresentação Aeromédico, TIHN, SAR e explanação de Segurança de Voo / Meteorologia RJ." },
+  { time: "07:00 - 08:00", title: "CAFÉ DA MANHÃ", desc: "Período do desjejum matinal. Verificação dos alimentos disponibilizados para consumo aos militares de serviço." },
+  { time: "08:00 - 09:30", title: "TFM (Treinamento Físico Militar)", desc: "Treinamento Físico Militar - Intensidade LEVE. SOMENTE DENTRO DO COMPLEXO DO DGOA. Período destinado ao treinamento físico." },
+  { time: "10:45 - 12:00", title: "TRANSPORTE DE REFEIÇÃO (ALMOÇO)", desc: "Conferir as condições dos recipientes para armazenamento da alimentação e designação de militar para buscar a refeição." },
+  { time: "12:00 - 13:00", title: "ALMOÇO", desc: "Fiscalizar que apenas militares em serviço (DBM 1/GOA) realizem a refeição; separar alimentação de equipes em socorro ou missão externa e permanência 24h." },
+  { time: "14:30 - 16:30", title: "MANUTENÇÃO", desc: "Manutenção de viaturas e materiais operacionais (1º escalão e limpeza)." },
+  { time: "17:00 - 18:00", title: "LIMPEZA DAS DEPENDÊNCIAS DA UNIDADE", desc: "Fiscalizar a faxina diária e manutenção da limpeza das dependências do DBM e Anexos pelo efetivo de serviço." },
+  { time: "18:00 - 18:15", title: "DESATIVAÇÃO DO SERVIÇO", desc: "Formatura de encerramento do serviço, caso não haja aeronave em voo." },
+  { time: "18:30 - 19:00", title: "HANGARAGEM DAS AERONAVES", desc: "Limpeza, abastecimento e reboque das aeronaves de serviço para o hangar." }
+];
+
+/* ==========================================================================
+   1. SISTEMA DE AUTENTICAÇÃO E LOGIN DO GESTOR
+   ========================================================================== */
+
+window.isGestorAutenticado = function() {
+  return sessionStorage.getItem(STORAGE_KEY_AUTH) === "true" ||
+         localStorage.getItem(STORAGE_KEY_AUTH) === "true";
+};
+
+window.abrirPainelGestaoComLogin = function() {
+  if (window.isGestorAutenticado()) {
+    window.abrirModalCMS();
+  } else {
+    window.abrirModalLoginGestor();
+  }
+};
+
+window.abrirModalLoginGestor = function() {
+  const modalLogin = document.getElementById("cms-login-modal");
+  const userInput = document.getElementById("cms-user-input");
+  const passInput = document.getElementById("cms-pass-input");
+  const msgBox = document.getElementById("cms-login-msg");
+
+  if (msgBox) msgBox.style.display = "none";
+  if (passInput) passInput.value = "";
+  if (userInput && !userInput.value) userInput.value = "dbmlagoa";
+
+  if (modalLogin) {
+    modalLogin.classList.add("active");
+    setTimeout(() => {
+      if (passInput) passInput.focus();
+    }, 200);
+  }
+};
+
+window.fecharLoginCMS = function() {
+  const modalLogin = document.getElementById("cms-login-modal");
+  if (modalLogin) modalLogin.classList.remove("active");
+};
+
+window.submeterLoginCMS = function() {
+  const userInput = document.getElementById("cms-user-input");
+  const passInput = document.getElementById("cms-pass-input");
+  const rememberCheck = document.getElementById("cms-remember-check");
+  const msgBox = document.getElementById("cms-login-msg");
+
+  const user = (userInput ? userInput.value : "").trim().toLowerCase();
+  const pass = (passInput ? passInput.value : "").trim();
+
+  if (user === CMS_AUTH_USER.toLowerCase() && pass === CMS_AUTH_PASS) {
+    // Autenticação com Sucesso
+    const remember = rememberCheck ? rememberCheck.checked : false;
+    if (remember) {
+      localStorage.setItem(STORAGE_KEY_AUTH, "true");
+    } else {
+      sessionStorage.setItem(STORAGE_KEY_AUTH, "true");
+    }
+
+    if (msgBox) {
+      msgBox.style.display = "block";
+      msgBox.style.background = "rgba(34, 197, 94, 0.15)";
+      msgBox.style.border = "1px solid rgba(34, 197, 94, 0.4)";
+      msgBox.style.color = "#22c55e";
+      msgBox.innerHTML = "✅ Credenciais autorizadas. Abrindo Painel...";
+    }
+
+    setTimeout(() => {
+      window.fecharLoginCMS();
+      window.abrirModalCMS();
+      mostrarNotificacaoToast("🔓 Sessão administrativa iniciada como dbmlagoa!");
+    }, 450);
+
+  } else {
+    // Falha de Autenticação
+    if (msgBox) {
+      msgBox.style.display = "block";
+      msgBox.style.background = "rgba(239, 68, 68, 0.15)";
+      msgBox.style.border = "1px solid rgba(239, 68, 68, 0.4)";
+      msgBox.style.color = "#ef4444";
+      msgBox.innerHTML = "❌ Usuário ou senha incorretos. Verifique suas credenciais.";
+    }
+    if (passInput) {
+      passInput.value = "";
+      passInput.focus();
+    }
+  }
+};
+
+window.logoutGestorCMS = function() {
+  sessionStorage.removeItem(STORAGE_KEY_AUTH);
+  localStorage.removeItem(STORAGE_KEY_AUTH);
+
+  const modalCMS = document.getElementById("cms-modal");
+  if (modalCMS) modalCMS.classList.remove("active");
+
+  mostrarNotificacaoToast("🔒 Sessão de gestão encerrada com sucesso.");
+};
+
+window.toggleVisibilidadeSenhaCMS = function() {
+  const passInput = document.getElementById("cms-pass-input");
+  if (!passInput) return;
+  passInput.type = (passInput.type === "password") ? "text" : "password";
+};
+
+/* ==========================================================================
+   2. CONTROLE DE ABAS DO PAINEL DE GESTÃO (CMS TABS)
+   ========================================================================== */
+
+window.switchCmsTab = function(tabId) {
+  // Desativar todos os botões de aba
+  document.querySelectorAll(".cms-tab-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  // Ocultar todos os painéis
+  document.querySelectorAll(".cms-tab-pane").forEach(pane => {
+    pane.classList.remove("active");
+  });
+
+  // Ativar aba selecionada
+  const targetPane = document.getElementById(`cms-tab-${tabId}`);
+  if (targetPane) targetPane.classList.add("active");
+
+  // Ativar botão correspondente
+  const buttons = document.querySelectorAll(".cms-tab-btn");
+  buttons.forEach(btn => {
+    if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(`'${tabId}'`)) {
+      btn.classList.add("active");
+    }
+  });
+};
+
+/* ==========================================================================
+   3. ABERTURA E PREENCHIMENTO DO PAINEL DE GESTÃO
+   ========================================================================== */
+
+window.abrirModalCMS = function() {
+  window.popularFormularioCMS();
+  const modal = document.getElementById("cms-modal");
+  if (modal) modal.classList.add("active");
+};
 
 window.popularFormularioCMS = function() {
   const cfg = carregarConfiguracao();
 
-  // 1. Quadro de Trabalho / Vídeo
+  // 1. Aba TV: Vídeo Alternativo / Google Drive ID
   const inputQuadroId = document.getElementById("cms-quadro-id");
   if (inputQuadroId) {
-    inputQuadroId.value = (cfg.videoRecomendacoes && cfg.videoRecomendacoes.driveFileId) || (cfg.quadroDeTrabalho && cfg.quadroDeTrabalho.driveFileId) || "";
+    inputQuadroId.value = (cfg.videoRecomendacoes && cfg.videoRecomendacoes.driveFileId) || "";
   }
 
-  // 2. Checklist
-  const inputChecklistForm = document.getElementById("cms-checklist-form");
-  const inputChecklistCsv = document.getElementById("cms-checklist-csv");
-  if (inputChecklistForm) inputChecklistForm.value = cfg.checklist.formUrl;
-  if (inputChecklistCsv) inputChecklistCsv.value = cfg.checklist.csvUrl;
-
-  // 3. Google Apps Script Web App (dbmlagoa@gmail.com)
-  const inputScriptUrl = document.getElementById("cms-script-url");
-  if (inputScriptUrl) inputScriptUrl.value = cfg.portal.appsScriptUrl || "";
-
-  // 4. Renderizar Lista de Avisos do Mural
+  // 2. Aba TV: Lista de Avisos / Notícias do Carrossel
   renderizarListaAvisosCMS(cfg.muralAvisos);
 
-  // 5. Renderizar Lista de Rotinas Diárias
+  // 3. Aba Rotina: Lista de Horários da Rotina Diária
   renderizarListaRotinasCMS(cfg.rotinaDiaria);
+
+  // 4. Aba Formulários: Links dos 4 Formulários Operacionais e CSV
+  const inputChecklistForm = document.getElementById("cms-checklist-form");
+  const inputExperienciaForm = document.getElementById("cms-experiencia-form");
+  const inputCautelaForm = document.getElementById("cms-cautela-form");
+  const inputChecklistCsv = document.getElementById("cms-checklist-csv");
+
+  if (inputChecklistForm) {
+    inputChecklistForm.value = (cfg.checklist && cfg.checklist.formUrl) || "https://forms.gle/SuLZ4WrT7N7UUVRQ7";
+  }
+
+  if (inputExperienciaForm) {
+    const qfExp = (cfg.quickForms || []).find(f => f.id === "form-experiencia");
+    inputExperienciaForm.value = qfExp ? qfExp.url : "https://docs.google.com/forms/d/e/1FAIpQLSfJwFw_1cXWmDELPyB6v_aaVWKt3GfIDqwuEYj5qprN35EHjA/viewform";
+  }
+
+  if (inputCautelaForm) {
+    const qfCaut = (cfg.quickForms || []).find(f => f.id === "form-cautela");
+    inputCautelaForm.value = qfCaut ? qfCaut.url : "https://docs.google.com/forms/d/e/1FAIpQLSfD7BpVW84JEsywaFGiBd-U7zSv86pkfxcZuWfM5XZKIKbe5Q/viewform";
+  }
+
+  if (inputChecklistCsv) {
+    inputChecklistCsv.value = (cfg.checklist && cfg.checklist.csvUrl) || "https://docs.google.com/spreadsheets/d/e/2PACX-1vTu4q9jr-xN_divraeeFmyyDeoANph3559wXe3sXl54Oek2LvNt9zVhttk5Uivh_rKGlhfrgUTtCTOW/pub?output=csv";
+  }
+
+  // 5. Aba Google Drive: URL do Google Apps Script
+  const inputScriptUrl = document.getElementById("cms-script-url");
+  if (inputScriptUrl) {
+    inputScriptUrl.value = (cfg.portal && cfg.portal.appsScriptUrl) || "https://script.google.com/macros/s/AKfycbxAc4FFvitYtQB35psdhPu6XEkZF7p16y-ILr5YrmI5ilF_P1snMukF2qWGWUaM2dUeeQ/exec";
+  }
 };
+
+/* ==========================================================================
+   4. RENDERIZAÇÃO DOS ITENS EDITÁVEIS (NOTÍCIAS & ROTINA)
+   ========================================================================== */
 
 function renderizarListaAvisosCMS(avisos) {
   const container = document.getElementById("cms-avisos-list");
   if (!container) return;
 
-  container.innerHTML = avisos.map((av, idx) => `
-    <div class="cms-item-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px;">
+  const lista = avisos || [];
+  container.innerHTML = lista.map((av, idx) => `
+    <div class="cms-item-card" data-idx="${idx}">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span class="mural-badge ${av.tipo === 'urgente' ? 'badge-danger' : 'badge-info'}">${av.tipo.toUpperCase()}</span>
-        <button type="button" class="btn-icon" style="width: 28px; height: 28px; color: var(--red-alert);" onclick="removerAvisoCMS(${idx})" title="Excluir Aviso">✕</button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <select class="cms-aviso-tipo" data-idx="${idx}" style="background: rgba(0,0,0,0.6); border: 1px solid var(--border-subtle); color: #ffaa33; font-weight: 800; font-size: 0.74rem; padding: 4px 8px; border-radius: 4px;">
+            <option value="operacional" ${av.tipo === 'operacional' ? 'selected' : ''}>OPERACIONAL</option>
+            <option value="urgente" ${av.tipo === 'urgente' ? 'selected' : ''}>URGENTE</option>
+            <option value="informativo" ${av.tipo === 'informativo' ? 'selected' : ''}>INFORMATIVO</option>
+          </select>
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">Slide ${idx + 1}</span>
+        </div>
+        <button type="button" class="btn-icon" style="width: 28px; height: 28px; color: var(--red-alert);" onclick="removerAvisoCMS(${idx})" title="Excluir Matéria">✕</button>
       </div>
-      <input type="text" value="${av.titulo}" class="cms-aviso-titulo" data-idx="${idx}" placeholder="Título do Aviso" style="width:100%; font-weight:700; margin-bottom:6px; background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); color:#fff; padding:6px 10px; border-radius:4px;">
-      <textarea class="cms-aviso-texto" data-idx="${idx}" placeholder="Conteúdo do aviso..." rows="2" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); color:#cbd5e1; padding:6px 10px; border-radius:4px; font-size:0.85rem;">${av.texto}</textarea>
+
+      <input type="text" value="${escapeAttr(av.titulo || '')}" class="cms-aviso-titulo" data-idx="${idx}" placeholder="Título principal da notícia na TV" style="width:100%; font-weight:800; font-size: 0.95rem; margin-bottom:6px; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:#fff; padding:8px 12px; border-radius:4px;">
+
+      <input type="text" value="${escapeAttr(av.subtitulo || '')}" class="cms-aviso-sub" data-idx="${idx}" placeholder="Subtítulo em tom dourado (Ex: Padronização DMOP • GOA)" style="width:100%; font-weight:700; font-size: 0.8rem; margin-bottom:6px; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--gold-wings); padding:6px 12px; border-radius:4px;">
+
+      <textarea class="cms-aviso-texto" data-idx="${idx}" placeholder="Resumo do texto exibido na TV..." rows="2" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:#cbd5e1; padding:8px 12px; border-radius:4px; font-size:0.85rem; margin-bottom: 6px;">${escapeHtml(av.texto || '')}</textarea>
+
+      <input type="text" value="${escapeAttr(av.imagem || '')}" class="cms-aviso-img" data-idx="${idx}" placeholder="URL ou caminho da imagem (Ex: assets/noticias/noticias_img_10.jpg)" style="width:100%; font-size: 0.78rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:#94a3b8; padding:6px 12px; border-radius:4px;">
     </div>
   `).join("");
 }
@@ -49,90 +252,150 @@ function renderizarListaRotinasCMS(rotinas) {
   const container = document.getElementById("cms-rotinas-list");
   if (!container) return;
 
-  container.innerHTML = rotinas.map((rt, idx) => `
-    <div style="display: grid; grid-template-columns: 80px 1.2fr 1fr 32px; gap: 8px; align-items: center; margin-bottom: 8px;">
-      <input type="text" value="${rt.time}" class="cms-rotina-time" data-idx="${idx}" placeholder="07:00" style="background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); color:var(--orange-rescue); font-weight:800; padding:6px; border-radius:4px; text-align:center;">
-      <input type="text" value="${rt.title}" class="cms-rotina-title" data-idx="${idx}" placeholder="Atividade" style="background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); color:#fff; padding:6px; border-radius:4px;">
-      <input type="text" value="${rt.desc}" class="cms-rotina-desc" data-idx="${idx}" placeholder="Detalhes" style="background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); color:#94a3b8; padding:6px; border-radius:4px; font-size:0.8rem;">
-      <button type="button" class="btn-icon" style="width: 28px; height: 28px; color: var(--red-alert);" onclick="removerRotinaCMS(${idx})">✕</button>
+  const lista = rotinas || [];
+  container.innerHTML = lista.map((rt, idx) => `
+    <div style="display: grid; grid-template-columns: 140px 1.2fr 1.2fr 34px; gap: 8px; align-items: center; background: rgba(13, 21, 39, 0.6); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+      <input type="text" value="${escapeAttr(rt.time || '')}" class="cms-rotina-time" data-idx="${idx}" placeholder="06:20 - 07:00" style="background:rgba(0,0,0,0.6); border:1px solid var(--border-subtle); color:#ffaa33; font-weight:800; font-size: 0.85rem; padding:6px; border-radius:4px; text-align:center;">
+      <input type="text" value="${escapeAttr(rt.title || '')}" class="cms-rotina-title" data-idx="${idx}" placeholder="Título da Atividade" style="background:rgba(0,0,0,0.6); border:1px solid var(--border-subtle); color:#fff; font-weight: 700; padding:6px 10px; border-radius:4px; font-size: 0.85rem;">
+      <input type="text" value="${escapeAttr(rt.desc || '')}" class="cms-rotina-desc" data-idx="${idx}" placeholder="Descrição / Local" style="background:rgba(0,0,0,0.6); border:1px solid var(--border-subtle); color:#cbd5e1; padding:6px 10px; border-radius:4px; font-size:0.8rem;">
+      <button type="button" class="btn-icon" style="width: 28px; height: 28px; color: var(--red-alert);" onclick="removerRotinaCMS(${idx})" title="Remover Atividade">✕</button>
     </div>
   `).join("");
 }
 
 window.adicionarNovoAvisoCMS = function() {
   const cfg = carregarConfiguracao();
+  if (!cfg.muralAvisos) cfg.muralAvisos = [];
   cfg.muralAvisos.unshift({
     id: "aviso-" + Date.now(),
-    tipo: "informativo",
-    titulo: "Novo Comunicado Operacional",
-    texto: "Clique aqui para editar a mensagem deste aviso...",
+    tipo: "operacional",
+    titulo: "Nova Notícia Operacional",
+    subtitulo: "Informativo DBM 1 / GOA",
+    texto: "Descreva aqui os detalhes desta notícia a ser exibida no carrossel da TV...",
+    imagem: "assets/goa_hero_real.jpg",
     data: "Hoje"
   });
   salvarConfiguracaoLocal(cfg);
-  window.popularFormularioCMS();
+  renderizarListaAvisosCMS(cfg.muralAvisos);
 };
 
 window.removerAvisoCMS = function(index) {
   const cfg = carregarConfiguracao();
-  cfg.muralAvisos.splice(index, 1);
-  salvarConfiguracaoLocal(cfg);
-  window.popularFormularioCMS();
+  if (cfg.muralAvisos && cfg.muralAvisos[index]) {
+    cfg.muralAvisos.splice(index, 1);
+    salvarConfiguracaoLocal(cfg);
+    renderizarListaAvisosCMS(cfg.muralAvisos);
+  }
 };
 
 window.adicionarNovaRotinaCMS = function() {
   const cfg = carregarConfiguracao();
+  if (!cfg.rotinaDiaria) cfg.rotinaDiaria = [];
   cfg.rotinaDiaria.push({
-    time: "15:00",
+    time: "15:00 - 16:00",
     title: "Nova Atividade Programada",
-    desc: "Descrição da atividade ou treinamento"
+    desc: "Descrição ou local da atividade no DBM 1/GOA"
   });
   salvarConfiguracaoLocal(cfg);
-  window.popularFormularioCMS();
+  renderizarListaRotinasCMS(cfg.rotinaDiaria);
 };
 
 window.removerRotinaCMS = function(index) {
   const cfg = carregarConfiguracao();
-  cfg.rotinaDiaria.splice(index, 1);
-  salvarConfiguracaoLocal(cfg);
-  window.popularFormularioCMS();
+  if (cfg.rotinaDiaria && cfg.rotinaDiaria[index]) {
+    cfg.rotinaDiaria.splice(index, 1);
+    salvarConfiguracaoLocal(cfg);
+    renderizarListaRotinasCMS(cfg.rotinaDiaria);
+  }
 };
 
-// Salvar todas as alterações do formulário
+window.restaurarRotinaPadraoCMS = function() {
+  if (!confirm("Deseja restaurar a grade de horários oficiais padrão do DBM 1/GOA?")) return;
+  const cfg = carregarConfiguracao();
+  cfg.rotinaDiaria = JSON.parse(JSON.stringify(ROTINA_PADRAO_GOA));
+  salvarConfiguracaoLocal(cfg);
+  renderizarListaRotinasCMS(cfg.rotinaDiaria);
+  mostrarNotificacaoToast("Grade oficial da rotina restaurada com sucesso.");
+};
+
+/* ==========================================================================
+   5. SALVAR ALTERAÇÕES (LOCAL E NUVEM)
+   ========================================================================== */
+
 window.salvarAlteracoesCMS = async function() {
   const cfg = carregarConfiguracao();
 
-  // 1. Quadro
+  // 1. Vídeo da TV
   const inputQuadro = document.getElementById("cms-quadro-id");
-  if (inputQuadro && inputQuadro.value.trim()) {
+  if (inputQuadro) {
     let val = inputQuadro.value.trim();
-    // Se o gestor colou o link inteiro do Drive, extrai apenas o ID
     const match = val.match(/[-\w]{25,}/);
     if (match) val = match[0];
-    if (!cfg.quadroDeTrabalho) cfg.quadroDeTrabalho = {};
-    cfg.quadroDeTrabalho.driveFileId = val;
-    cfg.quadroDeTrabalho.previewUrl = `https://drive.google.com/file/d/${val}/preview`;
-    if (cfg.videoRecomendacoes) cfg.videoRecomendacoes.driveFileId = val;
+    if (!cfg.videoRecomendacoes) cfg.videoRecomendacoes = {};
+    cfg.videoRecomendacoes.driveFileId = val;
+    if (val) {
+      cfg.videoRecomendacoes.previewUrl = `https://drive.google.com/file/d/${val}/preview`;
+    }
   }
 
-  // 2. Checklist
+  // 2. Formulários e QR Codes
   const inputChecklistForm = document.getElementById("cms-checklist-form");
+  const inputExperienciaForm = document.getElementById("cms-experiencia-form");
+  const inputCautelaForm = document.getElementById("cms-cautela-form");
   const inputChecklistCsv = document.getElementById("cms-checklist-csv");
-  if (inputChecklistForm) cfg.checklist.formUrl = inputChecklistForm.value.trim();
-  if (inputChecklistCsv) cfg.checklist.csvUrl = inputChecklistCsv.value.trim();
 
-  // 3. Apps Script
-  const inputScript = document.getElementById("cms-script-url");
-  if (inputScript) cfg.portal.appsScriptUrl = inputScript.value.trim();
+  if (inputChecklistForm && inputChecklistForm.value.trim()) {
+    cfg.checklist.formUrl = inputChecklistForm.value.trim();
+    if (cfg.quickForms && cfg.quickForms[0]) cfg.quickForms[0].url = inputChecklistForm.value.trim();
+  }
 
-  // 4. Coletar Avisos editados
-  const titulos = document.querySelectorAll(".cms-aviso-titulo");
-  const textos = document.querySelectorAll(".cms-aviso-texto");
-  titulos.forEach((el, idx) => {
-    if (cfg.muralAvisos[idx]) {
-      cfg.muralAvisos[idx].titulo = el.value;
-      cfg.muralAvisos[idx].texto = textos[idx] ? textos[idx].value : "";
+  if (inputExperienciaForm && inputExperienciaForm.value.trim()) {
+    if (cfg.quickForms) {
+      const fExp = cfg.quickForms.find(f => f.id === "form-experiencia");
+      if (fExp) fExp.url = inputExperienciaForm.value.trim();
     }
+  }
+
+  if (inputCautelaForm && inputCautelaForm.value.trim()) {
+    if (cfg.quickForms) {
+      const fCaut = cfg.quickForms.find(f => f.id === "form-cautela");
+      if (fCaut) fCaut.url = inputCautelaForm.value.trim();
+    }
+  }
+
+  if (inputChecklistCsv && inputChecklistCsv.value.trim()) {
+    cfg.checklist.csvUrl = inputChecklistCsv.value.trim();
+  }
+
+  // 3. Google Apps Script WebApp
+  const inputScript = document.getElementById("cms-script-url");
+  if (inputScript && inputScript.value.trim()) {
+    if (!cfg.portal) cfg.portal = {};
+    cfg.portal.appsScriptUrl = inputScript.value.trim();
+  }
+
+  // 4. Coletar Avisos da TV editados
+  const tipos = document.querySelectorAll(".cms-aviso-tipo");
+  const titulos = document.querySelectorAll(".cms-aviso-titulo");
+  const subtitulos = document.querySelectorAll(".cms-aviso-sub");
+  const textos = document.querySelectorAll(".cms-aviso-texto");
+  const imagens = document.querySelectorAll(".cms-aviso-img");
+
+  const novosAvisos = [];
+  titulos.forEach((el, idx) => {
+    novosAvisos.push({
+      id: "aviso-" + idx,
+      tipo: tipos[idx] ? tipos[idx].value : "operacional",
+      titulo: el.value.trim(),
+      subtitulo: subtitulos[idx] ? subtitulos[idx].value.trim() : "",
+      texto: textos[idx] ? textos[idx].value.trim() : "",
+      imagem: imagens[idx] ? imagens[idx].value.trim() : "",
+      data: "Hoje"
+    });
   });
+  if (novosAvisos.length > 0) {
+    cfg.muralAvisos = novosAvisos;
+  }
 
   // 5. Coletar Rotinas editadas
   const rTimes = document.querySelectorAll(".cms-rotina-time");
@@ -150,23 +413,20 @@ window.salvarAlteracoesCMS = async function() {
     cfg.rotinaDiaria = novasRotinas;
   }
 
-  // Salva no navegador
+  // Salva no armazenamento local do navegador
   salvarConfiguracaoLocal(cfg);
   appConfig = cfg;
 
-  // Atualiza componentes na tela
-  if (window.initMuralCarousel) window.initMuralCarousel();
-  if (window.initRotinaTimeline) window.initRotinaTimeline();
-  if (window.initQuickForms) window.initQuickForms();
+  // Atualiza componentes visuais na tela imediatamente
+  if (typeof initMuralCarousel === "function") initMuralCarousel();
+  if (typeof initRotinaTimeline === "function") initRotinaTimeline();
+  if (typeof initQuickForms === "function") initQuickForms();
 
-  // Atualiza iframes do Quadro de Trabalho
-  const quadroIframe = document.getElementById("quadro-iframe");
-  const tvQuadroIframe = document.getElementById("tv-quadro-iframe");
-  if (quadroIframe) quadroIframe.src = cfg.quadroDeTrabalho.previewUrl;
-  if (tvQuadroIframe) tvQuadroIframe.src = cfg.quadroDeTrabalho.previewUrl;
+  // Atualizar QR codes da TV com novas URLs se fornecidas
+  atualizarQrCodesDaTv(cfg);
 
-  // Se tiver WebApp Google Apps Script configurado, tenta sincronizar na nuvem
-  if (cfg.portal.appsScriptUrl) {
+  // Sincronizar na nuvem (Google Drive dbmlagoa@gmail.com) caso Apps Script configurado
+  if (cfg.portal && cfg.portal.appsScriptUrl) {
     try {
       mostrarNotificacaoToast("Sincronizando com o Google Drive (dbmlagoa@gmail.com)...");
       await fetch(cfg.portal.appsScriptUrl, {
@@ -189,7 +449,177 @@ window.salvarAlteracoesCMS = async function() {
   if (modal) modal.classList.remove("active");
 };
 
-// Exportar backup em arquivo JSON
+function atualizarQrCodesDaTv(cfg) {
+  const qrBoxes = document.querySelectorAll(".tv-footer-qr .tv-qr-box");
+  if (qrBoxes.length >= 3) {
+    // 1. Checklist
+    if (cfg.checklist && cfg.checklist.formUrl) {
+      const img1 = qrBoxes[0].querySelector("img.tv-qr-img");
+      if (img1) img1.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(cfg.checklist.formUrl);
+    }
+    // 2. Experiência
+    const expForm = (cfg.quickForms || []).find(f => f.id === "form-experiencia");
+    if (expForm && expForm.url) {
+      const img2 = qrBoxes[1].querySelector("img.tv-qr-img");
+      if (img2) img2.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(expForm.url);
+    }
+    // 3. Cautela
+    const cautForm = (cfg.quickForms || []).find(f => f.id === "form-cautela");
+    if (cautForm && cautForm.url) {
+      const img3 = qrBoxes[2].querySelector("img.tv-qr-img");
+      if (img3) img3.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(cautForm.url);
+    }
+  }
+}
+
+/* ==========================================================================
+   6. SINCRONIZAÇÃO DO MANUAL COM O GOOGLE DRIVE (PASTA "SisGer DBM 1/GOA")
+   ========================================================================== */
+
+window.salvarManualNoGoogleDriveCMS = async function() {
+  const cfg = carregarConfiguracao();
+  const scriptUrl = (cfg.portal && cfg.portal.appsScriptUrl) || "https://script.google.com/macros/s/AKfycbxAc4FFvitYtQB35psdhPu6XEkZF7p16y-ILr5YrmI5ilF_P1snMukF2qWGWUaM2dUeeQ/exec";
+
+  if (!scriptUrl) {
+    alert("Por favor, configure a URL do Google Apps Script na aba Google Drive antes de salvar.");
+    return;
+  }
+
+  mostrarNotificacaoToast("☁️ Enviando Manual para a pasta 'SisGer DBM 1/GOA' do Drive...");
+
+  const manualContent = obterTextoDoManualCompleto();
+
+  try {
+    await fetch(scriptUrl, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "saveManualToDrive",
+        folderName: "SisGer DBM 1/GOA",
+        manualContent: manualContent
+      })
+    });
+    mostrarNotificacaoToast("✅ Manual salvo com sucesso na pasta 'SisGer DBM 1/GOA' do Google Drive (dbmlagoa@gmail.com)!");
+  } catch (err) {
+    console.error("Erro ao salvar manual no Drive:", err);
+    alert("Não foi possível conectar ao Google Apps Script. Verifique a URL e sua conexão: " + err.message);
+  }
+};
+
+window.testarConexaoAppsScript = async function() {
+  const cfg = carregarConfiguracao();
+  const scriptUrl = (cfg.portal && cfg.portal.appsScriptUrl) || document.getElementById("cms-script-url")?.value?.trim();
+
+  if (!scriptUrl) {
+    alert("Informe a URL do Google Apps Script para testar.");
+    return;
+  }
+
+  mostrarNotificacaoToast("🔄 Testando comunicação com o Google Apps Script...");
+
+  try {
+    const urlPing = scriptUrl + (scriptUrl.includes("?") ? "&" : "?") + "action=ping&t=" + Date.now();
+    const resp = await fetch(urlPing);
+    const data = await resp.json();
+    if (data.status === "success") {
+      alert(`✅ Conexão Estabelecida com Sucesso!\nConta: ${data.account || 'dbmlagoa@gmail.com'}\nPasta Raiz: ${data.folder || 'SisGer DBM 1/GOA'}`);
+    } else {
+      alert("Aviso retornado pela API: " + JSON.stringify(data));
+    }
+  } catch (e) {
+    // Mode no-cors fallback
+    mostrarNotificacaoToast("📡 Teste enviado (modo protegido por política Google). Verifique o Drive.");
+  }
+};
+
+/* ==========================================================================
+   7. LEITOR E DOWNLOAD DO MANUAL DO GESTOR
+   ========================================================================== */
+
+function obterTextoDoManualCompleto() {
+  return `# MANUAL DE GESTÃO & EDIÇÃO DO SISGER DBM 1 / GOA
+
+**Unidade:** 1º Destacamento de Bombeiro Militar / Grupamento de Operações Aéreas (CBMERJ)
+**Conta Institucional:** dbmlagoa@gmail.com
+**Pasta no Drive:** SisGer DBM 1/GOA
+**Versão:** 4.2.0
+
+------------------------------------------------------------------------
+1. CREDENCIAIS DE ACESSO AO PAINEL DE GESTÃO:
+- Endereço do Portal: https://dbmlagoa.github.io/SISGER-DBM1-GOA/
+- Acesso: Ícone de engrenagem ⚙️ no canto superior direito do menu
+- Login / Usuário: dbmlagoa
+- Senha de Acesso: salvamento193
+------------------------------------------------------------------------
+
+2. MODO TV VERTICAL (MURAL 24H):
+- Como Iniciar: Acesse o portal e adicione "#tv" ao final da URL, ou clique no botão "Exibição TV (Mural 24h)".
+- Pressione F11 no teclado para tela cheia sem barras.
+- Vídeo Oficial: O vídeo "assets/video_recomendacoes_goa.mp4" roda automaticamente em loop silencioso no centro da tela.
+- Rotina Diária: Exibe apenas a atividade do momento presente (calculada automaticamente).
+- QR Codes: 4 QR codes ampliados (88px) posicionados logo abaixo da rotina diária para acesso rápido a Checklist, Horas de Voo, Cautela e Manutenção.
+
+3. COMO REALIZAR EDIÇÕES PELO PAINEL:
+- Aba 1 (TV & Telão): Trocar link do vídeo oficial ou editar avisos do carrossel com fotos.
+- Aba 2 (Rotina Diária): Adicionar ou editar atividades e horários (formato HH:MM - HH:MM).
+- Aba 3 (Formulários & QR Codes): Atualizar links do Checklist, Horas de Voo, Cautela e Manutenção. Ao salvar, os QR codes são atualizados na hora.
+- Aba 4 (Google Drive): Conectar o portal com a conta dbmlagoa@gmail.com e salvar o manual na nuvem.
+- Aba 5 (Backup & Manual): Fazer download de cópia de segurança em .json ou do manual em .md.
+
+4. PUBLICAÇÃO DE NOTÍCIAS COM FOTOS:
+- Na página Notícias, clique em "✍️ Nova Postagem (Gestor)".
+- Preencha o título, subtítulo, texto e selecione uma foto do computador.
+- Clique em "Publicar Notícia". A matéria entra no topo da página e na rotação da TV.
+
+Suporte: dbmlagoa@gmail.com | (21) 98596-9351`;
+}
+
+window.baixarManualMarkdownCMS = function() {
+  const content = obterTextoDoManualCompleto();
+  const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "MANUAL_DE_GESTAO_E_EDICAO_SISGER.md";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  mostrarNotificacaoToast("📥 Download do Manual iniciado!");
+};
+
+window.abrirLeitorManualCMS = function() {
+  const modalViewer = document.getElementById("manual-viewer-modal");
+  const contentEl = document.getElementById("manual-viewer-content");
+
+  if (!modalViewer || !contentEl) return;
+
+  const rawText = obterTextoDoManualCompleto();
+  // Formatar texto simples em HTML legível
+  contentEl.innerHTML = `
+    <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="card-badge badge-warning">CREDENCIAIS OFICIAIS</span>
+        <span style="font-size: 0.74rem; color: var(--text-muted);">Uso Restrito do Gestor</span>
+      </div>
+      <div style="font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 4px;">
+        Login: <span style="color: var(--orange-rescue); font-family: var(--font-mono);">dbmlagoa</span>
+      </div>
+      <div style="font-size: 1.05rem; font-weight: 800; color: #fff;">
+        Senha: <span style="color: var(--orange-rescue); font-family: var(--font-mono);">salvamento193</span>
+      </div>
+    </div>
+    <pre style="white-space: pre-wrap; font-family: var(--font-mono); font-size: 0.82rem; color: #cbd5e1; line-height: 1.55; margin: 0;">${escapeHtml(rawText)}</pre>
+  `;
+
+  modalViewer.classList.add("active");
+};
+
+/* ==========================================================================
+   8. BACKUP E RESTAURAÇÃO (JSON)
+   ========================================================================== */
+
 window.exportarBackupJSON = function() {
   const cfg = carregarConfiguracao();
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cfg, null, 2));
@@ -199,9 +629,9 @@ window.exportarBackupJSON = function() {
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
   downloadAnchor.remove();
+  mostrarNotificacaoToast("📥 Backup baixado com sucesso!");
 };
 
-// Importar backup de arquivo JSON
 window.importarBackupJSON = function(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -210,7 +640,7 @@ window.importarBackupJSON = function(event) {
   reader.onload = function(e) {
     try {
       const importedCfg = JSON.parse(e.target.result);
-      if (importedCfg.portal && importedCfg.quadroDeTrabalho) {
+      if (importedCfg.portal && importedCfg.checklist) {
         salvarConfiguracaoLocal(importedCfg);
         mostrarNotificacaoToast("✅ Backup restaurado com sucesso! Recarregando...");
         setTimeout(() => window.location.reload(), 1200);
@@ -224,7 +654,10 @@ window.importarBackupJSON = function(event) {
   reader.readAsText(file);
 };
 
-// Toast notification
+/* ==========================================================================
+   9. NOTIFICAÇÃO TOAST & UTILITÁRIOS
+   ========================================================================== */
+
 function mostrarNotificacaoToast(msg) {
   let toast = document.getElementById("app-toast");
   if (!toast) {
@@ -242,7 +675,7 @@ function mostrarNotificacaoToast(msg) {
       box-shadow: 0 10px 25px rgba(0,0,0,0.8);
       font-weight: 700;
       font-size: 0.9rem;
-      z-index: 9999;
+      z-index: 99999;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -260,178 +693,12 @@ function mostrarNotificacaoToast(msg) {
   }, 4000);
 }
 
-/* ==========================================================================
-   FERRAMENTA DO GESTOR: PUBLICAÇÃO E GESTÃO DE NOVAS NOTÍCIAS
-   ========================================================================== */
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
 
-window.uploadedNewsImgData = "";
-
-// Inicializa o formulário de notícias (data atual, upload de imagem, etc.)
-window.initNewsManager = function() {
-  const dateInput = document.getElementById("new-post-date");
-  if (dateInput && !dateInput.value) {
-    const today = new Date().toISOString().split("T")[0];
-    dateInput.value = today;
-  }
-
-  const fileInput = document.getElementById("new-post-img-file");
-  if (fileInput) {
-    fileInput.addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 8 * 1024 * 1024) {
-        alert("A imagem selecionada é muito grande (máximo 8MB).");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        window.uploadedNewsImgData = evt.target.result;
-        const previewBox = document.getElementById("new-post-img-preview-box");
-        const previewImg = document.getElementById("new-post-img-preview");
-        if (previewBox && previewImg) {
-          previewImg.src = evt.target.result;
-          previewBox.style.display = "block";
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  // Renderizar notícias salvas
-  window.renderizarNoticiasCustomizadas();
-};
-
-window.renderizarNoticiasCustomizadas = function() {
-  const feed = document.getElementById("custom-news-feed");
-  if (!feed) return;
-
-  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
-  let noticias = [];
-  try {
-    if (saved) noticias = JSON.parse(saved);
-  } catch (e) {
-    console.error("Erro ao ler notícias personalizadas:", e);
-  }
-
-  if (noticias.length === 0) {
-    feed.innerHTML = "";
-    if (typeof initMuralCarousel === "function") initMuralCarousel();
-    return;
-  }
-
-  feed.innerHTML = noticias.map((noticia, idx) => {
-    // Formatar data
-    let dataStr = noticia.data || "";
-    if (dataStr.includes("-")) {
-      const parts = dataStr.split("-");
-      if (parts.length === 3) dataStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
-
-    return `
-      <article class="news-article-card" id="custom-news-${noticia.id}" style="border-left: 4px solid var(--orange-rescue);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 8px;">
-          <div>
-            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-              <span class="card-badge badge-warning" style="background: rgba(255,85,0,0.2); color: var(--orange-rescue); border: 1px solid var(--orange-rescue);">NOVA PUBLICAÇÃO</span>
-              <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Publicado em ${dataStr}</span>
-            </div>
-            <h3 style="margin-bottom: 4px;">${noticia.titulo}</h3>
-            <div class="meta" style="margin-bottom: 12px;">${noticia.categoria || 'Informativo Operacional'}</div>
-          </div>
-          <button type="button" class="btn-icon" style="color: var(--red-alert); width: 32px; height: 32px;" onclick="excluirNoticiaCustomizada('${noticia.id}')" title="Excluir esta publicação">
-            ✕
-          </button>
-        </div>
-
-        ${noticia.imagem ? `
-          <div class="news-img-banner-box" style="margin: 14px 0;">
-            <img src="${noticia.imagem}" alt="${noticia.titulo}" class="news-img-banner" style="max-height: 420px; width: 100%; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-          </div>
-        ` : ''}
-
-        <div style="white-space: pre-line; font-size: 0.93rem; color: var(--text-secondary); line-height: 1.75;">
-          ${noticia.texto}
-        </div>
-      </article>
-    `;
-  }).join("");
-  if (typeof initMuralCarousel === "function") initMuralCarousel();
-};
-
-window.publicarNovaNoticia = function() {
-  const inputTitulo = document.getElementById("new-post-title");
-  const inputCat = document.getElementById("new-post-category");
-  const inputData = document.getElementById("new-post-date");
-  const inputTexto = document.getElementById("new-post-body");
-  const inputImgUrl = document.getElementById("new-post-img-url");
-
-  if (!inputTitulo || !inputTitulo.value.trim()) {
-    alert("Por favor, digite o título da notícia.");
-    if (inputTitulo) inputTitulo.focus();
-    return;
-  }
-
-  if (!inputTexto || !inputTexto.value.trim()) {
-    alert("Por favor, digite o conteúdo ou texto da notícia.");
-    if (inputTexto) inputTexto.focus();
-    return;
-  }
-
-  const imagemFinal = window.uploadedNewsImgData || (inputImgUrl ? inputImgUrl.value.trim() : "");
-
-  const novaNoticia = {
-    id: "noticia-" + Date.now(),
-    titulo: inputTitulo.value.trim(),
-    categoria: inputCat && inputCat.value.trim() ? inputCat.value.trim() : "Comunicado Oficial • DBM 1/GOA",
-    data: inputData && inputData.value ? inputData.value : new Date().toISOString().split("T")[0],
-    texto: inputTexto.value.trim(),
-    imagem: imagemFinal,
-    autor: "Gestão DBM 1 / GOA"
-  };
-
-  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
-  let noticias = [];
-  try {
-    if (saved) noticias = JSON.parse(saved);
-  } catch (e) {
-    noticias = [];
-  }
-
-  noticias.unshift(novaNoticia);
-  localStorage.setItem("SISGER_NOTICIAS_CUSTOM", JSON.stringify(noticias));
-
-  // Limpar formulário
-  inputTitulo.value = "";
-  if (inputCat) inputCat.value = "";
-  inputTexto.value = "";
-  if (inputImgUrl) inputImgUrl.value = "";
-  window.uploadedNewsImgData = "";
-  const previewBox = document.getElementById("new-post-img-preview-box");
-  if (previewBox) previewBox.style.display = "none";
-  const fileInput = document.getElementById("new-post-img-file");
-  if (fileInput) fileInput.value = "";
-
-  window.renderizarNoticiasCustomizadas();
-  mostrarNotificacaoToast("📢 Nova notícia publicada com sucesso no Mural!");
-
-  // Rolar suavemente para a notícia publicada
-  const feed = document.getElementById("custom-news-feed");
-  if (feed) feed.scrollIntoView({ behavior: "smooth" });
-};
-
-window.excluirNoticiaCustomizada = function(id) {
-  if (!confirm("Tem certeza que deseja remover esta notícia?")) return;
-
-  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
-  let noticias = [];
-  try {
-    if (saved) noticias = JSON.parse(saved);
-  } catch (e) {
-    noticias = [];
-  }
-
-  noticias = noticias.filter(n => n.id !== id);
-  localStorage.setItem("SISGER_NOTICIAS_CUSTOM", JSON.stringify(noticias));
-  window.renderizarNoticiasCustomizadas();
-  mostrarNotificacaoToast("Notícia removida com sucesso.");
-};
+function escapeAttr(s) {
+  return String(s || "").replace(/"/g, "&quot;");
+}

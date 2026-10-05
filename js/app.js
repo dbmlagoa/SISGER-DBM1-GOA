@@ -1060,9 +1060,14 @@ function initManagerModal() {
   const modal = document.getElementById("cms-modal");
 
   if (btnOpen) {
-    btnOpen.addEventListener("click", () => {
-      if (window.popularFormularioCMS) window.popularFormularioCMS();
-      if (modal) modal.classList.add("active");
+    btnOpen.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (typeof window.abrirPainelGestaoComLogin === "function") {
+        window.abrirPainelGestaoComLogin();
+      } else {
+        if (window.popularFormularioCMS) window.popularFormularioCMS();
+        if (modal) modal.classList.add("active");
+      }
     });
   }
 
