@@ -784,7 +784,7 @@ function initTvModeHandlers() {
   const tvMntQr = document.getElementById("tv-qr-manutencao-img");
   if (tvMntQr) {
     const link = window.location.origin + window.location.pathname + "?form=manutencao";
-    tvMntQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(link);
+    tvMntQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(link);
   }
 
 function ativarFallbackVideoTv() {
