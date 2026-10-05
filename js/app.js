@@ -477,6 +477,8 @@ function initMuralCarousel() {
   const btnPrev = document.getElementById("btn-mural-prev");
   const btnNext = document.getElementById("btn-mural-next");
   const progressBar = document.getElementById("mural-progress-bar");
+  const tvProgressBar = document.getElementById("tv-news-progress-bar");
+  const tvBanner = document.getElementById("tv-urgent-banner");
 
   const tvAvisoTitulo = document.getElementById("tv-aviso-titulo");
   const tvAvisoTexto = document.getElementById("tv-aviso-texto");
@@ -587,14 +589,36 @@ function initMuralCarousel() {
       });
     }
 
-    // Atualizar Banner na TV
+    // Atualizar Card de Notícias na TV (com Imagem relativa, Subtítulo, Badge e Texto)
     const n = noticias[index];
     if (n) {
       if (tvAvisoTitulo) tvAvisoTitulo.textContent = n.titulo;
-      if (tvAvisoTexto) tvAvisoTexto.textContent = (n.meta ? `${n.meta} — ` : "") + n.texto;
+      const tvAvisoSub = document.getElementById("tv-aviso-sub");
+      if (tvAvisoSub) {
+        tvAvisoSub.textContent = n.meta || "";
+        tvAvisoSub.style.display = n.meta ? "block" : "none";
+      }
+      if (tvAvisoTexto) tvAvisoTexto.textContent = n.texto;
       if (tvAvisoBadge) {
-        tvAvisoBadge.textContent = n.tag;
+        tvAvisoBadge.innerHTML = `<span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span> ${escapeHtml(n.tag)}`;
         tvAvisoBadge.className = `mural-badge ${n.badgeClass}`;
+      }
+      const tvAvisoImg = document.getElementById("tv-aviso-img");
+      const tvAvisoImgBox = document.getElementById("tv-news-img-box");
+      if (tvAvisoImg && tvAvisoImgBox) {
+        tvAvisoImg.style.opacity = "0.3";
+        setTimeout(() => {
+          if (n.imagem) {
+            tvAvisoImg.src = n.imagem;
+            tvAvisoImg.alt = n.titulo;
+            tvAvisoImgBox.style.display = "block";
+          } else {
+            tvAvisoImg.src = "assets/goa_hero_real.jpg";
+            tvAvisoImg.alt = "GOA CBMERJ";
+            tvAvisoImgBox.style.display = "block";
+          }
+          tvAvisoImg.style.opacity = "1";
+        }, 120);
       }
     }
   }
@@ -602,6 +626,7 @@ function initMuralCarousel() {
   function goToSlide(index) {
     progress = 0;
     if (progressBar) progressBar.style.width = "0%";
+    if (tvProgressBar) tvProgressBar.style.width = "0%";
     showSlide(index);
   }
 
@@ -632,6 +657,10 @@ function initMuralCarousel() {
     carouselBox.onmouseenter = () => { isHovered = true; };
     carouselBox.onmouseleave = () => { isHovered = false; };
   }
+  if (tvBanner) {
+    tvBanner.onmouseenter = () => { isHovered = true; };
+    tvBanner.onmouseleave = () => { isHovered = false; };
+  }
 
   showSlide(0);
 
@@ -641,6 +670,7 @@ function initMuralCarousel() {
     if (!isHovered) {
       progress += (updateInterval / slideDuration) * 100;
       if (progressBar) progressBar.style.width = `${progress}%`;
+      if (tvProgressBar) tvProgressBar.style.width = `${progress}%`;
 
       if (progress >= 100) {
         progress = 0;

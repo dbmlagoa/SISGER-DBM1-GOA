@@ -57,14 +57,27 @@
     </div>
 
     <div class="tv-body-vertical">
-      <!-- 1. Container de Notícias com Rotação Automática (Tamanho Único Fixo e sem 'Ao Vivo') -->
-      <div class="tv-urgent-banner" id="tv-urgent-banner">
-        <div class="tv-urgent-text">
-          <div class="tv-urgent-top-line">
-            <div id="tv-aviso-badge" class="mural-badge badge-danger">AVISO OPERACIONAL</div>
-            <h3 id="tv-aviso-titulo">Checklist Eletrônico de Pronto Emprego</h3>
+      <!-- 1. Container de Notícias com Rotação Automática (Visual Idêntico ao Mural & Início, com Imagem) -->
+      <div class="tv-urgent-banner tv-news-carousel-card" id="tv-urgent-banner">
+        <div class="tv-news-card-body">
+          <div class="tv-news-card-info">
+            <div class="tv-news-card-badge-row">
+              <span id="tv-aviso-badge" class="mural-badge badge-success">
+                <span class="pulse-dot" style="width: 6px; height: 6px; background: currentColor; margin-right: 4px;"></span>
+                OPERACIONAL • SALVAMENTO AQUÁTICO
+              </span>
+              <span class="tv-news-tag-live">MURAL DE NOTÍCIAS</span>
+            </div>
+            <h3 id="tv-aviso-titulo">Padronização de EPI - Aquisição de Short John</h3>
+            <div id="tv-aviso-sub" class="mural-slide-sub">Utilização de Short John para Salvamento no Mar • GOA</div>
+            <p id="tv-aviso-texto" class="mural-slide-text">Após processo de aquisição de EPIs para salvamento aquático, fica padronizada a correta equipagem do fiel: Short John (roupa de neoprene curta), luvas de neoprene e botas de neoprene. Cautela de kits completa disponível no DMOP.</p>
           </div>
-          <p id="tv-aviso-texto">Conferência diária de material operacional após o briefing das 06:20h.</p>
+          <div class="tv-news-img-box" id="tv-news-img-box">
+            <img id="tv-aviso-img" src="assets/noticias/noticias_img_10.jpg" alt="Notícia GOA" loading="lazy">
+          </div>
+        </div>
+        <div class="tv-news-progress">
+          <div class="tv-news-progress-bar" id="tv-news-progress-bar"></div>
         </div>
       </div>
 
