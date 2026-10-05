@@ -224,15 +224,25 @@ async function verificarChecklistStatus() {
 
   // Atualizar visual na interface
   const cardBox = document.getElementById("checklist-card-box");
+  const tvCardBox = document.getElementById("tv-checklist-card-box");
   if (conferido || valorB2 === "1") {
     const successHTML = `<span class="pulse-dot" style="background-color: #22c55e;"></span> ✅ PRONTO EMPREGO (CONFERIDO)`;
+    const tvSuccessHTML = `<span class="pulse-dot" style="background-color: #22c55e;"></span> REALIZADO • CONFERIDO`;
     if (badge) {
       badge.className = "status-indicator-badge badge-success";
       badge.innerHTML = successHTML;
     }
     if (tvBadge) {
       tvBadge.className = "status-indicator-badge badge-success";
-      tvBadge.innerHTML = successHTML;
+      tvBadge.innerHTML = tvSuccessHTML;
+    }
+    if (cardBox) {
+      cardBox.classList.add("status-conferido");
+      cardBox.classList.remove("status-pendente");
+    }
+    if (tvCardBox) {
+      tvCardBox.classList.add("status-conferido");
+      tvCardBox.classList.remove("status-pendente");
     }
     if (cardBox) {
       cardBox.classList.add("status-conferido");
@@ -243,13 +253,22 @@ async function verificarChecklistStatus() {
     }
   } else {
     const warningHTML = `<span class="pulse-dot" style="background-color: var(--gold-wings);"></span> ❌ CHECKLIST PENDENTE`;
+    const tvWarningHTML = `<span class="pulse-dot" style="background-color: var(--gold-wings);"></span> PENDENTE DE REALIZAÇÃO`;
     if (badge) {
       badge.className = "status-indicator-badge badge-warning";
       badge.innerHTML = warningHTML;
     }
     if (tvBadge) {
       tvBadge.className = "status-indicator-badge badge-warning";
-      tvBadge.innerHTML = warningHTML;
+      tvBadge.innerHTML = tvWarningHTML;
+    }
+    if (cardBox) {
+      cardBox.classList.add("status-pendente");
+      cardBox.classList.remove("status-conferido");
+    }
+    if (tvCardBox) {
+      tvCardBox.classList.add("status-pendente");
+      tvCardBox.classList.remove("status-conferido");
     }
     if (cardBox) {
       cardBox.classList.add("status-pendente");
@@ -404,40 +423,46 @@ function renderRotinaDiaria() {
     container.innerHTML = html;
   }
 
-  // 4. Renderizar Container na TV (Modo Mural TV)
+  // 4. Renderizar Container na TV (Modo Mural TV): Exibir SOMENTE a atividade a ser realizada no momento
   if (tvContainer) {
-    let tvHtml = "";
-    activeAndUpcoming.forEach((item, index) => {
-      if (index === 0) {
-        const badgeLabel = isCurrentNow ? "ATIVIDADE ATUAL" : "PRÓXIMA ATIVIDADE";
-        tvHtml += `
-          <div class="tv-routine-card active-now" data-time="${item.time}" style="border: 2px solid var(--orange-rescue); background: linear-gradient(90deg, rgba(255, 85, 0, 0.3) 0%, rgba(255, 85, 0, 0.1) 100%); box-shadow: 0 0 20px rgba(255, 85, 0, 0.4);">
-            <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start; min-width: 110px;">
-              <span class="rotina-now-badge" style="font-size: 0.65rem; padding: 2px 8px;">
-                <span class="pulse-dot" style="width: 6px; height: 6px; background: #fff;"></span>
-                ${badgeLabel}
-              </span>
-              <div class="time" style="color: #ffaa33; font-weight: 900; font-size: 1rem;">${item.time}</div>
-            </div>
-            <div class="desc" style="flex: 1;">
-              <h4 style="font-weight: 800; color: #fff; font-size: 0.96rem; margin-bottom: 3px;">${item.title}</h4>
-              <p style="color: #e2e8f0; font-size: 0.8rem; line-height: 1.35;">${item.desc}</p>
-            </div>
+    if (activeAndUpcoming.length > 0) {
+      const currentItem = activeAndUpcoming[0];
+      const parsed = parseRoutineTime(currentItem.time);
+      const isCurrentNow = nowMin >= parsed.startMin && nowMin <= parsed.endMin;
+      const badgeLabel = isCurrentNow ? "ATIVIDADE DA HORA ATUAL" : "PRÓXIMA ATIVIDADE";
+
+      tvContainer.innerHTML = `
+        <div class="tv-routine-card active-now" data-time="${currentItem.time}">
+          <div class="tv-routine-card-meta">
+            <span class="rotina-now-badge">
+              <span class="pulse-dot" style="width: 6px; height: 6px; background: #fff;"></span>
+              ${badgeLabel}
+            </span>
+            <div class="time">${currentItem.time}</div>
           </div>
-        `;
-      } else {
-        tvHtml += `
-          <div class="tv-routine-card" data-time="${item.time}">
-            <div class="time">${item.time}</div>
-            <div class="desc" style="flex: 1;">
-              <h4 style="font-weight: 700; color: #fff; font-size: 0.92rem; margin-bottom: 2px;">${item.title}</h4>
-              <p style="color: var(--text-secondary); font-size: 0.78rem; line-height: 1.35;">${item.desc}</p>
-            </div>
+          <div class="desc">
+            <h4>${currentItem.title}</h4>
+            <p>${currentItem.desc}</p>
           </div>
-        `;
-      }
-    });
-    tvContainer.innerHTML = tvHtml;
+        </div>
+      `;
+    } else {
+      tvContainer.innerHTML = `
+        <div class="tv-routine-card tv-routine-card-completed">
+          <div class="tv-routine-card-meta">
+            <span class="card-badge badge-warning">
+              <span class="pulse-dot" style="background: var(--orange-rescue);"></span>
+              SOBREAVISO 24H
+            </span>
+            <div class="time">PRONTIDÃO</div>
+          </div>
+          <div class="desc">
+            <h4>Rotina Diurna Concluída</h4>
+            <p>Tripulações e aeronaves em prontidão operacional de sobreaviso noturno.</p>
+          </div>
+        </div>
+      `;
+    }
   }
 }
 
@@ -732,24 +757,40 @@ function initTvModeHandlers() {
     tvMntQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(link);
   }
 
-  // Modo TV Vídeo: suporte duplo (Drive Embed para Nuvem/GitHub Pages e Local MP4 para localhost)
-  const isLocal = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-  if (isLocal) {
-    const testVid = document.createElement("video");
-    testVid.src = "assets/video_recomendacoes_goa.mp4";
-    testVid.onloadeddata = function() {
+  // Configuração avançada de loop contínuo do vídeo oficial na TV
+  const tvVideo = document.getElementById("tv-video-player");
+  if (tvVideo) {
+    tvVideo.loop = true;
+    tvVideo.muted = true;
+    tvVideo.playsInline = true;
+
+    // Garantir loop infinito contínuo mesmo se o navegador ignorar o atributo 'loop' nativo
+    tvVideo.addEventListener("ended", () => {
+      tvVideo.currentTime = 0;
+      tvVideo.play().catch(err => console.warn("Erro ao reiniciar vídeo em loop:", err));
+    });
+
+    // Se o arquivo local falhar (ex: hospedagem estática sem o vídeo de 142MB), fallback para Google Drive
+    tvVideo.addEventListener("error", () => {
+      console.warn("Vídeo local não pôde ser carregado. Ativando fallback do Google Drive.");
       const wrapper = document.getElementById("tv-video-wrapper");
-      if (wrapper && !wrapper.querySelector("video")) {
+      if (wrapper && !wrapper.querySelector("iframe")) {
         wrapper.innerHTML = `
           <div class="tv-video-tag">🎥 RECOMENDAÇÕES DE SEGURANÇA • GOA</div>
-          <video id="tv-video-player" src="assets/video_recomendacoes_goa.mp4" autoplay loop muted playsinline controls preload="auto" style="width: 100%; height: 100%; object-fit: contain; background: #000; border: none;"></video>
+          <iframe id="tv-video-iframe" 
+                  src="https://drive.google.com/file/d/1x5rcnA3uGS-BICz-KsjbRdXVSWH4XSfp/preview" 
+                  allow="autoplay; encrypted-media; fullscreen" 
+                  allowfullscreen 
+                  style="width: 100%; height: 100%; border: none; background: #000; border-radius: var(--radius-sm);">
+          </iframe>
         `;
-        const v = document.getElementById("tv-video-player");
-        if (v && document.body.classList.contains("tv-mode-active")) {
-          v.play().catch(() => {});
-        }
       }
-    };
+    });
+
+    // Iniciar reprodução se já estiver no modo TV
+    if (document.body.classList.contains("tv-mode-active")) {
+      tvVideo.play().catch(() => {});
+    }
   }
 }
 
@@ -770,16 +811,19 @@ function ativarModoTv(ativar) {
     if (typeof renderRotinaDiaria === "function") {
       renderRotinaDiaria();
     }
-    // Iniciar vídeo oficial em loop na TV (se for player de vídeo HTML5)
+    // Iniciar vídeo oficial em loop contínuo na TV
     const tvVideo = document.getElementById("tv-video-player");
-    if (tvVideo && typeof tvVideo.play === "function") {
+    if (tvVideo) {
+      tvVideo.loop = true;
       tvVideo.muted = true;
       try {
-        const playPromise = tvVideo.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(err => {
-            console.warn("TV video play deferred by browser policy:", err);
-          });
+        if (tvVideo.paused || tvVideo.ended) {
+          const playPromise = tvVideo.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.warn("TV video play deferred by browser policy:", err);
+            });
+          }
         }
       } catch (e) {}
     }

@@ -32,31 +32,39 @@
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 24px;">
-        <div id="tv-checklist-badge" class="status-indicator-badge badge-warning">
-          <span class="pulse-dot"></span> CHECKLIST PENDENTE
+      <div class="tv-header-right">
+        <!-- Card de Verificação da Realização do Checklist -->
+        <div class="tv-checklist-card" id="tv-checklist-card-box">
+          <div class="tv-chk-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2 4-4"></path></svg>
+          </div>
+          <div class="tv-chk-details">
+            <span class="tv-chk-title">Checklist Pronto Emprego</span>
+            <div id="tv-checklist-badge" class="status-indicator-badge badge-warning">
+              <span class="pulse-dot"></span> PENDENTE DE REALIZAÇÃO
+            </div>
+          </div>
         </div>
+
         <div class="tv-clock">
           <div class="tv-clock-time" id="tv-clock-time">06:00:00</div>
           <div class="tv-clock-date" id="tv-clock-date">Sexta-feira, 3 de Outubro de 2026</div>
         </div>
         <button class="tv-exit-btn" id="btn-exit-tv-mode" onclick="ativarModoTv(false)" title="Sair do Modo TV (Esc)">
-          ✕ Sair da TV
+          ✕ Sair
         </button>
       </div>
     </div>
 
     <div class="tv-body-vertical">
-      <!-- 1. Banner de Avisos com Rotação Automática -->
-      <div class="tv-urgent-banner">
+      <!-- 1. Container de Notícias com Rotação Automática (Tamanho Único Fixo e sem 'Ao Vivo') -->
+      <div class="tv-urgent-banner" id="tv-urgent-banner">
         <div class="tv-urgent-text">
-          <div id="tv-aviso-badge" class="mural-badge badge-danger">AVISO OPERACIONAL</div>
-          <h3 id="tv-aviso-titulo">Checklist Eletrônico de Pronto Emprego</h3>
+          <div class="tv-urgent-top-line">
+            <div id="tv-aviso-badge" class="mural-badge badge-danger">AVISO OPERACIONAL</div>
+            <h3 id="tv-aviso-titulo">Checklist Eletrônico de Pronto Emprego</h3>
+          </div>
           <p id="tv-aviso-texto">Conferência diária de material operacional após o briefing das 06:20h.</p>
-        </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="pulse-dot" style="width: 12px; height: 12px; background: var(--orange-rescue);"></span>
-          <span style="font-size: 0.85rem; font-weight: 800; color: #fff; text-transform: uppercase;">Ao Vivo</span>
         </div>
       </div>
 
@@ -65,22 +73,25 @@
         <div class="tv-video-tag">
           🎥 RECOMENDAÇÕES DE SEGURANÇA • GOA
         </div>
-        <iframe id="tv-video-iframe" 
-                src="https://drive.google.com/file/d/1x5rcnA3uGS-BICz-KsjbRdXVSWH4XSfp/preview" 
-                allow="autoplay; encrypted-media; fullscreen" 
-                allowfullscreen 
-                style="width: 100%; height: 100%; border: none; background: #000; border-radius: var(--radius-sm);">
-        </iframe>
+        <video id="tv-video-player" 
+               src="assets/video_recomendacoes_goa.mp4" 
+               autoplay 
+               loop 
+               muted 
+               playsinline 
+               preload="auto" 
+               style="width: 100%; height: 100%; object-fit: contain; background: #000; border: none;">
+        </video>
       </div>
 
       <!-- 3. Timeline da Rotina Diária Oficial -->
       <div class="tv-routine-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: #fff; font-weight: 700;">Rotina da Escala Oficial</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.05rem; color: #fff; font-weight: 700;">Rotina diária</h3>
           <span class="card-badge badge-info">Hoje</span>
         </div>
         <div class="tv-routine-list" id="tv-rotina-container">
-          <!-- Injetado dinamicamente: 06:00 Assunção, 06:20 Briefing, 06:40 Checklist, etc. -->
+          <!-- Injetado dinamicamente: Exibe somente o card da atividade no momento da exibição -->
         </div>
       </div>
 
