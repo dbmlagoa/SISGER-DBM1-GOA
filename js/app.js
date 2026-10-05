@@ -757,6 +757,22 @@ function initTvModeHandlers() {
     tvMntQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(link);
   }
 
+function ativarFallbackVideoTv() {
+  const wrapper = document.getElementById("tv-video-wrapper");
+  if (wrapper && !wrapper.querySelector("iframe")) {
+    wrapper.innerHTML = `
+      <div class="tv-video-tag">🎥 RECOMENDAÇÕES DE SEGURANÇA • GOA</div>
+      <iframe id="tv-video-iframe" 
+              src="https://drive.google.com/file/d/1x5rcnA3uGS-BICz-KsjbRdXVSWH4XSfp/preview" 
+              allow="autoplay; encrypted-media; fullscreen" 
+              allowfullscreen 
+              style="width: 100%; height: 100%; border: none; background: #000; border-radius: var(--radius-sm);">
+      </iframe>
+    `;
+  }
+}
+window.ativarFallbackVideoTv = ativarFallbackVideoTv;
+
   // Configuração avançada de loop contínuo do vídeo oficial na TV
   const tvVideo = document.getElementById("tv-video-player");
   if (tvVideo) {
@@ -764,28 +780,17 @@ function initTvModeHandlers() {
     tvVideo.muted = true;
     tvVideo.playsInline = true;
 
-    // Garantir loop infinito contínuo mesmo se o navegador ignorar o atributo 'loop' nativo
-    tvVideo.addEventListener("ended", () => {
-      tvVideo.currentTime = 0;
-      tvVideo.play().catch(err => console.warn("Erro ao reiniciar vídeo em loop:", err));
-    });
-
-    // Se o arquivo local falhar (ex: hospedagem estática sem o vídeo de 142MB), fallback para Google Drive
-    tvVideo.addEventListener("error", () => {
-      console.warn("Vídeo local não pôde ser carregado. Ativando fallback do Google Drive.");
-      const wrapper = document.getElementById("tv-video-wrapper");
-      if (wrapper && !wrapper.querySelector("iframe")) {
-        wrapper.innerHTML = `
-          <div class="tv-video-tag">🎥 RECOMENDAÇÕES DE SEGURANÇA • GOA</div>
-          <iframe id="tv-video-iframe" 
-                  src="https://drive.google.com/file/d/1x5rcnA3uGS-BICz-KsjbRdXVSWH4XSfp/preview" 
-                  allow="autoplay; encrypted-media; fullscreen" 
-                  allowfullscreen 
-                  style="width: 100%; height: 100%; border: none; background: #000; border-radius: var(--radius-sm);">
-          </iframe>
-        `;
-      }
-    });
+    // Se o elemento já tiver falhado antes da inicialização do script
+    if (tvVideo.error) {
+      ativarFallbackVideoTv();
+    } else {
+      tvVideo.addEventListener("error", ativarFallbackVideoTv);
+      // Garantir loop infinito contínuo mesmo se o navegador ignorar o atributo 'loop' nativo
+      tvVideo.addEventListener("ended", () => {
+        tvVideo.currentTime = 0;
+        tvVideo.play().catch(err => console.warn("Erro ao reiniciar vídeo em loop:", err));
+      });
+    }
 
     // Iniciar reprodução se já estiver no modo TV
     if (document.body.classList.contains("tv-mode-active")) {

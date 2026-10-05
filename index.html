@@ -80,6 +80,7 @@
                muted 
                playsinline 
                preload="auto" 
+               onerror="if(window.ativarFallbackVideoTv){window.ativarFallbackVideoTv();}else{this.style.display='none';}"
                style="width: 100%; height: 100%; object-fit: contain; background: #000; border: none;">
         </video>
       </div>

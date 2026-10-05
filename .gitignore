@@ -5,7 +5,7 @@
 *.docx
 
 # Mídia pesada (> 100MB não permitida no GitHub)
-*.mp4
+# (assets/video_recomendacoes_goa.mp4 otimizado para 48MB e incluído no repositório)
 
 # Scripts temporários de desenvolvimento
 scratch_*.py
