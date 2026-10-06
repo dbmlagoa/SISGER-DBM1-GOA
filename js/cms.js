@@ -249,6 +249,9 @@ window.popularFormularioCMS = function() {
   if (typeof window.renderizarListaNoticiasCMS === "function") {
     window.renderizarListaNoticiasCMS();
   }
+
+  // 7. Aba Quadro de Trabalho: Lista de Atividades do Quadro de Trabalho Semanal
+  renderizarListaQuadroCMS(cfg.quadroTrabalho);
 };
 
 /* ==========================================================================
@@ -356,6 +359,177 @@ window.restaurarRotinaPadraoCMS = function() {
 };
 
 /* ==========================================================================
+   4.1 QUADRO DE TRABALHO SEMANAL (INSTRUÇÃO) - CMS & EDIÇÃO FÁCIL
+   ========================================================================== */
+
+function renderizarListaQuadroCMS(quadro) {
+  const container = document.getElementById("cms-quadro-list");
+  if (!container) return;
+
+  const lista = (quadro && quadro.length > 0) ? quadro : (typeof DEFAULT_CONFIG !== "undefined" ? DEFAULT_CONFIG.quadroTrabalho : []);
+  if (!lista || lista.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 16px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px dashed var(--border-subtle);">
+        <span style="font-size: 1.8rem; display: block; margin-bottom: 6px;">📋</span>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0 0 10px 0;">Nenhuma atividade cadastrada no Quadro de Trabalho.</p>
+        <button type="button" class="btn-primary" style="padding: 6px 14px; font-size: 0.78rem;" onclick="restaurarQuadroPadraoCMS()">
+          ↺ Restaurar Grade Padrão (Outubro 2026)
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = lista.map((item, idx) => `
+    <div class="cms-quadro-item" data-idx="${idx}" style="background: rgba(13, 21, 39, 0.7); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px; margin-bottom: 8px;">
+      <div style="display: grid; grid-template-columns: 100px 140px 1fr 130px 32px; gap: 8px; align-items: center; margin-bottom: 8px;">
+        <div>
+          <label style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">DIA (DD/MM)</label>
+          <input type="text" value="${escapeAttr(item.dia || '')}" class="cms-quadro-dia" data-idx="${idx}" placeholder="06/10" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--border-subtle); color: #ffaa33; font-weight: 800; font-size: 0.85rem; padding: 6px; border-radius: 4px; text-align: center;">
+        </div>
+        <div>
+          <label style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">HORÁRIO</label>
+          <input type="text" value="${escapeAttr(item.horario || '')}" class="cms-quadro-horario" data-idx="${idx}" placeholder="09:30h as 10:45h" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--border-subtle); color: #fff; font-weight: 700; font-size: 0.82rem; padding: 6px; border-radius: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">ASSUNTO</label>
+          <input type="text" value="${escapeAttr(item.assunto || '')}" class="cms-quadro-assunto" data-idx="${idx}" placeholder="Assunto da Instrução" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--border-subtle); color: #fff; font-weight: 800; font-size: 0.85rem; padding: 6px 10px; border-radius: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">RESPONSÁVEL</label>
+          <input type="text" value="${escapeAttr(item.responsavel || '')}" class="cms-quadro-resp" data-idx="${idx}" placeholder="COVANT / TASA" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--border-subtle); color: var(--gold-wings); font-weight: 800; font-size: 0.8rem; padding: 6px 8px; border-radius: 4px;">
+        </div>
+        <div style="align-self: flex-end;">
+          <button type="button" class="btn-icon" style="width: 30px; height: 30px; color: var(--red-alert); margin-bottom: 2px;" onclick="removerAtividadeQuadroCMS(${idx})" title="Remover Instrução">✕</button>
+        </div>
+      </div>
+      <div>
+        <label style="font-size: 0.68rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">CONTEÚDO PROGRAMÁTICO</label>
+        <textarea class="cms-quadro-conteudo" data-idx="${idx}" placeholder="Ementa / Conteúdo detalhado da instrução..." rows="2" style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: #cbd5e1; padding: 6px 10px; border-radius: 4px; font-size: 0.8rem; line-height: 1.4;">${escapeHtml(item.conteudo || '')}</textarea>
+      </div>
+    </div>
+  `).join("");
+}
+
+window.adicionarNovaAtividadeQuadroCMS = function() {
+  const cfg = carregarConfiguracao();
+  if (!cfg.quadroTrabalho) cfg.quadroTrabalho = [];
+  const now = new Date();
+  const diaPadrao = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}`;
+  cfg.quadroTrabalho.push({
+    dia: diaPadrao,
+    horario: "09:30h as 10:45h",
+    assunto: "NOVA INSTRUÇÃO OPERACIONAL",
+    conteudo: "Conteúdo programático da instrução teórica ou prática.",
+    responsavel: "COVANT"
+  });
+  salvarConfiguracaoLocal(cfg);
+  renderizarListaQuadroCMS(cfg.quadroTrabalho);
+  mostrarNotificacaoToast("Nova atividade adicionada ao Quadro!");
+};
+
+window.removerAtividadeQuadroCMS = function(index) {
+  const cfg = carregarConfiguracao();
+  if (cfg.quadroTrabalho && cfg.quadroTrabalho[index]) {
+    cfg.quadroTrabalho.splice(index, 1);
+    salvarConfiguracaoLocal(cfg);
+    renderizarListaQuadroCMS(cfg.quadroTrabalho);
+  }
+};
+
+window.restaurarQuadroPadraoCMS = function() {
+  if (!confirm("Deseja restaurar a grade de instruções padrão do Quadro de Trabalho (documento Outubro 2026)?")) return;
+  const cfg = carregarConfiguracao();
+  if (typeof DEFAULT_CONFIG !== "undefined" && DEFAULT_CONFIG.quadroTrabalho) {
+    cfg.quadroTrabalho = JSON.parse(JSON.stringify(DEFAULT_CONFIG.quadroTrabalho));
+  }
+  salvarConfiguracaoLocal(cfg);
+  renderizarListaQuadroCMS(cfg.quadroTrabalho);
+  if (typeof renderQuadroTrabalho === "function") renderQuadroTrabalho();
+  mostrarNotificacaoToast("Grade padrão do Quadro de Trabalho restaurada!");
+};
+
+window.abrirModalImportarQuadroCMS = function() {
+  const modal = document.getElementById("modal-importar-quadro");
+  const ta = document.getElementById("importar-quadro-textarea");
+  if (ta) ta.value = "";
+  if (modal) modal.classList.add("active");
+};
+
+window.fecharModalImportarQuadroCMS = function() {
+  const modal = document.getElementById("modal-importar-quadro");
+  if (modal) modal.classList.remove("active");
+};
+
+window.confirmarImportacaoQuadroCMS = function() {
+  const ta = document.getElementById("importar-quadro-textarea");
+  if (!ta) return;
+  const raw = ta.value.trim();
+  if (!raw) {
+    alert("Por favor, cole o texto ou tabela do Quadro de Trabalho no campo.");
+    return;
+  }
+
+  const linhas = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const novosItens = [];
+
+  for (const linha of linhas) {
+    // Ignorar linhas de cabeçalho
+    const lUpper = linha.toUpperCase();
+    if (lUpper.includes("CORPO DE BOMBEIROS") || lUpper.includes("GRUPAMENTO DE OPERAÇÕES") || lUpper.includes("QUADRO DE TRABALHO") || (lUpper.includes("DIA") && lUpper.includes("HORÁRIO"))) {
+      continue;
+    }
+
+    let partes = [];
+    if (linha.includes("\t")) {
+      partes = linha.split("\t");
+    } else if (linha.includes("|")) {
+      partes = linha.split("|");
+    } else if (linha.includes(";")) {
+      partes = linha.split(";");
+    } else {
+      partes = linha.split(/\s{2,}/);
+    }
+
+    partes = partes.map(p => p.trim()).filter(p => p !== "");
+    if (partes.length >= 2) {
+      const dia = partes[0] || "";
+      const horario = partes[1] || "09:30h as 10:45h";
+      const assunto = partes[2] || "INSTRUÇÃO OPERACIONAL";
+      const conteudo = partes[3] || partes[2] || "";
+      const responsavel = partes[4] || "COVANT";
+
+      novosItens.push({
+        dia: dia,
+        horario: horario,
+        assunto: assunto,
+        conteudo: conteudo,
+        responsavel: responsavel
+      });
+    }
+  }
+
+  if (novosItens.length === 0) {
+    alert("Não foi possível identificar nenhuma linha válida. Verifique a formatação com colunas separadas por Tabulação, Pipe (|) ou Ponto e Vírgula (;).");
+    return;
+  }
+
+  const cfg = carregarConfiguracao();
+  const substituir = confirm(`Foram identificadas ${novosItens.length} atividades.\n\nDeseja SUBSTITUIR o quadro atual por este novo cronograma?\n(Clique em OK para Substituir ou Cancelar para Adicionar ao final)`);
+  if (substituir) {
+    cfg.quadroTrabalho = novosItens;
+  } else {
+    cfg.quadroTrabalho = (cfg.quadroTrabalho || []).concat(novosItens);
+  }
+
+  salvarConfiguracaoLocal(cfg);
+  renderizarListaQuadroCMS(cfg.quadroTrabalho);
+  if (typeof renderQuadroTrabalho === "function") renderQuadroTrabalho();
+  window.fecharModalImportarQuadroCMS();
+  mostrarNotificacaoToast(`✅ ${novosItens.length} atividades importadas com sucesso!`);
+};
+
+/* ==========================================================================
    5. SALVAR ALTERAÇÕES (LOCAL E NUVEM)
    ========================================================================== */
 
@@ -450,6 +624,26 @@ window.salvarAlteracoesCMS = async function() {
     cfg.rotinaDiaria = novasRotinas;
   }
 
+  // 6. Coletar Quadro de Trabalho editado
+  const qDias = document.querySelectorAll(".cms-quadro-dia");
+  const qHorarios = document.querySelectorAll(".cms-quadro-horario");
+  const qAssuntos = document.querySelectorAll(".cms-quadro-assunto");
+  const qConteudos = document.querySelectorAll(".cms-quadro-conteudo");
+  const qResps = document.querySelectorAll(".cms-quadro-resp");
+  const novoQuadro = [];
+  qDias.forEach((el, idx) => {
+    novoQuadro.push({
+      dia: el.value.trim(),
+      horario: qHorarios[idx] ? qHorarios[idx].value.trim() : "09:30h as 10:45h",
+      assunto: qAssuntos[idx] ? qAssuntos[idx].value.trim() : "",
+      conteudo: qConteudos[idx] ? qConteudos[idx].value.trim() : "",
+      responsavel: qResps[idx] ? qResps[idx].value.trim() : "COVANT"
+    });
+  });
+  if (novoQuadro.length > 0) {
+    cfg.quadroTrabalho = novoQuadro;
+  }
+
   // Salva no armazenamento local do navegador
   salvarConfiguracaoLocal(cfg);
   appConfig = cfg;
@@ -457,6 +651,7 @@ window.salvarAlteracoesCMS = async function() {
   // Atualiza componentes visuais na tela imediatamente
   if (typeof initMuralCarousel === "function") initMuralCarousel();
   if (typeof initRotinaTimeline === "function") initRotinaTimeline();
+  if (typeof renderQuadroTrabalho === "function") renderQuadroTrabalho();
   if (typeof initQuickForms === "function") initQuickForms();
 
   // Atualizar QR codes da TV com novas URLs se fornecidas
@@ -595,17 +790,24 @@ function obterTextoDoManualCompleto() {
 - Pressione F11 no teclado para tela cheia sem barras.
 - Vídeo Oficial: O vídeo "assets/video_recomendacoes_goa.mp4" roda automaticamente em loop silencioso no centro da tela.
 - Rotina Diária: Exibe apenas a atividade do momento presente (calculada automaticamente).
-- QR Codes: 4 QR codes ampliados (88px) posicionados logo abaixo da rotina diária para acesso rápido a Checklist, Horas de Voo, Cautela e Manutenção.
+- Quadro de Trabalho: Card posicionado logo abaixo da rotina diária com as mesmas dimensões, exibindo a atividade de instrução prevista no documento para o dia corrente (ou "Sem atividades previstas").
+- QR Codes: 4 QR codes ampliados (88px) posicionados logo abaixo para acesso rápido a Checklist, Horas de Voo, Cautela e Manutenção.
 
 3. COMO REALIZAR EDIÇÕES PELO PAINEL:
 - Aba 1 (TV & Telão): Trocar link do vídeo oficial ou editar avisos do carrossel com fotos.
 - Aba 2 (Notícias & Publicações): Publicar e gerenciar notícias personalizadas com layout de 1 ou 2 fotos, excluir matérias antigas e ver contagem.
 - Aba 3 (Rotina Diária): Adicionar ou editar atividades e horários (formato HH:MM - HH:MM).
-- Aba 4 (Formulários & QR Codes): Atualizar links do Checklist, Horas de Voo, Cautela e Manutenção. Ao salvar, os QR codes são atualizados na hora.
-- Aba 5 (Google Drive): Conectar o portal com a conta dbmlagoa@gmail.com e salvar o manual na nuvem.
-- Aba 6 (Backup & Manual): Fazer download de cópia de segurança em .json ou do manual em .md.
+- Aba 4 (Quadro de Trabalho): Gerenciar o cronograma semanal de instrução (DIA, HORÁRIO, ASSUNTO, CONTEÚDO, RESPONSÁVEL), com importação/colagem rápida de tabelas e atualização diária automática.
+- Aba 5 (Formulários & QR Codes): Atualizar links do Checklist, Horas de Voo, Cautela e Manutenção. Ao salvar, os QR codes são atualizados na hora.
+- Aba 6 (Google Drive): Conectar o portal com a conta dbmlagoa@gmail.com e salvar o manual na nuvem.
+- Aba 7 (Backup & Manual): Fazer download de cópia de segurança em .json ou do manual em .md.
 
-4. PUBLICAÇÃO DE NOTÍCIAS COM LAYOUT DE 1 OU 2 FOTOS:
+4. MURAL E INÍCIO - DIVISÃO ROTINA & QUADRO DE TRABALHO:
+- A coluna da Rotina Diária na tela inicial e no Mural é dividida em duas seções:
+  * Parte Superior: Tarefa da Rotina Diária Oficial em andamento.
+  * Parte Inferior: Novo container com título "Quadro de Trabalho", exibindo a instrução prevista para o dia corrente com atualização automática. Se não houver instrução no dia, mantém o espaço reservado exibindo "Sem atividades previstas".
+
+5. PUBLICAÇÃO DE NOTÍCIAS COM LAYOUT DE 1 OU 2 FOTOS:
 - Acesse pelo menu "Notícias" no botão "✍️ Nova Postagem (Gestor)" ou pela Aba "Notícias & Publicações" no Painel de Gestão.
 - Escolha o layout desejado:
   * [1 Foto]: Banner panorâmico em destaque principal com legenda individual.

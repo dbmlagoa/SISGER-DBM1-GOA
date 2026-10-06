@@ -2151,6 +2151,89 @@ body.tv-mode-active .tv-kiosk-container {
   border-color: rgba(255, 107, 0, 0.35);
 }
 
+/* ==========================================================================
+   CONTAINER E CARDS DO QUADRO DE TRABALHO (INSTRUÇÃO)
+   ========================================================================== */
+
+.quadro-card-item {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.16) 0%, rgba(13, 21, 39, 0.9) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  border-left: 5px solid #0284c7;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.quadro-card-item:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 6px 22px rgba(2, 132, 199, 0.3);
+}
+
+.quadro-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+}
+
+.quadro-time {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffaa33;
+  letter-spacing: 0.5px;
+}
+
+.quadro-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+.quadro-card-desc {
+  font-size: 0.84rem;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.quadro-card-empty {
+  background: rgba(13, 21, 39, 0.55);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Itens de Edição do Quadro de Trabalho no CMS Modal */
+.cms-quadro-item {
+  background: rgba(13, 21, 39, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.cms-quadro-item:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+}
 
 /* ==========================================================================
    GRID DE PRONTIDÃO: MURAL DE AVISOS + ROTINA DIÁRIA OFICIAL

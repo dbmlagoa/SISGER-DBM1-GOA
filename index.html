@@ -109,6 +109,17 @@
         </div>
       </div>
 
+      <!-- 3.1 Quadro de Trabalho Oficial (Instrução) -->
+      <div class="tv-routine-container" id="tv-quadro-wrapper">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.05rem; color: #fff; font-weight: 700;">Quadro de trabalho</h3>
+          <span class="card-badge badge-warning" id="tv-quadro-badge">Instrução • Hoje</span>
+        </div>
+        <div class="tv-routine-list" id="tv-quadro-container">
+          <!-- Injetado dinamicamente: Exibe a atividade proposta pelo documento com as mesmas dimensões -->
+        </div>
+      </div>
+
       <!-- 4. Rodapé da TV: QR Codes Rápidos para as Tripulações -->
       <div class="tv-footer-qr">
         <div class="tv-qr-box">
@@ -491,17 +502,35 @@
               </div>
             </div>
 
-            <!-- Coluna 2: Rotina Diária Oficial (Atividade Atual em Destaque) -->
-            <div class="card" style="display: flex; flex-direction: column;">
-              <div class="card-header">
-                <div class="card-title">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  Rotina Diária Oficial
+            <!-- Coluna 2: Divisão em 2 partes - Rotina Diária (Superior) & Quadro de Trabalho (Inferior) -->
+            <div class="mural-rotina-col-wrapper" style="display: flex; flex-direction: column; gap: 18px;">
+              
+              <!-- Container Superior: Rotina Diária Oficial -->
+              <div class="card" id="card-rotina-diaria-box" style="display: flex; flex-direction: column; margin-bottom: 0;">
+                <div class="card-header" style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle);">
+                  <div class="card-title" style="font-size: 1.05rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Rotina Diária Oficial
+                  </div>
+                  <span class="card-badge badge-info" id="rotina-live-badge">24h Operacional</span>
                 </div>
-                <span class="card-badge badge-info" id="rotina-live-badge">24h Operacional</span>
+                <div class="rotina-timeline" id="rotina-timeline-container" style="flex: 1;"></div>
               </div>
 
-              <div class="rotina-timeline" id="rotina-timeline-container" style="flex: 1;"></div>
+              <!-- Container Inferior: Quadro de Trabalho -->
+              <div class="card" id="card-quadro-trabalho-box" style="display: flex; flex-direction: column; margin-bottom: 0;">
+                <div class="card-header" style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle);">
+                  <div class="card-title" style="font-size: 1.05rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    Quadro de Trabalho
+                  </div>
+                  <span class="card-badge badge-warning" id="quadro-trabalho-badge">Instrução • Hoje</span>
+                </div>
+                <div class="quadro-trabalho-body" id="quadro-trabalho-container" style="flex: 1;">
+                  <!-- Injetado dinamicamente: Exibe a atividade do dia corrente ou 'Sem atividades previstas' -->
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -1707,6 +1736,9 @@
         <button type="button" class="cms-tab-btn" onclick="switchCmsTab('rotina')">
           🕒 Rotina Diária
         </button>
+        <button type="button" class="cms-tab-btn" onclick="switchCmsTab('quadro')">
+          📋 Quadro de Trabalho
+        </button>
         <button type="button" class="cms-tab-btn" onclick="switchCmsTab('forms')">
           📱 Formulários & QR Codes
         </button>
@@ -1783,7 +1815,7 @@
           </div>
         </div>
 
-        <!-- ABA 2: ROTINA DIÁRIA OFICIAL -->
+        <!-- ABA 3: ROTINA DIÁRIA OFICIAL -->
         <div class="cms-tab-pane" id="cms-tab-rotina">
           <div class="cms-section-card">
             <div class="cms-section-header">
@@ -1801,6 +1833,30 @@
               O sistema compara o horário atual do dia com os horários informados abaixo e <strong>destaca na TV vertical apenas a atividade do momento presente</strong>. Utilize o formato <code>HH:MM - HH:MM</code> ou <code>HH:MM</code>.
             </p>
             <div id="cms-rotinas-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+        </div>
+
+        <!-- ABA 4: QUADRO DE TRABALHO SEMANAL (INSTRUÇÃO) -->
+        <div class="cms-tab-pane" id="cms-tab-quadro">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>📋 Quadro de Trabalho Semanal - Instrução Oficial</h4>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="restaurarQuadroPadraoCMS()" title="Restaura a grade de instruções do documento de Outubro 2026">
+                  ↺ Restaurar Padrão
+                </button>
+                <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="abrirModalImportarQuadroCMS()" title="Colar texto ou tabela com novas instruções">
+                  📥 Inserir / Colar Tabela
+                </button>
+                <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adicionarNovaAtividadeQuadroCMS()">
+                  + Adicionar Atividade
+                </button>
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              O portal localiza automaticamente a instrução correspondente à data atual (ex: <code>06/10</code>) e exibe o card no <strong>Mural e Início</strong> e na <strong>TV vertical</strong>. Caso não haja atividade prevista para o dia, exibe automaticamente <em>"Sem atividades previstas"</em>.
+            </p>
+            <div id="cms-quadro-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;"></div>
           </div>
         </div>
 
@@ -1941,6 +1997,37 @@
         </button>
         <button type="button" class="btn-primary" onclick="baixarManualMarkdownCMS()">
           📥 Baixar Manual (.md)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: IMPORTAR / COLAR QUADRO DE TRABALHO -->
+  <div class="modal-backdrop" id="modal-importar-quadro">
+    <div class="modal-card" style="max-width: 720px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.4rem;">📋</span>
+          <div>
+            <h3 style="margin: 0; color: #fff;">Importar / Colar Quadro de Trabalho</h3>
+            <span style="font-size: 0.72rem; color: var(--orange-rescue); font-weight: 700; text-transform: uppercase;">Inserção Rápida de Cronograma</span>
+          </div>
+        </div>
+        <button type="button" class="btn-icon" onclick="fecharModalImportarQuadroCMS()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px 24px; gap: 14px;">
+        <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
+          Cole abaixo as linhas copiadas de tabela, PDF ou texto. O sistema reconhece colunas separadas por <strong>tabulação (Tab)</strong>, <strong>barra vertical (|)</strong> ou <strong>ponto e vírgula (;)</strong>.<br>
+          <span style="color: #ffaa33; font-weight: 600;">Ordem das colunas: DIA | HORÁRIO | ASSUNTO | CONTEÚDO | RESPONSÁVEL</span>
+        </p>
+        <textarea id="importar-quadro-textarea" rows="8" placeholder="Exemplo:
+06/10 | 09:30h as 10:45h | VEÍCULOS AÉREOS NÃO TRIPULADOS | VISÃO GERAL DAS OPERAÇÕES COM RPA NO ÂMBITO DO CBMERJ: DO ACIONAMENTO AO PÓS-VOO | COVANT
+07/10 | 09:30h as 10:45h | VEÍCULOS AÉREOS NÃO TRIPULADOS | VISÃO GERAL DAS OPERAÇÕES COM RPA NO ÂMBITO DO CBMERJ: DO ACIONAMENTO AO PÓS-VOO | COVANT" style="width: 100%; font-family: var(--font-mono); font-size: 0.8rem; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: #fff; border-radius: var(--radius-sm);"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="fecharModalImportarQuadroCMS()">Cancelar</button>
+        <button type="button" class="btn-primary" onclick="confirmarImportacaoQuadroCMS()" style="padding: 9px 20px; font-weight: 800; box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);">
+          📥 Processar e Atualizar Quadro
         </button>
       </div>
     </div>

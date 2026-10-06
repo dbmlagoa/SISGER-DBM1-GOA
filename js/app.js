@@ -15,6 +15,7 @@ function safeInit(fn) {
 document.addEventListener("DOMContentLoaded", () => {
   // Rotina primeiro: é o conteúdo mais crítico e deve aparecer instantaneamente
   safeInit(initRotinaTimeline);
+  safeInit(initQuadroTrabalho);
   safeInit(initRouter);
   safeInit(initClock);
   safeInit(() => { if (window.initNewsManager) window.initNewsManager(); });
@@ -465,6 +466,161 @@ function renderRotinaDiaria() {
     }
   }
 }
+
+/* ==========================================================================
+   4.1 QUADRO DE TRABALHO SEMANAL (INSTRUÇÃO OFICIAL DBM 1/GOA)
+   ========================================================================== */
+
+function escapeHtmlStr(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function normalizarDataQuadro(str) {
+  if (!str) return "";
+  const s = String(str).trim();
+  if (s.includes("-")) {
+    const parts = s.split("-");
+    if (parts.length === 3) return `${parts[2].padStart(2, "0")}/${parts[1].padStart(2, "0")}`;
+  }
+  const parts = s.split("/");
+  if (parts.length >= 2) {
+    return `${parts[0].padStart(2, "0")}/${parts[1].padStart(2, "0")}`;
+  }
+  return s;
+}
+
+function initQuadroTrabalho() {
+  renderQuadroTrabalho();
+  // Atualiza periodicamente para virar de dia automaticamente
+  setInterval(renderQuadroTrabalho, 30000);
+}
+
+function renderQuadroTrabalho() {
+  const container = document.getElementById("quadro-trabalho-container");
+  const tvContainer = document.getElementById("tv-quadro-container");
+  const homeBadge = document.getElementById("quadro-trabalho-badge");
+  const tvBadge = document.getElementById("tv-quadro-badge");
+
+  if (!container && !tvContainer) return;
+
+  const now = new Date();
+  const diaStr = String(now.getDate()).padStart(2, "0");
+  const mesStr = String(now.getMonth() + 1).padStart(2, "0");
+  const chaveHoje = `${diaStr}/${mesStr}`;
+
+  const lista = (appConfig && appConfig.quadroTrabalho && appConfig.quadroTrabalho.length > 0)
+    ? appConfig.quadroTrabalho
+    : ((typeof DEFAULT_CONFIG !== "undefined" && DEFAULT_CONFIG.quadroTrabalho) ? DEFAULT_CONFIG.quadroTrabalho : []);
+
+  // Procura instrução programada para a data corrente
+  const itemHoje = lista.find(item => normalizarDataQuadro(item.dia) === chaveHoje);
+
+  if (itemHoje) {
+    // 1. Atualizar badges de status
+    if (homeBadge) {
+      homeBadge.className = "card-badge badge-warning";
+      homeBadge.innerHTML = `<span class="pulse-dot" style="background: #fff; width: 6px; height: 6px;"></span> Hoje • ${itemHoje.dia}`;
+    }
+    if (tvBadge) {
+      tvBadge.className = "card-badge badge-warning";
+      tvBadge.innerHTML = `<span class="pulse-dot" style="background: #fff; width: 6px; height: 6px;"></span> ${itemHoje.dia} • ${itemHoje.responsavel}`;
+    }
+
+    // 2. Renderizar no Mural e Início
+    if (container) {
+      container.innerHTML = `
+        <div class="quadro-card-item active-today">
+          <div class="quadro-card-meta">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span class="card-badge badge-warning" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px;">
+                <span class="pulse-dot" style="width: 5px; height: 5px; background: #fff;"></span>
+                INSTRUÇÃO • ${itemHoje.dia}
+              </span>
+              <span class="card-badge badge-info" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px;">
+                ${escapeHtmlStr(itemHoje.responsavel || 'COVANT')}
+              </span>
+            </div>
+            <div class="quadro-time">${escapeHtmlStr(itemHoje.horario || '09:30h às 10:45h')}</div>
+          </div>
+          <div class="quadro-card-body" style="margin-top: 6px;">
+            <h4 class="quadro-card-title">${escapeHtmlStr(itemHoje.assunto)}</h4>
+            <p class="quadro-card-desc">${escapeHtmlStr(itemHoje.conteudo)}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // 3. Renderizar na TV Vertical (mesmas dimensões da rotina diária)
+    if (tvContainer) {
+      tvContainer.innerHTML = `
+        <div class="tv-routine-card active-now" data-dia="${itemHoje.dia}">
+          <div class="tv-routine-card-meta">
+            <span class="rotina-now-badge" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+              <span class="pulse-dot" style="width: 6px; height: 6px; background: #fff;"></span>
+              ${escapeHtmlStr(itemHoje.responsavel || 'INSTRUÇÃO')}
+            </span>
+            <div class="time" style="font-size: 0.92rem;">${escapeHtmlStr(itemHoje.horario || '09:30h às 10:45h')}</div>
+          </div>
+          <div class="desc">
+            <h4 style="text-transform: uppercase;">${escapeHtmlStr(itemHoje.assunto)}</h4>
+            <p>${escapeHtmlStr(itemHoje.conteudo)}</p>
+          </div>
+        </div>
+      `;
+    }
+
+  } else {
+    // Caso não haja atividade para hoje ou cronograma esgotado
+    if (homeBadge) {
+      homeBadge.className = "card-badge badge-info";
+      homeBadge.textContent = "Sem atividade hoje";
+    }
+    if (tvBadge) {
+      tvBadge.className = "card-badge badge-info";
+      tvBadge.textContent = "Sem atividade";
+    }
+
+    if (container) {
+      container.innerHTML = `
+        <div class="quadro-card-empty">
+          <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+            📅
+          </div>
+          <div>
+            <h4 style="color: #fff; font-size: 0.96rem; font-weight: 800; margin: 0 0 2px 0;">
+              Sem atividades previstas
+            </h4>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; line-height: 1.35; margin: 0;">
+              Não há planejamento de instrução previsto no Quadro de Trabalho para o dia de hoje (${chaveHoje}).
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    if (tvContainer) {
+      tvContainer.innerHTML = `
+        <div class="tv-routine-card tv-routine-card-empty">
+          <div class="tv-routine-card-meta">
+            <span class="rotina-now-badge" style="background: rgba(255,255,255,0.1); color: #cbd5e1;">
+              INSTRUÇÃO
+            </span>
+            <div class="time" style="font-size: 0.92rem; color: var(--text-muted);">${chaveHoje}</div>
+          </div>
+          <div class="desc">
+            <h4>Sem atividades previstas</h4>
+            <p>Não há planejamento de instrução previsto no Quadro de Trabalho para hoje.</p>
+          </div>
+        </div>
+      `;
+    }
+  }
+}
+
+window.renderQuadroTrabalho = renderQuadroTrabalho;
+window.initQuadroTrabalho = initQuadroTrabalho;
 
 /* ==========================================================================
    5. MURAL DE AVISOS ROTATIVO (CARROSSEL COM PROGRESS BAR)

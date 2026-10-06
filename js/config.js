@@ -85,6 +85,122 @@ const DEFAULT_CONFIG = {
     { time: "18:30 - 19:00", title: "HANGARAGEM DAS AERONAVES", desc: "Limpeza, abastecimento e reboque das aeronaves de serviço para o hangar." }
   ],
 
+  // 5.1 Quadro de Trabalho Semanal - Instrução Oficial (Outubro 2026 - GOA/CBMERJ)
+  quadroTrabalho: [
+    {
+      dia: "06/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "VISÃO GERAL DAS OPERAÇÕES COM RPA NO ÂMBITO DO CBMERJ: DO ACIONAMENTO AO PÓS-VOO",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "07/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "VISÃO GERAL DAS OPERAÇÕES COM RPA NO ÂMBITO DO CBMERJ: DO ACIONAMENTO AO PÓS-VOO",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "08/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "VISÃO GERAL DAS OPERAÇÕES COM RPA NO ÂMBITO DO CBMERJ: DO ACIONAMENTO AO PÓS-VOO",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "09/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "VISÃO GERAL DAS OPERAÇÕES COM RPA NO ÂMBITO DO CBMERJ: DO ACIONAMENTO AO PÓS-VOO",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "13/10",
+      horario: "09:30h às 10:45h",
+      assunto: "ABASTECIMENTO",
+      conteudo: "ABASTECIMENTO DE AERONAVES: QUALIDADE DE COMBUSTÍVEIS",
+      responsavel: "TASA"
+    },
+    {
+      dia: "14/10",
+      horario: "09:30h às 10:45h",
+      assunto: "ABASTECIMENTO",
+      conteudo: "ABASTECIMENTO DE AERONAVES: QUALIDADE DE COMBUSTÍVEIS",
+      responsavel: "TASA"
+    },
+    {
+      dia: "15/10",
+      horario: "09:30h às 10:45h",
+      assunto: "ABASTECIMENTO",
+      conteudo: "ABASTECIMENTO DE AERONAVES: QUALIDADE DE COMBUSTÍVEIS",
+      responsavel: "TASA"
+    },
+    {
+      dia: "16/10",
+      horario: "09:30h às 10:45h",
+      assunto: "ABASTECIMENTO",
+      conteudo: "ABASTECIMENTO DE AERONAVES: QUALIDADE DE COMBUSTÍVEIS",
+      responsavel: "TASA"
+    },
+    {
+      dia: "19/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "MODELOS E TECNOLOGIAS DE RPA NO ÂMBITO DO CBMERJ",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "20/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "MODELOS E TECNOLOGIAS DE RPA NO ÂMBITO DO CBMERJ",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "21/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "MODELOS E TECNOLOGIAS DE RPA NO ÂMBITO DO CBMERJ",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "22/10",
+      horario: "09:30h às 10:45h",
+      assunto: "VEÍCULOS AÉREOS NÃO TRIPULADOS",
+      conteudo: "MODELOS E TECNOLOGIAS DE RPA NO ÂMBITO DO CBMERJ",
+      responsavel: "COVANT"
+    },
+    {
+      dia: "26/10",
+      horario: "09:30h às 10:45h",
+      assunto: "PRÁTICA : SALVAMENTO EM ALTURA (EM SOLO)",
+      conteudo: "PRÁTICA: PREPARAÇÃO PARA O SOCORRO / INSPEÇÃO DE EQUIPAMENTOS / SALVAMENTO COM MACA / SEGURANÇA DA OPERAÇÃO / POP",
+      responsavel: "COPILOTO DE SERVIÇO / FIEL"
+    },
+    {
+      dia: "27/10",
+      horario: "09:30h às 10:45h",
+      assunto: "PRÁTICA : SALVAMENTO EM ALTURA (EM SOLO)",
+      conteudo: "PRÁTICA: PREPARAÇÃO PARA O SOCORRO / INSPEÇÃO DE EQUIPAMENTOS / SALVAMENTO COM MACA / SEGURANÇA DA OPERAÇÃO / POP",
+      responsavel: "COPILOTO DE SERVIÇO / FIEL"
+    },
+    {
+      dia: "28/10",
+      horario: "09:30h às 10:45h",
+      assunto: "PRÁTICA : SALVAMENTO EM ALTURA (EM SOLO)",
+      conteudo: "PRÁTICA: PREPARAÇÃO PARA O SOCORRO / INSPEÇÃO DE EQUIPAMENTOS / SALVAMENTO COM MACA / SEGURANÇA DA OPERAÇÃO / POP",
+      responsavel: "COPILOTO DE SERVIÇO / FIEL"
+    },
+    {
+      dia: "29/10",
+      horario: "09:30h às 10:45h",
+      assunto: "PRÁTICA : SALVAMENTO EM ALTURA (EM SOLO)",
+      conteudo: "PRÁTICA: PREPARAÇÃO PARA O SOCORRO / INSPEÇÃO DE EQUIPAMENTOS / SALVAMENTO COM MACA / SEGURANÇA DA OPERAÇÃO / POP",
+      responsavel: "COPILOTO DE SERVIÇO / FIEL"
+    }
+  ],
+
   // 6. Mural de Avisos e Últimas Notícias (Extraído da Barra de Notícias do Site Original)
   muralAvisos: [
     {
@@ -236,6 +352,9 @@ function carregarConfiguracao() {
       if (parsed.portal && parsed.portal.version === DEFAULT_CONFIG.portal.version) {
         if (!parsed.muralAvisos || !Array.isArray(parsed.muralAvisos) || parsed.muralAvisos.length === 0) {
           parsed.muralAvisos = JSON.parse(JSON.stringify(DEFAULT_CONFIG.muralAvisos));
+        }
+        if (!parsed.quadroTrabalho || !Array.isArray(parsed.quadroTrabalho) || parsed.quadroTrabalho.length === 0) {
+          parsed.quadroTrabalho = JSON.parse(JSON.stringify(DEFAULT_CONFIG.quadroTrabalho));
         }
         return parsed;
       }

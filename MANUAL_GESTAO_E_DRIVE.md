@@ -36,7 +36,8 @@ A página de exibição na TV vertical opera nos totens e monitores em modo retr
 2. **Container Superior de Notícias:** Banner ampliado com rotação automática a cada 8 segundos, exibindo categoria com ponto pulsante, título em destaque, subtítulo em tom ouro/âmbar, resumo de texto e **imagem real da matéria mostrada no momento**, com barra de progresso contínua.
 3. **Linha Central (Vídeo Oficial):** Reprodução nativa do vídeo oficial de **Recomendações de Segurança** (`assets/video_recomendacoes_goa.mp4`) em loop contínuo e silencioso, centralizado verticalmente na tela.
 4. **Rotina Diária Oficial:** Exibe **apenas o card da atividade correspondente ao momento atual** (identificado automaticamente pelos horários da escala diária).
-5. **Rodapé de QR Codes Rápidos:** 4 QR codes em tamanho ampliado (88px) posicionados logo abaixo da rotina diária para leitura fácil por smartphones à distância:
+5. **Quadro de Trabalho Oficial (Instrução):** Posicionado **logo abaixo da Rotina Diária, mantendo exatamente as mesmas dimensões**, exibe a atividade proposta para o dia corrente conforme o Quadro de Trabalho Semanal (ex: *Veículos Aéreos Não Tripulados - COVANT* ou *Abastecimento - TASA*). Caso não haja instrução agendada para o dia, exibe com clareza o aviso *"Sem atividades previstas"*.
+6. **Rodapé de QR Codes Rápidos:** 4 QR codes em tamanho ampliado (88px) posicionados logo abaixo para leitura fácil por smartphones à distância:
    - **QR 1:** *Checklist Pronto Emprego* (Conferência obrigatória pós-briefing).
    - **QR 2:** *Experiência Operacional* (Horas de voo, missões e ocorrências da tripulação).
    - **QR 3:** *Cautela de EPIs* (Short John, Long John, botas e luvas de neoprene).
@@ -44,40 +45,41 @@ A página de exibição na TV vertical opera nos totens e monitores em modo retr
 
 ---
 
-## ⚙️ 3. Como Realizar Edições pelo Painel de Gestão
+## 🏛️ 3. Divisão de Containers no Mural e Início
 
-Ao clicar na engrenagem **⚙️** e inserir o login (`dbmlagoa`) e senha (`salvamento193`), o painel é aberto com 5 abas organizadas:
+Na página **Mural e Início**, a coluna da rotina diária foi estruturada em duas partes harmônicas:
+- **Parte Superior (Rotina Diária Oficial):** Exibe a escala e tarefa em andamento no dia, destacando em vermelho pulsante a atividade do horário corrente.
+- **Parte Inferior (Quadro de Trabalho):** Novo container oficial intitulado **Quadro de Trabalho**, exibindo o card da atividade de instrução prevista no cronograma para o dia atual (exibindo dia, horário, responsável, assunto e resumo do conteúdo).
+- **Atualização Automática:** Atualiza dinamicamente a cada dia. Quando a data não possui instrução prevista ou ao término do planejamento semanal, o container permanece na sua posição exibindo de forma elegante a mensagem **"Sem atividades previstas"**.
+
+---
+
+## ⚙️ 4. Como Realizar Edições pelo Painel de Gestão
+
+Ao clicar na engrenagem **⚙️** e inserir o login (`dbmlagoa`) e senha (`salvamento193`), o painel é aberto com as seguintes abas:
 
 ### Aba 1: 📺 Exibição TV Vertical
-- **Vídeo Oficial de Recomendações:**
-  - O sistema já carrega o vídeo padrão otimizado de 48.8 MB em loop contínuo.
-  - Se a unidade desejar trocar o vídeo futuramente por um novo arquivo ou link do Google Drive/YouTube, basta colar o ID ou link no campo correspondente e clicar em Salvar.
-- **Avisos do Carrossel da TV:**
-  - Permite adicionar, editar o texto, subtítulo, link de foto e categoria de cada aviso que roda no topo da TV vertical.
+- Permite alterar o link/ID do vídeo oficial de recomendações ou editar matérias do carrossel rotativo da TV.
 
-### Aba 2: 🕒 Rotina Diária Oficial
-- **Formato dos Horários:** Utilize `HH:MM - HH:MM` (ex: `06:20 - 07:00`) ou horário simples `07:00`.
-- O sistema calcula automaticamente:
-  - Quando a hora atual estiver dentro do intervalo, a atividade ganha badge vermelho pulsante **"ATIVIDADE DA HORA ATUAL"** e aparece na TV vertical.
-  - Atividades passadas saem automaticamente da tela para não poluir a visão operacional.
-  - Se todas as atividades do dia forem concluídas (ex: após as 19h), a TV assume automaticamente o status **"Sobreaviso Noturno 24h"**.
-- É possível adicionar novos horários, alterar descrições ou restaurar a grade oficial do DBM 1/GOA com 1 clique.
+### Aba 2: 📰 Notícias & Publicações
+- Gerenciamento completo das postagens do portal com escolha de layout de 1 ou 2 fotos.
 
-### Aba 3: 📱 Formulários & QR Codes da TV
-- Permite alterar os 4 links dos formulários do Google Forms / SISGER:
-  1. *Link do Checklist de Pronto Emprego*
-  2. *Link da Experiência Operacional (Horas de Voo)*
-  3. *Link da Cautela de EPIs de Neoprene*
-  4. *Link da Solicitação de Manutenção / Obras*
-- **Importante:** Ao alterar qualquer um dos links e salvar, o QR code correspondente na TV vertical e na página inicial é regerado e atualizado na hora!
-- **Link da Planilha CSV do Checklist:** Link da planilha publicada na web que permite ao portal conferir se o checklist do dia já foi preenchido.
+### Aba 3: 🕒 Rotina Diária Oficial
+- Ajuste dos horários da escala 24h e das tarefas de rotina do DBM 1/GOA.
 
-### Aba 4: ☁️ Google Drive & Nuvem (`dbmlagoa@gmail.com`)
-- Exibe o status da comunicação com a conta Google institucional da unidade.
-- **URL do Google Apps Script:** Endpoint da ponte com o Drive.
-- **Botão "Salvar Manual na Pasta SisGer DBM 1/GOA":** Envia e salva este manual diretamente na pasta oficial do Google Drive da conta `dbmlagoa@gmail.com`.
+### Aba 4: 📋 Quadro de Trabalho Semanal (Instrução)
+- Gerenciamento das atividades de instrução operacional do mês/semana (DIA, HORÁRIO, ASSUNTO, CONTEÚDO PROGRAMÁTICO e RESPONSÁVEL).
+- **Adicionar Atividade:** Adiciona uma nova instrução individualmente.
+- **Inserir / Colar Tabela:** Permite colar diretamente textos ou tabelas de planejamento (separadas por Tab, Pipe `|` ou Ponto e Vírgula `;`). O sistema processa e atualiza todo o quadro instantaneamente!
+- **Restaurar Padrão:** Restaura a grade completa de Outubro de 2026 extraída do documento oficial do CBMERJ / GOA.
 
-### Aba 5: 💾 Backup & Manual
+### Aba 5: 📱 Formulários & QR Codes da TV
+- Atualização dos 4 formulários operacionais e sincronização automática dos QR codes na TV.
+
+### Aba 6: ☁️ Google Drive & Nuvem (`dbmlagoa@gmail.com`)
+- Status da integração com a conta Google institucional e botão para salvar o manual na pasta `SisGer DBM 1/GOA`.
+
+### Aba 7: 💾 Backup & Manual
 - **📥 Baixar Backup (.json):** Gera um arquivo contendo todas as configurações atuais do portal (notícias, horários, links). Guarde este arquivo em caso de troca de computador.
 - **📤 Restaurar Backup:** Carrega um arquivo `.json` salvo anteriormente para restabelecer tudo em 2 segundos.
 - **📥 Baixar Manual (.md):** Baixa este manual completo para consulta offline.
