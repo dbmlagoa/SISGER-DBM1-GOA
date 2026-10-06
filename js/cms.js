@@ -681,27 +681,40 @@ window.salvarAlteracoesCMS = async function() {
   if (modal) modal.classList.remove("active");
 };
 
-function atualizarQrCodesDaTv(cfg) {
+window.atualizarQrCodesDaTv = function(cfg) {
+  const config = cfg || (typeof carregarConfiguracao === "function" ? carregarConfiguracao() : {});
   const qrBoxes = document.querySelectorAll(".tv-footer-qr .tv-qr-box");
   if (qrBoxes.length >= 3) {
     // 1. Checklist
-    if (cfg.checklist && cfg.checklist.formUrl) {
+    if (config.checklist && config.checklist.formUrl) {
       const img1 = qrBoxes[0].querySelector("img.tv-qr-img");
-      if (img1) img1.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(cfg.checklist.formUrl);
+      if (img1) img1.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(config.checklist.formUrl);
     }
     // 2. Experiência
-    const expForm = (cfg.quickForms || []).find(f => f.id === "form-experiencia");
+    const expForm = (config.quickForms || []).find(f => f.id === "form-experiencia");
     if (expForm && expForm.url) {
       const img2 = qrBoxes[1].querySelector("img.tv-qr-img");
       if (img2) img2.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(expForm.url);
     }
     // 3. Cautela
-    const cautForm = (cfg.quickForms || []).find(f => f.id === "form-cautela");
+    const cautForm = (config.quickForms || []).find(f => f.id === "form-cautela");
     if (cautForm && cautForm.url) {
       const img3 = qrBoxes[2].querySelector("img.tv-qr-img");
       if (img3) img3.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(cautForm.url);
     }
   }
+
+  // 4. Manutenção / Obras (URL da aplicação)
+  const tvMntQr = document.getElementById("tv-qr-manutencao-img");
+  if (tvMntQr) {
+    const origin = (typeof window !== "undefined" && window.location && window.location.origin && window.location.origin !== "null") ? window.location.origin : "https://dbmlagoa.github.io";
+    const path = (typeof window !== "undefined" && window.location && window.location.pathname) ? window.location.pathname : "/SISGER-DBM1-GOA/";
+    const link = origin + path + (path.endsWith("/") ? "" : "/") + "?form=manutencao";
+    tvMntQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(link);
+  }
+};
+function atualizarQrCodesDaTv(cfg) {
+  window.atualizarQrCodesDaTv(cfg);
 }
 
 /* ==========================================================================

@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   safeInit(initChecklistStatusChecker);
   safeInit(initTvModeHandlers);
   safeInit(initManagerModal);
+  safeInit(() => { if (window.atualizarQrCodesDaTv) window.atualizarQrCodesDaTv(appConfig); });
   if (window.location.search.includes("tv=1") || window.location.hash === "#tv") {
     ativarModoTv(true);
   }
@@ -1001,6 +1002,14 @@ function ativarModoTv(ativar) {
     // Atualizar rotina na TV imediatamente
     if (typeof renderRotinaDiaria === "function") {
       renderRotinaDiaria();
+    }
+    // Atualizar quadro de trabalho na TV imediatamente
+    if (typeof renderQuadroTrabalho === "function") {
+      renderQuadroTrabalho();
+    }
+    // Garantir exibição e links corretos dos QR codes da TV
+    if (typeof window.atualizarQrCodesDaTv === "function") {
+      window.atualizarQrCodesDaTv(typeof carregarConfiguracao === "function" ? carregarConfiguracao() : undefined);
     }
     // Iniciar vídeo oficial em loop contínuo na TV
     const tvVideo = document.getElementById("tv-video-player");
