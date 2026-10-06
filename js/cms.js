@@ -35,7 +35,27 @@ window.isGestorAutenticado = function() {
          localStorage.getItem(STORAGE_KEY_AUTH) === "true";
 };
 
+window.pendingNewsPublishAction = false;
+
+window.solicitarAberturaNovaPostagem = function() {
+  if (window.isGestorAutenticado && window.isGestorAutenticado()) {
+    const p = document.getElementById('news-publish-card');
+    if (p) {
+      p.style.display = p.style.display === 'none' ? 'block' : 'none';
+      if (p.style.display !== 'none') {
+        p.scrollIntoView({ behavior: "smooth", block: "start" });
+        const titleEl = document.getElementById('new-post-title');
+        if (titleEl) titleEl.focus();
+      }
+    }
+  } else {
+    window.pendingNewsPublishAction = true;
+    window.abrirModalLoginGestor();
+  }
+};
+
 window.abrirPainelGestaoComLogin = function() {
+  window.pendingNewsPublishAction = false;
   if (window.isGestorAutenticado()) {
     window.abrirModalCMS();
   } else {
@@ -89,13 +109,25 @@ window.submeterLoginCMS = function() {
       msgBox.style.background = "rgba(34, 197, 94, 0.15)";
       msgBox.style.border = "1px solid rgba(34, 197, 94, 0.4)";
       msgBox.style.color = "#22c55e";
-      msgBox.innerHTML = "✅ Credenciais autorizadas. Abrindo Painel...";
+      msgBox.innerHTML = "✅ Credenciais autorizadas. Abrindo...";
     }
 
     setTimeout(() => {
       window.fecharLoginCMS();
-      window.abrirModalCMS();
-      mostrarNotificacaoToast("🔓 Sessão administrativa iniciada como dbmlagoa!");
+      if (window.pendingNewsPublishAction) {
+        window.pendingNewsPublishAction = false;
+        const p = document.getElementById('news-publish-card');
+        if (p) {
+          p.style.display = 'block';
+          p.scrollIntoView({ behavior: "smooth", block: "start" });
+          const titleEl = document.getElementById('new-post-title');
+          if (titleEl) titleEl.focus();
+        }
+        mostrarNotificacaoToast("🔓 Sessão autorizada! Formulário de publicação pronto.");
+      } else {
+        window.abrirModalCMS();
+        mostrarNotificacaoToast("🔓 Sessão administrativa iniciada como dbmlagoa!");
+      }
     }, 450);
 
   } else {
@@ -211,6 +243,11 @@ window.popularFormularioCMS = function() {
   const inputScriptUrl = document.getElementById("cms-script-url");
   if (inputScriptUrl) {
     inputScriptUrl.value = (cfg.portal && cfg.portal.appsScriptUrl) || "https://script.google.com/macros/s/AKfycbxAc4FFvitYtQB35psdhPu6XEkZF7p16y-ILr5YrmI5ilF_P1snMukF2qWGWUaM2dUeeQ/exec";
+  }
+
+  // 6. Aba Notícias: Lista de Notícias do Gestor
+  if (typeof window.renderizarListaNoticiasCMS === "function") {
+    window.renderizarListaNoticiasCMS();
   }
 };
 
@@ -562,15 +599,20 @@ function obterTextoDoManualCompleto() {
 
 3. COMO REALIZAR EDIÇÕES PELO PAINEL:
 - Aba 1 (TV & Telão): Trocar link do vídeo oficial ou editar avisos do carrossel com fotos.
-- Aba 2 (Rotina Diária): Adicionar ou editar atividades e horários (formato HH:MM - HH:MM).
-- Aba 3 (Formulários & QR Codes): Atualizar links do Checklist, Horas de Voo, Cautela e Manutenção. Ao salvar, os QR codes são atualizados na hora.
-- Aba 4 (Google Drive): Conectar o portal com a conta dbmlagoa@gmail.com e salvar o manual na nuvem.
-- Aba 5 (Backup & Manual): Fazer download de cópia de segurança em .json ou do manual em .md.
+- Aba 2 (Notícias & Publicações): Publicar e gerenciar notícias personalizadas com layout de 1 ou 2 fotos, excluir matérias antigas e ver contagem.
+- Aba 3 (Rotina Diária): Adicionar ou editar atividades e horários (formato HH:MM - HH:MM).
+- Aba 4 (Formulários & QR Codes): Atualizar links do Checklist, Horas de Voo, Cautela e Manutenção. Ao salvar, os QR codes são atualizados na hora.
+- Aba 5 (Google Drive): Conectar o portal com a conta dbmlagoa@gmail.com e salvar o manual na nuvem.
+- Aba 6 (Backup & Manual): Fazer download de cópia de segurança em .json ou do manual em .md.
 
-4. PUBLICAÇÃO DE NOTÍCIAS COM FOTOS:
-- Na página Notícias, clique em "✍️ Nova Postagem (Gestor)".
-- Preencha o título, subtítulo, texto e selecione uma foto do computador.
-- Clique em "Publicar Notícia". A matéria entra no topo da página e na rotação da TV.
+4. PUBLICAÇÃO DE NOTÍCIAS COM LAYOUT DE 1 OU 2 FOTOS:
+- Acesse pelo menu "Notícias" no botão "✍️ Nova Postagem (Gestor)" ou pela Aba "Notícias & Publicações" no Painel de Gestão.
+- Escolha o layout desejado:
+  * [1 Foto]: Banner panorâmico em destaque principal com legenda individual.
+  * [2 Fotos]: Grid de 2 fotos lado a lado comparativas com legendas individuais para cada uma.
+- Para cada foto, você pode anexar um arquivo do seu computador (com preview e otimização automática) ou colar uma URL.
+- Preencha o título, subtítulo e o texto da notícia.
+- Clique em "📢 Publicar Notícia no Portal". A matéria é veiculada imediatamente no topo do feed, no Mural rotativo da tela inicial e no telão da TV vertical!
 
 Suporte: dbmlagoa@gmail.com | (21) 98596-9351`;
 }
@@ -702,3 +744,535 @@ function escapeHtml(s) {
 function escapeAttr(s) {
   return String(s || "").replace(/"/g, "&quot;");
 }
+
+/* ==========================================================================
+   10. GESTÃO E PUBLICAÇÃO DE NOTÍCIAS (LAYOUT COM 1 OU 2 FOTOS)
+   ========================================================================== */
+
+window.uploadedNewsImg1Data = "";
+window.uploadedNewsImg2Data = "";
+window.currentNewsLayout = "1-foto";
+
+/**
+ * Redimensiona e comprime imagens via Canvas antes de salvar no localStorage,
+ * garantindo altíssima qualidade visual sem estourar o limite de armazenamento.
+ */
+function otimizarImagemBase64(file, maxWidth = 1600, maxHeight = 1200, qualidade = 0.85) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          if (width / height > maxWidth / maxHeight) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", qualidade);
+        resolve(dataUrl);
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Alterna entre os layouts de exibição de imagens: 1 Foto (Destaque) ou 2 Fotos (Lado a Lado).
+ */
+window.selecionarLayoutFotos = function(layout) {
+  window.currentNewsLayout = layout;
+  const btn1 = document.getElementById("btn-layout-1foto");
+  const btn2 = document.getElementById("btn-layout-2fotos");
+  const inputLayout = document.getElementById("new-post-layout");
+  const group2 = document.getElementById("news-photo-group-2");
+  const label1Tipo = document.getElementById("label-foto-1-tipo");
+
+  if (inputLayout) inputLayout.value = layout;
+
+  if (layout === "2-fotos") {
+    if (btn1) btn1.classList.remove("active");
+    if (btn2) btn2.classList.add("active");
+    if (group2) group2.style.display = "block";
+    if (label1Tipo) label1Tipo.textContent = "(Foto 1 • Esquerda / Destaque)";
+  } else {
+    if (btn1) btn1.classList.add("active");
+    if (btn2) btn2.classList.remove("active");
+    if (group2) group2.style.display = "none";
+    if (label1Tipo) label1Tipo.textContent = "(Destaque Principal / Banner)";
+  }
+};
+
+/**
+ * Processa upload de arquivo local de imagem para Foto 1 ou Foto 2 com compressão e preview instantâneo.
+ */
+window.processarArquivoFoto = async function(event, num) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (file.size > 15 * 1024 * 1024) {
+    alert("O arquivo selecionado é muito grande. Escolha uma imagem de até 15MB.");
+    event.target.value = "";
+    return;
+  }
+
+  try {
+    mostrarNotificacaoToast("Processando imagem...");
+    const dataUrl = await otimizarImagemBase64(file);
+    if (num === 1) {
+      window.uploadedNewsImg1Data = dataUrl;
+      const previewBox = document.getElementById("new-post-img-preview-box");
+      const previewImg = document.getElementById("new-post-img-preview");
+      const btnRemover = document.getElementById("btn-remover-foto-1");
+      const urlInput = document.getElementById("new-post-img-url");
+      if (previewImg) previewImg.src = dataUrl;
+      if (previewBox) previewBox.style.display = "block";
+      if (btnRemover) btnRemover.style.display = "inline-block";
+      if (urlInput) urlInput.value = "";
+    } else if (num === 2) {
+      window.uploadedNewsImg2Data = dataUrl;
+      const previewBox = document.getElementById("new-post-img2-preview-box");
+      const previewImg = document.getElementById("new-post-img2-preview");
+      const btnRemover = document.getElementById("btn-remover-foto-2");
+      const urlInput = document.getElementById("new-post-img2-url");
+      if (previewImg) previewImg.src = dataUrl;
+      if (previewBox) previewBox.style.display = "block";
+      if (btnRemover) btnRemover.style.display = "inline-block";
+      if (urlInput) urlInput.value = "";
+    }
+    mostrarNotificacaoToast(`📷 Foto ${num} carregada com sucesso!`);
+  } catch (err) {
+    console.error("Erro ao processar imagem:", err);
+    alert("Não foi possível carregar a imagem. Tente outro arquivo.");
+  }
+};
+
+/**
+ * Atualiza preview quando o usuário digita ou cola uma URL de imagem.
+ */
+window.atualizarPreviewFoto = function(num) {
+  if (num === 1) {
+    const urlInput = document.getElementById("new-post-img-url");
+    const previewBox = document.getElementById("new-post-img-preview-box");
+    const previewImg = document.getElementById("new-post-img-preview");
+    const btnRemover = document.getElementById("btn-remover-foto-1");
+    const val = (urlInput ? urlInput.value : "").trim();
+    if (val && !window.uploadedNewsImg1Data) {
+      if (previewImg) previewImg.src = val;
+      if (previewBox) previewBox.style.display = "block";
+      if (btnRemover) btnRemover.style.display = "inline-block";
+    } else if (!val && !window.uploadedNewsImg1Data) {
+      if (previewBox) previewBox.style.display = "none";
+      if (btnRemover) btnRemover.style.display = "none";
+    }
+  } else if (num === 2) {
+    const urlInput = document.getElementById("new-post-img2-url");
+    const previewBox = document.getElementById("new-post-img2-preview-box");
+    const previewImg = document.getElementById("new-post-img2-preview");
+    const btnRemover = document.getElementById("btn-remover-foto-2");
+    const val = (urlInput ? urlInput.value : "").trim();
+    if (val && !window.uploadedNewsImg2Data) {
+      if (previewImg) previewImg.src = val;
+      if (previewBox) previewBox.style.display = "block";
+      if (btnRemover) btnRemover.style.display = "inline-block";
+    } else if (!val && !window.uploadedNewsImg2Data) {
+      if (previewBox) previewBox.style.display = "none";
+      if (btnRemover) btnRemover.style.display = "none";
+    }
+  }
+};
+
+/**
+ * Remove a foto selecionada (arquivo ou URL) e oculta seu preview.
+ */
+window.removerFoto = function(num) {
+  if (num === 1) {
+    window.uploadedNewsImg1Data = "";
+    const urlInput = document.getElementById("new-post-img-url");
+    const fileInput = document.getElementById("new-post-img-file");
+    const previewBox = document.getElementById("new-post-img-preview-box");
+    const previewImg = document.getElementById("new-post-img-preview");
+    const btnRemover = document.getElementById("btn-remover-foto-1");
+    if (urlInput) urlInput.value = "";
+    if (fileInput) fileInput.value = "";
+    if (previewImg) previewImg.src = "";
+    if (previewBox) previewBox.style.display = "none";
+    if (btnRemover) btnRemover.style.display = "none";
+  } else if (num === 2) {
+    window.uploadedNewsImg2Data = "";
+    const urlInput = document.getElementById("new-post-img2-url");
+    const fileInput = document.getElementById("new-post-img2-file");
+    const previewBox = document.getElementById("new-post-img2-preview-box");
+    const previewImg = document.getElementById("new-post-img2-preview");
+    const btnRemover = document.getElementById("btn-remover-foto-2");
+    if (urlInput) urlInput.value = "";
+    if (fileInput) fileInput.value = "";
+    if (previewImg) previewImg.src = "";
+    if (previewBox) previewBox.style.display = "none";
+    if (btnRemover) btnRemover.style.display = "none";
+  }
+};
+
+/**
+ * Publica uma nova notícia formatada com layout de 1 ou 2 fotos.
+ */
+window.publicarNovaNoticia = async function() {
+  const inputTitulo = document.getElementById("new-post-title");
+  const inputCat = document.getElementById("new-post-category");
+  const inputData = document.getElementById("new-post-date");
+  const inputTexto = document.getElementById("new-post-body");
+  const inputLayout = document.getElementById("new-post-layout");
+
+  const inputImg1Url = document.getElementById("new-post-img-url");
+  const inputImg1Caption = document.getElementById("new-post-img-caption");
+  const inputImg2Url = document.getElementById("new-post-img2-url");
+  const inputImg2Caption = document.getElementById("new-post-img2-caption");
+
+  if (!inputTitulo || !inputTitulo.value.trim()) {
+    alert("Por favor, digite o título da notícia.");
+    if (inputTitulo) inputTitulo.focus();
+    return;
+  }
+
+  if (!inputTexto || !inputTexto.value.trim()) {
+    alert("Por favor, digite o conteúdo ou texto da notícia.");
+    if (inputTexto) inputTexto.focus();
+    return;
+  }
+
+  const layout = (inputLayout ? inputLayout.value : "") || window.currentNewsLayout || "1-foto";
+  const img1 = window.uploadedNewsImg1Data || (inputImg1Url ? inputImg1Url.value.trim() : "");
+  const caption1 = (inputImg1Caption ? inputImg1Caption.value.trim() : "");
+  const img2 = window.uploadedNewsImg2Data || (inputImg2Url ? inputImg2Url.value.trim() : "");
+  const caption2 = (inputImg2Caption ? inputImg2Caption.value.trim() : "");
+
+  const novaNoticia = {
+    id: "noticia-" + Date.now(),
+    titulo: inputTitulo.value.trim(),
+    categoria: inputCat && inputCat.value.trim() ? inputCat.value.trim() : "Comunicado Oficial • DBM 1/GOA",
+    data: inputData && inputData.value ? inputData.value : new Date().toISOString().split("T")[0],
+    texto: inputTexto.value.trim(),
+    layoutFotos: layout,
+    imagem: img1,
+    legenda: caption1,
+    imagem2: img2,
+    legenda2: caption2,
+    autor: "Gestão DBM 1 / GOA"
+  };
+
+  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
+  let noticias = [];
+  try {
+    if (saved) noticias = JSON.parse(saved);
+  } catch (e) {
+    noticias = [];
+  }
+
+  noticias.unshift(novaNoticia);
+  try {
+    localStorage.setItem("SISGER_NOTICIAS_CUSTOM", JSON.stringify(noticias));
+  } catch (storageErr) {
+    console.error("Erro ao salvar no localStorage:", storageErr);
+    alert("Atenção: Limite de armazenamento local atingido. Tente usar imagens menores ou links.");
+    return;
+  }
+
+  // Limpar formulário de publicação
+  inputTitulo.value = "";
+  if (inputCat) inputCat.value = "";
+  inputTexto.value = "";
+  window.removerFoto(1);
+  window.removerFoto(2);
+  if (inputImg1Caption) inputImg1Caption.value = "";
+  if (inputImg2Caption) inputImg2Caption.value = "";
+  window.selecionarLayoutFotos("1-foto");
+
+  // Renderizar notícias no feed e no CMS
+  window.renderizarNoticiasCustomizadas();
+  if (typeof window.renderizarListaNoticiasCMS === "function") {
+    window.renderizarListaNoticiasCMS();
+  }
+
+  mostrarNotificacaoToast("📢 Nova notícia veiculada com sucesso no Portal e Mural!");
+
+  // Sincronizar em segundo plano com o Google Apps Script se configurado
+  const cfg = carregarConfiguracao();
+  if (cfg.portal && cfg.portal.appsScriptUrl) {
+    try {
+      fetch(cfg.portal.appsScriptUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "saveNews", news: noticias })
+      }).catch(e => console.warn("Sync news bg error:", e));
+    } catch (e) {}
+  }
+
+  // Rolar suavemente para a notícia publicada
+  const feed = document.getElementById("custom-news-feed");
+  if (feed) feed.scrollIntoView({ behavior: "smooth" });
+};
+
+/**
+ * Remove uma notícia personalizada salva no localStorage.
+ */
+window.excluirNoticiaCustomizada = function(id) {
+  if (!confirm("Tem certeza que deseja remover esta notícia do portal?")) return;
+
+  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
+  let noticias = [];
+  try {
+    if (saved) noticias = JSON.parse(saved);
+  } catch (e) {
+    noticias = [];
+  }
+
+  noticias = noticias.filter(n => n.id !== id);
+  localStorage.setItem("SISGER_NOTICIAS_CUSTOM", JSON.stringify(noticias));
+
+  window.renderizarNoticiasCustomizadas();
+  if (typeof window.renderizarListaNoticiasCMS === "function") {
+    window.renderizarListaNoticiasCMS();
+  }
+  mostrarNotificacaoToast("Notícia removida com sucesso.");
+};
+
+/**
+ * Renderiza todas as notícias personalizadas salvas no feed `#custom-news-feed`.
+ */
+window.renderizarNoticiasCustomizadas = function() {
+  const feed = document.getElementById("custom-news-feed");
+  if (!feed) return;
+
+  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
+  let noticias = [];
+  try {
+    if (saved) noticias = JSON.parse(saved);
+  } catch (e) {
+    console.error("Erro ao ler notícias personalizadas:", e);
+  }
+
+  if (noticias.length === 0) {
+    feed.innerHTML = "";
+    if (typeof initMuralCarousel === "function") initMuralCarousel();
+    return;
+  }
+
+  feed.innerHTML = noticias.map((noticia) => {
+    // Formatar data para DD/MM/AAAA
+    let dataStr = noticia.data || "";
+    if (dataStr.includes("-")) {
+      const parts = dataStr.split("-");
+      if (parts.length === 3) dataStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    // Montar bloco de imagens de acordo com o layout (1 Foto ou 2 Fotos)
+    let mediaHtml = "";
+    const hasImg1 = !!(noticia.imagem && noticia.imagem.trim());
+    const hasImg2 = !!(noticia.imagem2 && noticia.imagem2.trim());
+
+    if (noticia.layoutFotos === "2-fotos" && (hasImg1 || hasImg2)) {
+      mediaHtml = `
+        <div class="news-img-grid two-cols">
+          ${hasImg1 ? `
+            <div class="news-img-item">
+              <img src="${noticia.imagem}" alt="${escapeAttr(noticia.titulo)}" loading="lazy">
+              ${noticia.legenda ? `<div class="news-img-caption">${escapeHtml(noticia.legenda)}</div>` : ''}
+            </div>
+          ` : ''}
+          ${hasImg2 ? `
+            <div class="news-img-item">
+              <img src="${noticia.imagem2}" alt="${escapeAttr(noticia.titulo)}" loading="lazy">
+              ${noticia.legenda2 ? `<div class="news-img-caption">${escapeHtml(noticia.legenda2)}</div>` : ''}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else if (hasImg1) {
+      mediaHtml = `
+        <div class="news-img-banner-box" style="margin: 16px 0;">
+          <img src="${noticia.imagem}" alt="${escapeAttr(noticia.titulo)}" class="news-img-banner" loading="lazy">
+          ${noticia.legenda ? `<div class="news-img-caption" style="margin-top: -6px; margin-bottom: 14px; border-radius: 0 0 var(--radius-sm) var(--radius-sm); font-size: 0.78rem;">${escapeHtml(noticia.legenda)}</div>` : ''}
+        </div>
+      `;
+    }
+
+    const layoutTag = noticia.layoutFotos === "2-fotos" ? "LAYOUT: 2 FOTOS" : "LAYOUT: 1 FOTO";
+
+    return `
+      <article class="news-article-card" id="custom-news-${noticia.id}" style="border-left: 4px solid var(--orange-rescue); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 8px;">
+          <div>
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+              <span class="card-badge badge-warning" style="background: rgba(255,85,0,0.2); color: var(--orange-rescue); border: 1px solid var(--orange-rescue); font-weight: 800;">NOVA PUBLICAÇÃO</span>
+              <span class="card-badge badge-info" style="font-size: 0.7rem;">${layoutTag}</span>
+              <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Publicado em ${dataStr}</span>
+            </div>
+            <h3 style="margin-bottom: 4px; font-size: 1.25rem; font-weight: 800; color: #fff;">${escapeHtml(noticia.titulo)}</h3>
+            <div class="meta" style="margin-bottom: 12px; color: var(--gold-wings); font-size: 0.82rem; font-weight: 700;">${escapeHtml(noticia.categoria || 'Informativo Operacional')}</div>
+          </div>
+          <button type="button" class="btn-icon" style="color: var(--red-alert); width: 34px; height: 34px; font-size: 1.1rem; border-color: rgba(239,68,68,0.3);" onclick="excluirNoticiaCustomizada('${noticia.id}')" title="Excluir esta publicação">
+            ✕
+          </button>
+        </div>
+
+        ${mediaHtml}
+
+        <div style="white-space: pre-line; font-size: 0.94rem; color: var(--text-secondary); line-height: 1.75; margin-top: 10px;">
+          ${escapeHtml(noticia.texto)}
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  // Atualizar carrossel do mural e telão da TV com a nova notícia
+  if (typeof initMuralCarousel === "function") initMuralCarousel();
+};
+
+/**
+ * Renderiza a lista de notícias publicadas dentro da aba de gestão do CMS (`#cms-tab-noticias`).
+ */
+window.renderizarListaNoticiasCMS = function() {
+  const container = document.getElementById("cms-noticias-gestao-list");
+  const badge = document.getElementById("cms-noticias-count-badge");
+  if (!container) return;
+
+  const saved = localStorage.getItem("SISGER_NOTICIAS_CUSTOM");
+  let noticias = [];
+  try {
+    if (saved) noticias = JSON.parse(saved);
+  } catch (e) {
+    noticias = [];
+  }
+
+  if (badge) {
+    badge.textContent = `${noticias.length} ${noticias.length === 1 ? 'Publicação' : 'Publicações'}`;
+  }
+
+  if (noticias.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 16px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px dashed var(--border-subtle);">
+        <span style="font-size: 2rem; display: block; margin-bottom: 6px;">📰</span>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0 0 10px 0;">Nenhuma notícia personalizada publicada até o momento.</p>
+        <button type="button" class="btn-primary" style="padding: 7px 16px; font-size: 0.8rem;" onclick="abrirPublicacaoDeNoticiaPeloCms()">
+          + Publicar Primeira Notícia
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = noticias.map((n) => {
+    const is2Fotos = n.layoutFotos === "2-fotos";
+    return `
+      <div class="cms-noticia-item">
+        <div style="display: flex; gap: 12px; align-items: center; flex: 1; min-width: 0;">
+          <div style="display: flex; gap: 4px; flex-shrink: 0;">
+            ${n.imagem ? `<img src="${n.imagem}" alt="Foto 1" style="width: 48px; height: 42px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-subtle);">` : ''}
+            ${n.imagem2 ? `<img src="${n.imagem2}" alt="Foto 2" style="width: 48px; height: 42px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-subtle);">` : ''}
+            ${!n.imagem && !n.imagem2 ? `<div style="width: 48px; height: 42px; background: rgba(255,255,255,0.05); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">📰</div>` : ''}
+          </div>
+          <div style="min-width: 0; flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px; flex-wrap: wrap;">
+              <span class="card-badge ${is2Fotos ? 'badge-info' : 'badge-warning'}" style="font-size: 0.68rem; padding: 2px 6px;">
+                ${is2Fotos ? '2 FOTOS' : '1 FOTO'}
+              </span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">${n.data || 'Sem data'}</span>
+            </div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${escapeHtml(n.titulo)}
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${escapeHtml(n.texto || '')}
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
+          <button type="button" class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" onclick="abrirNoticiaPeloCms('${n.id}')" title="Ver Notícia no Mural">
+            👁️ Ver
+          </button>
+          <button type="button" class="btn-icon" style="color: var(--red-alert); width: 32px; height: 32px;" onclick="excluirNoticiaCustomizada('${n.id}')" title="Excluir Notícia">
+            🗑️
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+};
+
+/**
+ * Abre o formulário de publicação na página de notícias a partir do CMS.
+ */
+window.abrirPublicacaoDeNoticiaPeloCms = function() {
+  const modal = document.getElementById("cms-modal");
+  if (modal) modal.classList.remove("active");
+  if (typeof switchView === "function") switchView("noticias");
+  const card = document.getElementById("news-publish-card");
+  if (card) {
+    card.style.display = "block";
+    setTimeout(() => {
+      card.scrollIntoView({ behavior: "smooth", block: "start" });
+      const inputTitle = document.getElementById("new-post-title");
+      if (inputTitle) inputTitle.focus();
+    }, 200);
+  }
+};
+
+/**
+ * Navega do CMS para a página de Notícias no portal.
+ */
+window.irParaMuralNoticias = function() {
+  const modal = document.getElementById("cms-modal");
+  if (modal) modal.classList.remove("active");
+  if (typeof switchView === "function") switchView("noticias");
+  const feed = document.getElementById("custom-news-feed");
+  if (feed) {
+    setTimeout(() => {
+      feed.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 200);
+  }
+};
+
+/**
+ * Fecha o CMS e navega diretamente para a notícia específica no mural.
+ */
+window.abrirNoticiaPeloCms = function(id) {
+  const modal = document.getElementById("cms-modal");
+  if (modal) modal.classList.remove("active");
+  if (typeof switchView === "function") switchView("noticias");
+  setTimeout(() => {
+    const el = document.getElementById("custom-news-" + id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 200);
+};
+
+/**
+ * Inicializa os ouvintes e estado padrão do formulário de notícias.
+ */
+window.initNewsManager = function() {
+  const dateInput = document.getElementById("new-post-date");
+  if (dateInput && !dateInput.value) {
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.value = today;
+  }
+
+  // Renderizar notícias existentes salvas no localStorage
+  window.renderizarNoticiasCustomizadas();
+};
+

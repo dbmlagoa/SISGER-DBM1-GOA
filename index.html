@@ -1075,7 +1075,7 @@
                   Histórico completo de comunicados, aquisições, reformas, instruções e padronizações da unidade.
                 </p>
               </div>
-              <button type="button" class="btn-primary" onclick="if(window.isGestorAutenticado && !window.isGestorAutenticado()){ window.abrirModalLoginGestor(); } else { const p = document.getElementById('news-publish-card'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; if(p.style.display !== 'none') document.getElementById('new-post-title').focus(); }">
+              <button type="button" class="btn-primary" onclick="solicitarAberturaNovaPostagem()">
                 ✍️ Nova Postagem (Gestor)
               </button>
             </div>
@@ -1095,7 +1095,7 @@
               <button type="button" class="btn-icon" onclick="document.getElementById('news-publish-card').style.display='none'" title="Recolher formulário">✕</button>
             </div>
             <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 6px;">
-              Preencha os campos abaixo. A notícia será formatada automaticamente no padrão visual do portal com a data correspondente.
+              Preencha os campos abaixo. Escolha o layout desejado (1 Foto em destaque ou 2 Fotos lado a lado). A notícia será formatada automaticamente no padrão visual do portal com veiculação imediata no Mural e na TV vertical.
             </p>
 
             <form class="news-publish-form" onsubmit="event.preventDefault(); publicarNovaNoticia();">
@@ -1120,24 +1120,83 @@
                 <textarea id="new-post-body" rows="4" placeholder="Descreva aqui o informativo, orientações operacionais, detalhes de materiais ou novidades..." required></textarea>
               </div>
 
+              <!-- SELETOR DE LAYOUT DE FOTOS (1 FOTO OU 2 FOTOS) -->
               <div class="form-group">
-                <label>Foto / Imagem Ilustrativa da Notícia</label>
-                <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;">
-                  <input type="text" id="new-post-img-url" placeholder="Cole a URL da imagem ou anexe um arquivo ao lado...">
-                  <label class="btn-secondary" style="padding: 10px 18px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
-                    📁 Escolher Imagem
-                    <input type="file" id="new-post-img-file" accept="image/*" style="display: none;">
+                <label style="font-weight: 700; color: #fff; margin-bottom: 8px; display: block;">
+                  Layout de Imagens da Notícia *
+                </label>
+                <div class="news-layout-selector" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                  <button type="button" class="btn-layout-choice active" id="btn-layout-1foto" onclick="selecionarLayoutFotos('1-foto')">
+                    <span class="layout-icon">🖼️</span>
+                    <div style="text-align: left;">
+                      <strong style="display: block; font-size: 0.88rem; color: #fff;">1 Foto (Destaque Principal)</strong>
+                      <span style="font-size: 0.73rem; color: var(--text-secondary);">Banner panorâmico em largura total com legenda</span>
+                    </div>
+                  </button>
+                  <button type="button" class="btn-layout-choice" id="btn-layout-2fotos" onclick="selecionarLayoutFotos('2-fotos')">
+                    <span class="layout-icon">🖼️🖼️</span>
+                    <div style="text-align: left;">
+                      <strong style="display: block; font-size: 0.88rem; color: #fff;">2 Fotos (Lado a Lado)</strong>
+                      <span style="font-size: 0.73rem; color: var(--text-secondary);">Grid de 2 fotos lado a lado com legendas individuais</span>
+                    </div>
+                  </button>
+                </div>
+                <input type="hidden" id="new-post-layout" value="1-foto">
+              </div>
+
+              <!-- GRUPO FOTO 1 -->
+              <div class="news-photo-group" id="news-photo-group-1">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: var(--orange-rescue);">
+                    📷 Foto 1 <span id="label-foto-1-tipo">(Destaque Principal / Banner)</span>
+                  </label>
+                  <button type="button" id="btn-remover-foto-1" onclick="removerFoto(1)" style="display: none; background: none; border: none; color: var(--red-alert); font-size: 0.74rem; cursor: pointer; font-weight: 700;">
+                    ✕ Remover Foto 1
+                  </button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;">
+                  <input type="text" id="new-post-img-url" placeholder="Cole o link/URL da Foto 1 ou anexe um arquivo ao lado..." oninput="atualizarPreviewFoto(1)">
+                  <label class="btn-secondary" style="padding: 9px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.82rem; white-space: nowrap;">
+                    📁 Anexar Arquivo
+                    <input type="file" id="new-post-img-file" accept="image/*" style="display: none;" onchange="processarArquivoFoto(event, 1)">
                   </label>
                 </div>
+                <input type="text" id="new-post-img-caption" placeholder="Legenda da Foto 1 (opcional)..." style="margin-top: 8px; font-size: 0.82rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); color: #cbd5e1; padding: 7px 12px; border-radius: var(--radius-sm); width: 100%;">
+                
                 <div id="new-post-img-preview-box" style="display: none; margin-top: 10px;">
-                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Pré-visualização da imagem:</span>
-                  <img id="new-post-img-preview" src="" alt="Preview da Imagem" style="max-height: 200px; border-radius: var(--radius-sm); border: 1px solid var(--border-active);">
+                  <span style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Pré-visualização da Foto 1:</span>
+                  <img id="new-post-img-preview" src="" alt="Preview Foto 1" style="max-height: 220px; max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-active); object-fit: cover;">
                 </div>
               </div>
 
-              <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+              <!-- GRUPO FOTO 2 (EXIBIDO APENAS SE LAYOUT 2 FOTOS) -->
+              <div class="news-photo-group" id="news-photo-group-2" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255, 107, 0, 0.25);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: var(--orange-rescue);">
+                    📷 Foto 2 (Foto Secundária / Lado a Lado)
+                  </label>
+                  <button type="button" id="btn-remover-foto-2" onclick="removerFoto(2)" style="display: none; background: none; border: none; color: var(--red-alert); font-size: 0.74rem; cursor: pointer; font-weight: 700;">
+                    ✕ Remover Foto 2
+                  </button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;">
+                  <input type="text" id="new-post-img2-url" placeholder="Cole o link/URL da Foto 2 ou anexe um arquivo ao lado..." oninput="atualizarPreviewFoto(2)">
+                  <label class="btn-secondary" style="padding: 9px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.82rem; white-space: nowrap;">
+                    📁 Anexar Arquivo
+                    <input type="file" id="new-post-img2-file" accept="image/*" style="display: none;" onchange="processarArquivoFoto(event, 2)">
+                  </label>
+                </div>
+                <input type="text" id="new-post-img2-caption" placeholder="Legenda da Foto 2 (opcional)..." style="margin-top: 8px; font-size: 0.82rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); color: #cbd5e1; padding: 7px 12px; border-radius: var(--radius-sm); width: 100%;">
+                
+                <div id="new-post-img2-preview-box" style="display: none; margin-top: 10px;">
+                  <span style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Pré-visualização da Foto 2:</span>
+                  <img id="new-post-img2-preview" src="" alt="Preview Foto 2" style="max-height: 220px; max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-active); object-fit: cover;">
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
                 <button type="button" class="btn-secondary" onclick="document.getElementById('news-publish-card').style.display='none'">Cancelar</button>
-                <button type="submit" class="btn-primary" style="padding: 10px 24px; font-weight: 800;">
+                <button type="submit" class="btn-primary" style="padding: 10px 24px; font-weight: 800; box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);">
                   📢 Publicar Notícia no Portal
                 </button>
               </div>
@@ -1642,6 +1701,9 @@
         <button type="button" class="cms-tab-btn active" onclick="switchCmsTab('tv')">
           📺 TV Vertical & Telão
         </button>
+        <button type="button" class="cms-tab-btn" onclick="switchCmsTab('noticias')">
+          📰 Notícias & Publicações
+        </button>
         <button type="button" class="cms-tab-btn" onclick="switchCmsTab('rotina')">
           🕒 Rotina Diária
         </button>
@@ -1686,6 +1748,38 @@
               Estas matérias rotacionam automaticamente no topo da TV vertical acompanhadas de imagem correspondente.
             </p>
             <div id="cms-avisos-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+        </div>
+
+        <!-- ABA 2: NOTÍCIAS & PUBLICAÇÕES (GESTÃO COMPLETA) -->
+        <div class="cms-tab-pane" id="cms-tab-noticias">
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>📰 Publicação de Notícias no Portal & Mural</h4>
+              <span class="card-badge badge-warning">Layout 1 ou 2 Fotos</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Publique comunicados, notas operacionais ou boletins informativos com suporte a layout de <strong>1 Foto (Destaque)</strong> ou <strong>2 Fotos (Lado a Lado)</strong>. As matérias entram imediatamente no feed de notícias, no mural e no topo da TV vertical.
+            </p>
+            <div style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-primary" style="padding: 9px 18px; font-size: 0.85rem; font-weight: 800;" onclick="abrirPublicacaoDeNoticiaPeloCms()">
+                ✍️ Abrir Formulário de Nova Notícia
+              </button>
+              <button type="button" class="btn-secondary" style="padding: 9px 18px; font-size: 0.85rem;" onclick="irParaMuralNoticias()">
+                👁️ Ver Notícias no Portal
+              </button>
+            </div>
+          </div>
+
+          <div class="cms-section-card">
+            <div class="cms-section-header">
+              <h4>📋 Notícias Publicadas pelo Gestor</h4>
+              <span class="card-badge badge-info" id="cms-noticias-count-badge">0 Publicações</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
+              Gerencie ou remova notícias personalizadas adicionadas anteriormente. Ao excluir, a notícia é removida imediatamente do feed, do mural e do carrossel da TV.
+            </p>
+            <div id="cms-noticias-gestao-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;"></div>
           </div>
         </div>
 

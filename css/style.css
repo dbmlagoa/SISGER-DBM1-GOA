@@ -2070,6 +2070,88 @@ body.tv-mode-active .tv-kiosk-container {
   gap: 14px;
 }
 
+/* Seletores de Layout de Imagens (1 Foto ou 2 Fotos) */
+.news-layout-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 680px) {
+  .news-layout-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-layout-choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(13, 21, 39, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.btn-layout-choice:hover {
+  background: rgba(255, 107, 0, 0.08);
+  border-color: rgba(255, 107, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-layout-choice.active {
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(200, 70, 0, 0.1) 100%);
+  border: 2px solid var(--orange-rescue);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(255, 107, 0, 0.25);
+}
+
+.btn-layout-choice .layout-icon {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.news-photo-group {
+  background: rgba(8, 14, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  transition: var(--transition);
+}
+
+.news-photo-group:focus-within {
+  border-color: rgba(255, 107, 0, 0.35);
+}
+
+.news-img-grid.two-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+/* Itens de Gestão de Notícias no CMS Modal */
+.cms-noticia-item {
+  background: rgba(13, 21, 39, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  transition: var(--transition);
+}
+
+.cms-noticia-item:hover {
+  border-color: rgba(255, 107, 0, 0.35);
+}
+
+
 /* ==========================================================================
    GRID DE PRONTIDÃO: MURAL DE AVISOS + ROTINA DIÁRIA OFICIAL
    ========================================================================== */

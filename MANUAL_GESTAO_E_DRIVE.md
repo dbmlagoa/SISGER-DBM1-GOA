@@ -84,18 +84,29 @@ Ao clicar na engrenagem **⚙️** e inserir o login (`dbmlagoa`) e senha (`salv
 
 ---
 
-## ✍️ 4. Como Publicar Notícias com Fotos no Portal
+## ✍️ 4. Como Publicar Notícias com Escolha de Layout (1 ou 2 Fotos)
 
-1. Na barra lateral esquerda do portal, clique em **"Notícias"**.
-2. Clique no botão azul **"✍️ Nova Postagem (Gestor)"**.
-3. Preencha os campos:
+1. Você pode iniciar a publicação de duas maneiras:
+   - Na barra lateral esquerda do portal, clique em **"Notícias"** e depois no botão **"✍️ Nova Postagem (Gestor)"**.
+   - OU clique no ícone de engrenagem ⚙️ (Painel de Gestão), faça login e vá na aba **"📰 Notícias & Publicações"** ➔ clique em **"✍️ Abrir Formulário de Nova Notícia"**.
+2. **Escolha o Layout de Imagens desejado:**
+   - **🖼️ 1 Foto (Destaque Principal):** Banner panorâmico em largura total com campo de legenda individual.
+   - **🖼️🖼️ 2 Fotos (Lado a Lado):** Grid moderno de 2 fotos lado a lado comparativas, cada uma com seu botão de anexo/URL e legenda individual.
+3. Preencha os campos da matéria:
    - **Título da Notícia:** Ex: *Aquisição de Novos Equipamentos de Salvamento*.
-   - **Data da Publicação:** Preenchida automaticamente com a data de hoje.
-   - **Subtítulo / Categoria:** Ex: *Material Operacional • DMOP*.
-   - **Texto da Notícia:** Descrição detalhada do informe.
-   - **Imagem Ilustrativa:** Você pode selecionar um arquivo do computador clicando em *Escolher Imagem* OU colar a URL de uma imagem da internet. O preview da imagem aparece na hora!
+   - **Data da Publicação:** Preenchida automaticamente com a data atual.
+   - **Subtítulo / Categoria:** Ex: *Material Operacional • DMOP / Instrução Especializada*.
+   - **Texto da Notícia:** Descrição detalhada do informe com quebras de linha automáticas.
+   - **Fotos (Foto 1 e Foto 2 se selecionado 2 Fotos):**
+     * Clique em **"📁 Anexar Arquivo"** para selecionar fotos do seu computador (o sistema comprime e otimiza automaticamente para máxima velocidade e sem sobrecarregar a memória) **OU** cole uma URL de imagem.
+     * Insira a legenda descritiva de cada foto no campo correspondente (opcional).
+     * O preview da imagem aparece na hora com botão para remover se desejar trocar.
 4. Clique no botão **"📢 Publicar Notícia no Portal"**.
-5. A notícia entra imediatamente no topo da página de notícias e passa a fazer parte da rotação da página inicial e da TV vertical!
+5. **Veiculação Instantânea:**
+   - A notícia é publicada no topo da página de **Notícias** com o layout escolhido e selo identificador.
+   - Entra automaticamente no **Mural de Avisos da Tela Inicial** com thumbnail e link de leitura completa.
+   - Entra automaticamente na rotação de matérias no topo da **TV Vertical (Mural 24h)**.
+   - Fica listada no **Painel de Gestão (Aba Notícias & Publicações)** para acompanhamento e exclusão quando necessário.
 
 ---
 
