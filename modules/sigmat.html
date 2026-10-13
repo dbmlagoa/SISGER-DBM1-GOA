@@ -2183,44 +2183,67 @@
                             safeStorageSet('sigmat_items', mapped);
                         }
                         if (data && data.transactions && Array.isArray(data.transactions) && data.transactions.length > 0) {
+                            // Mapeamento dinâmico das colunas da aba 'movimentações' da planilha
+                            const headers = Array.isArray(data.headers) ? data.headers.map(h => String(h || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) : [];
+
+                            let cDate = headers.findIndex(h => h.includes('data'));
+                            let cItem = headers.findIndex(h => h.includes('equip') || h.includes('mater') || h.includes('item'));
+                            let cType = headers.findIndex(h => h.includes('tipo') || h.includes('fluxo'));
+                            let cQty = headers.findIndex(h => h.includes('qtd') || h.includes('quant'));
+                            let cGrad = headers.findIndex(h => h.includes('grad'));
+                            let cName = headers.findIndex(h => h.includes('guerra') || (h.includes('nome') && !h.includes('equip')));
+                            let cRg = headers.findIndex(h => h.includes('rg') && (h.includes('port') || !h.includes('reg')));
+                            let cDest = headers.findIndex(h => h.includes('destin') || h.includes('finalid') || h.includes('motiv') || h.includes('detalh') || h.includes('obs'));
+                            let cRec = headers.findIndex(h => h.includes('fiel') || h.includes('registrador'));
+                            let cRecRg = headers.findLastIndex(h => h.includes('rg'));
+
+                            if (cDate === -1) cDate = 0;
+                            if (cItem === -1) cItem = 1;
+                            if (cType === -1) cType = 2;
+                            if (cQty === -1) cQty = 3;
+                            if (cGrad === -1) cGrad = 4;
+                            if (cName === -1) cName = 5;
+                            if (cRg === -1) cRg = 6;
+                            if (cRec === -1) cRec = 7;
+                            if (cDest === -1) cDest = 8;
+                            if (cRecRg === -1 || cRecRg === cRg) cRecRg = 9;
+
                             const cleanTrans = data.transactions
                                 .filter(row => {
-                                    if (!row || (!row[0] && !row[1])) return false;
-                                    // Proteção total: descarta qualquer registro da aba 'users' que contenha senhas/cadastros
+                                    if (!row || (!row[cDate] && !row[cItem])) return false;
+                                    // Descarta qualquer linha de conta da aba 'users'
                                     const r0 = String(row[0] || '').toLowerCase().trim();
                                     const r3 = String(row[3] || '').toLowerCase().trim();
                                     const isUserAccount = ['maj', 'cap', 'subten', 'sub', 'sgt', '1º sgt', '2º sgt', 'st'].includes(r0) &&
                                         ['igorliborio1', '281197re@', 'souza810127', '23869', '15325326', 'salvamento', 'goa40887', 'cbmerj@0529', 'montanha@01', '121213', 'magno357', 'ser43712!', 'goa97', 'itacoa', 'sigmat138*', '72981', '2332noah'].some(pwd => r3.includes(pwd));
                                     if (isUserAccount) return false;
 
-                                    // Deve ser um registro genuíno de material com nome e fluxo
-                                    const hasValidItem = String(row[1] || '').trim().length > 2;
-                                    const isMovementType = ['saída', 'saida', 'entrada', 'avaria', 'alteração', 'alteracao', 'manutenção', 'manutencao', 'retorno'].some(t => String(row[2] || '').toLowerCase().includes(t));
-                                    const hasValidDate = ['-', '/', 'T'].some(k => String(row[0] || '').includes(k));
-                                    return hasValidItem && (isMovementType || hasValidDate);
+                                    const itemName = String(row[cItem] || '').trim();
+                                    return itemName.length >= 2;
                                 })
                                 .map((row, idx) => {
-                                    const isStandardDate = ['-', '/', 'T'].some(k => String(row[0]).includes(k));
-                                    const formattedDate = isStandardDate && !isNaN(Date.parse(row[0]))
-                                        ? new Date(row[0]).toLocaleDateString('pt-BR')
-                                        : String(row[0] || '').trim();
+                                    const rawDate = row[cDate];
+                                    const isStandardDate = ['-', '/', 'T'].some(k => String(rawDate || '').includes(k));
+                                    const formattedDate = isStandardDate && !isNaN(Date.parse(rawDate))
+                                        ? new Date(rawDate).toLocaleDateString('pt-BR')
+                                        : (String(rawDate || '').trim() || new Date().toISOString().split('T')[0]);
 
                                     return {
-                                        id: 'TR-GAS-' + (idx + 1),
+                                        id: 'TR-MOV-' + (idx + 1),
                                         movementDate: formattedDate,
-                                        itemName: String(row[1] || '').trim(),
-                                        type: String(row[2] || 'saída').trim(),
-                                        quantity: Number(row[3]) || 1,
+                                        itemName: String(row[cItem] || '').trim(),
+                                        type: String(row[cType] || 'saída').trim(),
+                                        quantity: Number(row[cQty]) || 1,
                                         bearer: {
-                                            graduation: String(row[4] || '---').trim(),
-                                            warName: String(row[5] || 'N/A').trim(),
-                                            rg: String(row[6] || '---').trim()
+                                            graduation: String(row[cGrad] || '---').trim(),
+                                            warName: String(row[cName] || 'N/A').trim(),
+                                            rg: String(row[cRg] || '---').trim()
                                         },
                                         recorder: {
-                                            warName: String(row[7] || 'FIEL DMOP').trim(),
-                                            rg: String(row[9] || '---').trim()
+                                            warName: String(row[cRec] || 'FIEL DMOP').trim(),
+                                            rg: String(row[cRecRg] || '---').trim()
                                         },
-                                        reason: String(row[8] || 'Destino operacional').trim()
+                                        reason: String(row[cDest] || 'Destino operacional').trim()
                                     };
                                 }).reverse();
                             

@@ -97,28 +97,69 @@ function executeAction(payload) {
 }
 
 /**
- * Retorna todos os Itens e Transações da Planilha
+ * Localiza com precisão a aba 'movimentações' na planilha de Controle DMOP
+ * (insensível a maiúsculas/minúsculas e acentuação)
+ * NUNCA seleciona a aba 'users' ou 'items'!
  */
-function getData() {
-  var ss = getSpreadsheet();
+function getMovimentacoesSheet(ss) {
   var sheets = ss.getSheets();
-  var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || sheets[0];
-  // Localiza a aba de transações/movimentações/cautelas (NUNCA a aba 'users')
-  var transSheet = ss.getSheetByName("transactions") || 
-                   ss.getSheetByName("Transações") || 
-                   ss.getSheetByName("movimentações") || 
-                   ss.getSheetByName("cautelas") || 
-                   ss.getSheetByName("registros");
-
-  if (!transSheet) {
-    for (var s = 0; s < sheets.length; s++) {
-      var sName = sheets[s].getName().toLowerCase().trim();
-      if (sName !== "items" && sName !== "itens" && sName !== "users" && sName !== "usuários" && sName !== "usuarios") {
-        transSheet = sheets[s];
-        break;
+  var targets = ["movimentacoes", "movimentacao", "cautelas", "cautela", "transactions", "transacoes", "registros", "livro"];
+  
+  for (var i = 0; i < sheets.length; i++) {
+    var rawName = sheets[i].getName().trim();
+    var normName = rawName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    
+    // Ignora terminantemente as abas de catálogo e de usuários
+    if (normName === "items" || normName === "itens" || normName === "users" || normName === "usuarios") {
+      continue;
+    }
+    
+    for (var j = 0; j < targets.length; j++) {
+      if (normName.indexOf(targets[j]) !== -1) {
+        return sheets[i];
       }
     }
   }
+
+  // Se não encontrou por palavra-chave, seleciona a terceira aba existente que não seja items nem users
+  for (var k = 0; k < sheets.length; k++) {
+    var kNorm = sheets[k].getName().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (kNorm !== "items" && kNorm !== "itens" && kNorm !== "users" && kNorm !== "usuarios") {
+      return sheets[k];
+    }
+  }
+
+  // Fallback seguro: cria a aba oficial 'movimentações' com cabeçalhos padronizados
+  var newSheet = ss.insertSheet("movimentações");
+  newSheet.appendRow(["Data", "Equipamento", "Tipo", "Quantidade", "Graduação Portador", "Nome Guerra Portador", "RG Portador", "Fiel Registrador", "Destino / Finalidade", "RG Registrador"]);
+  return newSheet;
+}
+
+function getItemsSheet(ss) {
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    var norm = sheets[i].getName().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (norm === "items" || norm === "itens") return sheets[i];
+  }
+  return sheets[0];
+}
+
+function getUsersSheet(ss) {
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    var norm = sheets[i].getName().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (norm === "users" || norm === "usuarios") return sheets[i];
+  }
+  return ss.getSheetByName("users");
+}
+
+/**
+ * Retorna todos os Itens e o Livro de Movimentações & Avarias da Planilha
+ */
+function getData() {
+  var ss = getSpreadsheet();
+  var itemsSheet = getItemsSheet(ss);
+  var transSheet = getMovimentacoesSheet(ss);
 
   var items = [];
   if (itemsSheet && itemsSheet.getLastRow() > 1) {
@@ -126,12 +167,21 @@ function getData() {
   }
 
   var transactions = [];
-  if (transSheet && transSheet.getLastRow() > 1) {
-    var maxCols = Math.min(10, transSheet.getLastColumn());
-    transactions = transSheet.getRange(2, 1, transSheet.getLastRow() - 1, maxCols).getValues();
+  var headers = [];
+  if (transSheet && transSheet.getLastRow() >= 1) {
+    var maxCols = Math.max(10, transSheet.getLastColumn());
+    headers = transSheet.getRange(1, 1, 1, maxCols).getValues()[0];
+    if (transSheet.getLastRow() > 1) {
+      transactions = transSheet.getRange(2, 1, transSheet.getLastRow() - 1, maxCols).getValues();
+    }
   }
 
-  return { items: items, transactions: transactions };
+  return { 
+    items: items, 
+    transactions: transactions, 
+    headers: headers,
+    sheetName: transSheet ? transSheet.getName() : "movimentações"
+  };
 }
 
 /**
@@ -274,29 +324,9 @@ function registerMovement(payload) {
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(10000);
-    var sheets = ss.getSheets();
-    // NUNCA gravar na aba 'users'!
-    var transSheet = ss.getSheetByName("transactions") || 
-                     ss.getSheetByName("Transações") || 
-                     ss.getSheetByName("movimentações") || 
-                     ss.getSheetByName("cautelas") || 
-                     ss.getSheetByName("registros");
-
-    if (!transSheet) {
-      for (var s = 0; s < sheets.length; s++) {
-        var sName = sheets[s].getName().toLowerCase().trim();
-        if (sName !== "items" && sName !== "itens" && sName !== "users" && sName !== "usuários" && sName !== "usuarios") {
-          transSheet = sheets[s];
-          break;
-        }
-      }
-    }
-
-    if (!transSheet) {
-      transSheet = ss.insertSheet("transactions");
-      transSheet.appendRow(["Data", "Equipamento", "Tipo", "Quantidade", "Graduação Portador", "Nome Guerra Portador", "RG Portador", "Fiel Registrador", "Destino / Finalidade", "RG Registrador"]);
-    }
-    var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || ss.getSheets()[0];
+    var ss = getSpreadsheet();
+    var itemsSheet = getItemsSheet(ss);
+    var transSheet = getMovimentacoesSheet(ss);
 
     var trans = payload.trans;
     var newStock = Number(payload.newStock);
@@ -312,12 +342,7 @@ function registerMovement(payload) {
       }
     }
 
-    // 2. Grava a movimentação no Livro de Cautelas (aba transactions)
-    if (!transSheet) {
-      transSheet = ss.insertSheet("transactions");
-      transSheet.appendRow(["Data", "Equipamento", "Tipo", "Quantidade", "Graduação Portador", "Nome Guerra Portador", "RG Portador", "Fiel Registrador", "Finalidade/Motivo", "RG Registrador"]);
-    }
-
+    // 2. Grava a movimentação na aba 'movimentações' (Livro de Movimentações & Avarias)
     var movementRow = [
       trans.movementDate || new Date().toISOString(),
       trans.itemName || "",
@@ -327,13 +352,16 @@ function registerMovement(payload) {
       (trans.bearer && trans.bearer.warName) || "N/A",
       (trans.bearer && trans.bearer.rg) || "---",
       (trans.recorder && trans.recorder.warName) || "---",
-      trans.reason || "",
+      trans.reason || "", // Destino / Finalidade / Descrição da Avaria
       (trans.recorder && trans.recorder.rg) || "---"
     ];
 
     transSheet.appendRow(movementRow);
 
-    return { success: true, message: "Movimentação registrada com sucesso!" };
+    return { 
+      success: true, 
+      message: "Movimentação registrada com sucesso na aba '" + transSheet.getName() + "'!" 
+    };
   } catch (err) {
     return { success: false, message: "Erro ao registrar movimentação: " + err.toString() };
   } finally {
