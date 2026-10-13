@@ -103,12 +103,22 @@ function getData() {
   var ss = getSpreadsheet();
   var sheets = ss.getSheets();
   var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || sheets[0];
+  // Localiza a aba de transações/movimentações/cautelas (NUNCA a aba 'users')
   var transSheet = ss.getSheetByName("transactions") || 
                    ss.getSheetByName("Transações") || 
                    ss.getSheetByName("movimentações") || 
                    ss.getSheetByName("cautelas") || 
-                   ss.getSheetByName("registros") || 
-                   (sheets.length > 1 ? sheets[1] : null);
+                   ss.getSheetByName("registros");
+
+  if (!transSheet) {
+    for (var s = 0; s < sheets.length; s++) {
+      var sName = sheets[s].getName().toLowerCase().trim();
+      if (sName !== "items" && sName !== "itens" && sName !== "users" && sName !== "usuários" && sName !== "usuarios") {
+        transSheet = sheets[s];
+        break;
+      }
+    }
+  }
 
   var items = [];
   if (itemsSheet && itemsSheet.getLastRow() > 1) {
@@ -264,13 +274,28 @@ function registerMovement(payload) {
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(10000);
-    var ss = getSpreadsheet();
+    var sheets = ss.getSheets();
+    // NUNCA gravar na aba 'users'!
     var transSheet = ss.getSheetByName("transactions") || 
                      ss.getSheetByName("Transações") || 
                      ss.getSheetByName("movimentações") || 
                      ss.getSheetByName("cautelas") || 
-                     ss.getSheetByName("registros") || 
-                     (ss.getSheets().length > 1 ? ss.getSheets()[1] : null);
+                     ss.getSheetByName("registros");
+
+    if (!transSheet) {
+      for (var s = 0; s < sheets.length; s++) {
+        var sName = sheets[s].getName().toLowerCase().trim();
+        if (sName !== "items" && sName !== "itens" && sName !== "users" && sName !== "usuários" && sName !== "usuarios") {
+          transSheet = sheets[s];
+          break;
+        }
+      }
+    }
+
+    if (!transSheet) {
+      transSheet = ss.insertSheet("transactions");
+      transSheet.appendRow(["Data", "Equipamento", "Tipo", "Quantidade", "Graduação Portador", "Nome Guerra Portador", "RG Portador", "Fiel Registrador", "Destino / Finalidade", "RG Registrador"]);
+    }
     var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || ss.getSheets()[0];
 
     var trans = payload.trans;
