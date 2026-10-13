@@ -76,6 +76,8 @@ function doPost(e) {
       return jsonResponse(saveItem(data));
     } else if (action === "registerMovement") {
       return jsonResponse(registerMovement(data));
+    } else if (action === "executeAction") {
+      return jsonResponse(executeAction(data));
     }
 
     return jsonResponse({ success: false, message: "Ação POST desconhecida: " + action });
@@ -85,12 +87,22 @@ function doPost(e) {
 }
 
 /**
+ * Função ponte para execução direta via google.script.run
+ */
+function executeAction(payload) {
+  var action = payload ? payload.action : "";
+  if (action === "registerMovement") return registerMovement(payload);
+  if (action === "saveItem") return saveItem(payload);
+  return { success: false, message: "Ação desconhecida: " + action };
+}
+
+/**
  * Retorna todos os Itens e Transações da Planilha
  */
 function getData() {
   var ss = getSpreadsheet();
-  var itemsSheet = ss.getSheetByName("items") || ss.getSheets()[0];
-  var transSheet = ss.getSheetByName("transactions") || (ss.getSheets().length > 1 ? ss.getSheets()[1] : null);
+  var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || ss.getSheets()[0];
+  var transSheet = ss.getSheetByName("transactions") || ss.getSheetByName("Transações") || ss.getSheetByName("movimentações");
 
   var items = [];
   if (itemsSheet && itemsSheet.getLastRow() > 1) {
@@ -246,8 +258,8 @@ function registerMovement(payload) {
   try {
     lock.waitLock(10000);
     var ss = getSpreadsheet();
-    var transSheet = ss.getSheetByName("transactions") || (ss.getSheets().length > 1 ? ss.getSheets()[1] : null);
-    var itemsSheet = ss.getSheetByName("items") || ss.getSheets()[0];
+    var transSheet = ss.getSheetByName("transactions") || ss.getSheetByName("Transações") || ss.getSheetByName("movimentações");
+    var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || ss.getSheets()[0];
 
     var trans = payload.trans;
     var newStock = Number(payload.newStock);

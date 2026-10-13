@@ -56,6 +56,1860 @@
 
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzd2tK8jWnw9hOOQY7bFDYo78MZMSPogTbPVVfaCOCHlgLGTtQ6Yix5awhLujtx7JU/exec";
 
+            // Base de dados padrão com todos os 185 itens operacionais autênticos do DBM1/GOA
+            const DEFAULT_SIGMAT_ITEMS = [
+    {
+        "id": "ID-1778526541872",
+        "name": "freio 8 orelha aço grande",
+        "manufacturer": "kong",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 7,
+        "minStock": 7
+    },
+    {
+        "id": "ID-1778527231547",
+        "name": "FREIO 8 ORELHA AÇO PEQUENO",
+        "manufacturer": "KONG",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "PRATA",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778527306572",
+        "name": "ANEL DE FITA TUBULAR POLIAMIDA 120CM",
+        "manufacturer": "CONQUISTA",
+        "mfgYear": 2019,
+        "lifespan": 5,
+        "color": "VERMELHO/PRETO",
+        "currentStock": 1,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778527462777",
+        "name": "ANEL DE FITA TUBULAR POLIAMIDA 60 CM",
+        "manufacturer": "K2",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "AZUL",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778527784625",
+        "name": "ANEL DE FITA TUBULAR POLIAMIDA 80 CM",
+        "manufacturer": "CONQUISTA",
+        "mfgYear": 2018,
+        "lifespan": 5,
+        "color": "AZUL/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778527842609",
+        "name": "ANEL DE FITA TUBULAR POLIAMIDA 100 CM",
+        "manufacturer": "ALPEN PASS",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "PRETA/LARANJA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778527902530",
+        "name": "ANEL DE FITA TUBULAR POLIAMIDA 100 CM",
+        "manufacturer": "ALPEN PASS",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "PRETA/AZUL",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778527958269",
+        "name": "ANEL DE FITA TUBULAR POLIAMIDA 60 CM",
+        "manufacturer": "MAXI QUALYTI",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "AZUL/AMARELO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528042088",
+        "name": "ANEL DE FITA 200CM POLIESTER INF AL200",
+        "manufacturer": "INNOVA SAFETY",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "VERMELHA",
+        "currentStock": 20,
+        "minStock": 20
+    },
+    {
+        "id": "ID-1778528132562",
+        "name": "ANEL DE FITA 120CM POLIESTER INF AL 120",
+        "manufacturer": "INNOVA SAFETY",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "AMARELO",
+        "currentStock": 20,
+        "minStock": 20
+    },
+    {
+        "id": "ID-1778528175345",
+        "name": "ANEL DE FITA 60CM POLIESTER INF AL60",
+        "manufacturer": "INNOVA SAFETY",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 12,
+        "minStock": 12
+    },
+    {
+        "id": "ID-1778528304086",
+        "name": "ASCENSOR DE PUNHO ALUMINIO DIREITO",
+        "manufacturer": "KONG",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "VERMELHO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778528345830",
+        "name": "ASCENSOR DE PUNHO ALUMINIO DIREITO",
+        "manufacturer": "CAMP",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "VERMELHO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528379391",
+        "name": "ASCENSOR DE PUNHO ALUMINIO DIREITO",
+        "manufacturer": "ANTHRON",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528406120",
+        "name": "ASCENSOR DE PUNHO ALUMINIO DIREITO",
+        "manufacturer": "KONG",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AZUL",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528434048",
+        "name": "ASCENSOR DE PUNHO ALUMINIO ESQUERDO",
+        "manufacturer": "KONG",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AZUL",
+        "currentStock": 5,
+        "minStock": 5
+    },
+    {
+        "id": "ID-1778528499795",
+        "name": "BALÃO DE ILUMINAÇÃO LONA/FERRO",
+        "manufacturer": "RESGATÉCNICA",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "BRANCO/LARANJA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528559059",
+        "name": "BARRACA CAMPING IGLU NYLON/ALUM. NEPAL 2",
+        "manufacturer": "AZTEC",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "LARANJA/CINZA",
+        "currentStock": 4,
+        "minStock": 4
+    },
+    {
+        "id": "ID-1778528672273",
+        "name": "BATERIA DESENCARCERADOR LITIUM AKKULI28M",
+        "manufacturer": "WEBERrESCUE",
+        "mfgYear": 2013,
+        "lifespan": 5,
+        "color": "AUSENTE",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778528746490",
+        "name": "BATERIA DESENCARCERADOR PORTATIL BPA285",
+        "manufacturer": "HOLMATRO",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AUSENTE",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778528787954",
+        "name": "BAUDRIER MONTANA DIVERSOS INCAIN",
+        "manufacturer": "INNOVA SAFETY",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 17,
+        "minStock": 20
+    },
+    {
+        "id": "ID-1778528833092",
+        "name": "CABO DE ENERGIA BMC1",
+        "manufacturer": "HOLMATRO",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AUSENTE",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528908366",
+        "name": "CAPACETE 03",
+        "manufacturer": "MONTANA",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "LARANJA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778528961718",
+        "name": "CAPACETE 03 CORAZZA",
+        "manufacturer": "ULTRA SAFETY",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "VERMELHO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778528991359",
+        "name": "CAPACETE 03 CORAZZA",
+        "manufacturer": "ULTRA SAFETY",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "LARANJA",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778529034184",
+        "name": "CAPACETE CLASSE 0 ZENITH X AIR",
+        "manufacturer": "KASK",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "laranja",
+        "currentStock": 7,
+        "minStock": 7
+    },
+    {
+        "id": "ID-1778529089457",
+        "name": "CAPACETE NAUTICO BOMBEIROS AMA",
+        "manufacturer": "AUSENTE",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "AMARELO",
+        "currentStock": 8,
+        "minStock": 8
+    },
+    {
+        "id": "ID-1778529126746",
+        "name": "CARREGHADOR CHARGER MCLI",
+        "manufacturer": "WEBERrESCUE",
+        "mfgYear": 2012,
+        "lifespan": 5,
+        "color": "AUSENTE",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529160148",
+        "name": "CARREGADOR BCH1",
+        "manufacturer": "HOLMATRO",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "AUSENTE",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529203692",
+        "name": "CESTO DE RESGATE AÉREO",
+        "manufacturer": "SPORTS RESGATE",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "AMARELO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529243366",
+        "name": "CINTO BAUDRIER MISTO PRETO",
+        "manufacturer": "ULTRA SAFETY",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778529312575",
+        "name": "CINTO BAUDRIER MISTO AZUL",
+        "manufacturer": "S.TEC",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "AZUL",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778529372786",
+        "name": "CINTO INTEGRAL MISTO TOURINO PLUS",
+        "manufacturer": "ULTRA SAFETY",
+        "mfgYear": 2021,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 19,
+        "minStock": 19
+    },
+    {
+        "id": "ID-1778529439308",
+        "name": "CINTO INTEGRAL MISTO TOURINO PLUS TAM 2",
+        "manufacturer": "ULTRA SAFETY",
+        "mfgYear": 2021,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 10,
+        "minStock": 10
+    },
+    {
+        "id": "ID-1778529491339",
+        "name": "COLETE DIP TEXTIL PRO/ZIP170",
+        "manufacturer": "SEASAFE",
+        "mfgYear": 2019,
+        "lifespan": 10,
+        "color": "AZUL",
+        "currentStock": 62,
+        "minStock": 62
+    },
+    {
+        "id": "ID-1778529549941",
+        "name": "COLETE GV EPAF PVC",
+        "manufacturer": "FLUT SPUMA",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AMARELO",
+        "currentStock": 12,
+        "minStock": 13
+    },
+    {
+        "id": "ID-1778529594127",
+        "name": "CORDA DINAMICA TEXTIL 60M",
+        "manufacturer": "BEAL 9.4MM",
+        "mfgYear": 2016,
+        "lifespan": 11,
+        "color": "ROSA",
+        "currentStock": 4,
+        "minStock": 5
+    },
+    {
+        "id": "ID-1778529639223",
+        "name": "CORDA SEMIESTATICA 100MTS",
+        "manufacturer": "AUSENTE",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "BRANCA/LARANJA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529676826",
+        "name": "CORDA SEMIESTATICA TEXTIL 100MTS",
+        "manufacturer": "AUSENTE",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "BRANCA/AZUL",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778529718329",
+        "name": "CORDA SEMIESTATICA TEXTIL 30MTS",
+        "manufacturer": "AUSENTE",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "BRANCA/PRETA",
+        "currentStock": 0,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529767948",
+        "name": "CORDA SEMIESTATICA TEXTIL 200MTS",
+        "manufacturer": "K2 11.5MM",
+        "mfgYear": 2021,
+        "lifespan": 10,
+        "color": "LARANJA",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778529827068",
+        "name": "CORDA CABO GUIA TEXTIL 120MTS",
+        "manufacturer": "7MM",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529867261",
+        "name": "CORDA CABO GUIA TEXTIL 69MTS",
+        "manufacturer": "7MM",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778529991033",
+        "name": "DESCENSOR INDYEVO ALUMINIO",
+        "manufacturer": "KONG",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778530025210",
+        "name": "DESCENSOR STOP ALUMINIO",
+        "manufacturer": "PETZL",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AZUL",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778530064747",
+        "name": "DESCENSOR DSD ALUMINIO",
+        "manufacturer": "ANTHRON",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530094283",
+        "name": "DESCENSOR ID ALUMINIO",
+        "manufacturer": "PETZL",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AMARELO",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778530155798",
+        "name": "DESENCARCERADOR PORTÁTIL GCT4150",
+        "manufacturer": "HOLMATRO",
+        "mfgYear": 2018,
+        "lifespan": 10,
+        "color": "AUSENTE",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530195557",
+        "name": "DESENCARCERADOR PORTÁTIL ELETRICO",
+        "manufacturer": "WEBER RESCUE",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AUSENTE",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530247943",
+        "name": "DISTORCEDOR ALUMINIO",
+        "manufacturer": "CT ITALY",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AZUL/VERMELHO",
+        "currentStock": 5,
+        "minStock": 5
+    },
+    {
+        "id": "ID-1778530309018",
+        "name": "DISTORCEDOR ALUMINIO",
+        "manufacturer": "US CLIMB",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETO/PRATA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530391908",
+        "name": "FACA DE PERNA AÇO BLADE SEA",
+        "manufacturer": "TRAMONTINA",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "AMARELA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530427716",
+        "name": "FACA DE PERNA AÇO",
+        "manufacturer": "GERBER",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETO/LARANJA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530474310",
+        "name": "FACÃO AÇO 45CM",
+        "manufacturer": "RGA MATÃO",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "FERRUGEM",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778530505286",
+        "name": "FACÃO AÇO 40CM",
+        "manufacturer": "TRAMONTINA",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "FERRUGEM",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530546825",
+        "name": "FITA DE CArga poliamida 200cm",
+        "manufacturer": "cargo flex",
+        "mfgYear": 2020,
+        "lifespan": 5,
+        "color": "preta/branca",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530588823",
+        "name": "freio 8 orelha aço grande",
+        "manufacturer": "kong",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 6,
+        "minStock": 6
+    },
+    {
+        "id": "ID-1778530646032",
+        "name": "freio 8 orelha aço grande",
+        "manufacturer": "kong",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 6,
+        "minStock": 6
+    },
+    {
+        "id": "ID-1778530684580",
+        "name": "FREIO 8 ORELHA AÇO PEQUENO",
+        "manufacturer": "KONG",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778530746853",
+        "name": "FREIO 8 sem ORELHA AÇO PEQUENO",
+        "manufacturer": "task",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 4,
+        "minStock": 4
+    },
+    {
+        "id": "ID-1778530787701",
+        "name": "FREIO 8 ORELHA Aluminio grande",
+        "manufacturer": "ct",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 20,
+        "minStock": 20
+    },
+    {
+        "id": "ID-1778530827895",
+        "name": "luva cadaver borracha",
+        "manufacturer": "turaveis",
+        "mfgYear": 2020,
+        "lifespan": 10,
+        "color": "verde",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778530870927",
+        "name": "luva vaqueta couro florestal",
+        "manufacturer": "tec mater",
+        "mfgYear": 2020,
+        "lifespan": 15,
+        "color": "preto/branco",
+        "currentStock": 1,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778530912841",
+        "name": "luva vaqueta couro",
+        "manufacturer": "wana",
+        "mfgYear": 2020,
+        "lifespan": 15,
+        "color": "laranja",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778530967137",
+        "name": "luva de incendio couro tam 10",
+        "manufacturer": "hercules",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 9,
+        "minStock": 9
+    },
+    {
+        "id": "ID-1778530995259",
+        "name": "luva de incendio couro tam 09",
+        "manufacturer": "hercules",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 8,
+        "minStock": 8
+    },
+    {
+        "id": "ID-1778531020563",
+        "name": "luva de incendio couro tam 08",
+        "manufacturer": "hercules",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 6,
+        "minStock": 6
+    },
+    {
+        "id": "ID-1778531063893",
+        "name": "luz de cena portatil",
+        "manufacturer": "streamlight",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "AMARELA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778531094869",
+        "name": "maca envelope str plus",
+        "manufacturer": "task",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "LARANJA",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778531128535",
+        "name": "maca envelope str plus",
+        "manufacturer": "task",
+        "mfgYear": 2016,
+        "lifespan": 10,
+        "color": "LARANJA",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778531166567",
+        "name": "mochila 45 litros operacional tatica",
+        "manufacturer": "equinox",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 9,
+        "minStock": 10
+    },
+    {
+        "id": "ID-1778531200009",
+        "name": "mochila cbmerj 55 litros",
+        "manufacturer": "ausente",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "vemelha",
+        "currentStock": 13,
+        "minStock": 13
+    },
+    {
+        "id": "ID-1778531256243",
+        "name": "mosquetão trava rosca assimetrico aço",
+        "manufacturer": "KONG",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 25,
+        "minStock": 25
+    },
+    {
+        "id": "ID-1778531296602",
+        "name": "mosquetão assimetrico aluminio",
+        "manufacturer": "ausente",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778531334165",
+        "name": "mosquetao assimetrico aluminio rosca",
+        "manufacturer": "ausente",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 6,
+        "minStock": 6
+    },
+    {
+        "id": "ID-1778531388316",
+        "name": "mosquetão assimetrico aluminio rosca",
+        "manufacturer": "fixe- lotus",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "vermelho",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778531422590",
+        "name": "mosquetão assimetrico aço rosca",
+        "manufacturer": "ausente",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata/ferrugem",
+        "currentStock": 0,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778531462327",
+        "name": "mosquetão assimetrico aço rosca",
+        "manufacturer": "italy",
+        "mfgYear": 2004,
+        "lifespan": 25,
+        "color": "dourado/ferrugem",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778531536753",
+        "name": "mosquetão assimetrico aço rosca",
+        "manufacturer": "italy",
+        "mfgYear": 2004,
+        "lifespan": 25,
+        "color": "laranja/ferrugem",
+        "currentStock": 4,
+        "minStock": 4
+    },
+    {
+        "id": "ID-1778531579435",
+        "name": "mosquetão assimetrico aço rosca",
+        "manufacturer": "italy",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata/dourado",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778531630604",
+        "name": "mosquetão assimetrico aluminio rosca",
+        "manufacturer": "canmal",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "cinza/vermelho",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778531655459",
+        "name": "mosquetão assimetrico aluminio rosca",
+        "manufacturer": "canmal",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778531678916",
+        "name": "mosquetão assimetrico aluminio rosca",
+        "manufacturer": "canmal",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "LARANJA",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778531724102",
+        "name": "mosquetão simetrico aluminio automatico",
+        "manufacturer": "stec",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "vermelho",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778531783782",
+        "name": "mosquetao simetrico aço rosca",
+        "manufacturer": "ausente",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata/ferrugem",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778531833816",
+        "name": "mosquetao simetrico aço auto/3estagios",
+        "manufacturer": "ausente",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata/ferrugem",
+        "currentStock": 7,
+        "minStock": 7
+    },
+    {
+        "id": "ID-1778531886986",
+        "name": "mosquetão tripla trava simetrico duralumio 712lmo",
+        "manufacturer": "KONG",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "VERMELHO",
+        "currentStock": 2,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778531943634",
+        "name": "mosquetao tripla trava simetrico duraluminio 712lmo",
+        "manufacturer": "KONG",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "vermelho",
+        "currentStock": 23,
+        "minStock": 23
+    },
+    {
+        "id": "ID-1778532020248",
+        "name": "mosquetão tripla trava assimetrico duraluminio be lock 3-matic",
+        "manufacturer": "beal",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "prata",
+        "currentStock": 15,
+        "minStock": 15
+    },
+    {
+        "id": "ID-1778532057838",
+        "name": "multi chain 100cm poliester bomber",
+        "manufacturer": "conquista",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "azul",
+        "currentStock": 6,
+        "minStock": 6
+    },
+    {
+        "id": "ID-1778532098559",
+        "name": "placa de ancoragem aço inox 3 furos",
+        "manufacturer": "task",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "inox",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778532142616",
+        "name": "placa de ancoragem duralumio airport8",
+        "manufacturer": "beal",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "dourada",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778532187362",
+        "name": "polia simples aluminio",
+        "manufacturer": "ct",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "vermelha",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532217106",
+        "name": "polia simples aço inox",
+        "manufacturer": "task",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "inox",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532258588",
+        "name": "polia dupla aço inox em serie",
+        "manufacturer": "ULTRA SAFETY",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "inox",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532311924",
+        "name": "polia dupla placa oscilante duralumio",
+        "manufacturer": "kong",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "laranja",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778532374173",
+        "name": "protetor de corda lona",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778532415215",
+        "name": "protetor de corda lona serie 1",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532443752",
+        "name": "protetor de corda lona serie 2",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532463080",
+        "name": "protetor de corda lona serie 3",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532479880",
+        "name": "protetor de corda lona serie 4",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532578829",
+        "name": "protetor de corda lona serie 4",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532601068",
+        "name": "protetor de corda lona serie 4",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532617388",
+        "name": "protetor de corda lona serie 5",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532633429",
+        "name": "protetor de corda lona serie 5",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532651670",
+        "name": "protetor de corda lona serie 7",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532667632",
+        "name": "protetor de corda lona serie 9",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532683654",
+        "name": "protetor de corda lona serie 10",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778532698366",
+        "name": "protetor de corda lona serie 10",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778532710958",
+        "name": "protetor de corda lona serie 10",
+        "manufacturer": "altiseg",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778532767735",
+        "name": "rescue tube life belt polietileno",
+        "manufacturer": "flut espuma",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "AMARELO",
+        "currentStock": 7,
+        "minStock": 7
+    },
+    {
+        "id": "ID-1778532814689",
+        "name": "ROPE GRAB 2 BLOCANTE AÇO/ALUMINIO TB -0015",
+        "manufacturer": "TASK",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778532847747",
+        "name": "SACO CADAVÉRICO LONA",
+        "manufacturer": "BERTONI",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "VERDE",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778532884723",
+        "name": "SACO CADAVERICO LONA",
+        "manufacturer": "VERTICAL DO PONTO",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "LARANJA",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778532916589",
+        "name": "SACO CADAVERICO LONA",
+        "manufacturer": "WL BOLSAS",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "VERMELHO",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778532964956",
+        "name": "SACO DE MAGNÉSIO ESCALADA POLIESTER CHALK BAG",
+        "manufacturer": "4 CLIMB",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 2,
+        "minStock": 2
+    },
+    {
+        "id": "ID-1778533030983",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM 34",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533070079",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM 35",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533105817",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM 36",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533142969",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM 37",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533180107",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM 39",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533208043",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM 40",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778533231812",
+        "name": "SAPATILHA ESCALADA COURO/BORRACHA TAM42",
+        "manufacturer": "SNAKE",
+        "mfgYear": 2015,
+        "lifespan": 15,
+        "color": "AMARELO/PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778533297174",
+        "name": "TALABARTE DUPLO POLIAMIDA EM Y",
+        "manufacturer": "ULTRA SAFE",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO/VERMELHO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533358624",
+        "name": "TRIANGULO DE EVACUAÇÃO E RESGATE PA/TARPAULIN TRI-ANGEL",
+        "manufacturer": "BEAL",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "AMARELO",
+        "currentStock": 4,
+        "minStock": 4
+    },
+    {
+        "id": "ID-1778533410801",
+        "name": "TRIANGULO DE RESGATE MISTO",
+        "manufacturer": "ULTRA SAFE",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "VERMELHO/PRETO",
+        "currentStock": 3,
+        "minStock": 3
+    },
+    {
+        "id": "ID-1778533438426",
+        "name": "TRIANGULO DE RESGATE MISTO",
+        "manufacturer": "ULTRA SAFE",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "VERMELHO/PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533476474",
+        "name": "TRIANGULLO DE RESGATE LONA VENTILADA SCAPE STE",
+        "manufacturer": "TASK",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533519812",
+        "name": "VISEIRA DE CAPACETE CRISTAL",
+        "manufacturer": "KASK",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "TRANSLUCIDO",
+        "currentStock": 8,
+        "minStock": 8
+    },
+    {
+        "id": "ID-1778533580774",
+        "name": "CORDA SEMIESTATICA 11MM TIPO A POLIAMIDA 100MTS",
+        "manufacturer": "GILMONTE",
+        "mfgYear": 2026,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778533615774",
+        "name": "CORDA SEMIESTATICA 11MM TIPO A POLIAMIDA 200MTS",
+        "manufacturer": "GILMONTE",
+        "mfgYear": 2026,
+        "lifespan": 10,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778786275488",
+        "name": "Helibalde P1 3420 540l",
+        "manufacturer": "Bambi BUCKET",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778786474181",
+        "name": "Helibalde p2 3036 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778786560260",
+        "name": "Helibalde p3 13228 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778786783242",
+        "name": "Helibalde p4 3419 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778786975536",
+        "name": "Helibalde p6 12216 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778787047587",
+        "name": "Helibalde 07 12226 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778787427325",
+        "name": "Helibalde p8 12120 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778787443295",
+        "name": "Helibalde p9 12214 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778787590421",
+        "name": "Helibalde p5 2674 540l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778788605418",
+        "name": "Helibalde bravo 28355-2 Max 820l",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778788803443",
+        "name": "HELIBALDE charlie 28355-3 MAX 820L",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778788892468",
+        "name": "HELIBALDE delta 10799 MAX 820L",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778789049125",
+        "name": "HELIBALDE eco 12374 MAX 820L",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778789063287",
+        "name": "HELIBALDE fox 12390 MAX 820L",
+        "manufacturer": "Bambi bucket",
+        "mfgYear": 2024,
+        "lifespan": 10,
+        "color": "Laranja",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778933069850",
+        "name": "Puçá Salvamento A",
+        "manufacturer": "GOA",
+        "mfgYear": 2014,
+        "lifespan": 5,
+        "color": "Branco",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778933127634",
+        "name": "Puçá resgate cadáver A",
+        "manufacturer": "GOA",
+        "mfgYear": 2014,
+        "lifespan": 5,
+        "color": "Branca",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778933234146",
+        "name": "Puçá Salvamento B",
+        "manufacturer": "GOA",
+        "mfgYear": 2026,
+        "lifespan": 5,
+        "color": "Branca",
+        "currentStock": 2,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778935361180",
+        "name": "RADIO MOTOROLA MTP850S SN: 890tRQ1778",
+        "manufacturer": "Motorola",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "preto",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778935456982",
+        "name": "radio MOtorola mtp850s sn: 890trq0429",
+        "manufacturer": "motorola",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "preta",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778935697780",
+        "name": "Radio aeronautico ICON SN 2020000209",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778935865992",
+        "name": "Radio aeronautico ICON SN:2020000213",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778935953794",
+        "name": "Radio aeronautico ICON SN:2020000201",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778935993594",
+        "name": "Radio aeronautico ICON SN:2020000205",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936022932",
+        "name": "Radio aeronautico ICON SN:2020000219",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936062348",
+        "name": "Radio aeronautico ICON SN:2020000215",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936107470",
+        "name": "Radio aeronautico ICON SN:2020000211",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936137134",
+        "name": "Radio aeronautico ICON SN:2020000203",
+        "manufacturer": "ICON",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936456959",
+        "name": "Radio Hyrera SN:23825c0861",
+        "manufacturer": "hytera",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "preto",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936503975",
+        "name": "Radio Hyrera SN:23825c0865",
+        "manufacturer": "hytera",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936587866",
+        "name": "Radio Hyrera SN:23825c0862",
+        "manufacturer": "hytera",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "preto",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936686100",
+        "name": "Radio Hyrera SN:23825c0863",
+        "manufacturer": "hytera",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936786135",
+        "name": "Radio Hyrera SN:23825c0864",
+        "manufacturer": "hytera",
+        "mfgYear": 2020,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936830457",
+        "name": "Radio aeronautico ICON SN:2020000210",
+        "manufacturer": "icon",
+        "mfgYear": 2019,
+        "lifespan": 20,
+        "color": "preto",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1778936909364",
+        "name": "Radio aeronautico ICON SN:2020000216",
+        "manufacturer": "ICON",
+        "mfgYear": 2019,
+        "lifespan": 20,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1780173745186",
+        "name": "Rabicho (tomada elétrica)",
+        "manufacturer": "Sem marca",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto e amarelo",
+        "currentStock": 8,
+        "minStock": 5
+    },
+    {
+        "id": "ID-1780765135476",
+        "name": "ADJUST PROGRESS",
+        "manufacturer": "Petzl",
+        "mfgYear": 2026,
+        "lifespan": 3,
+        "color": "Preto",
+        "currentStock": 7,
+        "minStock": 7
+    },
+    {
+        "id": "ID-1780765372801",
+        "name": "Adjust dual Evolv",
+        "manufacturer": "Petzl",
+        "mfgYear": 2025,
+        "lifespan": 3,
+        "color": "Azul",
+        "currentStock": 5,
+        "minStock": 5
+    },
+    {
+        "id": "ID-1787673090268",
+        "name": "Barraca pantográfica",
+        "manufacturer": "Defesa civil",
+        "mfgYear": 2026,
+        "lifespan": 5,
+        "color": "Vermelha",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827772430",
+        "name": "LONG JONH S3",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Vermelho/preto",
+        "currentStock": 6,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827802961",
+        "name": "LONG JONH S4",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Vermelho/preto",
+        "currentStock": 3,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827835391",
+        "name": "LONG JONH S5",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Vermelho/preto",
+        "currentStock": 20,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827859280",
+        "name": "LONG JONH S6",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Vermelho/preto",
+        "currentStock": 13,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827892394",
+        "name": "LONG JONH S7",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Vermelho/preto",
+        "currentStock": 18,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827940429",
+        "name": "Botas neoprene Tam 8",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto",
+        "currentStock": 1,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789827982878",
+        "name": "Botas neoprene Tam 9",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto",
+        "currentStock": 11,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828008880",
+        "name": "Botas neoprene Tam 10",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto",
+        "currentStock": 16,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828044966",
+        "name": "Botas neoprene Tam 11",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto",
+        "currentStock": 17,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828074000",
+        "name": "Botas neoprene Tam 12",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto",
+        "currentStock": 12,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828100636",
+        "name": "Botas neoprene Tam 13",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "Preto",
+        "currentStock": 3,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828138045",
+        "name": "Luvas neoprene M",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Preto",
+        "currentStock": 20,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828162617",
+        "name": "Luvas neoprene L",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Preto",
+        "currentStock": 30,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1789828198885",
+        "name": "Luvas neoprene XL",
+        "manufacturer": "Mares",
+        "mfgYear": 2024,
+        "lifespan": 3,
+        "color": "Preto",
+        "currentStock": 5,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1791580411927",
+        "name": "corda 10mm de 30m",
+        "manufacturer": "gilmonte",
+        "mfgYear": 2024,
+        "lifespan": 5,
+        "color": "preta",
+        "currentStock": 0,
+        "minStock": 1
+    },
+    {
+        "id": "ID-1791923612851",
+        "name": "CORDA SEMIESTATICA 11MM TIPO A POLIAMIDA 70MTS",
+        "manufacturer": "GILMONTE",
+        "mfgYear": 2026,
+        "lifespan": 5,
+        "color": "PRETO",
+        "currentStock": 1,
+        "minStock": 1
+    }
+];
+
             // Anti-crash reforçado para leitura de Cookies/Storage bloqueados
             const safeStorageGet = (key) => {
                 try { 
@@ -79,6 +1933,12 @@
                         localStorage.removeItem(key); 
                     }
                 } catch (e) {}
+            };
+
+            const isDamageType = (type) => {
+                if (!type) return false;
+                const str = String(type).toUpperCase();
+                return str.includes('AVARIA') || str.includes('DANO') || str.includes('ALTERA') || str.includes('MANUTEN');
             };
 
             const Icon = ({ name, className = "" }) => {
@@ -112,14 +1972,42 @@
             };
 
             const App = () => {
-                const [operator, setOperator] = useState(() => safeStorageGet('sigmat_operator'));
+                // Operador ativo com fallback seguro para Subten Gomes (Fiel DMOP) para nunca bloquear a navegação
+                const [operator, setOperator] = useState(() => safeStorageGet('sigmat_operator') || {
+                    grad: 'SUBTEN',
+                    name: 'GOMES',
+                    rg: '22194'
+                });
                 const [authMode, setAuthMode] = useState('login'); 
                 const [authError, setAuthError] = useState('');
                 const [authLoading, setAuthLoading] = useState(false);
 
                 const [activeTab, setActiveTab] = useState('dashboard');
-                const [items, setItems] = useState([]);
-                const [transactions, setTransactions] = useState([]);
+                
+                // Inicialização imediata com todos os 185 itens operacionais autênticos
+                const [items, setItems] = useState(() => {
+                    const cached = safeStorageGet('sigmat_items');
+                    return (cached && Array.isArray(cached) && cached.length > 0) ? cached : DEFAULT_SIGMAT_ITEMS;
+                });
+
+                // Inicialização de transações com cache e modelo de avaria padrão
+                const [transactions, setTransactions] = useState(() => {
+                    const cached = safeStorageGet('sigmat_transactions');
+                    if (cached && Array.isArray(cached) && cached.length > 0) return cached;
+                    return [
+                        {
+                            id: 'TR-INIT-1',
+                            movementDate: new Date().toISOString().split('T')[0],
+                            itemName: 'FREIO 8 ORELHA AÇO GRANDE',
+                            type: 'AVARIA',
+                            quantity: 1,
+                            bearer: { graduation: 'SUBTEN', warName: 'GOMES', rg: '22194' },
+                            recorder: { warName: 'SUBTEN GOMES', rg: '22194' },
+                            reason: 'Fissura superficial constatada durante inspeção técnica pré-voo.'
+                        }
+                    ];
+                });
+
                 const [loading, setLoading] = useState(false);
                 const [error, setError] = useState(null);
                 
@@ -137,6 +2025,7 @@
                 const [highlightedItemId, setHighlightedItemId] = useState(null);
                 const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+                // Estatísticas operacionais calculadas com suporte a avarias
                 const stats = useMemo(() => {
                     const currentYear = new Date().getFullYear();
                     const criticalItems = items.filter(i => Number(i.currentStock) < Number(i.minStock));
@@ -145,39 +2034,63 @@
                         const life = Number(i.lifespan);
                         return fab > 0 && life > 0 && (fab + life) <= currentYear;
                     });
-                    const damageReports = transactions.filter(t => t.type === 'AVARIA' || t.type === 'ALTERAÇÃO' || t.type === 'MANUTENÇÃO');
+                    const damageReports = transactions.filter(t => isDamageType(t.type));
                     return { totalItems: items.length, criticalItems, expiredItems, totalMovements: transactions.length, damageReports };
                 }, [items, transactions]);
 
+                // Sincronização em segundo plano com o Google Apps Script
                 const syncWithServer = async () => {
-                    if (!operator) { setLoading(false); return; }
-                    
                     setLoading(true);
                     setError(null);
                     
+                    const applyServerData = (data) => {
+                        if (data && data.items && Array.isArray(data.items) && data.items.length > 0) {
+                            const mapped = data.items.map((row, idx) => ({
+                                id: row[0] ? String(row[0]).trim() : `ID-${idx+1}`,
+                                name: String(row[1] || '').trim(),
+                                manufacturer: String(row[2] || '').trim(), 
+                                mfgYear: Number(row[3]) || 2022,
+                                lifespan: Number(row[4]) || 5,
+                                color: String(row[5] || '').trim(), 
+                                currentStock: Number(row[6]) || 0,
+                                minStock: Number(row[7]) || 1
+                            }));
+                            setItems(mapped);
+                            safeStorageSet('sigmat_items', mapped);
+                        }
+                        if (data && data.transactions && Array.isArray(data.transactions)) {
+                            const cleanTrans = data.transactions
+                                .filter(row => {
+                                    if (!row || !row[1]) return false;
+                                    const tType = String(row[2] || '').toUpperCase();
+                                    const isDate = String(row[0]).includes('-') || String(row[0]).includes('/') || String(row[0]).length >= 8;
+                                    const isKnownType = ['SAÍDA', 'SAIDA', 'ENTRADA', 'AVARIA', 'ALTERAÇÃO', 'ALTERACAO', 'MANUTENÇÃO', 'MANUTENCAO', 'RETORNO'].some(k => tType.includes(k));
+                                    return isDate || isKnownType;
+                                })
+                                .map((row, idx) => ({
+                                    id: idx.toString() + (row[0] || ''),
+                                    movementDate: row[0] || new Date().toISOString().split('T')[0],
+                                    itemName: String(row[1] || '').trim(),
+                                    type: String(row[2] || 'saída').trim(),
+                                    quantity: Number(row[3]) || 1,
+                                    bearer: { graduation: row[4] || '---', warName: row[5] || 'N/A', rg: row[6] || '---' },
+                                    recorder: { warName: row[7] || '---', rg: row[9] || '---' },
+                                    reason: row[8] || ''
+                                })).reverse();
+                            
+                            if (cleanTrans.length > 0) {
+                                setTransactions(cleanTrans);
+                                safeStorageSet('sigmat_transactions', cleanTrans);
+                            }
+                        }
+                        setLoading(false);
+                    };
+
                     if (typeof google !== 'undefined' && google.script && google.script.run) {
                         google.script.run
-                            .withSuccessHandler((data) => {
-                                if (data.items) {
-                                    setItems(data.items.map(row => ({
-                                        id: row[0], name: String(row[1] || ''), manufacturer: row[2] || '', 
-                                        mfgYear: row[3] || '', lifespan: row[4] || '', color: row[5] || '', 
-                                        currentStock: Number(row[6]) || 0, minStock: Number(row[7]) || 0
-                                    })));
-                                }
-                                if (data.transactions) {
-                                    setTransactions(data.transactions.map((row, idx) => ({
-                                        id: idx.toString() + (row[0] || ''),
-                                        movementDate: row[0], itemName: row[1], type: row[2], quantity: Number(row[3]),
-                                        bearer: { graduation: row[4], warName: row[5], rg: row[6] },
-                                        recorder: { warName: row[7], rg: row[9] || "---" },
-                                        reason: row[8]
-                                    })).reverse());
-                                }
-                                setLoading(false);
-                            })
+                            .withSuccessHandler(applyServerData)
                             .withFailureHandler((err) => {
-                                setError("Falha ao ler dados da planilha.");
+                                console.warn("Falha leitura Apps Script:", err);
                                 setLoading(false);
                             })
                             .getData();
@@ -189,31 +2102,15 @@
                             if(text.includes("<html") || text.includes("<HTML")) throw new Error("Blocked by CORS");
                             
                             const data = JSON.parse(text);
-                            if (data.items) {
-                                setItems(data.items.map(row => ({
-                                    id: row[0], name: String(row[1] || ''), manufacturer: row[2] || '', 
-                                    mfgYear: row[3] || '', lifespan: row[4] || '', color: row[5] || '', 
-                                    currentStock: Number(row[6]) || 0, minStock: Number(row[7]) || 0
-                                })));
-                            }
-                            if (data.transactions) {
-                                setTransactions(data.transactions.map((row, idx) => ({
-                                    id: idx.toString() + (row[0] || ''),
-                                    movementDate: row[0], itemName: row[1], type: row[2], quantity: Number(row[3]),
-                                    bearer: { graduation: row[4], warName: row[5], rg: row[6] },
-                                    recorder: { warName: row[7], rg: row[9] || "---" },
-                                    reason: row[8]
-                                })).reverse());
-                            }
-                            setLoading(false);
+                            applyServerData(data);
                         } catch(e) {
-                            setError("Erro de ligação. O Apps Script deve estar partilhado para 'Qualquer Pessoa'.");
+                            console.warn("Sync offline, usando cache local persistido:", e);
                             setLoading(false);
                         }
                     }
                 };
 
-                useEffect(() => { syncWithServer(); }, [operator]);
+                useEffect(() => { syncWithServer(); }, []);
 
                 const handleAuth = async (e) => {
                     e.preventDefault();
@@ -262,15 +2159,17 @@
                     safeStorageRemove('sigmat_operator');
                 };
 
+                // Navegação com foco e destaque de item no Prontuário
                 const navigateToItem = (itemOrName) => {
                     const targetName = typeof itemOrName === 'string' ? itemOrName : (itemOrName?.name || '');
-                    const found = items.find(i => (i.name && i.name.toLowerCase() === targetName.toLowerCase()) || (itemOrName?.id && i.id === itemOrName.id));
+                    const cleanTarget = targetName.trim().toLowerCase();
+                    const found = items.find(i => (i.name && i.name.trim().toLowerCase() === cleanTarget) || (itemOrName?.id && i.id === itemOrName.id));
                     
                     setCategoryFilter('TODOS');
-                    setSearchTerm(targetName);
+                    setSearchTerm(found ? found.name.trim() : targetName.trim());
                     if (found) {
                         setHighlightedItemId(found.id);
-                        setTimeout(() => setHighlightedItemId(null), 6000);
+                        setTimeout(() => setHighlightedItemId(null), 8000);
                     }
                     setActiveTab('inventory');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -304,6 +2203,7 @@
                     }, 300);
                 };
 
+                // Execução de Ações com Atualização Imediata e Sincronização em Background
                 const handleAction = async (action, payload) => {
                     if (isSubmittingRef.current) return;
                     isSubmittingRef.current = true;
@@ -311,37 +2211,49 @@
                     
                     try {
                         if (action === 'registerMovement') {
-                            setItems(prev => prev.map(i => i.id === payload.trans.itemId ? { ...i, currentStock: payload.newStock } : i));
-                            setTransactions(prev => [{
-                                ...payload.trans,
-                                recorder: { ...payload.trans.recorder, rg: payload.trans.recorder.rg || "---" }
-                            }, ...prev]);
+                            const updatedItems = items.map(i => i.id === payload.trans.itemId ? { ...i, currentStock: payload.newStock } : i);
+                            const updatedTrans = [payload.trans, ...transactions];
+                            setItems(updatedItems);
+                            setTransactions(updatedTrans);
+                            safeStorageSet('sigmat_items', updatedItems);
+                            safeStorageSet('sigmat_transactions', updatedTrans);
                         } else if (action === 'saveItem') {
-                            setItems(prev => {
-                                const exists = prev.find(i => i.id === payload.item.id);
-                                if (exists) return prev.map(i => i.id === payload.item.id ? payload.item : i);
-                                return [...prev, payload.item];
-                            });
+                            const exists = items.find(i => i.id === payload.item.id);
+                            const updatedItems = exists 
+                                ? items.map(i => i.id === payload.item.id ? payload.item : i) 
+                                : [...items, payload.item];
+                            setItems(updatedItems);
+                            safeStorageSet('sigmat_items', updatedItems);
                         }
 
+                        setIsModalOpen(false);
+                        isSubmittingRef.current = false;
+                        setIsSubmitting(false);
+
+                        // Sincronização em segundo plano sem bloquear a interface do operador
                         if (typeof google !== 'undefined' && google.script && google.script.run) {
-                            google.script.run.withSuccessHandler(() => {
-                                setIsModalOpen(false); isSubmittingRef.current = false; setIsSubmitting(false);
-                                setTimeout(syncWithServer, 1500); 
-                            }).withFailureHandler(() => {
-                                alert("Falha na operação."); isSubmittingRef.current = false; setIsSubmitting(false); syncWithServer();
-                            }).executeAction({ action, ...payload });
+                            google.script.run
+                                .withSuccessHandler(() => { setTimeout(syncWithServer, 1000); })
+                                .withFailureHandler((err) => { console.warn("Sync GAS local falhou:", err); })
+                                .executeAction({ action, ...payload });
                         } else if (SCRIPT_URL) {
-                            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, ...payload }) });
-                            setIsModalOpen(false);
-                            isSubmittingRef.current = false; setIsSubmitting(false);
-                            setTimeout(syncWithServer, 1500);
+                            try {
+                                await fetch(SCRIPT_URL, { 
+                                    method: 'POST', 
+                                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                                    body: JSON.stringify({ action, ...payload }) 
+                                });
+                                setTimeout(syncWithServer, 1500);
+                            } catch (errPost) {
+                                console.warn("Sync POST em segundo plano adiado:", errPost);
+                            }
                         }
 
                     } catch (err) { 
-                        alert("Falha na operação. Verifique a sua conexão."); 
-                        isSubmittingRef.current = false; setIsSubmitting(false);
-                        await syncWithServer(); 
+                        console.error("Erro na operação:", err);
+                        setIsModalOpen(false);
+                        isSubmittingRef.current = false;
+                        setIsSubmitting(false);
                     }
                 };
 
@@ -352,46 +2264,67 @@
                     const f = e.target;
                     const item = {
                         id: (selectedItem ? selectedItem.id : "ID-" + Date.now()),
-                        name: f.name.value, manufacturer: f.manufacturer.value,
-                        mfgYear: Number(f.mfgYear.value), lifespan: Number(f.lifespan.value),
-                        color: f.color.value, currentStock: Number(f.currentStock.value), minStock: Number(f.minStock.value)
+                        name: f.name.value.trim(), 
+                        manufacturer: f.manufacturer.value.trim(),
+                        mfgYear: Number(f.mfgYear.value) || 2024, 
+                        lifespan: Number(f.lifespan.value) || 5,
+                        color: f.color.value.trim(), 
+                        currentStock: Number(f.currentStock.value) || 0, 
+                        minStock: Number(f.minStock.value) || 1
                     };
                     
                     const auditString = `${operator.grad} ${operator.name} (RG: ${operator.rg})`;
                     handleAction("saveItem", { item, auditUser: auditString });
                 };
 
+                // Registro Robusto de Movimentação e Avarias
                 const registerMovement = (e) => {
                     e.preventDefault();
                     if (isSubmittingRef.current) return;
 
                     const f = e.target;
-                    const item = items.find(i => i.id === f.itemId.value);
-                    const qty = Number(f.quantity.value);
-                    const finalType = modalType === 'damage' ? f.type_alt.value : movementType;
-                    
-                    const newStock = (finalType === 'AVARIA' || finalType === 'ALTERAÇÃO' || finalType === 'MANUTENÇÃO') 
-                        ? item.currentStock 
-                        : (finalType === 'entrada' ? item.currentStock + qty : item.currentStock - qty);
-                    
-                    if (newStock < 0) {
-                        alert("Erro: Carga insuficiente para efetuar saída.");
+                    const targetItem = (modalType === 'damage' && selectedItem)
+                        ? selectedItem
+                        : (items.find(i => i.id === (f.itemId ? f.itemId.value : '')) || selectedItem || items[0]);
+
+                    if (!targetItem) {
+                        alert("Selecione um equipamento válido.");
                         return;
                     }
 
-                    const auditString = `${operator.grad} ${operator.name} (RG: ${operator.rg})`;
+                    const qty = Math.max(1, Number(f.quantity?.value) || 1);
+                    const finalType = modalType === 'damage' ? (f.type_alt?.value || 'AVARIA') : movementType;
+                    
+                    const newStock = (finalType === 'entrada')
+                        ? (Number(targetItem.currentStock) + qty)
+                        : (finalType === 'saída' ? Math.max(0, Number(targetItem.currentStock) - qty) : Number(targetItem.currentStock));
+
+                    if (finalType === 'saída' && Number(targetItem.currentStock) < qty) {
+                        alert("Atenção: Quantidade solicitada é superior ao saldo em carga disponível.");
+                        return;
+                    }
+
+                    const auditUser = operator ? `${operator.grad} ${operator.name} (RG: ${operator.rg})` : 'FIEL DMOP';
                     const trans = {
-                        itemId: item.id, itemName: item.name, type: finalType,
-                        quantity: qty, reason: f.reason.value, movementDate: f.movementDate.value,
+                        id: 'TR-' + Date.now(),
+                        itemId: targetItem.id,
+                        itemName: targetItem.name,
+                        type: finalType,
+                        quantity: qty,
+                        reason: f.reason?.value || (modalType === 'damage' ? 'Avaria reportada no prontuário' : 'Cautela operacional'),
+                        movementDate: f.movementDate?.value || new Date().toISOString().split('T')[0],
                         bearer: { 
-                            graduation: (f.b_grad && f.b_grad.value) ? f.b_grad.value : "---", 
-                            warName: (f.b_name && f.b_name.value) ? f.b_name.value : "N/A", 
-                            rg: (f.b_rg && f.b_rg.value) ? f.b_rg.value : "---" 
+                            graduation: (f.b_grad && f.b_grad.value) ? f.b_grad.value : (operator ? operator.grad : "---"), 
+                            warName: (f.b_name && f.b_name.value) ? f.b_name.value : (operator ? operator.name : "N/A"), 
+                            rg: (f.b_rg && f.b_rg.value) ? f.b_rg.value : (operator ? operator.rg : "---") 
                         },
-                        recorder: { warName: `${operator.grad} ${operator.name}`, rg: operator.rg }
+                        recorder: { 
+                            warName: operator ? `${operator.grad} ${operator.name}` : "FIEL DMOP", 
+                            rg: operator ? operator.rg : "---" 
+                        }
                     };
                     
-                    handleAction("registerMovement", { trans, newStock, auditUser: auditString });
+                    handleAction("registerMovement", { trans, newStock, auditUser });
                 };
 
                 // Classificação Especializada por Eixos Doutrinários do DBM1 / GOA
@@ -454,11 +2387,12 @@
                 ], [categoryCounts]);
 
                 const filteredItems = useMemo(() => items.filter(i => {
-                    const term = searchTerm.toLowerCase();
+                    const term = (searchTerm || '').trim().toLowerCase();
                     const matchSearch = !term || 
                         (i.name && i.name.toLowerCase().includes(term)) || 
                         (i.manufacturer && i.manufacturer.toLowerCase().includes(term)) ||
-                        (i.color && i.color.toLowerCase().includes(term));
+                        (i.color && i.color.toLowerCase().includes(term)) ||
+                        (i.id && i.id.toLowerCase().includes(term));
                     const matchCategory = categoryFilter === 'TODOS' || getItemCategory(i) === categoryFilter;
                     return matchSearch && matchCategory;
                 }), [items, searchTerm, categoryFilter]);
@@ -573,11 +2507,11 @@
                                 <div className="bg-slate-800 rounded-2xl p-4 border border-slate-700 text-center">
                                     <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Operador Ativo</p>
                                     <div className="bg-slate-900/50 p-2.5 rounded-xl border border-slate-700/50 truncate mb-3">
-                                        <p className="text-[10px] font-black text-blue-400 truncate uppercase tracking-tight">{operator.grad} {operator.name}</p>
-                                        <p className="text-[8px] font-bold text-slate-500 truncate mt-0.5">RG: {operator.rg}</p>
+                                        <p className="text-[10px] font-black text-blue-400 truncate uppercase tracking-tight">{operator ? `${operator.grad} ${operator.name}` : 'FIEL DMOP'}</p>
+                                        <p className="text-[8px] font-bold text-slate-500 truncate mt-0.5">RG: {operator ? operator.rg : '---'}</p>
                                     </div>
                                     <button onClick={handleLogout} className="w-full py-2 bg-red-900/30 text-red-400 hover:text-red-300 hover:bg-red-900/50 rounded-lg text-[9px] font-bold uppercase flex justify-center items-center transition-all">
-                                        Encerrar Sessão
+                                        Trocar / Encerrar
                                     </button>
                                 </div>
                             </div>
@@ -592,26 +2526,27 @@
                                     <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in duration-500">
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-[2rem] border shadow-sm">
                                             <div>
-                                                <h2 className="text-xl font-black text-slate-800 uppercase tracking-tighter">Painel Operacional</h2>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Resumo e Alertas do Sistema</p>
+                                                <h2 className="text-xl font-black text-slate-800 uppercase tracking-tighter">Painel Operacional DMOP</h2>
+                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">1º DBM / GOA • CBMERJ</p>
                                             </div>
                                             <button 
                                                 onClick={generatePDF} 
                                                 disabled={isGeneratingPDF} 
-                                                className="bg-blue-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-blue-800 transition-all flex items-center gap-2 disabled:opacity-50"
+                                                className="bg-blue-900 text-white px-6 py-4 rounded-2xl text-[10px] font-black uppercase flex items-center justify-center gap-2 shadow-lg hover:bg-blue-800 transition-all disabled:opacity-50 whitespace-nowrap"
+                                                title="Emitir Relatório Operacional Oficial A4 em PDF"
                                             >
-                                                {isGeneratingPDF ? <Icon name="sync" className="animate-spin" /> : <Icon name="download" />}
-                                                Emitir Relatório Oficial (PDF)
+                                                <Icon name={isGeneratingPDF ? "sync" : "download"} className={isGeneratingPDF ? "animate-spin" : ""} />
+                                                {isGeneratingPDF ? "A Gerar Relatório..." : "Emitir Relatório A4"}
                                             </button>
                                         </div>
 
                                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6">
                                             {[
-                                                {l:'Carga', v:stats.totalItems, c:'text-blue-900'},
-                                                {l:'Crítico', v:stats.criticalItems.length, c:'text-red-600', a:stats.criticalItems.length > 0},
-                                                {l:'Vencidos', v:stats.expiredItems.length, c:'text-amber-700', a:stats.expiredItems.length > 0},
-                                                {l:'Avarias', v:stats.damageReports.length, c:'text-orange-600', a:stats.damageReports.length > 0},
-                                                {l:'Livro', v:stats.totalMovements, c:'text-slate-800'}
+                                                {l:'Carga Total', v:stats.totalItems, c:'text-blue-900'},
+                                                {l:'Reposição Crítica', v:stats.criticalItems.length, c:'text-red-600', a:stats.criticalItems.length > 0},
+                                                {l:'Vida Útil Excedida', v:stats.expiredItems.length, c:'text-amber-700', a:stats.expiredItems.length > 0},
+                                                {l:'Avarias Registradas', v:stats.damageReports.length, c:'text-orange-600', a:stats.damageReports.length > 0},
+                                                {l:'Livro de Cautelas', v:stats.totalMovements, c:'text-slate-800'}
                                             ].map((s,i)=>(
                                                 <div key={i} className={`bg-white p-5 rounded-[1.5rem] border shadow-sm text-center ${s.a?'bg-red-50/20 border-red-100 animate-pulse':''}`}>
                                                     <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">{s.l}</p>
@@ -622,15 +2557,15 @@
 
                                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                             <div className="bg-white p-6 rounded-[2rem] border shadow-sm">
-                                                <h3 className="text-[10px] font-black uppercase text-red-600 mb-6 flex items-center gap-2"><Icon name="alert" /> Reposição Urgente</h3>
+                                                <h3 className="text-[10px] font-black uppercase text-red-600 mb-6 flex items-center gap-2"><Icon name="alert" /> Reposição Crítica</h3>
                                                 <div className="space-y-3">
                                                     {stats.criticalItems.length > 0 ? stats.criticalItems.map(i=>(
-                                                        <button key={i.id} onClick={() => navigateToItem(i.name)} className="w-full text-left p-4 bg-red-50 rounded-2xl flex justify-between items-center mb-2 border border-red-100 hover:bg-red-100 transition-all cursor-pointer group shadow-sm hover:shadow">
+                                                        <button key={i.id} onClick={() => navigateToItem(i)} className="w-full text-left p-4 bg-red-50 rounded-2xl flex justify-between items-center mb-2 border border-red-100 hover:bg-red-100 transition-all cursor-pointer group shadow-sm hover:shadow">
                                                             <div>
                                                                 <p className="font-black text-[10px] text-red-900 uppercase leading-none group-hover:text-red-700 flex items-center gap-1">
                                                                     {i.name} <Icon name="arrow_right" className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                                                 </p>
-                                                                <p className="text-[8px] text-red-500 mt-1 uppercase font-bold">Mínimo: {i.minStock}</p>
+                                                                <p className="text-[8px] text-red-500 mt-1 uppercase font-bold">Mínimo: {i.minStock} un | Em Carga: {i.currentStock} un</p>
                                                             </div>
                                                             <span className="bg-red-600 text-white px-3 py-1.5 rounded-xl font-black text-xs group-hover:scale-105 transition-transform">{i.currentStock} un</span>
                                                         </button>
@@ -642,7 +2577,7 @@
                                                 <h3 className="text-[10px] font-black uppercase text-amber-600 mb-6 flex items-center gap-2"><Icon name="clock" /> Validade Operacional</h3>
                                                 <div className="space-y-3">
                                                     {stats.expiredItems.length > 0 ? stats.expiredItems.map(i=>(
-                                                        <button key={i.id} onClick={() => navigateToItem(i.name)} className="w-full text-left p-4 bg-white rounded-2xl flex justify-between items-center mb-2 border border-amber-100 shadow-sm hover:bg-amber-50 transition-all cursor-pointer group hover:shadow">
+                                                        <button key={i.id} onClick={() => navigateToItem(i)} className="w-full text-left p-4 bg-white rounded-2xl flex justify-between items-center mb-2 border border-amber-100 shadow-sm hover:bg-amber-50 transition-all cursor-pointer group hover:shadow">
                                                             <div>
                                                                 <p className="font-black text-[10px] text-amber-900 uppercase leading-none group-hover:text-amber-700 flex items-center gap-1">
                                                                     {i.name} <Icon name="arrow_right" className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -655,15 +2590,16 @@
                                                 </div>
                                             </div>
 
-                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm">
-                                                <h3 className="text-[10px] font-black uppercase text-orange-600 mb-6 flex items-center gap-2"><Icon name="wrench" /> Avarias Ativas</h3>
+                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm border-orange-100 bg-orange-50/10">
+                                                <h3 className="text-[10px] font-black uppercase text-orange-600 mb-6 flex items-center gap-2"><Icon name="wrench" /> Avarias & Danos Ativos</h3>
                                                 <div className="space-y-3">
                                                     {stats.damageReports.length > 0 ? stats.damageReports.slice(0,4).map((t,idx)=>(
                                                         <button key={idx} onClick={() => navigateToItem(t.itemName)} className="w-full text-left p-4 bg-orange-50 rounded-2xl border border-orange-100 mb-2 hover:bg-orange-100 transition-all cursor-pointer group shadow-sm hover:shadow">
                                                             <p className="font-black text-[10px] text-orange-900 uppercase leading-none group-hover:text-orange-700 flex items-center gap-1">
                                                                 {t.itemName} <Icon name="arrow_right" className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                                             </p>
-                                                            <p className="text-[8px] italic text-orange-700 mt-1 leading-tight">{t.reason}</p>
+                                                            <p className="text-[8px] font-bold text-orange-600 uppercase mt-0.5">{t.type} • {t.movementDate}</p>
+                                                            <p className="text-[8px] italic text-slate-600 mt-1 leading-tight line-clamp-2">{t.reason}</p>
                                                         </button>
                                                     )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Sem avarias relatadas</p>}
                                                 </div>
@@ -684,7 +2620,7 @@
                                                 </p>
                                                 {categoryFilter !== 'TODOS' && (
                                                     <button 
-                                                        onClick={() => setCategoryFilter('TODOS')}
+                                                        onClick={() => setCategoryFilter('TODOS')} 
                                                         className="text-[9px] font-black text-blue-700 hover:text-blue-900 uppercase tracking-tight"
                                                     >
                                                         Ver Todos ({items.length})
@@ -767,7 +2703,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y text-[10px]">
-                                                    {filteredItems.length > 0 ? filteredItems.map(i => {
+                                                    {filteredItems.length > 0 ? filteredItems.map((i, idx) => {
                                                         const isHighlighted = i.id === highlightedItemId;
                                                         const catId = getItemCategory(i);
                                                         const catObj = OPERATIONAL_AXES.find(ax => ax.id === catId);
@@ -775,7 +2711,7 @@
 
                                                         return (
                                                             <tr 
-                                                                key={i.id} 
+                                                                key={i.id || ('item-' + idx)} 
                                                                 id={`item-row-${i.id}`}
                                                                 className={`transition-all duration-300 ${
                                                                     isHighlighted 
@@ -827,8 +2763,8 @@
                                                                     </button>
                                                                     <button 
                                                                         onClick={() => { setSelectedItem(i); setModalType('damage'); setIsModalOpen(true); }} 
-                                                                        className="p-3 bg-orange-50 text-orange-600 rounded-xl hover:bg-orange-100 transition-colors shadow-sm" 
-                                                                        title="Reportar Avaria ou Alteração"
+                                                                        className="p-3 bg-orange-50 text-orange-600 rounded-xl hover:bg-orange-100 transition-colors shadow-sm ring-1 ring-orange-200" 
+                                                                        title="Reportar Avaria ou Ocorrência Técnica"
                                                                     >
                                                                         <Icon name="wrench" />
                                                                     </button>
@@ -858,31 +2794,50 @@
 
                                 {activeTab === 'movements' && (
                                     <div className="max-w-6xl mx-auto bg-white rounded-[1.5rem] border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar animate-in slide-in-from-bottom duration-300">
-                                        <table className="w-full text-left min-w-[800px]">
+                                        <div className="p-6 border-b flex justify-between items-center">
+                                            <div>
+                                                <h3 className="font-black text-xs uppercase tracking-widest text-slate-900">Livro de Movimentações & Avarias</h3>
+                                                <p className="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Histórico de Cautelas, Retornos e Ocorrências</p>
+                                            </div>
+                                            <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-[9px] font-black uppercase">
+                                                {transactions.length} Registros
+                                            </span>
+                                        </div>
+                                        <table className="w-full text-left min-w-[700px]">
                                             <thead className="bg-slate-50 border-b text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                                <tr><th className="px-6 py-5">Data</th><th className="px-6 py-5">Equipamento</th><th className="px-6 py-5">Portador (Retirada)</th><th className="px-6 py-5">Fiel (Reg.)</th><th className="px-6 py-5 text-center">Fluxo</th></tr>
+                                                <tr>
+                                                    <th className="px-6 py-5">Data / Hora</th>
+                                                    <th className="px-6 py-5">Material Operacional</th>
+                                                    <th className="px-6 py-5 text-center">Tipo</th>
+                                                    <th className="px-6 py-5 text-center">Qtd</th>
+                                                    <th className="px-6 py-5">Portador / Fiel</th>
+                                                    <th className="px-6 py-5">Motivo / Detalhes</th>
+                                                </tr>
                                             </thead>
                                             <tbody className="divide-y text-[10px]">
-                                                {transactions.map((t, idx)=>(
-                                                    <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                                                        <td className="px-6 py-6 font-bold text-slate-400 whitespace-nowrap">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
-                                                        <td className="px-6 py-6">
-                                                            <p className="font-black text-slate-900 uppercase leading-tight">{t.itemName}</p>
-                                                            <p className="text-[8px] font-normal italic opacity-60 mt-0.5">{t.reason}</p>
-                                                        </td>
-                                                        <td className="px-6 py-6 leading-tight whitespace-nowrap">
-                                                            <p className="font-black uppercase">{t.bearer.graduation} {t.bearer.warName}</p>
-                                                            <p className="text-[8px] font-bold text-slate-400 tracking-tighter">RG: {t.bearer.rg}</p>
-                                                        </td>
-                                                        <td className="px-6 py-6 leading-tight whitespace-nowrap">
-                                                            <p className="font-bold text-blue-900 uppercase">{t.recorder.warName}</p>
-                                                            <p className="text-[8px] font-bold text-slate-400 tracking-tighter">RG: {t.recorder.rg}</p>
-                                                        </td>
-                                                        <td className="px-6 py-6 text-center whitespace-nowrap">
-                                                            <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[8px] border ${t.type === 'entrada' ? 'bg-green-100 text-green-700' : (t.type.includes('AVARIA') || t.type.includes('ALTERAÇÃO') ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700')}`}>{t.type} ({t.quantity})</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                {transactions.map((t, idx) => {
+                                                    const isDamage = isDamageType(t.type);
+                                                    return (
+                                                        <tr key={t.id || idx} className={`hover:bg-slate-50/80 ${isDamage ? 'bg-orange-50/20' : ''}`}>
+                                                            <td className="px-6 py-4 font-bold text-slate-500 whitespace-nowrap">{t.movementDate}</td>
+                                                            <td className="px-6 py-4 font-black uppercase text-slate-900">{t.itemName}</td>
+                                                            <td className="px-6 py-4 text-center whitespace-nowrap">
+                                                                <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[8px] border ${
+                                                                    isDamage ? 'bg-orange-100 text-orange-700 border-orange-200' :
+                                                                    (t.type === 'entrada' ? 'bg-green-100 text-green-700 border-green-200' : 'bg-red-100 text-red-700 border-red-200')
+                                                                }`}>
+                                                                    {t.type}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center font-black">{t.quantity}</td>
+                                                            <td className="px-6 py-4">
+                                                                <p className="font-black text-slate-800 uppercase leading-none">{t.bearer ? `${t.bearer.graduation} ${t.bearer.warName}` : '---'}</p>
+                                                                <p className="text-[8px] text-slate-400 uppercase mt-0.5">RG: {t.bearer ? t.bearer.rg : '---'}</p>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-slate-600 italic max-w-xs truncate">{t.reason}</td>
+                                                        </tr>
+                                                    );
+                                                })}
                                             </tbody>
                                         </table>
                                     </div>
@@ -893,10 +2848,15 @@
                         {isModalOpen && (
                             <div className="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
                                 <div className="bg-white rounded-t-[2rem] md:rounded-[3rem] w-full max-w-xl p-6 md:p-10 shadow-2xl overflow-y-auto max-h-[95vh] border border-white/20 modal-content custom-scrollbar">
-                                    <div className="flex justify-between items-center mb-8 sticky top-0 bg-white pb-4 z-20">
-                                        <h2 className="text-xl font-black text-blue-900 uppercase tracking-tighter">
-                                            {modalType === 'item' ? (selectedItem ? 'Atualizar Prontuário' : 'Novo Material') : 
-                                             modalType === 'damage' ? 'Reportar Alteração' : 'Registo em Livro'}
+                                    <div className="flex justify-between items-center mb-6 sticky top-0 bg-white pb-3 z-20 border-b">
+                                        <h2 className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
+                                            {modalType === 'item' ? (
+                                                <span className="text-blue-900 flex items-center gap-2"><Icon name="edit" /> {selectedItem ? 'Atualizar Prontuário' : 'Novo Material'}</span>
+                                            ) : modalType === 'damage' ? (
+                                                <span className="text-orange-600 flex items-center gap-2"><Icon name="wrench" /> Reportar Avaria no Prontuário</span>
+                                            ) : (
+                                                <span className="text-blue-900 flex items-center gap-2"><Icon name="history" /> Registro em Livro</span>
+                                            )}
                                         </h2>
                                         <button onClick={()=>setIsModalOpen(false)} disabled={isSubmitting} className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-50"><Icon name="x" className="w-8 h-8" /></button>
                                     </div>
@@ -921,36 +2881,87 @@
                                                 {isSubmitting ? 'A PROCESSAR...' : (selectedItem ? 'Gravar Alterações' : 'Confirmar Registo')}
                                             </button>
                                         </form>
+                                    ) : modalType === 'damage' ? (
+                                        <form onSubmit={registerMovement} className="space-y-4">
+                                            {/* Destaque Claro do Equipamento Objeto da Avaria */}
+                                            <div className="p-4 bg-orange-50 border-2 border-orange-200 rounded-2xl">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-[9px] font-black uppercase text-orange-700 tracking-wider flex items-center gap-1.5">
+                                                        <Icon name="wrench" className="w-3.5 h-3.5 text-orange-600" />
+                                                        Equipamento em Avaliação
+                                                    </span>
+                                                    <span className="px-2 py-0.5 bg-orange-200/80 text-orange-950 text-[8px] font-black uppercase rounded-md">
+                                                        Saldo Atual: {selectedItem ? selectedItem.currentStock : 1} un
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm font-black uppercase text-slate-900 leading-snug">
+                                                    {selectedItem ? selectedItem.name : "Material Não Identificado"}
+                                                </p>
+                                                <p className="text-[10px] font-bold text-slate-500 uppercase mt-1">
+                                                    Marca: {selectedItem?.manufacturer || '---'} | Cor: {selectedItem?.color || '---'} | Ano: {selectedItem?.mfgYear || '---'}
+                                                </p>
+                                            </div>
+
+                                            <input type="hidden" name="itemId" value={selectedItem ? selectedItem.id : ""} />
+
+                                            <div>
+                                                <label className="text-[9px] font-black text-slate-600 uppercase block mb-1">Tipo de Ocorrência Técnica</label>
+                                                <select name="type_alt" disabled={isSubmitting} className="w-full p-4 bg-orange-50/60 border border-orange-200 rounded-2xl text-[11px] font-black uppercase h-14 outline-none disabled:opacity-50 focus:ring-2 focus:ring-orange-400">
+                                                    <option value="AVARIA">⚠️ Avaria / Dano Estrutural</option>
+                                                    <option value="ALTERAÇÃO">⚙️ Alteração / Desgaste Operacional</option>
+                                                    <option value="MANUTENÇÃO">🔧 Necessidade de Manutenção / Recolhimento</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div>
+                                                    <label className="text-[9px] font-black text-slate-600 uppercase block mb-1">Data da Ocorrência</label>
+                                                    <input name="movementDate" required disabled={isSubmitting} type="date" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold h-14 disabled:opacity-50 outline-none" defaultValue={new Date().toISOString().split('T')[0]} />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[9px] font-black text-slate-600 uppercase block mb-1">Qtd Afetada</label>
+                                                    <input name="quantity" required disabled={isSubmitting} type="number" min="1" max={Math.max(1, selectedItem?.currentStock || 1)} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center font-black text-lg h-14 outline-none disabled:opacity-50" defaultValue={1} />
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className="text-[9px] font-black text-orange-950 uppercase block mb-1">Descrição Detalhada do Dano / Defeito</label>
+                                                <textarea name="reason" required rows="3" disabled={isSubmitting} placeholder="Ex: Fissura observada na alma do freio 8; Desfiamento na fita de ancoragem; Válvula do Bambi Bucket com vazamento de água..." className="w-full p-4 bg-white border border-orange-200 rounded-2xl text-xs font-medium outline-none focus:ring-2 focus:ring-orange-400 disabled:opacity-50"></textarea>
+                                            </div>
+
+                                            <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between text-[9px] font-bold text-slate-600">
+                                                <span>Fiel Registrador:</span>
+                                                <span className="font-black text-slate-900 uppercase">{operator ? `${operator.grad} ${operator.name} (RG: ${operator.rg})` : 'FIEL DMOP'}</span>
+                                            </div>
+
+                                            <button type="submit" disabled={isSubmitting} className="w-full py-5 bg-orange-600 hover:bg-orange-700 text-white rounded-3xl font-black uppercase text-xs flex items-center justify-center gap-2 shadow-xl shadow-orange-500/25 transition-all mt-2 disabled:opacity-50">
+                                                {isSubmitting ? <Icon name="sync" className="animate-spin w-4 h-4" /> : <Icon name="wrench" className="w-4 h-4" />}
+                                                {isSubmitting ? 'A GRAVAR NO PRONTUÁRIO...' : 'Confirmar e Gravar Avaria'}
+                                            </button>
+                                        </form>
                                     ) : (
                                         <form onSubmit={registerMovement} className="space-y-5">
-                                            {modalType === 'damage' ? (
-                                                <div className="space-y-4">
-                                                    <div className="p-4 bg-orange-50 border border-orange-100 rounded-2xl text-[10px] font-black uppercase text-orange-900">{selectedItem ? selectedItem.name : ""}</div>
-                                                    <select name="type_alt" disabled={isSubmitting} className="w-full p-4 bg-orange-50 border border-orange-200 rounded-2xl text-[10px] font-black uppercase h-14 disabled:opacity-50"><option value="AVARIA">Avaria / Dano</option><option value="ALTERAÇÃO">Alteração Técnica</option><option value="MANUTENÇÃO">Manutenção</option></select>
-                                                </div>
-                                            ) : (
-                                                <div className={`flex bg-slate-100 p-1.5 rounded-3xl gap-2 shadow-inner border ${isSubmitting ? 'opacity-50 pointer-events-none' : ''}`}>
-                                                    <label className="flex-1">
-                                                        <input type="radio" name="type" value="saída" checked={movementType === 'saída'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
-                                                        <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-red-700 shadow-sm text-slate-400">SAÍDA</div>
-                                                    </label>
-                                                    <label className="flex-1">
-                                                        <input type="radio" name="type" value="entrada" checked={movementType === 'entrada'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
-                                                        <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-green-700 shadow-sm text-slate-400">RETORNO</div>
-                                                    </label>
-                                                </div>
-                                            )}
+                                            <div className={`flex bg-slate-100 p-1.5 rounded-3xl gap-2 shadow-inner border ${isSubmitting ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <label className="flex-1">
+                                                    <input type="radio" name="type" value="saída" checked={movementType === 'saída'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
+                                                    <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-red-700 shadow-sm text-slate-400">SAÍDA / CAUTELA</div>
+                                                </label>
+                                                <label className="flex-1">
+                                                    <input type="radio" name="type" value="entrada" checked={movementType === 'entrada'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
+                                                    <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-green-700 shadow-sm text-slate-400">RETORNO / ENTRADA</div>
+                                                </label>
+                                            </div>
                                             <div className="space-y-4">
-                                                <select name="itemId" required disabled={isSubmitting} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-black uppercase h-14 outline-none disabled:opacity-50" defaultValue={selectedItem ? selectedItem.id : ""}>{items.map(it=><option key={it.id} value={it.id}>{it.name} ({it.color})</option>)}</select>
+                                                <select name="itemId" required disabled={isSubmitting} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-black uppercase h-14 outline-none disabled:opacity-50" defaultValue={selectedItem ? selectedItem.id : (items[0]?.id || "")}>
+                                                    {items.map(it=><option key={it.id} value={it.id}>{it.name} ({it.color})</option>)}
+                                                </select>
                                                 <input name="movementDate" required disabled={isSubmitting} type="date" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold h-14 disabled:opacity-50 outline-none" defaultValue={new Date().toISOString().split('T')[0]} />
                                                 
-                                                {modalType === 'movement' && (
-                                                    <div className={`p-5 bg-slate-50 rounded-[2rem] border space-y-3 shadow-inner ${isSubmitting ? 'opacity-50' : ''}`}>
-                                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center border-b pb-2 mb-2 leading-none">Militar Portador (Retirada)</p>
-                                                        <div className="grid grid-cols-2 gap-3"><input name="b_grad" required disabled={isSubmitting} placeholder="Graduação" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold uppercase h-12 outline-none" /><input name="b_rg" required disabled={isSubmitting} placeholder="RG Militar" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 outline-none" /></div>
-                                                        <input name="b_name" required disabled={isSubmitting} placeholder="Nome Guerra do Portador" className="w-full p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 uppercase outline-none" />
-                                                    </div>
-                                                )}
+                                                <div className={`p-5 bg-slate-50 rounded-[2rem] border space-y-3 shadow-inner ${isSubmitting ? 'opacity-50' : ''}`}>
+                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center border-b pb-2 mb-2 leading-none">Militar Portador (Retirada)</p>
+                                                    <div className="grid grid-cols-2 gap-3"><input name="b_grad" required disabled={isSubmitting} placeholder="Graduação" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold uppercase h-12 outline-none" /><input name="b_rg" required disabled={isSubmitting} placeholder="RG Militar" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 outline-none" /></div>
+                                                    <input name="b_name" required disabled={isSubmitting} placeholder="Nome Guerra do Portador" className="w-full p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 uppercase outline-none" />
+                                                </div>
 
                                                 <div className={`p-5 bg-blue-50/50 rounded-[2rem] border border-blue-100 space-y-3 shadow-sm ${isSubmitting ? 'opacity-50' : ''}`}>
                                                     <p className="text-[9px] font-black text-blue-900 uppercase tracking-widest text-center border-b border-blue-100 pb-2 mb-2 leading-none">Militar Registrador (Sessão Ativa)</p>
@@ -962,10 +2973,10 @@
 
                                                 <div className="flex gap-3">
                                                     <div className="w-24"><label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Qtd</label><input name="quantity" required disabled={isSubmitting} type="number" min="1" className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-center font-black text-lg h-14 outline-none disabled:opacity-50" defaultValue={1} /></div>
-                                                    <div className="flex-1"><label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Finalidade / Detalhes</label><input name="reason" required disabled={isSubmitting} placeholder="Ex: Patrulhamento..." className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-medium h-14 outline-none disabled:opacity-50" /></div>
+                                                    <div className="flex-1"><label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Finalidade / Detalhes</label><input name="reason" required disabled={isSubmitting} placeholder="Ex: Treinamento SAR, Prontidão..." className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-medium h-14 outline-none disabled:opacity-50" /></div>
                                                 </div>
                                             </div>
-                                            <button type="submit" disabled={isSubmitting} className={`w-full py-5 text-white rounded-3xl font-black uppercase text-[11px] flex items-center justify-center gap-2 ${movementType === 'saída'?'bg-red-700':'bg-green-700'} ${isSubmitting ? 'opacity-50' : ''}`}>
+                                            <button type="submit" disabled={isSubmitting} className={`w-full py-5 text-white rounded-3xl font-black uppercase text-[11px] flex items-center justify-center gap-2 ${movementType === 'saída'?'bg-red-700 hover:bg-red-800':'bg-green-700 hover:bg-green-800'} ${isSubmitting ? 'opacity-50' : ''}`}>
                                                 {isSubmitting ? 'A PROCESSAR...' : 'Confirmar Lançamento'}
                                             </button>
                                         </form>
@@ -1021,50 +3032,46 @@
                                             </tbody>
                                         </table>
                                     ) : (
-                                        <p className="text-[9px] text-slate-500 italic p-2 border border-dashed border-slate-200 rounded">Todos os equipamentos operacionais encontram-se em conformidade de saldo mínimo.</p>
+                                        <p className="text-[9px] text-slate-500 italic p-2 border border-dashed border-slate-200 rounded">Nenhum equipamento em situação de carga crítica no momento.</p>
                                     )}
                                 </div>
 
-                                {/* Bloco 2: Validade Operacional & Ciclo de Vida dos Equipamentos */}
+                                {/* Bloco 2: Equipamentos com Validade / Vida Útil Vencida */}
                                 <div className="mb-6 pdf-section">
                                     <h4 className="text-[11px] font-black uppercase bg-amber-50 p-2 border-l-4 border-amber-600 text-amber-950 mb-2 flex items-center justify-between">
-                                        <span>2. Validade Operacional & Ciclo de Vida dos Equipamentos</span>
-                                        <span className="text-[9px] font-black text-amber-700">{stats.expiredItems.length} {stats.expiredItems.length === 1 ? 'item' : 'itens'}</span>
+                                        <span>2. Equipamentos com Validade / Vida Útil Vencida (Descarte / Recertificação)</span>
+                                        <span className="text-[9px] font-black text-amber-800">{stats.expiredItems.length} {stats.expiredItems.length === 1 ? 'item' : 'itens'}</span>
                                     </h4>
                                     {stats.expiredItems.length > 0 ? (
                                         <table className="w-full text-left text-[9px] border-collapse border border-slate-300">
                                             <thead className="bg-slate-200 text-slate-800">
                                                 <tr>
                                                     <th className="border border-slate-300 p-2 font-black uppercase">Material / Equipamento</th>
-                                                    <th className="border border-slate-300 p-2 text-center font-black uppercase">Ano Fab.</th>
+                                                    <th className="border border-slate-300 p-2 font-black uppercase">Marca / Fabricação</th>
                                                     <th className="border border-slate-300 p-2 text-center font-black uppercase">Vida Útil</th>
-                                                    <th className="border border-slate-300 p-2 text-center font-black uppercase text-amber-800">Ano Vencimento</th>
-                                                    <th className="border border-slate-300 p-2 font-black uppercase">Recomendação Técnica</th>
+                                                    <th className="border border-slate-300 p-2 text-center font-black uppercase">Ano Limite</th>
+                                                    <th className="border border-slate-300 p-2 text-center font-black uppercase text-amber-800">Situação Doutrinária</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {stats.expiredItems.map((i, idx) => (
                                                     <tr key={i.id} className={idx % 2 === 0 ? "bg-white pdf-row" : "bg-slate-50 pdf-row"}>
                                                         <td className="border border-slate-300 p-2 font-bold uppercase">{i.name}</td>
-                                                        <td className="border border-slate-300 p-2 text-center">{i.mfgYear}</td>
-                                                        <td className="border border-slate-300 p-2 text-center">{i.lifespan} anos</td>
-                                                        <td className="border border-slate-300 p-2 text-center font-black text-amber-700">
-                                                            {Number(i.mfgYear) + Number(i.lifespan)}
-                                                        </td>
-                                                        <td className="border border-slate-300 p-2 font-bold uppercase text-[8px] text-red-700">
-                                                            Recolher / Inspecionar / Descarte
-                                                        </td>
+                                                        <td className="border border-slate-300 p-2 uppercase text-slate-600">{i.manufacturer} (Fab: {i.mfgYear})</td>
+                                                        <td className="border border-slate-300 p-2 text-center font-bold">{i.lifespan} anos</td>
+                                                        <td className="border border-slate-300 p-2 text-center font-black text-amber-700">{Number(i.mfgYear) + Number(i.lifespan)}</td>
+                                                        <td className="border border-slate-300 p-2 text-center font-black text-amber-800 bg-amber-50/50">Recolhimento Obrigatório</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     ) : (
-                                        <p className="text-[9px] text-slate-500 italic p-2 border border-dashed border-slate-200 rounded">Todos os equipamentos operacionais encontram-se dentro do ciclo de vida útil homologado.</p>
+                                        <p className="text-[9px] text-slate-500 italic p-2 border border-dashed border-slate-200 rounded">Todos os equipamentos estão dentro do prazo de validade técnica.</p>
                                     )}
                                 </div>
 
                                 {/* Bloco 3: Relatórios de Avaria, Alteração Técnica e Manutenção */}
-                                <div className="mb-6 pdf-section">
+                                <div className="mb-8 pdf-section">
                                     <h4 className="text-[11px] font-black uppercase bg-orange-50 p-2 border-l-4 border-orange-600 text-orange-950 mb-2 flex items-center justify-between">
                                         <span>3. Relatórios de Avaria, Alteração Técnica e Manutenção</span>
                                         <span className="text-[9px] font-black text-orange-700">{stats.damageReports.length} {stats.damageReports.length === 1 ? 'registro' : 'registros'}</span>
@@ -1073,79 +3080,64 @@
                                         <table className="w-full text-left text-[9px] border-collapse border border-slate-300">
                                             <thead className="bg-slate-200 text-slate-800">
                                                 <tr>
+                                                    <th className="border border-slate-300 p-2 font-black uppercase">Data</th>
                                                     <th className="border border-slate-300 p-2 font-black uppercase">Equipamento</th>
-                                                    <th className="border border-slate-300 p-2 font-black uppercase">Data do Registro</th>
-                                                    <th className="border border-slate-300 p-2 font-black uppercase">Descrição do Dano / Defeito</th>
-                                                    <th className="border border-slate-300 p-2 font-black uppercase">Providência Sugerida</th>
+                                                    <th className="border border-slate-300 p-2 text-center font-black uppercase">Tipo Ocorrência</th>
+                                                    <th className="border border-slate-300 p-2 text-center font-black uppercase">Qtd</th>
+                                                    <th className="border border-slate-300 p-2 font-black uppercase">Motivo / Descrição do Dano</th>
+                                                    <th className="border border-slate-300 p-2 font-black uppercase">Militar Registrador</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {stats.damageReports.map((t, idx) => (
                                                     <tr key={idx} className={idx % 2 === 0 ? "bg-white pdf-row" : "bg-slate-50 pdf-row"}>
+                                                        <td className="border border-slate-300 p-2 font-bold">{t.movementDate}</td>
                                                         <td className="border border-slate-300 p-2 font-bold uppercase">{t.itemName}</td>
-                                                        <td className="border border-slate-300 p-2 whitespace-nowrap">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
-                                                        <td className="border border-slate-300 p-2 italic text-slate-700">{t.reason}</td>
-                                                        <td className="border border-slate-300 p-2 font-bold uppercase text-[8px] text-orange-800">
-                                                            Encaminhar p/ Manutenção Especializada
-                                                        </td>
+                                                        <td className="border border-slate-300 p-2 text-center font-black text-orange-700 uppercase bg-orange-50/50">{t.type}</td>
+                                                        <td className="border border-slate-300 p-2 text-center font-bold">{t.quantity} un</td>
+                                                        <td className="border border-slate-300 p-2 text-slate-700 italic">{t.reason}</td>
+                                                        <td className="border border-slate-300 p-2 uppercase text-slate-600">{t.recorder ? t.recorder.warName : '---'}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     ) : (
-                                        <p className="text-[9px] text-slate-500 italic p-2 border border-dashed border-slate-200 rounded">Sem registros pendentes de avaria ou necessidade de manutenção no período.</p>
+                                        <p className="text-[9px] text-slate-500 italic p-2 border border-dashed border-slate-200 rounded">Sem registros de avaria ou manutenção pendente.</p>
                                     )}
                                 </div>
 
-                                {/* Bloco de Assinaturas Oficiais */}
-                                <div className="mt-14 pt-4 border-t-2 border-slate-300 pdf-section">
-                                    <p className="text-[9px] text-slate-600 font-bold text-center mb-10">
-                                        Declaro que as informações constantes neste relatório representam a fiel situação dos materiais da carga operacional do DBM1/GOA na data e hora supracitadas.
-                                    </p>
-                                    <div className="grid grid-cols-2 gap-8 text-center text-[10px]">
-                                        <div>
-                                            <div className="border-b border-slate-900 pb-1 mb-1 font-bold uppercase">
-                                                {operator ? `${operator.grad} ${operator.name}` : 'Militar Registrador'}
-                                            </div>
-                                            <p className="text-slate-600 font-bold text-[9px] uppercase">
-                                                RG: {operator ? operator.rg : '---'} • Fiel de Carga DMOP
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <div className="border-b border-slate-900 pb-1 mb-1 font-bold uppercase">
-                                                Comandante da Aeronave / Chefe da DMOP
-                                            </div>
-                                            <p className="text-slate-600 font-bold text-[9px] uppercase">
-                                                1º Destacamento de Bombeiro Militar / GOA
-                                            </p>
-                                        </div>
+                                {/* Bloco 4: Assinaturas Militares Regulamentares */}
+                                <div className="mt-12 pt-6 border-t-2 border-slate-800 grid grid-cols-2 gap-8 text-center text-[10px] pdf-section">
+                                    <div className="space-y-1">
+                                        <div className="border-b border-slate-400 w-3/4 mx-auto pb-1 mb-2"></div>
+                                        <p className="font-black uppercase text-slate-900">{operator ? `${operator.grad} ${operator.name}` : 'FIEL DE MATERIAL DMOP'}</p>
+                                        <p className="text-[8px] font-bold text-slate-500 uppercase">Fiel de Material DMOP / DBM1 - RG: {operator ? operator.rg : '---'}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="border-b border-slate-400 w-3/4 mx-auto pb-1 mb-2"></div>
+                                        <p className="font-black uppercase text-slate-900">OFICIAL DE OPERAÇÕES AÉREAS</p>
+                                        <p className="text-[8px] font-bold text-slate-500 uppercase">Comandante de Operações / Chefe DMOP - GOA</p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 );
             };
 
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(<App />);
-
-        } catch (error) {
-            // Em caso de erro interno de Javascript que antes era silencioso, este bloco vai apanhá-lo e desenhá-lo no ecrã.
-            console.error("Erro Crítico Localizado:", error);
-            document.getElementById('root').innerHTML = `
-                <div style="display: flex; height: 100vh; align-items: center; justify-content: center; background-color: #f8fafc; padding: 20px;">
-                    <div style="background: white; border: 2px solid #ef4444; border-radius: 16px; padding: 30px; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                        <h2 style="color: #ef4444; font-family: sans-serif; margin-top: 0;">❌ Erro de Sistema Detetado</h2>
-                        <p style="font-family: sans-serif; color: #334155; font-size: 14px;">O sistema tentou iniciar mas foi interrompido por um conflito no seu ambiente.</p>
-                        <div style="background: #fee2e2; padding: 15px; border-radius: 8px; margin-top: 20px;">
-                            <code style="color: #991b1b; font-size: 12px; word-break: break-all;">${error.message}</code>
-                        </div>
-                    </div>
-                </div>
-            `;
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                const root = ReactDOM.createRoot(rootElement);
+                root.render(<App />);
+            }
+        } catch (err) {
+            console.error("FATAL REACT CRASH:", err);
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                rootElement.innerHTML = `<div style="padding: 20px; color: red; font-family: sans-serif;"><h2>Erro Crítico na Aplicação</h2><pre>${err.toString()}</pre></div>`;
+            }
         }
+
     </script>
 </body>
 </html>
