@@ -165,6 +165,9 @@ function formatHeaderRow(sheet, bgColor) {
 function doGet(e) {
   try {
     var ss = getSpreadsheet();
+    // Garante automaticamente que todas as abas estejam criadas e formatadas na planilha
+    inicializarPlanilhaAeromedico();
+
     var params = e ? e.parameter : {};
     var action = params.action || "getAll";
 
