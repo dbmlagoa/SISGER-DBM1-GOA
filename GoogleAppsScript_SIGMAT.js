@@ -101,38 +101,46 @@ function executeAction(payload) {
  * (insensível a maiúsculas/minúsculas e acentuação)
  * NUNCA seleciona a aba 'users' ou 'items'!
  */
+function normSheetName(name) {
+  return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 function getMovimentacoesSheet(ss) {
   var sheets = ss.getSheets();
-  var targets = ["movimentacoes", "movimentacao", "cautelas", "cautela", "transactions", "transacoes", "registros", "livro"];
-  
-  for (var i = 0; i < sheets.length; i++) {
-    var rawName = sheets[i].getName().trim();
-    var normName = rawName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    
-    // Ignora terminantemente as abas de catálogo e de usuários
-    if (normName === "items" || normName === "itens" || normName === "users" || normName === "usuarios") {
-      continue;
-    }
-    
-    for (var j = 0; j < targets.length; j++) {
-      if (normName.indexOf(targets[j]) !== -1) {
-        return sheets[i];
-      }
+  // Prioridade absoluta: aba chamada MOVIMENTACOES (qualquer caixa/acentuação)
+  var targets = ["movimentacoes", "movimentacao", "cautelas", "transactions", "registros"];
+  for (var j = 0; j < targets.length; j++) {
+    for (var i = 0; i < sheets.length; i++) {
+      var n = normSheetName(sheets[i].getName());
+      if (n === "items" || n === "itens" || n === "users" || n === "usuarios") continue;
+      if (n === targets[j] || (j === 0 && n.indexOf("movimentac") !== -1)) return sheets[i];
     }
   }
 
-  // Se não encontrou por palavra-chave, seleciona a terceira aba existente que não seja items nem users
-  for (var k = 0; k < sheets.length; k++) {
-    var kNorm = sheets[k].getName().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    if (kNorm !== "items" && kNorm !== "itens" && kNorm !== "users" && kNorm !== "usuarios") {
-      return sheets[k];
-    }
-  }
-
-  // Fallback seguro: cria a aba oficial 'movimentações' com cabeçalhos padronizados
-  var newSheet = ss.insertSheet("movimentações");
+  // Não existe: cria a aba oficial MOVIMENTACOES (nunca reaproveita outra aba)
+  var newSheet = ss.insertSheet("MOVIMENTACOES");
   newSheet.appendRow(["Data", "Equipamento", "Tipo", "Quantidade", "Graduação Portador", "Nome Guerra Portador", "RG Portador", "Fiel Registrador", "Destino / Finalidade", "RG Registrador"]);
   return newSheet;
+}
+
+/**
+ * Grava uma linha na aba MOVIMENTACOES (cautela, retorno, avaria, alteração, cadastro)
+ */
+function appendMovementRow(ss, tipo, itemName, qty, bearer, recorderName, reason, recorderRg) {
+  var sh = getMovimentacoesSheet(ss);
+  bearer = bearer || {};
+  sh.appendRow([
+    new Date().toISOString(),
+    itemName || "",
+    tipo,
+    Number(qty) || 1,
+    bearer.graduation || "---",
+    bearer.warName || "---",
+    bearer.rg || "---",
+    recorderName || "---",
+    reason || "",
+    recorderRg || "---"
+  ]);
 }
 
 function getItemsSheet(ss) {
@@ -303,10 +311,33 @@ function saveItem(payload) {
       Number(item.minStock) || 1
     ];
 
-    if (rowIndex > 0) {
+    var isUpdate = rowIndex > 0;
+    var changes = [];
+    if (isUpdate) {
+      var old = rows[rowIndex - 2];
+      var labels = ["ID", "Descrição", "Marca", "Ano Fab.", "Vida Útil", "Cor", "Carga Atual", "Qtd Crítica"];
+      for (var c = 1; c < 8; c++) {
+        if (String(old[c]).trim() !== String(rowValues[c]).trim()) {
+          changes.push(labels[c] + ": " + old[c] + " → " + rowValues[c]);
+        }
+      }
       itemsSheet.getRange(rowIndex, 1, 1, 8).setValues([rowValues]);
     } else {
       itemsSheet.appendRow(rowValues);
+    }
+
+    // Registro obrigatório na aba MOVIMENTACOES (alteração de status / cadastro)
+    if (!isUpdate || changes.length > 0) {
+      appendMovementRow(
+        ss,
+        isUpdate ? "ALTERAÇÃO" : "CADASTRO",
+        item.name,
+        Number(item.currentStock) || 1,
+        null,
+        payload.auditUser || "FIEL DMOP",
+        isUpdate ? "Alteração no prontuário • " + changes.join("; ") : "Novo material cadastrado no prontuário",
+        ""
+      );
     }
 
     return { success: true, message: "Equipamento salvo com sucesso no SIG-MAT!" };

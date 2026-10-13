@@ -1971,129 +1971,6 @@
                 );
             };
 
-            // Base operacional autêntica de Cautelas, Destinos e Avarias do SIG-MAT (DBM1/GOA)
-            const DEFAULT_SIGMAT_TRANSACTIONS = [
-    {
-        "id": "TR-AV-2026-001",
-        "movementDate": "2026-10-13",
-        "itemName": "FREIO 8 ORELHA AÇO GRANDE",
-        "type": "AVARIA",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "CAP",
-            "warName": "PETRUS",
-            "rg": "49917"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Fissura superficial constatada na inspeção técnica pré-voo • Destino: Oficina de Manutenção DMOP"
-    },
-    {
-        "id": "TR-MOV-2026-002",
-        "movementDate": "2026-10-13",
-        "itemName": "HELIBALDE P1 3420 540L",
-        "type": "saída",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "MAJ",
-            "warName": "LIBORIO",
-            "rg": "45317"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Destino: Aeronave Águia 01 • Operação CIF (Combate a Incêndio Florestal)"
-    },
-    {
-        "id": "TR-MOV-2026-003",
-        "movementDate": "2026-10-12",
-        "itemName": "CORDA SEMIESTATICA 11MM TIPO A POLIAMIDA 100MTS",
-        "type": "saída",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "1º SGT",
-            "warName": "FERNANDO",
-            "rg": "31612"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Destino: Viatura de Resgate Vertical • Treinamento CSMont / Maciço da Tijuca"
-    },
-    {
-        "id": "TR-MOV-2026-004",
-        "movementDate": "2026-10-12",
-        "itemName": "RADIO MOTOROLA MTP850S SN: 890TRQ1778",
-        "type": "entrada",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "2º SGT",
-            "warName": "RAMOS",
-            "rg": "43830"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Destino: Retorno à Reserva de Carga DMOP • Conclusão de Serviço Operacional"
-    },
-    {
-        "id": "TR-AV-2026-005",
-        "movementDate": "2026-10-11",
-        "itemName": "ANEL DE FITA TUBULAR POLIAMIDA 120CM",
-        "type": "AVARIA",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "SUBTEN",
-            "warName": "NANTES",
-            "rg": "23869"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Desfiamento grave por abrasão em rocha viva • Destino: Descarte e Baixa Definitiva de Patrimônio"
-    },
-    {
-        "id": "TR-MOV-2026-006",
-        "movementDate": "2026-10-10",
-        "itemName": "PUÇÁ SALVAMENTO A",
-        "type": "saída",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "CAP",
-            "warName": "TAMIRIS",
-            "rg": "49113"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Destino: Aeronave Águia 02 • Prontidão SAR Salvamento Marítimo Barra da Tijuca"
-    },
-    {
-        "id": "TR-MOV-2026-007",
-        "movementDate": "2026-10-09",
-        "itemName": "DESENCARCERADOR PORTÁTIL GCT4150",
-        "type": "entrada",
-        "quantity": 1,
-        "bearer": {
-            "graduation": "2º SGT",
-            "warName": "FÁBIO",
-            "rg": "42672"
-        },
-        "recorder": {
-            "warName": "SUBTEN GOMES",
-            "rg": "22194"
-        },
-        "reason": "Destino: Retorno da Manutenção Preventiva Especializada Holmatro • Pronto p/ Emprego"
-    }
-];
-
             const App = () => {
                 // Operador ativo com fallback seguro para Subten Gomes (Fiel DMOP) para nunca bloquear a navegação
                 const [operator, setOperator] = useState(() => safeStorageGet('sigmat_operator') || {
@@ -2113,14 +1990,14 @@
                     return (cached && Array.isArray(cached) && cached.length > 0) ? cached : DEFAULT_SIGMAT_ITEMS;
                 });
 
-                // Inicialização operacional: filtra e expurga qualquer cache corrompido com dados da aba de usuários
+                // Livro de Movimentações: origem única = aba MOVIMENTACOES da planilha (cache local apenas como apoio offline)
                 const [transactions, setTransactions] = useState(() => {
                     const cached = safeStorageGet('sigmat_transactions');
                     if (cached && Array.isArray(cached) && cached.length > 0) {
-                        const hasCorruptedUserAuth = cached.some(t => String(t.type).includes('45317') || String(t.movementDate).toLowerCase().includes('maj') || String(t.reason).includes('igorliborio1') || String(t.reason).includes('281197Re@'));
-                        if (!hasCorruptedUserAuth) return cached;
+                        const corrupted = cached.some(t => /^TR-(GAS|INIT|AV|MOV)-/.test(String(t.id || '')) && !/^TR-MOV-\d+$/.test(String(t.id)));
+                        if (!corrupted) return cached;
                     }
-                    return DEFAULT_SIGMAT_TRANSACTIONS;
+                    return [];
                 });
 
                 const [movementFilter, setMovementFilter] = useState('TODOS');
@@ -2182,7 +2059,7 @@
                             setItems(mapped);
                             safeStorageSet('sigmat_items', mapped);
                         }
-                        if (data && data.transactions && Array.isArray(data.transactions) && data.transactions.length > 0) {
+                        if (data && data.transactions && Array.isArray(data.transactions)) {
                             // Mapeamento dinâmico das colunas da aba 'movimentações' da planilha
                             const headers = Array.isArray(data.headers) ? data.headers.map(h => String(h || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) : [];
 
@@ -2247,9 +2124,10 @@
                                     };
                                 }).reverse();
                             
-                            if (cleanTrans.length > 0) {
-                                setTransactions(cleanTrans);
-                                safeStorageSet('sigmat_transactions', cleanTrans);
+                            setTransactions(cleanTrans);
+                            safeStorageSet('sigmat_transactions', cleanTrans);
+                            if (!data.sheetName) {
+                                setError('Apps Script desatualizado: reimplante GoogleAppsScript_SIGMAT.js (Nova versão) para ler a aba MOVIMENTACOES.');
                             }
                         }
                         setLoading(false);
@@ -2393,6 +2271,19 @@
                                 : [...items, payload.item];
                             setItems(updatedItems);
                             safeStorageSet('sigmat_items', updatedItems);
+                            const itemTrans = {
+                                id: 'TR-MOV-L' + Date.now(),
+                                movementDate: new Date().toLocaleDateString('pt-BR'),
+                                itemName: payload.item.name,
+                                type: exists ? 'ALTERAÇÃO' : 'CADASTRO',
+                                quantity: Number(payload.item.currentStock) || 1,
+                                bearer: { graduation: '---', warName: '---', rg: '---' },
+                                recorder: { warName: payload.auditUser || 'FIEL DMOP', rg: '---' },
+                                reason: exists ? 'Alteração no prontuário' : 'Novo material cadastrado no prontuário'
+                            };
+                            const updatedTrans2 = [itemTrans, ...transactions];
+                            setTransactions(updatedTrans2);
+                            safeStorageSet('sigmat_transactions', updatedTrans2);
                         }
 
                         setIsModalOpen(false);
@@ -2475,7 +2366,7 @@
 
                     const auditUser = operator ? `${operator.grad} ${operator.name} (RG: ${operator.rg})` : 'FIEL DMOP';
                     const trans = {
-                        id: 'TR-' + Date.now(),
+                        id: 'TR-MOV-L' + Date.now(),
                         itemId: targetItem.id,
                         itemName: targetItem.name,
                         type: finalType,
