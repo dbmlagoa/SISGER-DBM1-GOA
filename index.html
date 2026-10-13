@@ -692,16 +692,16 @@
                 </p>
               </div>
               <div style="display: flex; gap: 12px;">
-                <button class="btn-secondary" onclick="document.getElementById('aeromedico-frame').src += ''">
+                <button class="btn-secondary" onclick="document.getElementById('aeromedico-frame').src = 'modules/aeromedico.html?t=' + Date.now()">
                   🔄 Recarregar Dados
                 </button>
-                <a href="modules/aeromedico.html" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                <a href="modules/aeromedico.html?v=2.1" target="_blank" rel="noopener noreferrer" class="btn-primary">
                   ↗ Abrir em Janela Dedicada
                 </a>
               </div>
             </div>
           </div>
-          <iframe id="aeromedico-frame" class="embed-full-frame" src="modules/aeromedico.html"></iframe>
+          <iframe id="aeromedico-frame" class="embed-full-frame" src="modules/aeromedico.html?v=2.1"></iframe>
         </section>
 
         <!-- ==================================================================

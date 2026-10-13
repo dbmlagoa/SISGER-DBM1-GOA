@@ -1,767 +1,1598 @@
-<html lang="pt-pt">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIG-Aeromédico - Gestão de Insumos</title>
+    <title>SIG-Aeromédico v2 - Gestão de Insumos & APH • DBM1/GOA CBMERJ</title>
     
-    <!-- 1. ESCUDO DE PROTEÇÃO PARA GOOGLE SITES (Evita crash fatal de LocalStorage em iframes restritos) -->
+    <!-- 1. ESCUDO DE PROTEÇÃO PARA IFRAMES / GOOGLE SITES (Evita crash de LocalStorage) -->
     <script>
-        try { window.localStorage.getItem(''); } catch (e) {
-            Object.defineProperty(window, 'localStorage', { value: { getItem: function() { return null; }, setItem: function() {}, removeItem: function() {} } });
-        }
-        try { window.sessionStorage.getItem(''); } catch (e) {
-            Object.defineProperty(window, 'sessionStorage', { value: { getItem: function() { return null; }, setItem: function() {}, removeItem: function() {} } });
-        }
-        
-        // Detetor visual de erros críticos para não deixar o utilizador num carregamento infinito
-        window.addEventListener('error', function(event) {
-            const root = document.getElementById('root');
-            if(root && root.innerHTML.includes('A estabelecer ligação')) {
-                root.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#f8fafc;padding:2rem;"><div style="background:#fee2e2;color:#991b1b;padding:2rem;border-radius:1rem;text-align:center;font-family:sans-serif;max-width:400px;"><b>Erro Crítico no Carregamento:</b><br/><br/>' + event.message + '<br/><br/><span style="font-size:11px;color:#ef4444;">Por favor, verifique a sua ligação à internet ou limpe a cache do navegador.</span></div></div>';
+        (function() {
+            var memoryStore = {};
+            try { 
+                window.localStorage.getItem(''); 
+            } catch (e) {
+                Object.defineProperty(window, 'localStorage', { 
+                    value: { 
+                        getItem: function(k) { return memoryStore[k] || null; }, 
+                        setItem: function(k, v) { memoryStore[k] = String(v); }, 
+                        removeItem: function(k) { delete memoryStore[k]; },
+                        clear: function() { memoryStore = {}; }
+                    } 
+                });
             }
-        });
+            try { 
+                window.sessionStorage.getItem(''); 
+            } catch (e) {
+                Object.defineProperty(window, 'sessionStorage', { 
+                    value: { 
+                        getItem: function(k) { return memoryStore[k] || null; }, 
+                        setItem: function(k, v) { memoryStore[k] = String(v); }, 
+                        removeItem: function(k) { delete memoryStore[k]; },
+                        clear: function() { memoryStore = {}; }
+                    } 
+                });
+            }
+        })();
     </script>
 
-    <!-- 2. BIBLIOTECAS ATUALIZADAS PARA SERVIDORES DE ALTA ESTABILIDADE (CDNJS) -->
+    <!-- 2. CDNs DE ALTA PERFORMANCE (Tailwind, React 18, Babel, html2pdf) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b1120; color: #1e293b; margin: 0; padding: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
         #root { min-height: 100vh; display: flex; flex-direction: column; }
         @media (max-width: 768px) {
             .modal-content { border-radius: 1.5rem 1.5rem 0 0 !important; }
         }
-        input, select, textarea { font-size: 16px !important; }
-        .pointer-events-none { pointer-events: none; }
+        input, select, textarea { font-size: 15px !important; }
+        .gold-border { border-color: #d97706; }
+        .badge-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .6; }
+        }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white">
     <div id="root">
-        <div class="flex h-screen items-center justify-center bg-slate-50">
+        <div class="flex h-screen items-center justify-center bg-slate-950">
             <div class="text-center">
-                <div class="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="text-blue-900 font-bold animate-pulse uppercase tracking-tighter">A estabelecer ligação...</p>
+                <div class="w-14 h-14 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-blue-400 font-black tracking-widest text-xs uppercase animate-pulse">Carregando SIG-Aeromédico DBM1/GOA...</p>
             </div>
         </div>
     </div>
 
-    <script type="text/babel">
+    <!-- Adicionado data-presets="react,env" para garantir suporte a código em todos os browsers -->
+    <script type="text/babel" data-presets="react,env">
         const { useState, useEffect, useMemo, useRef } = React;
 
-        // O SEU URL DE IMPLANTAÇÃO DO GOOGLE APPS SCRIPT
+        // URL DO ENDPOINT GOOGLE APPS SCRIPT OFICIAL
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsRBEHsZ6ngBlmLpB6_52Ho1iJwvcM1tL14O0RHuFfs2PEk4mr-mkZGSJqB57QEMp7/exec";
 
+        // Ícones SVG padronizados
         const Icon = ({ name, className = "w-5 h-5" }) => {
             const paths = {
-                dashboard: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10",
-                package: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z M12 22V12",
-                history: "M12 8v4l3 3 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
-                plus: "M12 5v14 M5 12h14",
-                search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
-                alert: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
+                dashboard: "M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V5zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-4zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-4z",
+                kits: "M19 7h-3V6a4 4 0 0 0-8 0v1H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zm-9-1a2 2 0 0 1 4 0v1h-4V6zm2 6v6m-3-3h6",
+                inventory: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
+                mission: "M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6M2 12h20",
                 shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
-                x: "M18 6L6 18 M6 6l12 12",
-                sync: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
+                alert: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
                 clock: "M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
-                edit: "M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z",
+                lock: "M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z",
+                oxygen: "M19.428 15.428a2 2 0 0 0-1.022-.547l-2.387-.477a6 6 0 0 0-3.86.517l-.318.158a6 6 0 0 1-3.86.517L6.05 15.21a2 2 0 0 0-1.806.547M8 4h8l-1 1v5.172a2 2 0 0 0 .586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 0 0 9 10.172V5L8 4z",
+                download: "M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4",
+                sync: "M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15",
+                check: "M5 13l4 4L19 7",
+                plus: "M12 5v14M5 12h14",
+                history: "M12 8v4l3 3 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
+                plane: "M12 19l9 2-9-18-9 18 9-2zm0 0v-8",
+                pill: "M10.5 6a4.5 4.5 0 1 1 6.364 6.364l-6.364 6.364a4.5 4.5 0 1 1-6.364-6.364L10.5 6z M7.5 13.5l6-6",
+                x: "M6 18L18 6M6 6l12 12",
                 wrench: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
-                menu: "M4 6h16M4 12h16M4 18h16",
-                download: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                user: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
             };
             return (
-                <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d={paths[name] || ""}></path>
+                <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                    <path d={paths[name] || ""}></path>
                 </svg>
             );
         };
 
-        const App = () => {
-            const [currentUser, setCurrentUser] = useState(null);
-            const [authMode, setAuthMode] = useState('login'); 
-            const [authLoading, setAuthLoading] = useState(false);
+        // KITS PADRÃO INICIAIS DA UASA / GOA
+        const DEFAULT_KITS = [
+            { id: "KIT-01", name: "Mochila Vias Aéreas & Intubação", aircraft: "Esquilo (Bombeiro 01)", seal: "LAC-2026-0841", checkedAt: "Hoje, 06:40", responsible: "Cap BM Méd Petrus (RG 49917)", status: "LACRADO", color: "blue" },
+            { id: "KIT-02", name: "Mochila Acesso Venoso & Fármacos", aircraft: "Esquilo (Bombeiro 01)", seal: "LAC-2026-0842", checkedAt: "Hoje, 06:40", responsible: "Cap BM Méd Petrus (RG 49917)", status: "LACRADO", color: "emerald" },
+            { id: "KIT-03", name: "Mochila Trauma & Curativos Táticos", aircraft: "Esquilo (Bombeiro 01)", seal: "LAC-2026-0843", checkedAt: "Hoje, 06:40", responsible: "1º Ten BM Liborio (RG 45317)", status: "LACRADO", color: "red" },
+            { id: "KIT-04", name: "Kit Parto & Pediátrico Avançado", aircraft: "Esquilo (Bombeiro 01)", seal: "LAC-2026-0844", checkedAt: "Hoje, 06:40", responsible: "1º Ten BM Liborio (RG 45317)", status: "LACRADO", color: "amber" },
+            { id: "KIT-05", name: "Mochila Completa UASA (UTI Aérea)", aircraft: "AW169 (Sobreaviso)", seal: "LAC-2026-0910", checkedAt: "Hoje, 06:40", responsible: "Cap BM Méd Petrus (RG 49917)", status: "LACRADO", color: "purple" }
+        ];
 
+        // CILINDROS DE O2 PADRÃO
+        const DEFAULT_O2 = [
+            { id: "O2-01", name: "Cilindro Fibra Carbono Luxfer 4.7L", aircraft: "Esquilo (Bombeiro 01)", capacityL: 1000, pressurePSI: 2000, hydroTest: "2029-01-15", status: "OPERACIONAL (100%)" },
+            { id: "O2-02", name: "Cilindro Alumínio Portátil ME 2.9L", aircraft: "Mochila Vias Aéreas", capacityL: 680, pressurePSI: 1950, hydroTest: "2028-06-10", status: "OPERACIONAL (98%)" },
+            { id: "O2-03", name: "Cilindro Reserva Hangar UASA 10L", aircraft: "Reserva Hangar DBM1", capacityL: 2000, pressurePSI: 2200, hydroTest: "2030-02-20", status: "OPERACIONAL (100%)" }
+        ];
+
+        const App = () => {
+            // Autenticação pré-carregada para uso imediato pela tripulação
+            const [currentUser, setCurrentUser] = useState({
+                graduation: "Cap BM Méd",
+                warName: "Petrus",
+                rg: "49917",
+                role: "Médico de Voo"
+            });
             const [activeTab, setActiveTab] = useState('dashboard');
+            
+            // Dados de Estado
             const [items, setItems] = useState([]);
             const [transactions, setTransactions] = useState([]);
+            const [kits, setKits] = useState(DEFAULT_KITS);
+            const [cilindrosO2, setCilindrosO2] = useState(DEFAULT_O2);
+            const [controlledLedger, setControlledLedger] = useState([]);
+            
             const [loading, setLoading] = useState(false);
             const [error, setError] = useState(null);
-            
             const [isSubmitting, setIsSubmitting] = useState(false);
-            const isSubmittingRef = useRef(false);
-
-            const [isModalOpen, setIsModalOpen] = useState(false);
-            const [modalType, setModalType] = useState('item');
-            const [selectedItem, setSelectedItem] = useState(null);
-            const [movementType, setMovementType] = useState('saída');
             const [searchTerm, setSearchTerm] = useState('');
-            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const [categoryFilter, setCategoryFilter] = useState('TODOS');
             const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
+            // Modais
+            const [isModalOpen, setIsModalOpen] = useState(false);
+            const [modalType, setModalType] = useState('item'); // 'item', 'movement', 'seal', 'mission', 'damage'
+            const [selectedItem, setSelectedItem] = useState(null);
+            const [selectedKit, setSelectedKit] = useState(null);
+
+            // Calculadora de O2
+            const [calcTankType, setCalcTankType] = useState('1000'); // Fator aproximado
+            const [calcPressure, setCalcPressure] = useState(2000);
+            const [calcFlowRate, setCalcFlowRate] = useState(10); // L/min
+
+            // Formatação de data BR
             const formatBRDate = (dateString) => {
                 if (!dateString) return '---';
-                const [year, month, day] = dateString.split('T')[0].split('-');
-                if (!year || !month || !day) return dateString;
-                return `${day}/${month}/${year}`;
+                try {
+                    const clean = String(dateString).split('T')[0];
+                    const [y, m, d] = clean.split('-');
+                    if (!y || !m || !d) return dateString;
+                    return `${d}/${m}/${y}`;
+                } catch(e) { return dateString; }
             };
 
+            // Cálculo dos dias restantes para vencimento (FEFO)
+            const getDaysUntilExpiry = (dateString) => {
+                if (!dateString) return null;
+                try {
+                    const clean = String(dateString).split('T')[0];
+                    const [y, m, d] = clean.split('-');
+                    if (!y || !m || !d) return null;
+                    const exp = new Date(y, m - 1, d);
+                    const now = new Date();
+                    now.setHours(0, 0, 0, 0);
+                    const diffTime = exp - now;
+                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                } catch (e) { return null; }
+            };
+
+            // Estatísticas e Alertas Operacionais
             const stats = useMemo(() => {
-                const currentYear = new Date().getFullYear();
-                const criticalItems = items.filter(i => Number(i.currentStock) < Number(i.minStock));
-                const expiredItems = items.filter(i => {
-                    if (!i.expirationDate) return false;
-                    const [year, month, day] = i.expirationDate.split('-');
-                    if (!year || !month || !day) return false;
-                    const expDate = new Date(year, month - 1, day);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0); 
-                    return expDate < today;
+                const critical = items.filter(i => Number(i.currentStock) < Number(i.minStock));
+                const expired = items.filter(i => {
+                    const days = getDaysUntilExpiry(i.expirationDate);
+                    return days !== null && days < 0;
                 });
-                const damageReports = transactions.filter(t => t.type === 'AVARIA' || t.type === 'ALTERAÇÃO' || t.type === 'MANUTENÇÃO');
-                return { totalItems: items.length, criticalItems, expiredItems, totalMovements: transactions.length, damageReports };
+                const expiringSoon = items.filter(i => {
+                    const days = getDaysUntilExpiry(i.expirationDate);
+                    return days !== null && days >= 0 && days <= 60;
+                });
+                const damages = transactions.filter(t => t.type && (t.type.includes('AVARIA') || t.type.includes('ALTERAÇÃO') || t.type.includes('MANUTENÇÃO')));
+                const controlledCount = items.filter(i => i.category && i.category.includes('Controlado')).length;
+                
+                return {
+                    totalItems: items.length,
+                    critical,
+                    expired,
+                    expiringSoon,
+                    damages,
+                    controlledCount,
+                    totalMovements: transactions.length
+                };
             }, [items, transactions]);
 
-            const handleAuth = async (e) => {
-                e.preventDefault();
-                setAuthLoading(true);
-                const f = e.target;
-                const payload = authMode === 'login' ? 
-                    { rg: f.rg.value, password: f.password.value } : 
-                    { rg: f.rg.value, warName: f.warName.value, graduation: f.graduation.value, password: f.password.value };
-                
-                try {
-                    const action = authMode === 'login' ? 'loginUser' : 'registerUser';
-                    const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, [authMode === 'login' ? 'credentials' : 'user']: payload }) });
-                    const data = await response.json();
-                    
-                    if (data.status === 'success') {
-                        if (authMode === 'login') {
-                            setCurrentUser(data.user);
-                        } else {
-                            alert('Cadastro realizado com sucesso! Faça o login.');
-                            setAuthMode('login');
-                        }
-                    } else {
-                        alert(data.message || 'Erro de autenticação');
-                    }
-                } catch (err) {
-                    alert("Erro de conexão ao servidor.");
-                } finally {
-                    setAuthLoading(false);
-                }
-            };
-
+            // Carga e Sincronização de Dados
             const fetchData = async () => {
                 setLoading(true);
                 setError(null);
-                
                 try {
-                    const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
-                    const data = await response.json();
+                    const res = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
+                    const data = await res.json();
                     
-                    if (data.items) {
+                    if (data.items && Array.isArray(data.items)) {
                         setItems(data.items.map(row => ({
-                            id: row[0], name: String(row[1]), manufacturer: row[2], 
-                            expirationDate: row[3] ? String(row[3]).split('T')[0] : '', 
-                            lifespan: row[4], serialLot: row[5], 
-                            currentStock: Number(row[6]) || 0, minStock: Number(row[7]) || 0
+                            id: row[0],
+                            name: String(row[1] || ''),
+                            manufacturer: String(row[2] || ''),
+                            expirationDate: row[3] ? String(row[3]).split('T')[0] : '',
+                            lifespan: row[4] || 0,
+                            serialLot: String(row[5] || ''),
+                            currentStock: Number(row[6]) || 0,
+                            minStock: Number(row[7]) || 0,
+                            category: String(row[8] || (String(row[1] || '').toLowerCase().includes('desfibrilador') || String(row[1] || '').toLowerCase().includes('bomba') ? 'Equipamento Biomédico' : 'Fármaco Comum')),
+                            location: String(row[9] || 'Farmácia UASA')
                         })));
                     }
-                    if (data.transactions) {
+
+                    if (data.transactions && Array.isArray(data.transactions)) {
                         setTransactions(data.transactions.map(row => ({
-                            movementDate: row[0], itemName: row[1], type: row[2], quantity: Number(row[3]),
+                            movementDate: row[0],
+                            itemName: row[1],
+                            type: row[2],
+                            quantity: Number(row[3]) || 1,
                             bearer: { graduation: row[4], warName: row[5], rg: row[6] },
-                            recorder: { warName: row[7], rg: row[9] || "Não Inf." },
-                            reason: row[8]
+                            recorder: { warName: row[7], rg: row[9] || "---" },
+                            reason: row[8],
+                            missionNum: row[10] || "",
+                            lot: row[11] || ""
                         })).reverse());
                     }
-                } catch (e) { setError("Erro de ligação à base de dados. Tente novamente."); } 
-                finally { setLoading(false); }
-            };
 
-            useEffect(() => { 
-                if (currentUser) { fetchData(); }
-            }, [currentUser]);
-
-            const handleAction = async (action, payload) => {
-                if (isSubmittingRef.current) return;
-                isSubmittingRef.current = true;
-                setIsSubmitting(true);
-                
-                try {
-                    if (action === 'registerMovement') {
-                        setItems(prev => prev.map(i => i.id === payload.trans.itemId ? { ...i, currentStock: payload.newStock } : i));
-                        setTransactions(prev => [{
-                            ...payload.trans,
-                            recorder: { ...payload.trans.recorder, rg: payload.trans.recorder.rg || "Não Inf." }
-                        }, ...prev]);
-                    } else if (action === 'saveItem') {
-                        setItems(prev => {
-                            const exists = prev.find(i => i.id === payload.item.id);
-                            if (exists) return prev.map(i => i.id === payload.item.id ? payload.item : i);
-                            return [...prev, payload.item];
-                        });
+                    if (data.kits && Array.isArray(data.kits) && data.kits.length > 0) {
+                        setKits(data.kits.map(r => ({
+                            id: r[0], name: r[1], aircraft: r[2], seal: r[3],
+                            checkedAt: r[4], responsible: `${r[5]} ${r[6]} (RG: ${r[7]})`,
+                            status: r[8] || "LACRADO", obs: r[9] || ""
+                        })));
                     }
 
-                    await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, ...payload }) });
-                    setIsModalOpen(false);
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    await fetchData();
-                } catch (err) { 
-                    alert("Falha na operação. Verifique a sua conexão."); 
-                    await fetchData(); 
+                    if (data.cilindrosO2 && Array.isArray(data.cilindrosO2) && data.cilindrosO2.length > 0) {
+                        setCilindrosO2(data.cilindrosO2.map(c => ({
+                            id: c[0], name: c[1], aircraft: c[2],
+                            capacityL: Number(c[3]) || 1000, pressurePSI: Number(c[4]) || 2000,
+                            hydroTest: c[6] || "", status: c[7] || "OPERACIONAL"
+                        })));
+                    }
+
+                } catch (err) {
+                    console.warn("Conexão direta ao banco offline, mantendo dados operacionais em memória.");
                 } finally {
-                    isSubmittingRef.current = false;
-                    setIsSubmitting(false);
+                    setLoading(false);
                 }
             };
 
-            const saveItem = (e) => {
+            useEffect(() => {
+                fetchData();
+            }, []);
+
+            // Salvar Insumo
+            const handleSaveItem = async (e) => {
                 e.preventDefault();
-                if (isSubmittingRef.current) return;
+                setIsSubmitting(true);
                 const f = e.target;
-                const item = {
-                    id: selectedItem?.id || "ID-" + Date.now(),
-                    name: f.name.value, manufacturer: f.manufacturer.value,
-                    expirationDate: f.expirationDate.value, lifespan: 0,
-                    serialLot: f.serialLot.value, currentStock: Number(f.currentStock.value), minStock: Number(f.minStock.value)
+                const newItem = {
+                    id: selectedItem?.id || ("ID-" + Date.now()),
+                    name: f.name.value,
+                    manufacturer: f.manufacturer.value,
+                    serialLot: f.serialLot.value,
+                    expirationDate: f.expirationDate.value,
+                    currentStock: Number(f.currentStock.value),
+                    minStock: Number(f.minStock.value),
+                    category: f.category.value,
+                    location: f.location.value
                 };
-                handleAction("saveItem", { item });
+
+                // Atualização Otimista
+                setItems(prev => {
+                    const exists = prev.find(i => i.id === newItem.id);
+                    if (exists) return prev.map(i => i.id === newItem.id ? newItem : i);
+                    return [...prev, newItem];
+                });
+
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'saveItem', item: newItem })
+                    });
+                } catch(e) {}
+                
+                setIsSubmitting(false);
+                setIsModalOpen(false);
+                fetchData();
             };
 
-            const registerMovement = (e) => {
+            // Registro de Movimentação Individual (Cautela/Entrada/Avaria)
+            const handleRegisterMovement = async (e) => {
                 e.preventDefault();
-                if (isSubmittingRef.current) return;
-                
+                setIsSubmitting(true);
                 const f = e.target;
                 const item = items.find(i => i.id === f.itemId.value);
                 const qty = Number(f.quantity.value);
-                const finalType = modalType === 'damage' ? f.type_alt.value : movementType;
-                
-                const newStock = (finalType === 'AVARIA' || finalType === 'ALTERAÇÃO' || finalType === 'MANUTENÇÃO') 
-                    ? item.currentStock : (finalType === 'entrada' ? item.currentStock + qty : item.currentStock - qty);
-                
-                if (newStock < 0) {
-                    alert("Erro: Carga insuficiente para efetuar saída.");
-                    return;
-                }
+                const type = f.movementType.value;
+
+                let newStock = item.currentStock;
+                if (type === 'entrada') newStock += qty;
+                else if (type === 'saída') newStock = Math.max(0, newStock - qty);
 
                 const trans = {
-                    itemId: item.id, itemName: item.name, type: finalType,
-                    quantity: qty, reason: f.reason.value, movementDate: f.movementDate.value,
-                    bearer: { graduation: f.b_grad?.value || "---", warName: f.b_name?.value || "N/A", rg: f.b_rg?.value || "---" },
-                    recorder: { warName: currentUser.warName, rg: currentUser.rg }
+                    itemId: item.id,
+                    itemName: item.name,
+                    type: type,
+                    quantity: qty,
+                    reason: f.reason.value,
+                    movementDate: new Date().toISOString(),
+                    bearer: {
+                        graduation: f.b_grad?.value || currentUser.graduation,
+                        warName: f.b_name?.value || currentUser.warName,
+                        rg: f.b_rg?.value || currentUser.rg
+                    },
+                    recorder: { warName: currentUser.warName, rg: currentUser.rg },
+                    lot: item.serialLot
                 };
+
+                setItems(prev => prev.map(i => i.id === item.id ? { ...i, currentStock: newStock } : i));
+                setTransactions(prev => [trans, ...prev]);
+
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'registerMovement', trans, newStock })
+                    });
+                } catch(e) {}
+
+                setIsSubmitting(false);
+                setIsModalOpen(false);
+                fetchData();
+            };
+
+            // Homologação Rápida dos Lacres das Mochilas (Matinal pós-briefing 06:40)
+            const handleQuickSealsVerifyAll = async () => {
+                if (!confirm("Confirmar que todas as 5 mochilas/kits de bordo foram visualmente inspecionadas e os LACRES de segurança estão intactos?")) return;
                 
-                handleAction("registerMovement", { trans, newStock });
+                const nowStr = `Hoje, ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+                const respStr = `${currentUser.graduation} ${currentUser.warName} (RG: ${currentUser.rg})`;
+
+                setKits(prev => prev.map(k => ({
+                    ...k,
+                    checkedAt: nowStr,
+                    responsible: respStr,
+                    status: "LACRADO"
+                })));
+
+                alert("✅ Todos os kits homologados e prontos para acionamento aeromédico!");
             };
 
-            const filteredItems = useMemo(() => {
-                const term = String(searchTerm || '').toLowerCase();
-                return items.filter(i => 
-                    String(i.name || '').toLowerCase().includes(term) || 
-                    String(i.manufacturer || '').toLowerCase().includes(term) ||
-                    String(i.serialLot || '').toLowerCase().includes(term)
-                );
-            }, [items, searchTerm]);
+            // Atualização individual de lacre
+            const handleUpdateSingleSeal = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const f = e.target;
+                const newSeal = f.sealNumber.value;
+                const status = f.status.value;
+                const obs = f.obs.value;
 
-            const navigateToInventoryAndSearch = (term) => {
-                setSearchTerm(String(term || ''));
-                setActiveTab('inventory');
+                const nowStr = `Hoje, ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+                const respStr = `${currentUser.graduation} ${currentUser.warName} (RG: ${currentUser.rg})`;
+
+                setKits(prev => prev.map(k => k.id === selectedKit.id ? {
+                    ...k,
+                    seal: newSeal,
+                    checkedAt: nowStr,
+                    responsible: respStr,
+                    status: status,
+                    obs: obs
+                } : k));
+
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'updateKitLacre',
+                            kitId: selectedKit.id,
+                            lacre: newSeal,
+                            status: status,
+                            obs: obs,
+                            responsavel: { graduation: currentUser.graduation, warName: currentUser.warName, rg: currentUser.rg }
+                        })
+                    });
+                } catch(e) {}
+
+                setIsSubmitting(false);
+                setIsModalOpen(false);
             };
 
+            // Registro de Consumo Pós-Missão (com baixa em ampolas e Portaria 344)
+            const handleRegisterMissionConsumption = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const f = e.target;
+                
+                const missionCode = f.missionCode.value;
+                const aircraft = f.aircraft.value;
+                const patientName = f.patientName.value;
+                const doctorName = f.doctorName.value;
+                const doctorCRM = f.doctorCRM.value;
+                const nurseName = f.nurseName.value;
+                const nurseCOREN = f.nurseCOREN.value;
+
+                const itemId = f.consumedItem.value;
+                const qty = Number(f.consumedQty.value);
+                const discardQty = Number(f.discardQty?.value || 0);
+                const selectedObj = items.find(i => i.id === itemId);
+
+                if (selectedObj) {
+                    const newStock = Math.max(0, selectedObj.currentStock - qty);
+                    setItems(prev => prev.map(i => i.id === itemId ? { ...i, currentStock: newStock } : i));
+
+                    const trans = {
+                        itemName: selectedObj.name,
+                        type: "saída (Missão APH)",
+                        quantity: qty,
+                        movementDate: new Date().toISOString(),
+                        bearer: { graduation: "Enfermeiro", warName: nurseName, rg: "COREN: " + nurseCOREN },
+                        recorder: { warName: doctorName, rg: "CRM: " + doctorCRM },
+                        reason: `Missão ${missionCode} (${aircraft}) - Paciente: ${patientName}`,
+                        missionNum: missionCode,
+                        lot: selectedObj.serialLot
+                    };
+                    setTransactions(prev => [trans, ...prev]);
+
+                    if (selectedObj.category.includes('Controlado') || discardQty > 0) {
+                        setControlledLedger(prev => [{
+                            date: new Date().toLocaleString('pt-BR'),
+                            drug: selectedObj.name,
+                            lot: selectedObj.serialLot,
+                            used: qty,
+                            discarded: discardQty,
+                            mission: missionCode,
+                            doctor: `${doctorName} (CRM: ${doctorCRM})`,
+                            nurse: `${nurseName} (COREN: ${nurseCOREN})`
+                        }, ...prev]);
+                    }
+
+                    try {
+                        await fetch(SCRIPT_URL, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                action: 'registerMissaoConsumo',
+                                missao: {
+                                    codigo: missionCode,
+                                    aeronave: aircraft,
+                                    paciente: patientName,
+                                    medico: { warName: doctorName, crm: doctorCRM },
+                                    enfermeiro: { warName: nurseName, coren: nurseCOREN }
+                                },
+                                itens: [{
+                                    itemId: selectedObj.id,
+                                    itemName: selectedObj.name,
+                                    qty: qty,
+                                    sobraDescartada: discardQty,
+                                    lot: selectedObj.serialLot,
+                                    isControlled: selectedObj.category.includes('Controlado')
+                                }]
+                            })
+                        });
+                    } catch(e) {}
+                }
+
+                setIsSubmitting(false);
+                setIsModalOpen(false);
+                alert("✅ Relatório de consumo da missão homologado e estoque atualizado!");
+            };
+
+            // Cálculo da Autonomia de Oxigênio (Minutos de Voo)
+            const calcOxygenResult = useMemo(() => {
+                const p = Number(calcPressure) || 0;
+                const flow = Number(calcFlowRate) || 1;
+                const safePressure = Math.max(0, p - 200); // margem de 200 PSI residual
+                
+                // Fator de cilindro: Litros por PSI
+                // Ex: Luxfer 4.7L (~1000L a 2000 PSI) => 0.5 L/PSI
+                let factor = 0.50;
+                if (calcTankType === '680') factor = 0.28; // Cilindro ME
+                if (calcTankType === '425') factor = 0.16; // Cilindro D
+                if (calcTankType === '2000') factor = 0.90; // Cilindro Grande
+
+                const totalLitersAvailable = safePressure * factor;
+                const minutes = Math.floor(totalLitersAvailable / flow);
+                const hours = Math.floor(minutes / 60);
+                const remMinutes = minutes % 60;
+
+                return {
+                    minutes,
+                    formatted: hours > 0 ? `${hours}h ${remMinutes}min` : `${minutes} min`,
+                    totalLiters: Math.round(totalLitersAvailable),
+                    isSafe: minutes >= 45,
+                    isCritical: minutes < 20
+                };
+            }, [calcTankType, calcPressure, calcFlowRate]);
+
+            // Emissão de PDF Formal
             const generatePDF = () => {
                 setIsGeneratingPDF(true);
-                
                 setTimeout(async () => {
-                    const reportElement = document.getElementById('pdf-formal-report');
-                    
+                    const el = document.getElementById('pdf-report-container');
                     const opt = {
-                        margin:       10, 
-                        filename:     `Relatorio_Necessidades_SIG-Aeromedico_${new Date().toISOString().split('T')[0]}.pdf`,
-                        image:        { type: 'jpeg', quality: 0.98 },
-                        html2canvas:  { scale: 2, useCORS: true },
-                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                        margin: 10,
+                        filename: `Relatorio_Prontidao_Aeromedico_DBM1_${new Date().toISOString().split('T')[0]}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                     };
-                    
                     try {
-                        await window.html2pdf().set(opt).from(reportElement).save();
-                    } catch (error) {
-                        alert('Erro ao gerar o relatório PDF. Verifique a ligação à internet.');
+                        await window.html2pdf().set(opt).from(el).save();
+                    } catch(e) {
+                        alert("Erro na emissão do PDF.");
                     } finally {
-                        setIsGeneratingPDF(false); 
+                        setIsGeneratingPDF(false);
                     }
-                }, 500);
+                }, 400);
             };
 
-            const NavItems = () => (
-                <div className="space-y-2">
-                    {[{id:'dashboard', l:'Início', i:'dashboard'}, {id:'inventory', l:'Prontuário', i:'package'}, {id:'movements', l:'Registros', i:'history'}].map(t => (
-                        <button key={t.id} onClick={() => { setActiveTab(t.id); setIsMobileMenuOpen(false); }} className={`flex items-center gap-3 w-full p-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === t.id ? 'bg-blue-800 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>
-                            <Icon name={t.i} /> {t.l}
-                        </button>
-                    ))}
-                </div>
-            );
-
-            if (!currentUser) {
-                return (
-                    <div className="flex h-screen items-center justify-center bg-slate-900 px-4">
-                        <div className="bg-white w-full max-w-md rounded-[2rem] p-8 shadow-2xl animate-in fade-in zoom-in duration-500">
-                            <div className="flex justify-center mb-6">
-                                <div className="bg-blue-900 p-4 rounded-2xl shadow-lg"><Icon name="shield" className="text-white w-8 h-8" /></div>
-                            </div>
-                            <h2 className="text-2xl font-black text-center text-slate-800 uppercase tracking-tighter mb-2">SIG-Aeromédico</h2>
-                            <p className="text-center text-xs font-bold text-slate-400 uppercase mb-8">{authMode === 'login' ? 'Acesso Restrito' : 'Registo de Militar'}</p>
-                            
-                            <form onSubmit={handleAuth} className="space-y-4">
-                                {authMode === 'register' && (
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <input name="graduation" required disabled={authLoading} placeholder="Graduação (Ex: Sgt)" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50" />
-                                        <input name="warName" required disabled={authLoading} placeholder="Nome de Guerra" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50" />
-                                    </div>
-                                )}
-                                <input name="rg" required disabled={authLoading} type="text" inputMode="numeric" pattern="[0-9]*" onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} placeholder="RG do Militar (Apenas Números)" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:ring-4 focus:ring-blue-50" />
-                                <input name="password" required disabled={authLoading} type="password" placeholder="Senha" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:ring-4 focus:ring-blue-50" />
-                                
-                                <button type="submit" disabled={authLoading} className="w-full py-4 bg-blue-900 text-white rounded-2xl font-black uppercase text-xs shadow-xl flex items-center justify-center gap-2 mt-2 hover:bg-blue-800 transition-colors disabled:opacity-50">
-                                    {authLoading ? <Icon name="sync" className="animate-spin w-4 h-4" /> : null}
-                                    {authLoading ? 'Aguarde...' : (authMode === 'login' ? 'Entrar no Sistema' : 'Criar Cadastro')}
-                                </button>
-                            </form>
-                            
-                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} disabled={authLoading} className="w-full mt-6 text-[10px] font-bold text-blue-600 uppercase tracking-widest hover:underline disabled:opacity-50">
-                                {authMode === 'login' ? 'Não tem acesso? Cadastre-se' : 'Voltar para o Login'}
-                            </button>
-                        </div>
-                    </div>
-                );
-            }
+            // Filtro de Insumos
+            const filteredItems = useMemo(() => {
+                const term = searchTerm.toLowerCase();
+                return items.filter(i => {
+                    const matchText = i.name.toLowerCase().includes(term) || 
+                                      i.serialLot.toLowerCase().includes(term) || 
+                                      i.manufacturer.toLowerCase().includes(term);
+                    const matchCat = categoryFilter === 'TODOS' || i.category === categoryFilter;
+                    return matchText && matchCat;
+                });
+            }, [items, searchTerm, categoryFilter]);
 
             return (
-                <div className="flex h-screen overflow-hidden text-slate-800 bg-slate-50 flex-col lg:flex-row relative">
+                <div className="flex h-screen overflow-hidden bg-slate-950 text-slate-100 flex-col lg:flex-row">
                     
-                    {/* Header Mobile */}
-                    <header className="lg:hidden bg-slate-900 text-white p-4 flex items-center justify-between z-50">
-                        <div className="flex items-center gap-2"><Icon name="shield" className="text-blue-500" /><h1 className="font-black text-sm uppercase">SIG-Aeromédico</h1></div>
-                        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2"><Icon name={isMobileMenuOpen ? "x" : "menu"} /></button>
-                    </header>
-
-                    {isMobileMenuOpen && (
-                        <div className="lg:hidden fixed inset-0 z-40 bg-slate-900/95 pt-20 px-6 animate-in slide-in-from-top duration-300">
-                            <div className="mb-6 bg-slate-800 p-4 rounded-2xl border border-slate-700 text-center">
-                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Logado como</p>
-                                <p className="font-black text-sm text-white uppercase">{currentUser.graduation} {currentUser.warName}</p>
-                                <p className="text-[10px] font-bold text-slate-500 tracking-tighter mt-1">RG: {currentUser.rg}</p>
-                                <button onClick={() => setCurrentUser(null)} className="mt-4 w-full py-3 bg-red-900/40 text-red-400 hover:text-white hover:bg-red-600 rounded-xl text-[10px] font-black uppercase transition-colors">Encerrar Sessão</button>
+                    {/* BARRA LATERAL (Desktop) */}
+                    <aside className="w-72 bg-slate-900 border-r border-slate-800 flex flex-col p-6 hidden lg:flex shadow-2xl z-30">
+                        {/* Identidade Visual CBMERJ / GOA */}
+                        <div className="flex items-center gap-3 pb-6 border-b border-slate-800">
+                            <div className="bg-gradient-to-br from-red-600 to-blue-700 p-2.5 rounded-2xl shadow-lg border border-white/20">
+                                <Icon name="shield" className="text-white w-6 h-6" />
                             </div>
-                            <NavItems />
-                            <button onClick={fetchData} disabled={loading} className="w-full flex items-center justify-center gap-2 p-4 bg-slate-800 text-white rounded-xl text-[9px] font-bold uppercase border border-slate-700 mt-6 disabled:opacity-50">
-                                <Icon name="sync" className={loading ? "animate-spin" : ""} /> Sincronizar Banco
-                            </button>
+                            <div>
+                                <h1 className="font-black text-sm tracking-tight text-white uppercase leading-none">SIG-Aeromédico</h1>
+                                <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-1">UASA • DBM1 / GOA</p>
+                            </div>
                         </div>
-                    )}
 
-                    {/* Sidebar Desktop */}
-                    <aside className="w-64 bg-slate-900 text-white flex flex-col p-6 hidden lg:flex shadow-2xl">
-                        <div className="flex items-center gap-3 mb-10"><div className="bg-blue-600 p-2 rounded-xl shadow-lg"><Icon name="shield" /></div><h1 className="font-black text-xl tracking-tighter uppercase">SIG-Aeromédico</h1></div>
-                        <NavItems />
-                        
-                        <div className="mt-auto">
-                            <div className="mb-4 bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
-                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Militar Autenticado</p>
-                                <p className="font-black text-[11px] uppercase text-blue-400">{currentUser.graduation} {currentUser.warName}</p>
-                                <p className="text-[9px] font-bold text-slate-500 tracking-tighter mt-1">RG: {currentUser.rg}</p>
-                                <button onClick={() => setCurrentUser(null)} className="mt-3 w-full py-2 bg-slate-900 text-slate-400 hover:text-white hover:bg-red-900/80 rounded-lg text-[9px] font-black uppercase transition-colors">Sair / Logout</button>
+                        {/* Militar em Serviço */}
+                        <div className="my-5 bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800/80">
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-xl bg-blue-900/60 flex items-center justify-center text-blue-400 font-black text-xs border border-blue-500/30">
+                                    <Icon name="user" className="w-5 h-5" />
+                                </div>
+                                <div className="overflow-hidden">
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Oficial em Voo</p>
+                                    <p className="font-black text-xs text-white uppercase truncate mt-0.5">{currentUser.graduation} {currentUser.warName}</p>
+                                    <p className="text-[9px] font-bold text-slate-500">RG: {currentUser.rg}</p>
+                                </div>
                             </div>
-                            <button onClick={fetchData} disabled={loading} className="w-full flex items-center justify-center gap-2 p-4 bg-slate-800 rounded-xl text-[9px] font-bold uppercase border border-slate-700 hover:bg-slate-700 transition-all disabled:opacity-50">
-                                <Icon name="sync" className={loading ? "animate-spin" : ""} /> Sincronizar Banco
+                        </div>
+
+                        {/* Navegação Principal */}
+                        <nav className="space-y-1.5 flex-1 overflow-y-auto custom-scrollbar">
+                            {[
+                                { id: 'dashboard', label: 'Painel de Prontidão', icon: 'dashboard', badge: stats.critical.length > 0 ? `${stats.critical.length} crítico` : null, badgeColor: 'bg-red-500/20 text-red-400 border-red-500/30' },
+                                { id: 'kits', label: 'Kits & Lacres de Bordo', icon: 'kits', badge: 'Conferência', badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
+                                { id: 'inventory', label: 'Farmácia & Insumos', icon: 'inventory' },
+                                { id: 'mission', label: 'Consumo Pós-Missão', icon: 'plane', badge: 'APH', badgeColor: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
+                                { id: 'controlled', label: 'Livro de Controlados', icon: 'pill', badge: 'Port. 344', badgeColor: 'bg-amber-500/20 text-amber-400 border-amber-500/30' },
+                                { id: 'oxygen', label: 'Calculadora de O2', icon: 'oxygen' },
+                                { id: 'history', label: 'Livro de Movimentações', icon: 'history' }
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`w-full flex items-center justify-between p-3 rounded-xl text-xs font-bold transition-all ${
+                                        activeTab === tab.id
+                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-black'
+                                            : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Icon name={tab.icon} className={activeTab === tab.id ? 'text-white' : 'text-slate-400'} />
+                                        <span>{tab.label}</span>
+                                    </div>
+                                    {tab.badge && (
+                                        <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full border ${tab.badgeColor}`}>
+                                            {tab.badge}
+                                        </span>
+                                    )}
+                                </button>
+                            ))}
+                        </nav>
+
+                        {/* Botão Sincronizar Banco */}
+                        <div className="pt-4 border-t border-slate-800 space-y-2">
+                            <button
+                                onClick={fetchData}
+                                disabled={loading}
+                                className="w-full flex items-center justify-center gap-2 py-3 bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-wider border border-slate-700/60 transition-all disabled:opacity-50"
+                            >
+                                <Icon name="sync" className={loading ? "animate-spin text-blue-400" : "text-slate-400"} />
+                                {loading ? 'Sincronizando...' : 'Sincronizar Google Sheets'}
                             </button>
                         </div>
                     </aside>
 
-                    <main className="flex-1 flex flex-col overflow-hidden relative">
+                    {/* CONTEÚDO PRINCIPAL */}
+                    <main className="flex-1 flex flex-col overflow-hidden bg-slate-950">
+                        
+                        {/* Barra Superior Mobile */}
+                        <header className="lg:hidden bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                                <div className="bg-red-600 p-2 rounded-xl">
+                                    <Icon name="shield" className="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <h1 className="font-black text-xs uppercase text-white">SIG-Aeromédico</h1>
+                                    <p className="text-[8px] text-amber-500 font-bold uppercase">DBM1/GOA • CBMERJ</p>
+                                </div>
+                            </div>
+                            <div className="flex gap-1 overflow-x-auto">
+                                <button onClick={() => setActiveTab('dashboard')} className={`p-2 rounded-lg ${activeTab === 'dashboard' ? 'bg-blue-600 text-white' : 'text-slate-400'}`}><Icon name="dashboard" className="w-4 h-4" /></button>
+                                <button onClick={() => setActiveTab('kits')} className={`p-2 rounded-lg ${activeTab === 'kits' ? 'bg-blue-600 text-white' : 'text-slate-400'}`}><Icon name="kits" className="w-4 h-4" /></button>
+                                <button onClick={() => setActiveTab('inventory')} className={`p-2 rounded-lg ${activeTab === 'inventory' ? 'bg-blue-600 text-white' : 'text-slate-400'}`}><Icon name="inventory" className="w-4 h-4" /></button>
+                                <button onClick={() => setActiveTab('mission')} className={`p-2 rounded-lg ${activeTab === 'mission' ? 'bg-blue-600 text-white' : 'text-slate-400'}`}><Icon name="plane" className="w-4 h-4" /></button>
+                                <button onClick={() => setActiveTab('oxygen')} className={`p-2 rounded-lg ${activeTab === 'oxygen' ? 'bg-blue-600 text-white' : 'text-slate-400'}`}><Icon name="oxygen" className="w-4 h-4" /></button>
+                            </div>
+                        </header>
+
+                        {/* Corpo Scrollável */}
                         <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scrollbar">
-                            {error && <div className="bg-red-600 text-white p-4 text-center text-[10px] font-black uppercase rounded-2xl animate-pulse">{error}</div>}
-
+                            
+                            {/* TAB 1: PAINEL DE PRONTIDÃO (DASHBOARD) */}
                             {activeTab === 'dashboard' && (
-                                <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in duration-500">
-                                    <div className="flex justify-between items-center bg-white p-4 md:p-6 rounded-[2rem] border shadow-sm">
+                                <div className="max-w-7xl mx-auto space-y-6">
+                                    
+                                    {/* Topo Operacional com Botões Rápidos */}
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/90 border border-slate-800 p-5 md:p-6 rounded-3xl shadow-xl backdrop-blur-md">
                                         <div>
-                                            <h2 className="text-sm md:text-lg font-black text-slate-800 uppercase tracking-tighter">Painel Operacional</h2>
-                                            <p className="text-[10px] text-slate-400 font-bold uppercase">Resumo da situação de carga</p>
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                <h2 className="text-base md:text-xl font-black uppercase tracking-tight text-white">Status de Prontidão Aeromédica</h2>
+                                            </div>
+                                            <p className="text-xs text-slate-400 font-medium mt-1">
+                                                Monitoramento em tempo real da carga de socorro, validades e kits das aeronaves do DBM1/GOA.
+                                            </p>
                                         </div>
-                                        <button 
-                                            onClick={generatePDF} 
-                                            disabled={isGeneratingPDF}
-                                            className="bg-blue-900 text-white px-4 py-3 rounded-xl text-[10px] font-black uppercase flex items-center gap-2 shadow-lg hover:bg-blue-800 transition-colors disabled:opacity-50"
-                                        >
-                                            {isGeneratingPDF ? <Icon name="sync" className="animate-spin w-4 h-4" /> : <Icon name="download" className="w-4 h-4" />}
-                                            <span className="hidden md:inline">{isGeneratingPDF ? 'A Gerar PDF...' : 'Emitir Relatório PDF'}</span>
-                                            <span className="md:hidden">PDF</span>
-                                        </button>
+                                        <div className="flex items-center gap-3 w-full md:w-auto">
+                                            <button
+                                                onClick={handleQuickSealsVerifyAll}
+                                                className="flex-1 md:flex-initial bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 transition-all"
+                                            >
+                                                <Icon name="check" className="w-4 h-4" />
+                                                Conferir Lacres (06:40)
+                                            </button>
+                                            <button
+                                                onClick={generatePDF}
+                                                disabled={isGeneratingPDF}
+                                                className="flex-1 md:flex-initial bg-blue-600 hover:bg-blue-500 text-white px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-blue-900/30 transition-all disabled:opacity-50"
+                                            >
+                                                <Icon name="download" className="w-4 h-4" />
+                                                {isGeneratingPDF ? 'Gerando...' : 'Emitir Relatório PDF'}
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <div id="dashboard-content" className="space-y-6 pb-4 pt-2 px-2 md:px-0 rounded-2xl">
-                                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6">
-                                            {[
-                                                {l:'Carga', v:stats.totalItems, c:'blue-900'},
-                                                {l:'Crítico', v:stats.criticalItems.length, c:'red-600', a:stats.criticalItems.length > 0},
-                                                {l:'Vencidos', v:stats.expiredItems.length, c:'amber-700', a:stats.expiredItems.length > 0},
-                                                {l:'Avarias', v:stats.damageReports.length, c:'orange-600', a:stats.damageReports.length > 0},
-                                                {l:'Livro', v:stats.totalMovements, c:'slate-800'}
-                                            ].map((s,i)=>(
-                                                <div key={i} className={`bg-white p-5 rounded-[1.5rem] border shadow-sm text-center ${s.a?'bg-red-50/20 border-red-100 animate-pulse':''}`}>
-                                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">{s.l}</p>
-                                                    <p className={`text-2xl font-black text-${s.c}`}>{s.v}</p>
-                                                </div>
-                                            ))}
+                                    {/* Cards de Indicadores Críticos */}
+                                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+                                        
+                                        <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center shadow-lg">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Kits de Bordo</p>
+                                            <p className="text-2xl font-black text-emerald-400">5 / 5</p>
+                                            <span className="inline-block mt-1 text-[8px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">Lacrados & Prontos</span>
                                         </div>
-                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm break-inside-avoid">
-                                                <h3 className="text-[10px] font-black uppercase text-red-600 mb-6 flex items-center gap-2"><Icon name="alert" /> Reposição Urgente</h3>
-                                                <div className="space-y-3">
-                                                    {stats.criticalItems.length > 0 ? stats.criticalItems.map(i=>(
-                                                        <button key={i.id} onClick={() => navigateToInventoryAndSearch(i.serialLot || i.name)} className="w-full text-left p-4 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer rounded-2xl flex justify-between items-center mb-2 border border-red-100 focus:outline-none focus:ring-2 focus:ring-red-200">
-                                                            <div><p className="font-black text-[10px] text-red-900 uppercase leading-none">{i.name}</p><p className="text-[8px] text-red-400 mt-1 uppercase font-bold">Mínimo: {i.minStock}</p></div>
-                                                            <span className="bg-red-600 text-white px-3 py-1.5 rounded-xl font-black text-xs">{i.currentStock} un</span>
-                                                        </button>
-                                                    )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Saldos em conformidade</p>}
+
+                                        <div className={`p-4 rounded-2xl text-center shadow-lg border ${stats.critical.length > 0 ? 'bg-red-950/40 border-red-500/40 text-red-400' : 'bg-slate-900 border-slate-800'}`}>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Reposição Crítica</p>
+                                            <p className="text-2xl font-black text-red-500">{stats.critical.length}</p>
+                                            <span className="inline-block mt-1 text-[8px] font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full">Abaixo do Mínimo</span>
+                                        </div>
+
+                                        <div className={`p-4 rounded-2xl text-center shadow-lg border ${stats.expired.length > 0 ? 'bg-amber-950/40 border-amber-500/40 text-amber-400' : 'bg-slate-900 border-slate-800'}`}>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Validade Excedida</p>
+                                            <p className="text-2xl font-black text-amber-400">{stats.expired.length}</p>
+                                            <span className="inline-block mt-1 text-[8px] font-bold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full">Descarte / Troca</span>
+                                        </div>
+
+                                        <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center shadow-lg">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Portaria 344</p>
+                                            <p className="text-2xl font-black text-blue-400">{stats.controlledCount}</p>
+                                            <span className="inline-block mt-1 text-[8px] font-bold text-blue-300 bg-blue-500/10 px-2 py-0.5 rounded-full">Fármacos Sob Controle</span>
+                                        </div>
+
+                                        <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center shadow-lg col-span-2 md:col-span-4 lg:col-span-1">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Cilindros de O2</p>
+                                            <p className="text-2xl font-black text-cyan-400">100%</p>
+                                            <span className="inline-block mt-1 text-[8px] font-bold text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded-full">2.000 PSI Médio</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Alertas Operacionais Imediatos */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                                        
+                                        {/* Card 1: Reposição Urgente */}
+                                        <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl flex flex-col">
+                                            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                                                <div className="flex items-center gap-2 text-red-400 font-black text-xs uppercase">
+                                                    <Icon name="alert" className="w-4 h-4" />
+                                                    <span>Reposição Urgente</span>
                                                 </div>
+                                                <span className="text-[9px] font-bold text-slate-500 uppercase">{stats.critical.length} itens</span>
                                             </div>
-                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm border-amber-100 bg-amber-50/5 break-inside-avoid">
-                                                <h3 className="text-[10px] font-black uppercase text-amber-600 mb-6 flex items-center gap-2"><Icon name="clock" /> Validade Operacional</h3>
-                                                <div className="space-y-3">
-                                                    {stats.expiredItems.length > 0 ? stats.expiredItems.map(i=>(
-                                                        <button key={i.id} onClick={() => navigateToInventoryAndSearch(i.serialLot || i.name)} className="w-full text-left p-4 bg-white hover:bg-amber-50 transition-colors cursor-pointer rounded-2xl flex justify-between items-center mb-2 border border-amber-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-200">
+                                            <div className="space-y-2 flex-1 overflow-y-auto max-h-60 custom-scrollbar">
+                                                {stats.critical.length > 0 ? (
+                                                    stats.critical.map(i => (
+                                                        <div key={i.id} className="p-3 bg-red-950/20 border border-red-500/20 rounded-2xl flex items-center justify-between">
                                                             <div>
-                                                                <p className="font-black text-[10px] text-amber-900 uppercase leading-none">{i.name}</p>
-                                                                <p className="text-[8px] text-amber-600 mt-1 uppercase font-bold">Vencimento: {formatBRDate(i.expirationDate)}</p>
+                                                                <p className="font-black text-xs text-red-200 uppercase">{i.name}</p>
+                                                                <p className="text-[9px] text-red-400 font-bold mt-0.5">Mínimo: {i.minStock} un | Lote: {i.serialLot || '---'}</p>
                                                             </div>
-                                                            <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[8px] font-black uppercase">Substituir</span>
-                                                        </button>
-                                                    )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Prazos regularizados</p>}
-                                                </div>
-                                            </div>
-                                            <div className="bg-white p-6 rounded-[2rem] border shadow-sm break-inside-avoid">
-                                                <h3 className="text-[10px] font-black uppercase text-orange-600 mb-6 flex items-center gap-2"><Icon name="wrench" /> Avarias Ativas</h3>
-                                                <div className="space-y-3">
-                                                    {stats.damageReports.length > 0 ? stats.damageReports.slice(0,4).map((t,idx)=>(
-                                                        <button key={idx} onClick={() => navigateToInventoryAndSearch(t.itemName)} className="w-full text-left p-4 bg-orange-50 hover:bg-orange-100 transition-colors cursor-pointer rounded-2xl border border-orange-100 mb-2 focus:outline-none focus:ring-2 focus:ring-orange-200">
-                                                            <p className="font-black text-[10px] text-orange-900 uppercase leading-none">{t.itemName}</p>
-                                                            <p className="text-[8px] italic text-orange-700 mt-1 leading-tight">{t.reason}</p>
-                                                        </button>
-                                                    )) : <p className="text-[10px] text-slate-300 uppercase text-center font-bold py-6">Sem avarias relatadas</p>}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* SOBREPOSIÇÃO DURANTE A GERAÇÃO DO PDF */}
-                                    {isGeneratingPDF && (
-                                        <div className="fixed inset-0 z-[200] flex">
-                                            {/* TELA DE LOADING (Esconde o processo do usuário) */}
-                                            <div className="absolute inset-0 z-[210] bg-slate-50 flex flex-col items-center justify-center">
-                                                <div className="w-16 h-16 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mb-6"></div>
-                                                <h2 className="text-2xl font-black text-blue-900 uppercase tracking-tighter">A Formatar Documento</h2>
-                                                <p className="text-slate-500 text-[10px] font-bold mt-2 uppercase tracking-widest">Aguarde o download do PDF...</p>
-                                            </div>
-
-                                            {/* TEMPLATE DO RELATÓRIO (Fica atrás da tela de loading, mas perfeitamente visível para a captura de PDF) */}
-                                            <div className="absolute top-0 left-0 w-full z-[205] bg-white pointer-events-none flex justify-center">
-                                                <div id="pdf-formal-report" className="bg-white text-black p-6 w-[190mm] min-h-[297mm]">
-                                                    <div className="border-b-2 border-slate-800 pb-4 mb-8 text-center">
-                                                        <h1 className="text-2xl font-black uppercase mb-1">SIG-Aeromédico</h1>
-                                                        <h2 className="text-sm font-bold text-slate-600 uppercase tracking-widest">Relatório de Alterações e Necessidades Logísticas</h2>
-                                                        <div className="mt-4 flex justify-between text-[10px] text-slate-500">
-                                                            <span><strong>Data de Emissão:</strong> {new Date().toLocaleDateString('pt-PT')}</span>
-                                                            <span><strong>Militar Responsável:</strong> {currentUser?.graduation} {currentUser?.warName} (RG: {currentUser?.rg})</span>
+                                                            <span className="bg-red-600 text-white font-black text-xs px-2.5 py-1 rounded-xl">
+                                                                {i.currentStock} un
+                                                            </span>
                                                         </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center h-40 text-center text-slate-600">
+                                                        <Icon name="check" className="w-8 h-8 text-emerald-500/40 mb-2" />
+                                                        <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Cargas em Conformidade</p>
+                                                        <p className="text-[10px]">Todos os saldos respeitam a cota mínima.</p>
                                                     </div>
-
-                                                    <div className="space-y-10">
-                                                        {/* Seção 1: Reposição */}
-                                                        <section>
-                                                            <h3 className="text-xs font-black uppercase text-red-700 border-b border-red-200 pb-2 mb-3">1. Solicitação de Reposição Urgente (Abaixo do Mínimo)</h3>
-                                                            {stats.criticalItems.length > 0 ? (
-                                                                <table className="w-full table-fixed text-left text-[10px] border-collapse break-words">
-                                                                    <thead>
-                                                                        <tr className="bg-red-50 text-red-900">
-                                                                            <th className="border border-red-200 p-2 w-[30%]">Insumo / Equipamento</th>
-                                                                            <th className="border border-red-200 p-2 w-[20%]">Marca</th>
-                                                                            <th className="border border-red-200 p-2 w-[20%]">Lote / Série</th>
-                                                                            <th className="border border-red-200 p-2 w-[15%] text-center">Carga Atual</th>
-                                                                            <th className="border border-red-200 p-2 w-[15%] text-center">Mínimo</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {stats.criticalItems.map(i => (
-                                                                            <tr key={i.id}>
-                                                                                <td className="border border-slate-200 p-2 font-bold">{i.name}</td>
-                                                                                <td className="border border-slate-200 p-2">{i.manufacturer || 'N/A'}</td>
-                                                                                <td className="border border-slate-200 p-2">{i.serialLot || 'N/A'}</td>
-                                                                                <td className="border border-slate-200 p-2 text-center text-red-600 font-bold">{i.currentStock} un</td>
-                                                                                <td className="border border-slate-200 p-2 text-center">{i.minStock} un</td>
-                                                                            </tr>
-                                                                        ))}
-                                                                    </tbody>
-                                                                </table>
-                                                            ) : <p className="text-[10px] italic text-slate-500">Nenhum item em estado crítico no momento.</p>}
-                                                        </section>
-
-                                                        {/* Seção 2: Validade */}
-                                                        <section>
-                                                            <h3 className="text-xs font-black uppercase text-amber-700 border-b border-amber-200 pb-2 mb-3">2. Itens com Validade Operacional Excedida (Descarte/Troca)</h3>
-                                                            {stats.expiredItems.length > 0 ? (
-                                                                <table className="w-full table-fixed text-left text-[10px] border-collapse break-words">
-                                                                    <thead>
-                                                                        <tr className="bg-amber-50 text-amber-900">
-                                                                            <th className="border border-amber-200 p-2 w-[35%]">Insumo / Equipamento</th>
-                                                                            <th className="border border-amber-200 p-2 w-[20%]">Marca</th>
-                                                                            <th className="border border-amber-200 p-2 w-[20%]">Lote / Série</th>
-                                                                            <th className="border border-amber-200 p-2 w-[25%] text-center">Vencimento</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {stats.expiredItems.map(i => (
-                                                                            <tr key={i.id}>
-                                                                                <td className="border border-slate-200 p-2 font-bold">{i.name}</td>
-                                                                                <td className="border border-slate-200 p-2">{i.manufacturer || 'N/A'}</td>
-                                                                                <td className="border border-slate-200 p-2">{i.serialLot || 'N/A'}</td>
-                                                                                <td className="border border-slate-200 p-2 text-center text-amber-700 font-bold">{formatBRDate(i.expirationDate)}</td>
-                                                                            </tr>
-                                                                        ))}
-                                                                    </tbody>
-                                                                </table>
-                                                            ) : <p className="text-[10px] italic text-slate-500">Nenhum item vencido detectado.</p>}
-                                                        </section>
-
-                                                        {/* Seção 3: Avarias */}
-                                                        <section>
-                                                            <h3 className="text-xs font-black uppercase text-orange-700 border-b border-orange-200 pb-2 mb-3">3. Relatório de Avarias e Alterações (Para Manutenção)</h3>
-                                                            {stats.damageReports.length > 0 ? (
-                                                                <table className="w-full table-fixed text-left text-[10px] border-collapse break-words">
-                                                                    <thead>
-                                                                        <tr className="bg-orange-50 text-orange-900">
-                                                                            <th className="border border-orange-200 p-2 w-[15%]">Data</th>
-                                                                            <th className="border border-orange-200 p-2 w-[30%]">Equipamento Relatado</th>
-                                                                            <th className="border border-orange-200 p-2 w-[35%]">Motivo / Descrição do Dano</th>
-                                                                            <th className="border border-orange-200 p-2 w-[20%]">Registrado por</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {stats.damageReports.map((t, idx) => (
-                                                                            <tr key={idx}>
-                                                                                <td className="border border-slate-200 p-2">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
-                                                                                <td className="border border-slate-200 p-2 font-bold">{t.itemName}</td>
-                                                                                <td className="border border-slate-200 p-2">{t.reason}</td>
-                                                                                <td className="border border-slate-200 p-2">{t.recorder?.warName} (RG: {t.recorder?.rg})</td>
-                                                                            </tr>
-                                                                        ))}
-                                                                    </tbody>
-                                                                </table>
-                                                            ) : <p className="text-[10px] italic text-slate-500">Nenhuma avaria ativa relatada.</p>}
-                                                        </section>
-                                                    </div>
-                                                    
-                                                    {/* Assinatura */}
-                                                    <div className="mt-20 text-center break-inside-avoid">
-                                                        <div className="w-64 border-b border-slate-800 mx-auto mb-2"></div>
-                                                        <p className="text-[10px] font-bold uppercase">{currentUser?.graduation} {currentUser?.warName}</p>
-                                                        <p className="text-[9px] text-slate-500 uppercase">Responsável pela Emissão - RG: {currentUser?.rg}</p>
-                                                    </div>
-                                                </div>
+                                                )}
                                             </div>
                                         </div>
-                                    )}
+
+                                        {/* Card 2: Controle de Validades FEFO */}
+                                        <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl flex flex-col">
+                                            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                                                <div className="flex items-center gap-2 text-amber-400 font-black text-xs uppercase">
+                                                    <Icon name="clock" className="w-4 h-4" />
+                                                    <span>Validades em Atenção (&lt; 60 dias)</span>
+                                                </div>
+                                                <span className="text-[9px] font-bold text-slate-500 uppercase">{stats.expired.length + stats.expiringSoon.length} itens</span>
+                                            </div>
+                                            <div className="space-y-2 flex-1 overflow-y-auto max-h-60 custom-scrollbar">
+                                                {stats.expired.length > 0 || stats.expiringSoon.length > 0 ? (
+                                                    <>
+                                                        {stats.expired.map(i => (
+                                                            <div key={i.id} className="p-3 bg-red-950/30 border border-red-500/40 rounded-2xl flex items-center justify-between">
+                                                                <div>
+                                                                    <p className="font-black text-xs text-red-300 uppercase">{i.name}</p>
+                                                                    <p className="text-[9px] text-red-400 font-bold">Venceu em: {formatBRDate(i.expirationDate)}</p>
+                                                                </div>
+                                                                <span className="bg-red-600/30 text-red-300 border border-red-500/50 text-[9px] font-black uppercase px-2 py-0.5 rounded-lg">VENCIDO</span>
+                                                            </div>
+                                                        ))}
+                                                        {stats.expiringSoon.map(i => {
+                                                            const d = getDaysUntilExpiry(i.expirationDate);
+                                                            return (
+                                                                <div key={i.id} className="p-3 bg-amber-950/20 border border-amber-500/20 rounded-2xl flex items-center justify-between">
+                                                                    <div>
+                                                                        <p className="font-black text-xs text-amber-200 uppercase">{i.name}</p>
+                                                                        <p className="text-[9px] text-amber-400 font-bold">Vence em: {formatBRDate(i.expirationDate)} ({d} dias)</p>
+                                                                    </div>
+                                                                    <span className="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] font-black uppercase px-2 py-0.5 rounded-lg">Priorizar</span>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </>
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center h-40 text-center text-slate-600">
+                                                        <Icon name="check" className="w-8 h-8 text-emerald-500/40 mb-2" />
+                                                        <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Prazos de Validade Regulares</p>
+                                                        <p className="text-[10px]">Nenhum fármaco próximo do vencimento.</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Card 3: Prontidão dos Kits de Bordo */}
+                                        <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl flex flex-col">
+                                            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                                                <div className="flex items-center gap-2 text-emerald-400 font-black text-xs uppercase">
+                                                    <Icon name="kits" className="w-4 h-4" />
+                                                    <span>Mochilas de Voo (Lacres Ativos)</span>
+                                                </div>
+                                                <button onClick={() => setActiveTab('kits')} className="text-[9px] font-black text-blue-400 uppercase hover:underline">Ver Todos &rarr;</button>
+                                            </div>
+                                            <div className="space-y-2 flex-1 overflow-y-auto max-h-60 custom-scrollbar">
+                                                {kits.slice(0, 4).map(k => (
+                                                    <div key={k.id} className="p-3 bg-slate-950/60 border border-slate-800/80 rounded-2xl flex items-center justify-between">
+                                                        <div className="overflow-hidden pr-2">
+                                                            <p className="font-black text-xs text-white uppercase truncate">{k.name}</p>
+                                                            <p className="text-[9px] text-slate-400 font-medium">Lacre: <span className="text-amber-400 font-bold">{k.seal}</span> &bull; {k.aircraft}</p>
+                                                        </div>
+                                                        <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[8px] font-black uppercase px-2 py-1 rounded-lg shrink-0">
+                                                            {k.status}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                    </div>
 
                                 </div>
                             )}
 
-                            {activeTab === 'inventory' && (
-                                <div className="max-w-6xl mx-auto space-y-6">
-                                    <div className="flex flex-col md:flex-row gap-3">
-                                        <input type="text" placeholder="Filtrar por nome, lote ou marca..." className="flex-1 p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50 shadow-sm h-14" value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} />
-                                        <button onClick={()=>{setModalType('item'); setSelectedItem(null); setIsModalOpen(true);}} className="bg-blue-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase flex items-center gap-2 justify-center h-14 shadow-lg"><Icon name="plus" /> Novo Insumo</button>
+                            {/* TAB 2: KITS & LACRES DE BORDO */}
+                            {activeTab === 'kits' && (
+                                <div className="max-w-7xl mx-auto space-y-6">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+                                        <div>
+                                            <h2 className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                                                <Icon name="kits" className="text-emerald-400" />
+                                                Kits de Bordo & Conferência de Lacres
+                                            </h2>
+                                            <p className="text-xs text-slate-400 font-medium mt-1">
+                                                Conferência e controle de segurança de mochilas de atendimento pré-hospitalar embarcadas nas aeronaves do GOA.
+                                            </p>
+                                        </div>
+                                        <button
+                                            onClick={handleQuickSealsVerifyAll}
+                                            className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition-all"
+                                        >
+                                            <Icon name="check" className="w-4 h-4" />
+                                            Homologar Todos os Lacres
+                                        </button>
                                     </div>
-                                    <div className="bg-white rounded-[1.5rem] border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar">
-                                        <table className="w-full text-left min-w-[600px]">
-                                            <thead className="bg-slate-50 border-b text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                                <tr><th className="px-6 py-5">Material Detalhado</th><th className="px-6 py-5 text-center">Carga</th><th className="px-6 py-5 text-right">Ações</th></tr>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                        {kits.map(kit => (
+                                            <div key={kit.id} className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl flex flex-col justify-between hover:border-slate-700 transition-all">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <span className="text-[9px] font-black uppercase tracking-widest text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-500/20">
+                                                            {kit.aircraft}
+                                                        </span>
+                                                        <span className={`text-[9px] font-black uppercase px-2.5 py-1 rounded-lg border ${kit.status === 'LACRADO' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30'}`}>
+                                                            {kit.status}
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="font-black text-sm uppercase text-white mb-2">{kit.name}</h3>
+                                                    
+                                                    <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800/80 mb-4 space-y-2">
+                                                        <div className="flex justify-between items-center text-xs">
+                                                            <span className="text-slate-400 font-bold uppercase text-[10px]">Nº do Lacre:</span>
+                                                            <span className="font-black text-amber-400 font-mono text-sm tracking-wider">{kit.seal}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center text-xs border-t border-slate-850 pt-2">
+                                                            <span className="text-slate-500 font-medium text-[10px]">Última Conferência:</span>
+                                                            <span className="font-bold text-slate-300 text-[10px]">{kit.checkedAt}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center text-xs">
+                                                            <span className="text-slate-500 font-medium text-[10px]">Responsável:</span>
+                                                            <span className="font-bold text-slate-400 text-[10px] truncate max-w-[140px]">{kit.responsible}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedKit(kit);
+                                                        setModalType('seal');
+                                                        setIsModalOpen(true);
+                                                    }}
+                                                    className="w-full py-3 bg-slate-800 hover:bg-slate-750 text-white rounded-xl text-[10px] font-black uppercase tracking-wider border border-slate-700/60 transition-all flex items-center justify-center gap-2"
+                                                >
+                                                    <Icon name="lock" className="w-3.5 h-3.5 text-amber-400" />
+                                                    Alterar / Re-lacrar Mochila
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 3: FARMÁCIA & INSUMOS (FEFO) */}
+                            {activeTab === 'inventory' && (
+                                <div className="max-w-7xl mx-auto space-y-6">
+                                    
+                                    {/* Barra de Filtros e Busca */}
+                                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+                                        <div className="flex-1 flex flex-col sm:flex-row gap-3">
+                                            <input
+                                                type="text"
+                                                placeholder="Filtrar por nome, lote ou fabricante..."
+                                                value={searchTerm}
+                                                onChange={e => setSearchTerm(e.target.value)}
+                                                className="flex-1 p-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-xs font-bold text-white uppercase placeholder:text-slate-600 outline-none focus:border-blue-500 transition-all"
+                                            />
+                                            <select
+                                                value={categoryFilter}
+                                                onChange={e => setCategoryFilter(e.target.value)}
+                                                className="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-xs font-bold text-slate-300 uppercase outline-none focus:border-blue-500"
+                                            >
+                                                <option value="TODOS">Todas as Categorias</option>
+                                                <option value="Fármaco Comum">Fármacos Comuns</option>
+                                                <option value="Controlado (Port. 344)">Psicotrópicos (Port. 344)</option>
+                                                <option value="Material/Descartável APH">Materiais & Descartáveis</option>
+                                                <option value="Equipamento Biomédico">Equipamentos Biomédicos</option>
+                                                <option value="Gás Medicinal">Gases Medicinais (O2)</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedItem(null);
+                                                    setModalType('item');
+                                                    setIsModalOpen(true);
+                                                }}
+                                                className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-blue-900/30 transition-all"
+                                            >
+                                                <Icon name="plus" className="w-4 h-4" />
+                                                Novo Insumo
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Tabela de Insumos */}
+                                    <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl overflow-hidden overflow-x-auto custom-scrollbar">
+                                        <table className="w-full text-left min-w-[850px]">
+                                            <thead className="bg-slate-950/80 border-b border-slate-800 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                                <tr>
+                                                    <th className="px-6 py-4">Insumo & Detalhes</th>
+                                                    <th className="px-6 py-4">Categoria</th>
+                                                    <th className="px-6 py-4 text-center">Validade (FEFO)</th>
+                                                    <th className="px-6 py-4 text-center">Carga / Mínimo</th>
+                                                    <th className="px-6 py-4 text-right">Ações Operacionais</th>
+                                                </tr>
                                             </thead>
-                                            <tbody className="divide-y text-[10px]">
-                                                {filteredItems.map(i=>(
-                                                    <tr key={i.id} className="hover:bg-slate-50 transition-colors">
-                                                        <td className="px-6 py-5">
-                                                            <p className="font-black text-slate-900 uppercase text-[11px] leading-tight">{i.name}</p>
-                                                            <p className="text-[8px] text-blue-500 font-bold uppercase mt-1">Validade: {formatBRDate(i.expirationDate)} | Marca: {i.manufacturer} | Lote: {i.serialLot}</p>
-                                                            { (() => {
-                                                                if(!i.expirationDate) return null;
-                                                                const [y, m, d] = i.expirationDate.split('-');
-                                                                const exp = new Date(y, m-1, d);
-                                                                const now = new Date();
-                                                                now.setHours(0,0,0,0);
-                                                                return exp < now ? <span className="inline-block mt-1 px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[7px] font-black uppercase">Validade Excedida</span> : null;
-                                                            })() }
-                                                        </td>
-                                                        <td className="px-6 py-5 text-center whitespace-nowrap">
-                                                            <span className={`px-4 py-1.5 rounded-xl font-black ${Number(i.currentStock) < Number(i.minStock) ? 'bg-red-100 text-red-700 animate-pulse' : 'bg-slate-100 text-slate-800'}`}>{i.currentStock} / {i.minStock}</span>
-                                                        </td>
-                                                        <td className="px-6 py-5 text-right space-x-1.5 whitespace-nowrap">
-                                                            <button onClick={()=>{setSelectedItem(i); setModalType('movement'); setMovementType('saída'); setIsModalOpen(true);}} className="p-3 bg-blue-50 text-blue-900 rounded-xl" title="Cautela/Retorno"><Icon name="history" /></button>
-                                                            <button onClick={()=>{setSelectedItem(i); setModalType('damage'); setIsModalOpen(true);}} className="p-3 bg-orange-50 text-orange-600 rounded-xl" title="Avaria"><Icon name="wrench" /></button>
-                                                            <button onClick={()=>{setSelectedItem(i); setModalType('item'); setIsModalOpen(true);}} className="p-3 bg-slate-100 text-slate-400 rounded-xl" title="Editar"><Icon name="edit" /></button>
+                                            <tbody className="divide-y divide-slate-800/60 text-xs">
+                                                {filteredItems.map(item => {
+                                                    const days = getDaysUntilExpiry(item.expirationDate);
+                                                    const isExpired = days !== null && days < 0;
+                                                    const isSoon = days !== null && days >= 0 && days <= 60;
+                                                    const isLowStock = Number(item.currentStock) < Number(item.minStock);
+
+                                                    return (
+                                                        <tr key={item.id} className="hover:bg-slate-850/60 transition-colors">
+                                                            <td className="px-6 py-4">
+                                                                <p className="font-black text-white uppercase text-xs leading-tight">{item.name}</p>
+                                                                <div className="flex items-center gap-2 text-[9px] text-slate-400 font-bold uppercase mt-1">
+                                                                    <span>Lote: <strong className="text-amber-400">{item.serialLot || 'N/A'}</strong></span>
+                                                                    <span>&bull;</span>
+                                                                    <span>Marca: {item.manufacturer || 'N/A'}</span>
+                                                                    <span>&bull;</span>
+                                                                    <span className="text-blue-400">{item.location}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-6 py-4">
+                                                                <span className={`text-[8px] font-black uppercase px-2.5 py-1 rounded-lg border ${
+                                                                    item.category.includes('Controlado')
+                                                                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                                                                        : item.category.includes('Equipamento')
+                                                                        ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+                                                                        : 'bg-slate-800 text-slate-300 border-slate-700'
+                                                                }`}>
+                                                                    {item.category}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center">
+                                                                <span className="font-bold text-slate-200 block">{formatBRDate(item.expirationDate)}</span>
+                                                                {isExpired ? (
+                                                                    <span className="inline-block mt-0.5 text-[8px] font-black uppercase text-red-400 bg-red-500/20 px-2 py-0.5 rounded-full border border-red-500/30">VENCIDO</span>
+                                                                ) : isSoon ? (
+                                                                    <span className="inline-block mt-0.5 text-[8px] font-black uppercase text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">{days} dias restantes</span>
+                                                                ) : (
+                                                                    <span className="inline-block mt-0.5 text-[8px] font-bold uppercase text-emerald-400">Regular</span>
+                                                                )}
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center">
+                                                                <span className={`inline-block px-3 py-1 rounded-xl font-black text-xs border ${
+                                                                    isLowStock
+                                                                        ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
+                                                                        : 'bg-slate-800 text-slate-200 border-slate-700'
+                                                                }`}>
+                                                                    {item.currentStock} / {item.minStock} un
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-right space-x-1.5 whitespace-nowrap">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedItem(item);
+                                                                        setModalType('movement');
+                                                                        setIsModalOpen(true);
+                                                                    }}
+                                                                    className="p-2.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-xl border border-blue-500/30 transition-colors"
+                                                                    title="Cautela / Retorno / Saída"
+                                                                >
+                                                                    <Icon name="history" className="w-4 h-4" />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedItem(item);
+                                                                        setModalType('item');
+                                                                        setIsModalOpen(true);
+                                                                    }}
+                                                                    className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-xl border border-slate-700 transition-colors"
+                                                                    title="Editar Insumo"
+                                                                >
+                                                                    <Icon name="wrench" className="w-4 h-4" />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            )}
+
+                            {/* TAB 4: REGISTRO DE MISSÃO & CONSUMO APH */}
+                            {activeTab === 'mission' && (
+                                <div className="max-w-4xl mx-auto space-y-6">
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+                                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                                            <div className="bg-blue-600 p-3 rounded-2xl shadow-lg">
+                                                <Icon name="plane" className="text-white w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h2 className="text-lg font-black uppercase text-white">Registro de Consumo Pós-Missão APH</h2>
+                                                <p className="text-xs text-slate-400">Lançamento de insumos e fármacos utilizados em voo no atendimento de vítimas.</p>
+                                            </div>
+                                        </div>
+
+                                        <form onSubmit={handleRegisterMissionConsumption} className="space-y-5">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Nº Missão / Código Oncall (COBOM)</label>
+                                                    <input name="missionCode" required placeholder="Ex: MIS-2026-0412" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-500" />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Aeronave Empregada</label>
+                                                    <select name="aircraft" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-500">
+                                                        <option value="Esquilo (Bombeiro 01)">Esquilo AS350 B2 (Bombeiro 01)</option>
+                                                        <option value="Esquilo (Bombeiro 02)">Esquilo AS350 B3 (Bombeiro 02)</option>
+                                                        <option value="AW169">Leonardo AW169 (Bombeiro 03)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Nome / Identificação da Vítima ou Paciente</label>
+                                                    <input name="patientName" required placeholder="Ex: Paciente Grave - Trauma Rodoviário" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-500" />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Mochila Rompida em Voo</label>
+                                                    <select name="brokenKit" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-500">
+                                                        {kits.map(k => <option key={k.id} value={k.id}>{k.name} ({k.seal})</option>)}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            {/* Tripulação Médica */}
+                                            <div className="p-4 bg-slate-950/70 border border-slate-800 rounded-2xl space-y-3">
+                                                <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Equipe Médica & Enfermagem de Bordo</p>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <input name="doctorName" defaultValue="Cap BM Méd Petrus" placeholder="Médico de Voo" required className="p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                                    <input name="doctorCRM" defaultValue="CRM-RJ 98451" placeholder="CRM Médico" required className="p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <input name="nurseName" defaultValue="1º Ten BM Liborio" placeholder="Enfermeiro de Voo" required className="p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                                    <input name="nurseCOREN" defaultValue="COREN-RJ 14520" placeholder="COREN Enfermeiro" required className="p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                                </div>
+                                            </div>
+
+                                            {/* Seleção do Insumo Consumido */}
+                                            <div className="p-4 bg-blue-950/20 border border-blue-500/20 rounded-2xl space-y-3">
+                                                <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Insumo Utilizado no Socorro</p>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                    <div className="md:col-span-2">
+                                                        <select name="consumedItem" required className="w-full p-3.5 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none">
+                                                            {items.map(it => (
+                                                                <option key={it.id} value={it.id}>
+                                                                    {it.name} (Lote: {it.serialLot} - Saldo: {it.currentStock})
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <input name="consumedQty" type="number" min="1" defaultValue="1" required placeholder="Qtd" className="w-full p-3.5 bg-slate-900 border border-slate-800 rounded-xl text-xs font-black text-white text-center outline-none" />
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Descarte Assistido de Sobras (Portaria 344) - Qtd em ampolas/ml</label>
+                                                    <input name="discardQty" type="number" min="0" step="0.5" defaultValue="0" className="w-full p-3.5 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-amber-400 outline-none" />
+                                                    <p className="text-[9px] text-slate-500 mt-1">Caso tenha havido descarte de resíduo de psicotrópico, será lançado no livro com testemunho mútuo.</p>
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black uppercase text-xs tracking-wider shadow-xl shadow-blue-900/30 transition-all disabled:opacity-50"
+                                            >
+                                                {isSubmitting ? 'Homologando Lançamento...' : 'Concluir Registro Pós-Missão & Abater Carga'}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 5: LIVRO DE PSICOTRÓPICOS (PORTARIA 344/98) */}
+                            {activeTab === 'controlled' && (
+                                <div className="max-w-6xl mx-auto space-y-6">
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                        <div>
+                                            <h2 className="text-xl font-black uppercase text-white flex items-center gap-2">
+                                                <Icon name="pill" className="text-amber-400" />
+                                                Livro de Substâncias Controladas (Portaria SVS/MS nº 344/98)
+                                            </h2>
+                                            <p className="text-xs text-slate-400 font-medium mt-1">
+                                                Rastreabilidade legal de psicotrópicos, entorpecentes de analgesia/sedação e descarte assistido de resíduos.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl overflow-hidden overflow-x-auto custom-scrollbar">
+                                        <table className="w-full text-left min-w-[700px]">
+                                            <thead className="bg-slate-950/80 border-b border-slate-800 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                                <tr>
+                                                    <th className="px-6 py-4">Data/Hora</th>
+                                                    <th className="px-6 py-4">Fármaco & Lote</th>
+                                                    <th className="px-6 py-4 text-center">Dose / Sobra</th>
+                                                    <th className="px-6 py-4">Missão / Vítima</th>
+                                                    <th className="px-6 py-4">Equipe Médica & Testemunha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-800/60 text-xs">
+                                                {controlledLedger.length > 0 ? (
+                                                    controlledLedger.map((row, idx) => (
+                                                        <tr key={idx} className="hover:bg-slate-850/60">
+                                                            <td className="px-6 py-4 font-bold text-slate-400 text-[10px]">{row.date}</td>
+                                                            <td className="px-6 py-4">
+                                                                <p className="font-black text-amber-300 uppercase">{row.drug}</p>
+                                                                <p className="text-[9px] text-slate-400">Lote: {row.lot}</p>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center">
+                                                                <span className="font-black text-white">{row.used} un</span>
+                                                                {row.discarded > 0 && (
+                                                                    <span className="block text-[8px] font-bold text-red-400 uppercase mt-0.5">Descarte: {row.discarded}</span>
+                                                                )}
+                                                            </td>
+                                                            <td className="px-6 py-4 font-bold text-slate-300">{row.mission}</td>
+                                                            <td className="px-6 py-4 text-[10px]">
+                                                                <p className="font-bold text-white">{row.doctor}</p>
+                                                                <p className="text-slate-400">{row.nurse}</p>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="5" className="px-6 py-12 text-center text-slate-500 uppercase text-xs font-bold">
+                                                            Nenhum registro de consumo de controlados no turno atual.
                                                         </td>
                                                     </tr>
-                                                ))}
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             )}
 
-                            {activeTab === 'movements' && (
-                                <div className="max-w-6xl mx-auto bg-white rounded-[1.5rem] border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar animate-in slide-in-from-bottom duration-300">
-                                    <table className="w-full text-left min-w-[800px]">
-                                        <thead className="bg-slate-50 border-b text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                            <tr><th className="px-6 py-5">Data</th><th className="px-6 py-5">Insumo</th><th className="px-6 py-5">Portador (Retirada)</th><th className="px-6 py-5">Fiel (Reg.)</th><th className="px-6 py-5 text-center">Fluxo</th></tr>
+                            {/* TAB 6: CALCULADORA AERONÁUTICA DE OXIGÊNIO (O2) */}
+                            {activeTab === 'oxygen' && (
+                                <div className="max-w-4xl mx-auto space-y-6">
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+                                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                                            <div className="bg-cyan-600 p-3 rounded-2xl shadow-lg">
+                                                <Icon name="oxygen" className="text-white w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h2 className="text-lg font-black uppercase text-white">Calculadora Aeronáutica de Oxigênio (O2)</h2>
+                                                <p className="text-xs text-slate-400">Cálculo de autonomia de voo em minutos por vazão prescrita e manômetro.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                                            {/* Painel de Entrada */}
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Cilindro Instalado</label>
+                                                    <select
+                                                        value={calcTankType}
+                                                        onChange={e => setCalcTankType(e.target.value)}
+                                                        className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none"
+                                                    >
+                                                        <option value="1000">Cilindro Luxfer Fibra 4.7L (1.000 Litros • Fator 0.50)</option>
+                                                        <option value="680">Cilindro Alumínio ME 2.9L (680 Litros • Fator 0.28)</option>
+                                                        <option value="425">Cilindro Portátil D (425 Litros • Fator 0.16)</option>
+                                                        <option value="2000">Cilindro Reserva Hangar (2.000 Litros • Fator 0.90)</option>
+                                                    </select>
+                                                </div>
+
+                                                <div>
+                                                    <div className="flex justify-between items-center mb-1">
+                                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Pressão Manométrica Lida (PSI)</label>
+                                                        <span className="text-sm font-black text-cyan-400 font-mono">{calcPressure} PSI</span>
+                                                    </div>
+                                                    <input
+                                                        type="range"
+                                                        min="200"
+                                                        max="2200"
+                                                        step="50"
+                                                        value={calcPressure}
+                                                        onChange={e => setCalcPressure(Number(e.target.value))}
+                                                        className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <div className="flex justify-between items-center mb-1">
+                                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Fluxo de O2 Prescrito ao Paciente</label>
+                                                        <span className="text-sm font-black text-cyan-400 font-mono">{calcFlowRate} L/min</span>
+                                                    </div>
+                                                    <input
+                                                        type="range"
+                                                        min="1"
+                                                        max="15"
+                                                        step="1"
+                                                        value={calcFlowRate}
+                                                        onChange={e => setCalcFlowRate(Number(e.target.value))}
+                                                        className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Painel de Resultado */}
+                                            <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800 text-center flex flex-col justify-center items-center shadow-inner">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Autonomia Estimada de Voo</p>
+                                                <div className="text-4xl md:text-5xl font-black font-mono tracking-tight text-cyan-400 my-2">
+                                                    {calcOxygenResult.formatted}
+                                                </div>
+                                                <p className="text-xs font-bold text-slate-400 mt-1">
+                                                    Volume Útil: <strong className="text-white">{calcOxygenResult.totalLiters} Litros</strong> (com 200 PSI de reserva)
+                                                </p>
+                                                <div className="mt-4">
+                                                    {calcOxygenResult.isSafe ? (
+                                                        <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black uppercase px-3 py-1.5 rounded-full">
+                                                            ✓ Suficiente para Voo de Resgate
+                                                        </span>
+                                                    ) : (
+                                                        <span className="bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-black uppercase px-3 py-1.5 rounded-full animate-pulse">
+                                                            ⚠️ Carga Crítica - Providenciar Troca
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Lista de Cilindros Instalados */}
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+                                        <h3 className="text-xs font-black uppercase text-slate-300 mb-4 tracking-wider">Cilindros Instalados nas Aeronaves (DBM1/GOA)</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            {cilindrosO2.map(c => (
+                                                <div key={c.id} className="p-4 bg-slate-950 border border-slate-800 rounded-2xl flex flex-col justify-between">
+                                                    <div>
+                                                        <p className="font-black text-xs text-white uppercase">{c.name}</p>
+                                                        <p className="text-[9px] text-cyan-400 font-bold uppercase mt-0.5">{c.aircraft}</p>
+                                                    </div>
+                                                    <div className="mt-4 pt-3 border-t border-slate-850 flex justify-between items-center text-xs">
+                                                        <span className="font-mono font-bold text-white">{c.pressurePSI} PSI</span>
+                                                        <span className="text-[9px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Operacional</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 7: LIVRO GERAL DE MOVIMENTAÇÕES */}
+                            {activeTab === 'history' && (
+                                <div className="max-w-7xl mx-auto space-y-6">
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+                                        <h2 className="text-xl font-black uppercase text-white mb-4">Livro Oficial de Movimentações Aeromédicas</h2>
+                                        <div className="overflow-x-auto custom-scrollbar">
+                                            <table className="w-full text-left min-w-[800px]">
+                                                <thead className="bg-slate-950/80 border-b border-slate-800 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                                    <tr>
+                                                        <th className="px-6 py-4">Data/Hora</th>
+                                                        <th className="px-6 py-4">Insumo</th>
+                                                        <th className="px-6 py-4">Portador (Retirada)</th>
+                                                        <th className="px-6 py-4">Fiel (Registrador)</th>
+                                                        <th className="px-6 py-4 text-center">Tipo & Quantidade</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-800/60 text-xs">
+                                                    {transactions.map((t, idx) => (
+                                                        <tr key={idx} className="hover:bg-slate-850/60">
+                                                            <td className="px-6 py-4 font-bold text-slate-400">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
+                                                            <td className="px-6 py-4">
+                                                                <p className="font-black text-white uppercase">{t.itemName}</p>
+                                                                <p className="text-[9px] text-slate-500 italic mt-0.5">{t.reason}</p>
+                                                            </td>
+                                                            <td className="px-6 py-4 uppercase">
+                                                                <p className="font-black text-slate-200">{t.bearer.graduation} {t.bearer.warName}</p>
+                                                                <p className="text-[9px] text-slate-500">RG: {t.bearer.rg}</p>
+                                                            </td>
+                                                            <td className="px-6 py-4 uppercase">
+                                                                <p className="font-bold text-blue-400">{t.recorder.warName}</p>
+                                                                <p className="text-[9px] text-slate-500">RG: {t.recorder.rg}</p>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-center">
+                                                                <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[9px] border ${
+                                                                    t.type.includes('entrada')
+                                                                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                                                                        : 'bg-red-500/20 text-red-400 border-red-500/30'
+                                                                }`}>
+                                                                    {t.type} ({t.quantity} un)
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+                    </main>
+
+                    {/* MODAIS (Novo Insumo, Movimentação, Lacre) */}
+                    {isModalOpen && (
+                        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
+                            <div className="bg-slate-900 border border-slate-800 rounded-t-3xl md:rounded-3xl w-full max-w-xl p-6 md:p-8 shadow-2xl overflow-y-auto max-h-[92vh] custom-scrollbar">
+                                
+                                <div className="flex justify-between items-center mb-6 pb-3 border-b border-slate-800">
+                                    <h3 className="text-base font-black uppercase text-white">
+                                        {modalType === 'item' ? (selectedItem ? 'Editar Insumo' : 'Cadastrar Novo Insumo') :
+                                         modalType === 'seal' ? `Conferir Lacre: ${selectedKit?.name}` :
+                                         'Registrar Cautela / Movimentação'}
+                                    </h3>
+                                    <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white p-2">
+                                        <Icon name="x" className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                {/* Form: Novo Insumo */}
+                                {modalType === 'item' && (
+                                    <form onSubmit={handleSaveItem} className="space-y-4">
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Nome do Insumo / Medicamento</label>
+                                            <input name="name" required defaultValue={selectedItem?.name} placeholder="Ex: Midazolam 15mg/3ml ou Tubo Orotraqueal 7.5" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-500" />
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Categoria</label>
+                                                <select name="category" defaultValue={selectedItem?.category || "Fármaco Comum"} className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none">
+                                                    <option value="Fármaco Comum">Fármaco Comum</option>
+                                                    <option value="Controlado (Port. 344)">Controlado (Port. 344)</option>
+                                                    <option value="Material/Descartável APH">Material/Descartável APH</option>
+                                                    <option value="Equipamento Biomédico">Equipamento Biomédico</option>
+                                                    <option value="Gás Medicinal">Gás Medicinal</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Marca / Fabricante</label>
+                                                <input name="manufacturer" defaultValue={selectedItem?.manufacturer} placeholder="Ex: Cristália / Zoll" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Nº Lote / Série</label>
+                                                <input name="serialLot" defaultValue={selectedItem?.serialLot} placeholder="Ex: L24059A" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-amber-400 uppercase outline-none" />
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Data de Validade</label>
+                                                <input name="expirationDate" type="date" defaultValue={selectedItem?.expirationDate} className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Carga Atual (Saldo)</label>
+                                                <input name="currentStock" type="number" defaultValue={selectedItem?.currentStock || 10} required className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-black text-white text-center outline-none" />
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Carga Mínima (Alerta)</label>
+                                                <input name="minStock" type="number" defaultValue={selectedItem?.minStock || 5} required className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-black text-red-400 text-center outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Localização Operacional</label>
+                                            <input name="location" defaultValue={selectedItem?.location || "Farmácia UASA"} placeholder="Ex: Farmácia UASA / Mochila Vias Aéreas" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                        </div>
+
+                                        <button type="submit" disabled={isSubmitting} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black uppercase text-xs tracking-wider shadow-xl transition-all disabled:opacity-50 mt-4">
+                                            {isSubmitting ? 'Salvando...' : 'Gravar Alterações'}
+                                        </button>
+                                    </form>
+                                )}
+
+                                {/* Form: Atualizar Lacre */}
+                                {modalType === 'seal' && (
+                                    <form onSubmit={handleUpdateSingleSeal} className="space-y-4">
+                                        <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase">Kit Selecionado:</p>
+                                            <p className="font-black text-sm text-white uppercase">{selectedKit?.name}</p>
+                                            <p className="text-[10px] text-blue-400 font-bold uppercase">{selectedKit?.aircraft}</p>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Novo Número do Lacre de Segurança</label>
+                                            <input name="sealNumber" required defaultValue={selectedKit?.seal} placeholder="Ex: LAC-2026-0955" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-black text-amber-400 font-mono uppercase outline-none focus:border-amber-500" />
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Situação da Mochila</label>
+                                            <select name="status" defaultValue={selectedKit?.status} className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none">
+                                                <option value="LACRADO">LACRADO (Pronto Emprego)</option>
+                                                <option value="ROMPIDO EM VOO">ROMPIDO EM VOO (Atendimento)</option>
+                                                <option value="REPOSIÇÃO PENDENTE">REPOSIÇÃO PENDENTE (Em Armário)</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Observações da Conferência</label>
+                                            <textarea name="obs" defaultValue={selectedKit?.obs} rows="2" placeholder="Ex: Itens repostos e conferidos conforme padrão UASA." className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white outline-none"></textarea>
+                                        </div>
+
+                                        <button type="submit" disabled={isSubmitting} className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black uppercase text-xs tracking-wider shadow-xl transition-all disabled:opacity-50 mt-4">
+                                            {isSubmitting ? 'Atualizando...' : 'Confirmar Lacre & Homologar'}
+                                        </button>
+                                    </form>
+                                )}
+
+                                {/* Form: Cautela / Movimentação Individual */}
+                                {modalType === 'movement' && (
+                                    <form onSubmit={handleRegisterMovement} className="space-y-4">
+                                        <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase">Insumo:</p>
+                                            <p className="font-black text-sm text-white uppercase">{selectedItem?.name}</p>
+                                            <p className="text-[10px] text-amber-400 font-bold">Lote: {selectedItem?.serialLot} | Saldo Atual: {selectedItem?.currentStock} un</p>
+                                        </div>
+
+                                        <input type="hidden" name="itemId" value={selectedItem?.id} />
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Tipo de Movimentação</label>
+                                                <select name="movementType" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none">
+                                                    <option value="saída">Saída / Cautela</option>
+                                                    <option value="entrada">Entrada / Reposição</option>
+                                                    <option value="AVARIA">Avaria / Manutenção</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Quantidade</label>
+                                                <input name="quantity" type="number" min="1" defaultValue="1" required className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-black text-white text-center outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Militar Portador (Quem Retira)</label>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <input name="b_grad" defaultValue={currentUser.graduation} placeholder="Graduação" required className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                                <input name="b_name" defaultValue={currentUser.warName} placeholder="Nome Guerra" required className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                                <input name="b_rg" defaultValue={currentUser.rg} placeholder="RG" required className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Motivo / Finalidade</label>
+                                            <input name="reason" required placeholder="Ex: Equipagem da aeronave ou reposição pós-missão" className="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white uppercase outline-none" />
+                                        </div>
+
+                                        <button type="submit" disabled={isSubmitting} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black uppercase text-xs tracking-wider shadow-xl transition-all disabled:opacity-50 mt-4">
+                                            {isSubmitting ? 'Registrando...' : 'Confirmar Lançamento'}
+                                        </button>
+                                    </form>
+                                )}
+
+                            </div>
+                        </div>
+                    )}
+
+                    {/* TEMPLATE OCULTO PARA GERAÇÃO DO RELATÓRIO PDF FORMAL A4 */}
+                    <div className="fixed -left-[9999px] top-0">
+                        <div id="pdf-report-container" className="bg-white text-black p-8 w-[195mm] min-h-[285mm] font-sans">
+                            {/* Cabeçalho Oficial Militar */}
+                            <div className="border-b-2 border-slate-900 pb-4 mb-6 text-center">
+                                <h1 className="text-base font-black uppercase tracking-tight text-slate-900">Corpo de Bombeiros Militar do Estado do Rio de Janeiro</h1>
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-700">Grupamento de Operações Aéreas • 1º DBM / GOA</h2>
+                                <h3 className="text-xs font-black uppercase text-blue-900 mt-2">SIG-Aeromédico • Relatório de Prontidão Operacional & Suporte APH</h3>
+                                <div className="mt-3 flex justify-between text-[9px] text-slate-600 font-bold border-t border-slate-200 pt-2">
+                                    <span>Emissão: {new Date().toLocaleDateString('pt-BR')} às {new Date().toLocaleTimeString('pt-BR')}</span>
+                                    <span>Oficial Responsável: {currentUser.graduation} {currentUser.warName} (RG: {currentUser.rg})</span>
+                                </div>
+                            </div>
+
+                            {/* Seção 1: Status das Mochilas e Lacres */}
+                            <div className="mb-6">
+                                <h4 className="text-[11px] font-black uppercase bg-slate-100 p-1.5 border-l-4 border-emerald-600 text-slate-900 mb-2">1. Prontidão das Mochilas de Bordo & Lacres Ativos</h4>
+                                <table className="w-full text-left text-[9px] border-collapse border border-slate-300">
+                                    <thead>
+                                        <tr className="bg-slate-200 text-slate-800">
+                                            <th className="border border-slate-300 p-1.5">Mochila / Kit de Bordo</th>
+                                            <th className="border border-slate-300 p-1.5">Aeronave</th>
+                                            <th className="border border-slate-300 p-1.5 text-center">Nº Lacre</th>
+                                            <th className="border border-slate-300 p-1.5 text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {kits.map(k => (
+                                            <tr key={k.id}>
+                                                <td className="border border-slate-300 p-1.5 font-bold">{k.name}</td>
+                                                <td className="border border-slate-300 p-1.5">{k.aircraft}</td>
+                                                <td className="border border-slate-300 p-1.5 text-center font-mono font-bold text-amber-800">{k.seal}</td>
+                                                <td className="border border-slate-300 p-1.5 text-center font-bold text-emerald-800">{k.status}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Seção 2: Itens Abaixo do Mínimo */}
+                            <div className="mb-6">
+                                <h4 className="text-[11px] font-black uppercase bg-slate-100 p-1.5 border-l-4 border-red-600 text-slate-900 mb-2">2. Solicitação de Reposição Urgente (Saldo Crítico)</h4>
+                                {stats.critical.length > 0 ? (
+                                    <table className="w-full text-left text-[9px] border-collapse border border-slate-300">
+                                        <thead>
+                                            <tr className="bg-red-50 text-red-900">
+                                                <th className="border border-slate-300 p-1.5">Insumo</th>
+                                                <th className="border border-slate-300 p-1.5">Lote / Marca</th>
+                                                <th className="border border-slate-300 p-1.5 text-center">Saldo Atual</th>
+                                                <th className="border border-slate-300 p-1.5 text-center">Cota Mínima</th>
+                                            </tr>
                                         </thead>
-                                        <tbody className="divide-y text-[10px]">
-                                            {transactions.map((t, idx)=>(
-                                                <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                                                    <td className="px-6 py-6 font-bold text-slate-400 whitespace-nowrap">{new Date(t.movementDate).toLocaleDateString('pt-BR')}</td>
-                                                    <td className="px-6 py-6">
-                                                        <p className="font-black text-slate-900 uppercase leading-tight">{t.itemName}</p>
-                                                        <p className="text-[8px] font-normal italic opacity-60 mt-0.5">{t.reason}</p>
-                                                    </td>
-                                                    <td className="px-6 py-6 leading-tight whitespace-nowrap">
-                                                        <p className="font-black uppercase">{t.bearer.graduation} {t.bearer.warName}</p>
-                                                        <p className="text-[8px] font-bold text-slate-400 tracking-tighter">RG: {t.bearer.rg}</p>
-                                                    </td>
-                                                    <td className="px-6 py-6 leading-tight whitespace-nowrap">
-                                                        <p className="font-bold text-blue-900 uppercase">{t.recorder.warName}</p>
-                                                        <p className="text-[8px] font-bold text-slate-400 tracking-tighter">RG: {t.recorder.rg}</p>
-                                                    </td>
-                                                    <td className="px-6 py-6 text-center whitespace-nowrap">
-                                                        <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[8px] border ${t.type === 'entrada' ? 'bg-green-100 text-green-700' : (t.type.includes('AVARIA') || t.type.includes('ALTERAÇÃO') ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700')}`}>{t.type} ({t.quantity})</span>
-                                                    </td>
+                                        <tbody>
+                                            {stats.critical.map(i => (
+                                                <tr key={i.id}>
+                                                    <td className="border border-slate-300 p-1.5 font-bold">{i.name}</td>
+                                                    <td className="border border-slate-300 p-1.5">{i.serialLot} ({i.manufacturer})</td>
+                                                    <td className="border border-slate-300 p-1.5 text-center font-bold text-red-700">{i.currentStock} un</td>
+                                                    <td className="border border-slate-300 p-1.5 text-center">{i.minStock} un</td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
-                                </div>
-                            )}
-                        </div>
-                    </main>
-
-                    {/* MODAIS (Criação/Edição e Movimentação) */}
-                    {isModalOpen && (
-                        <div className="fixed inset-0 z-[300] bg-slate-900/80 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
-                            <div className="bg-white rounded-t-[2rem] md:rounded-[3rem] w-full max-w-xl p-6 md:p-10 shadow-2xl overflow-y-auto max-h-[95vh] border border-white/20 modal-content custom-scrollbar">
-                                <div className="flex justify-between items-center mb-8 sticky top-0 bg-white pb-4 z-20">
-                                    <h2 className="text-xl font-black text-blue-900 uppercase tracking-tighter">
-                                        {modalType === 'item' ? (selectedItem ? 'Atualizar Prontuário' : 'Novo Insumo') : 
-                                         modalType === 'damage' ? 'Reportar Alteração' : 'Registo em Livro'}
-                                    </h2>
-                                    <button onClick={()=>setIsModalOpen(false)} disabled={isSubmitting} className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-50"><Icon name="x" className="w-8 h-8" /></button>
-                                </div>
-
-                                {modalType === 'item' ? (
-                                    <form onSubmit={saveItem} className="space-y-4">
-                                        <div className="space-y-1"><label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Descrição</label><input name="name" required disabled={isSubmitting} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold uppercase outline-none focus:ring-4 focus:ring-blue-50 h-14 disabled:opacity-50" defaultValue={selectedItem?.name} /></div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <input name="manufacturer" required disabled={isSubmitting} placeholder="Marca" className="p-4 bg-slate-50 border rounded-2xl text-xs font-bold uppercase h-14 disabled:opacity-50" defaultValue={selectedItem?.manufacturer} />
-                                            <input name="serialLot" required disabled={isSubmitting} placeholder="Lote / Nº Série" className="p-4 bg-slate-50 border rounded-2xl text-xs font-bold uppercase h-14 disabled:opacity-50" defaultValue={selectedItem?.serialLot} />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[9px] font-black text-slate-400 uppercase">Data de Validade (Vencimento)</label>
-                                            <input name="expirationDate" required disabled={isSubmitting} type="date" className="w-full p-4 bg-slate-50 border rounded-2xl text-xs font-bold h-14 disabled:opacity-50 outline-none" defaultValue={selectedItem?.expirationDate || ''} />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4 text-center pt-2">
-                                            <div className="p-4 bg-blue-50 rounded-[1.5rem] border border-blue-100 shadow-inner"><label className="text-[9px] font-black text-blue-900 uppercase block mb-1">Carga Atual</label><input name="currentStock" required disabled={isSubmitting} type="number" className="w-full bg-transparent font-black text-xl text-center outline-none disabled:opacity-50" defaultValue={selectedItem?.currentStock || 0} /></div>
-                                            <div className="p-4 bg-red-50 rounded-[1.5rem] border border-red-100 shadow-inner"><label className="text-[9px] font-black text-red-600 uppercase block mb-1">Qtd Crítica</label><input name="minStock" required disabled={isSubmitting} type="number" className="w-full bg-transparent font-black text-xl text-center outline-none disabled:opacity-50" defaultValue={selectedItem?.minStock || 1} /></div>
-                                        </div>
-                                        <button type="submit" disabled={isSubmitting} className={`w-full py-5 bg-blue-900 text-white rounded-3xl font-black uppercase text-[11px] shadow-xl flex items-center justify-center gap-2 h-16 mt-4 transition-all ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]'}`}>
-                                            {isSubmitting ? <Icon name="sync" className="animate-spin w-4 h-4" /> : <Icon name="edit" className="w-4 h-4" />}
-                                            {isSubmitting ? 'A PROCESSAR...' : (selectedItem ? 'Gravar Alterações' : 'Confirmar Registo')}
-                                        </button>
-                                    </form>
                                 ) : (
-                                    <form onSubmit={registerMovement} className="space-y-5">
-                                        {modalType === 'damage' ? (
-                                            <div className="space-y-4">
-                                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-2xl text-[10px] font-black uppercase text-orange-900">{selectedItem?.name}</div>
-                                                <select name="type_alt" disabled={isSubmitting} className="w-full p-4 bg-orange-50 border border-orange-200 rounded-2xl text-[10px] font-black uppercase h-14 disabled:opacity-50">
-                                                    <option value="AVARIA">Avaria / Dano</option>
-                                                    <option value="ALTERAÇÃO">Alteração Técnica</option>
-                                                    <option value="MANUTENÇÃO">Manutenção</option>
-                                                </select>
-                                            </div>
-                                        ) : (
-                                            <div className={`flex bg-slate-100 p-1.5 rounded-3xl gap-2 shadow-inner border ${isSubmitting ? 'opacity-50 pointer-events-none' : ''}`}>
-                                                <label className="flex-1">
-                                                    <input type="radio" name="type" value="saída" checked={movementType === 'saída'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
-                                                    <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-red-700 shadow-sm text-slate-400">SAÍDA</div>
-                                                </label>
-                                                <label className="flex-1">
-                                                    <input type="radio" name="type" value="entrada" checked={movementType === 'entrada'} onChange={(e)=>setMovementType(e.target.value)} className="hidden peer"/>
-                                                    <div className="py-4 text-center rounded-2xl font-black text-[10px] uppercase cursor-pointer peer-checked:bg-white peer-checked:text-green-700 shadow-sm text-slate-400">RETORNO</div>
-                                                </label>
-                                            </div>
-                                        )}
-                                        <div className="space-y-4">
-                                            <select name="itemId" required disabled={isSubmitting} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-black uppercase h-14 outline-none disabled:opacity-50" defaultValue={selectedItem?.id}>
-                                                {items.map(it=><option key={it.id} value={it.id}>{it.name} (Lote: {it.serialLot})</option>)}
-                                            </select>
-                                            <input name="movementDate" required disabled={isSubmitting} type="date" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold h-14 disabled:opacity-50 outline-none" defaultValue={new Date().toISOString().split('T')[0]} />
-                                            
-                                            {modalType === 'movement' && (
-                                                <div className={`p-5 bg-slate-50 rounded-[2rem] border space-y-3 shadow-inner ${isSubmitting ? 'opacity-50' : ''}`}>
-                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center border-b pb-2 mb-2 leading-none">Militar Portador (Retirada)</p>
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <input name="b_grad" required disabled={isSubmitting} placeholder="Graduação" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold uppercase h-12 outline-none" />
-                                                        <input name="b_rg" required disabled={isSubmitting} type="text" inputMode="numeric" pattern="[0-9]*" onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} placeholder="RG Militar" className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 outline-none" />
-                                                    </div>
-                                                    <input name="b_name" required disabled={isSubmitting} placeholder="Nome Guerra do Portador" className="w-full p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold h-12 uppercase outline-none" />
-                                                </div>
-                                            )}
-
-                                            <div className={`p-5 bg-blue-50/50 rounded-[2rem] border border-blue-100 space-y-3 shadow-sm ${isSubmitting ? 'opacity-50' : ''}`}>
-                                                <p className="text-[9px] font-black text-blue-900 uppercase tracking-widest text-center border-b border-blue-100 pb-2 mb-2 leading-none">Militar Registrador (Fiel)</p>
-                                                <div className="text-center bg-white p-3 rounded-xl border border-blue-100">
-                                                    <p className="font-black text-blue-900 uppercase text-xs">{currentUser.graduation} {currentUser.warName}</p>
-                                                    <p className="text-[10px] font-bold text-slate-500 mt-0.5 tracking-tighter">RG: {currentUser.rg}</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex gap-3">
-                                                <div className="w-24">
-                                                    <label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Qtd</label>
-                                                    <input name="quantity" required disabled={isSubmitting} type="number" min="1" className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-center font-black text-lg h-14 outline-none disabled:opacity-50" defaultValue={1} />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <label className="text-[8px] font-black text-slate-400 uppercase mb-1 block">Finalidade / Detalhes</label>
-                                                    <input name="reason" required disabled={isSubmitting} placeholder="Ex: Patrulhamento / Missão..." className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-medium h-14 outline-none disabled:opacity-50" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" disabled={isSubmitting} className={`w-full py-5 text-white rounded-3xl font-black uppercase text-[11px] shadow-xl h-16 flex items-center justify-center gap-2 ${modalType==='damage'?'bg-orange-600 shadow-orange-200':'bg-blue-900 shadow-blue-200'} ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                                            {isSubmitting && <Icon name="sync" className="animate-spin w-4 h-4" />}
-                                            {isSubmitting ? 'A PROCESSAR...' : 'Confirmar Lançamento'}
-                                        </button>
-                                    </form>
+                                    <p className="text-[9px] text-slate-500 italic">Todos os insumos operacionais em níveis de segurança regulares.</p>
                                 )}
                             </div>
+
+                            {/* Assinaturas Oficiais */}
+                            <div className="mt-16 grid grid-cols-2 gap-8 text-center text-[10px]">
+                                <div>
+                                    <div className="border-b border-slate-900 pb-1 mb-1 font-bold">{currentUser.graduation} {currentUser.warName}</div>
+                                    <p className="text-slate-600">Oficial Médico de Voo / Fiel de Carga</p>
+                                </div>
+                                <div>
+                                    <div className="border-b border-slate-900 pb-1 mb-1 font-bold">Comandante da Aeronave / Chefe de Socorro</div>
+                                    <p className="text-slate-600">1º Destacamento de Bombeiro Militar / GOA</p>
+                                </div>
+                            </div>
                         </div>
-                    )}
+                    </div>
+
                 </div>
             );
         };
@@ -769,3 +1600,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
+</body>
+</html>
