@@ -101,8 +101,14 @@ function executeAction(payload) {
  */
 function getData() {
   var ss = getSpreadsheet();
-  var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || ss.getSheets()[0];
-  var transSheet = ss.getSheetByName("transactions") || ss.getSheetByName("Transações") || ss.getSheetByName("movimentações");
+  var sheets = ss.getSheets();
+  var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || sheets[0];
+  var transSheet = ss.getSheetByName("transactions") || 
+                   ss.getSheetByName("Transações") || 
+                   ss.getSheetByName("movimentações") || 
+                   ss.getSheetByName("cautelas") || 
+                   ss.getSheetByName("registros") || 
+                   (sheets.length > 1 ? sheets[1] : null);
 
   var items = [];
   if (itemsSheet && itemsSheet.getLastRow() > 1) {
@@ -111,7 +117,8 @@ function getData() {
 
   var transactions = [];
   if (transSheet && transSheet.getLastRow() > 1) {
-    transactions = transSheet.getRange(2, 1, transSheet.getLastRow() - 1, 10).getValues();
+    var maxCols = Math.min(10, transSheet.getLastColumn());
+    transactions = transSheet.getRange(2, 1, transSheet.getLastRow() - 1, maxCols).getValues();
   }
 
   return { items: items, transactions: transactions };
@@ -258,7 +265,12 @@ function registerMovement(payload) {
   try {
     lock.waitLock(10000);
     var ss = getSpreadsheet();
-    var transSheet = ss.getSheetByName("transactions") || ss.getSheetByName("Transações") || ss.getSheetByName("movimentações");
+    var transSheet = ss.getSheetByName("transactions") || 
+                     ss.getSheetByName("Transações") || 
+                     ss.getSheetByName("movimentações") || 
+                     ss.getSheetByName("cautelas") || 
+                     ss.getSheetByName("registros") || 
+                     (ss.getSheets().length > 1 ? ss.getSheets()[1] : null);
     var itemsSheet = ss.getSheetByName("items") || ss.getSheetByName("Itens") || ss.getSheets()[0];
 
     var trans = payload.trans;

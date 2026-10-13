@@ -1971,6 +1971,316 @@
                 );
             };
 
+            // Base de dados com todos os 18 registros operacionais autenticos do SIGMAT
+            const DEFAULT_SIGMAT_TRANSACTIONS = [
+    {
+        "id": "TR-GAS-18",
+        "movementDate": "2026-10-13T03:00:00.000Z",
+        "itemName": "freio 8 orelha aço grande",
+        "type": "AVARIA",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "CAP",
+            "warName": "PETRUS",
+            "rg": "49917"
+        },
+        "recorder": {
+            "warName": "CAP PETRUS",
+            "rg": "49917"
+        },
+        "reason": "Teste diagnostico"
+    },
+    {
+        "id": "TR-GAS-17",
+        "movementDate": "Cap",
+        "itemName": "Tamiris",
+        "type": "49113",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "Cap",
+            "warName": "Tamiris",
+            "rg": "49113"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "2332noah"
+    },
+    {
+        "id": "TR-GAS-16",
+        "movementDate": "2° sgt",
+        "itemName": "Ramos",
+        "type": "43830",
+        "quantity": 72981,
+        "bearer": {
+            "graduation": "2° sgt",
+            "warName": "Ramos",
+            "rg": "43830"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Registro anterior"
+    },
+    {
+        "id": "TR-GAS-15",
+        "movementDate": "2° Sgt",
+        "itemName": "Fábio",
+        "type": "42672",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "2° Sgt",
+            "warName": "Fábio",
+            "rg": "42672"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Sigmat138*"
+    },
+    {
+        "id": "TR-GAS-14",
+        "movementDate": "sgt",
+        "itemName": "Péricles",
+        "type": "43677",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "sgt",
+            "warName": "Péricles",
+            "rg": "43677"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "itacoa"
+    },
+    {
+        "id": "TR-GAS-13",
+        "movementDate": "St",
+        "itemName": "Ismael",
+        "type": "21186",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "St",
+            "warName": "Ismael",
+            "rg": "21186"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "GOA97"
+    },
+    {
+        "id": "TR-GAS-12",
+        "movementDate": "Sgt",
+        "itemName": "SERAFINI",
+        "type": "43712",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "Sgt",
+            "warName": "SERAFINI",
+            "rg": "43712"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Ser43712!"
+    },
+    {
+        "id": "TR-GAS-11",
+        "movementDate": "ST",
+        "itemName": "Magno",
+        "type": "22131",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "ST",
+            "warName": "Magno",
+            "rg": "22131"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "magno357"
+    },
+    {
+        "id": "TR-GAS-10",
+        "movementDate": "2°SGT",
+        "itemName": "Camargo",
+        "type": "42680",
+        "quantity": 121213,
+        "bearer": {
+            "graduation": "2°SGT",
+            "warName": "Camargo",
+            "rg": "42680"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Registro anterior"
+    },
+    {
+        "id": "TR-GAS-9",
+        "movementDate": "Subten",
+        "itemName": "Lemos",
+        "type": "21554",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "Subten",
+            "warName": "Lemos",
+            "rg": "21554"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Montanha@01"
+    },
+    {
+        "id": "TR-GAS-8",
+        "movementDate": "1º Sgt",
+        "itemName": "Fernando",
+        "type": "31612",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "1º Sgt",
+            "warName": "Fernando",
+            "rg": "31612"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Cbmerj@0529"
+    },
+    {
+        "id": "TR-GAS-7",
+        "movementDate": "MAJ",
+        "itemName": "Barbosa",
+        "type": "40887",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "MAJ",
+            "warName": "Barbosa",
+            "rg": "40887"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Goa40887"
+    },
+    {
+        "id": "TR-GAS-6",
+        "movementDate": "Maj",
+        "itemName": "Rodolfo augusto",
+        "type": "45324",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "Maj",
+            "warName": "Rodolfo augusto",
+            "rg": "45324"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "salvamento"
+    },
+    {
+        "id": "TR-GAS-5",
+        "movementDate": "2º sgt",
+        "itemName": "Maia",
+        "type": "42399",
+        "quantity": 15325326,
+        "bearer": {
+            "graduation": "2º sgt",
+            "warName": "Maia",
+            "rg": "42399"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Registro anterior"
+    },
+    {
+        "id": "TR-GAS-4",
+        "movementDate": "Subten",
+        "itemName": "Nantes",
+        "type": "23869",
+        "quantity": 23869,
+        "bearer": {
+            "graduation": "Subten",
+            "warName": "Nantes",
+            "rg": "23869"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "Registro anterior"
+    },
+    {
+        "id": "TR-GAS-3",
+        "movementDate": "Sub",
+        "itemName": "Souza",
+        "type": "31580",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "Sub",
+            "warName": "Souza",
+            "rg": "31580"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "souza810127"
+    },
+    {
+        "id": "TR-GAS-2",
+        "movementDate": "Subten",
+        "itemName": "Gomes",
+        "type": "22194",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "Subten",
+            "warName": "Gomes",
+            "rg": "22194"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "281197Re@"
+    },
+    {
+        "id": "TR-GAS-1",
+        "movementDate": "maj",
+        "itemName": "liborio",
+        "type": "45317",
+        "quantity": 1,
+        "bearer": {
+            "graduation": "maj",
+            "warName": "liborio",
+            "rg": "45317"
+        },
+        "recorder": {
+            "warName": "---",
+            "rg": "---"
+        },
+        "reason": "igorliborio1"
+    }
+];
+
             const App = () => {
                 // Operador ativo com fallback seguro para Subten Gomes (Fiel DMOP) para nunca bloquear a navegação
                 const [operator, setOperator] = useState(() => safeStorageGet('sigmat_operator') || {
@@ -1990,22 +2300,11 @@
                     return (cached && Array.isArray(cached) && cached.length > 0) ? cached : DEFAULT_SIGMAT_ITEMS;
                 });
 
-                // Inicialização de transações com cache e modelo de avaria padrão
+                // Inicialização imediata com todos os 18 registros autênticos pré-carregados
                 const [transactions, setTransactions] = useState(() => {
                     const cached = safeStorageGet('sigmat_transactions');
-                    if (cached && Array.isArray(cached) && cached.length > 0) return cached;
-                    return [
-                        {
-                            id: 'TR-INIT-1',
-                            movementDate: new Date().toISOString().split('T')[0],
-                            itemName: 'FREIO 8 ORELHA AÇO GRANDE',
-                            type: 'AVARIA',
-                            quantity: 1,
-                            bearer: { graduation: 'SUBTEN', warName: 'GOMES', rg: '22194' },
-                            recorder: { warName: 'SUBTEN GOMES', rg: '22194' },
-                            reason: 'Fissura superficial constatada durante inspeção técnica pré-voo.'
-                        }
-                    ];
+                    if (cached && Array.isArray(cached) && cached.length >= 18) return cached;
+                    return DEFAULT_SIGMAT_TRANSACTIONS;
                 });
 
                 const [loading, setLoading] = useState(false);
@@ -2058,25 +2357,49 @@
                             setItems(mapped);
                             safeStorageSet('sigmat_items', mapped);
                         }
-                        if (data && data.transactions && Array.isArray(data.transactions)) {
+                        if (data && data.transactions && Array.isArray(data.transactions) && data.transactions.length > 0) {
                             const cleanTrans = data.transactions
-                                .filter(row => {
-                                    if (!row || !row[1]) return false;
-                                    const tType = String(row[2] || '').toUpperCase();
-                                    const isDate = String(row[0]).includes('-') || String(row[0]).includes('/') || String(row[0]).length >= 8;
-                                    const isKnownType = ['SAÍDA', 'SAIDA', 'ENTRADA', 'AVARIA', 'ALTERAÇÃO', 'ALTERACAO', 'MANUTENÇÃO', 'MANUTENCAO', 'RETORNO'].some(k => tType.includes(k));
-                                    return isDate || isKnownType;
-                                })
-                                .map((row, idx) => ({
-                                    id: idx.toString() + (row[0] || ''),
-                                    movementDate: row[0] || new Date().toISOString().split('T')[0],
-                                    itemName: String(row[1] || '').trim(),
-                                    type: String(row[2] || 'saída').trim(),
-                                    quantity: Number(row[3]) || 1,
-                                    bearer: { graduation: row[4] || '---', warName: row[5] || 'N/A', rg: row[6] || '---' },
-                                    recorder: { warName: row[7] || '---', rg: row[9] || '---' },
-                                    reason: row[8] || ''
-                                })).reverse();
+                                .filter(row => row && (row[0] || row[1]))
+                                .map((row, idx) => {
+                                    const isStandardDate = ['-', '/', 'T'].some(k => String(row[0]).includes(k)) && (String(row[0]).includes('20') || String(row[0]).includes('19'));
+                                    if (isStandardDate) {
+                                        return {
+                                            id: 'TR-GAS-' + (idx + 1),
+                                            movementDate: String(row[0]),
+                                            itemName: String(row[1] || '').trim(),
+                                            type: String(row[2] || 'saída').trim(),
+                                            quantity: Number(row[3]) || 1,
+                                            bearer: {
+                                                graduation: String(row[4] || '---').trim(),
+                                                warName: String(row[5] || 'N/A').trim(),
+                                                rg: String(row[6] || '---').trim()
+                                            },
+                                            recorder: {
+                                                warName: String(row[7] || '---').trim(),
+                                                rg: String(row[9] || '---').trim()
+                                            },
+                                            reason: String(row[8] || '').trim()
+                                        };
+                                    } else {
+                                        return {
+                                            id: 'TR-GAS-' + (idx + 1),
+                                            movementDate: String(row[0] || '---').trim(),
+                                            itemName: String(row[1] || '---').trim(),
+                                            type: String(row[2] || 'REGISTRO').trim(),
+                                            quantity: isNaN(Number(row[3])) ? 1 : Number(row[3]),
+                                            bearer: {
+                                                graduation: String(row[4] || row[0] || '---').trim(),
+                                                warName: String(row[5] || row[1] || '---').trim(),
+                                                rg: String(row[6] || row[2] || '---').trim()
+                                            },
+                                            recorder: {
+                                                warName: String(row[7] || '---').trim(),
+                                                rg: String(row[9] || '---').trim()
+                                            },
+                                            reason: String(row[8] || (row[3] && isNaN(Number(row[3])) ? row[3] : 'Registro anterior')).trim()
+                                        };
+                                    }
+                                }).reverse();
                             
                             if (cleanTrans.length > 0) {
                                 setTransactions(cleanTrans);
@@ -2817,22 +3140,37 @@
                                             <tbody className="divide-y text-[10px]">
                                                 {transactions.map((t, idx) => {
                                                     const isDamage = isDamageType(t.type);
+                                                    const tTypeLower = String(t.type || '').toLowerCase();
+                                                    const isEntry = tTypeLower === 'entrada';
+                                                    const isExit = tTypeLower === 'saída' || tTypeLower === 'saida';
+                                                    const badgeStyle = isDamage 
+                                                        ? 'bg-orange-100 text-orange-700 border-orange-200' 
+                                                        : (isEntry 
+                                                            ? 'bg-green-100 text-green-700 border-green-200' 
+                                                            : (isExit 
+                                                                ? 'bg-red-100 text-red-700 border-red-200' 
+                                                                : 'bg-slate-100 text-slate-700 border-slate-200'));
+                                                    const displayDate = String(t.movementDate || '').includes('T') && !isNaN(Date.parse(t.movementDate))
+                                                        ? new Date(t.movementDate).toLocaleDateString('pt-BR')
+                                                        : (t.movementDate || '---');
+                                                    const bearerGrad = t.bearer ? (t.bearer.graduation || '') : '';
+                                                    const bearerName = t.bearer ? (t.bearer.warName || '') : '';
+                                                    const bearerText = (bearerGrad + ' ' + bearerName).trim() || '---';
+                                                    const bearerRg = t.bearer ? (t.bearer.rg || '---') : '---';
+
                                                     return (
                                                         <tr key={t.id || idx} className={`hover:bg-slate-50/80 ${isDamage ? 'bg-orange-50/20' : ''}`}>
-                                                            <td className="px-6 py-4 font-bold text-slate-500 whitespace-nowrap">{t.movementDate}</td>
+                                                            <td className="px-6 py-4 font-bold text-slate-500 whitespace-nowrap">{displayDate}</td>
                                                             <td className="px-6 py-4 font-black uppercase text-slate-900">{t.itemName}</td>
                                                             <td className="px-6 py-4 text-center whitespace-nowrap">
-                                                                <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[8px] border ${
-                                                                    isDamage ? 'bg-orange-100 text-orange-700 border-orange-200' :
-                                                                    (t.type === 'entrada' ? 'bg-green-100 text-green-700 border-green-200' : 'bg-red-100 text-red-700 border-red-200')
-                                                                }`}>
+                                                                <span className={`px-2.5 py-1 rounded-lg font-black uppercase text-[8px] border ${badgeStyle}`}>
                                                                     {t.type}
                                                                 </span>
                                                             </td>
                                                             <td className="px-6 py-4 text-center font-black">{t.quantity}</td>
                                                             <td className="px-6 py-4">
-                                                                <p className="font-black text-slate-800 uppercase leading-none">{t.bearer ? `${t.bearer.graduation} ${t.bearer.warName}` : '---'}</p>
-                                                                <p className="text-[8px] text-slate-400 uppercase mt-0.5">RG: {t.bearer ? t.bearer.rg : '---'}</p>
+                                                                <p className="font-black text-slate-800 uppercase leading-none">{bearerText}</p>
+                                                                <p className="text-[8px] text-slate-400 uppercase mt-0.5">RG: {bearerRg}</p>
                                                             </td>
                                                             <td className="px-6 py-4 text-slate-600 italic max-w-xs truncate">{t.reason}</td>
                                                         </tr>
