@@ -120,6 +120,1885 @@
         ];
 
         // CILINDROS DE O2 PADRÃO
+        const DEFAULT_ALMOXARIFADO_ITEMS = [
+    {
+        "id": "ALM-001",
+        "name": "ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO  (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 10,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2026-07-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260701",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-002",
+        "name": "CLAMP  UMBILICAL  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 5,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-06-01",
+        "expirationDate2": "2027-04-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260601",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-003",
+        "name": "TOT Nº2,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2027-10-01",
+        "expirationDate2": "2028-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-004",
+        "name": "ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 6,
+        "minStock": 16,
+        "solicitar": 10,
+        "expirationDate": "2027-04-01",
+        "expirationDate2": "2027-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270401",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-005",
+        "name": "ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA  ADULTO/ INFANTIL. (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 43,
+        "minStock": 70,
+        "solicitar": 37,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-006",
+        "name": "TOT Nº2,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2028-01-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-007",
+        "name": "ADRENALINA   1MG/ML  - 1ML/AMPOLA (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 89,
+        "minStock": 80,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-008",
+        "name": "EQUIPO DE BOMBA INFUSORA TERUMO  SIMPLES",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 4,
+        "minStock": 10,
+        "solicitar": 6,
+        "expirationDate": "2027-01-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-009",
+        "name": "TOT Nº3,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 5,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2027-09-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-010",
+        "name": "ÁGUA DESTILADA  10ML/AMPOLA   (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 0,
+        "minStock": 20,
+        "solicitar": 20,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-011",
+        "name": "EQUIPO DE BOMBA INFUSORA TERUMO  FOTOSENSIVEL",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 10,
+        "solicitar": 10,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-012",
+        "name": "TOT Nº3,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2027-12-01",
+        "expirationDate2": "2028-03-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-013",
+        "name": "AMIODARONA 50MG/ML 3ML/AMPOLA  (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 12,
+        "minStock": 12,
+        "solicitar": 0,
+        "expirationDate": "2027-03-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-014",
+        "name": "EQUIPO DE SORO MACROGOTAS COM INJETOR  LATERAL.(UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 24,
+        "minStock": 30,
+        "solicitar": 6,
+        "expirationDate": "2026-05-01",
+        "expirationDate2": "2029-12-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260501",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-015",
+        "name": "TOT Nº4,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-08-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-016",
+        "name": "ATROPINA  0,25MG/ML 1ML/AMPOLA  (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 15,
+        "minStock": 20,
+        "solicitar": 5,
+        "expirationDate": "2027-01-01",
+        "expirationDate2": "2027-04-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-017",
+        "name": "ESPARADRAPO ROLO (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 1,
+        "minStock": 2,
+        "solicitar": 1,
+        "expirationDate": "2027-10-01",
+        "expirationDate2": "2028-08-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-018",
+        "name": "TOT Nº4,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2027-12-01",
+        "expirationDate2": "2028-06-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-019",
+        "name": "BICARBONATO DE SÓDIO 8,4% 10ML-AMPOLA",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 29,
+        "minStock": 50,
+        "solicitar": 21,
+        "expirationDate": "2026-10-01",
+        "expirationDate2": "2027-01-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-020",
+        "name": "FITA DE HGT Okmeter Match II",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 1,
+        "solicitar": 1,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-021",
+        "name": "TOT Nº5,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 7,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2028-02-01",
+        "expirationDate2": "2028-12-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-022",
+        "name": "DIPIRONA 500MG/ML  2ML/AMPOLA   (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 19,
+        "minStock": 20,
+        "solicitar": 5,
+        "expirationDate": "2027-03-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-023",
+        "name": "FIXADOR DE TUBO OROTRAQUEAL AD/INF. (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 16,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-024",
+        "name": "TOT Nº5,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 6,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2026-03-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-025",
+        "name": "DOBUTAMINA 250MG/ML  20ML/AMPOLA   (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 11,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-11-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-026",
+        "name": "FRASCO DE SECREÇÃO PARA VIAS AÉREAS",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 11,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-027",
+        "name": "TOT Nº6,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 6,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2027-03-01",
+        "expirationDate2": "2027-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-028",
+        "name": "FENOTEROL (BROMIDRATO)  5MG/ML - 20ML",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 0,
+        "minStock": 1,
+        "solicitar": 1,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-029",
+        "name": "GAZE HIDRÓFILA ESTÉRIL 7,5 X 7,5.COMPRESSA (PCTE C/10 UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 18,
+        "minStock": 60,
+        "solicitar": 42,
+        "expirationDate": "1930-04-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-19300401",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-030",
+        "name": "TOT Nº6,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 8,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2028-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20281201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-031",
+        "name": "FUROSEMIDA 10MG/ML -2ML/AMPOLA   (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 15,
+        "minStock": 8,
+        "solicitar": 0,
+        "expirationDate": "2027-10-01",
+        "expirationDate2": "2027-12-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-032",
+        "name": "GEL PARA ECG (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 3,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2027-08-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-033",
+        "name": "TOT Nº7,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 13,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2027-01-01",
+        "expirationDate2": "2028-02-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-034",
+        "name": "GLICOSE HIPERTÔNICA 25%  10ML/AMPOLA  (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 14,
+        "minStock": 20,
+        "solicitar": 0,
+        "expirationDate": "2026-06-01",
+        "expirationDate2": "2026-07-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260601",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-035",
+        "name": "JELCO INTRAVENOSO  Nº 14 (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 18,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2027-09-01",
+        "expirationDate2": "2029-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-036",
+        "name": "TOT Nº7,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 8,
+        "minStock": 10,
+        "solicitar": 2,
+        "expirationDate": "2028-07-01",
+        "expirationDate2": "1930-01-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280701",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-037",
+        "name": "HIDRALAZINA (CLORIDRATO)  20MG/ML 1ML - AMPOLA",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 4,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2027-07-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270701",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-038",
+        "name": "JELCO INTRAVENOSO  Nº 16 (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 14,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2027-09-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-039",
+        "name": "TOT Nº8,0  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 7,
+        "minStock": 10,
+        "solicitar": 3,
+        "expirationDate": "2026-08-01",
+        "expirationDate2": "2027-09-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-040",
+        "name": "IPRATRÓPIO (BROMETO) 0,25MG/ML -  20ML",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 1,
+        "minStock": 1,
+        "solicitar": 0,
+        "expirationDate": "2026-06-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260601",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-041",
+        "name": "JELCO INTRAVENOSO Nº 18 (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 14,
+        "minStock": 15,
+        "solicitar": 5,
+        "expirationDate": "2027-04-01",
+        "expirationDate2": "2029-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270401",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-042",
+        "name": "TOT Nº8,5  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 8,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2026-06-01",
+        "expirationDate2": "2027-07-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260601",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-043",
+        "name": "ISOSSORBIDA 5MG / COMPRIMIDO (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 20,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2026-09-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-044",
+        "name": "JELCO INTRAVENOSO  Nº 20 (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 19,
+        "minStock": 20,
+        "solicitar": 5,
+        "expirationDate": "2028-01-01",
+        "expirationDate2": "2029-06-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-045",
+        "name": "MAGNÉSIO (SULFATO)  10%  10mL - AMPOLA",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 0,
+        "minStock": 16,
+        "solicitar": 16,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-046",
+        "name": "JELCO INTRAVENOSO  Nº 22 (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 8,
+        "minStock": 10,
+        "solicitar": 2,
+        "expirationDate": "2028-01-01",
+        "expirationDate2": "2028-02-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-047",
+        "name": "ÁLCOOL GEL ANTI-SÉPTICO REFIL 500ML (UNID)",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-048",
+        "name": "METILPREDNISOLONA  (SUCCINATO SÓDICO) PÓ LIÓFILO INJETÁVEL 125MG-AMPOLA (SOLU-CORTEF)  (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-049",
+        "name": "JELCO INTRAVENOSO  Nº 24 (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 5,
+        "minStock": 5,
+        "solicitar": 0,
+        "expirationDate": "2027-09-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-050",
+        "name": "ÁLCOOL 70%  ALMOTOLIA 100ML",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 3,
+        "minStock": 10,
+        "solicitar": 3,
+        "expirationDate": "2026-05-01",
+        "expirationDate2": "2027-03-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260501",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-051",
+        "name": "METOPROLOL (SUCCINATO) SOLUÇÃO INJETÁVEL 1MG/ML AMPOLA (SELOKEN)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 4,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2027-05-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270501",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-052",
+        "name": "KIT DE IDENTIFICAÇÃO PARA RECÉM NASCIDO (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 3,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-053",
+        "name": "COLETOR DE PERFURO CORTANTE CAIXA 7 LTS",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 3,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-054",
+        "name": "NITROGLICERINA SOLUÇÃO INJETÁVEL 5MG/ML 10ML-AMPOLA (TRIDIL)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 4,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-10-01",
+        "expirationDate2": "2027-10-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-055",
+        "name": "LÂMINA DE BISTURI COM CABO Nº10  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 6,
+        "solicitar": 6,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-056",
+        "name": "CLOREXIDINA   ALCOÓLICA 0,5% ALMOTOLIA   100ML",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 4,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-10-01",
+        "expirationDate2": "2027-11-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-057",
+        "name": "NOREPINEFRINA (HEMITARTARATO) SOLUÇÃO INJETÁVEL 2MG/4ML 4ML-AMPOLA.(NORADRENALINA)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 6,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-08-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-058",
+        "name": "LANCETA PARA PUNÇÃO MANUAL (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 10,
+        "minStock": 20,
+        "solicitar": 10,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-059",
+        "name": "HIPOCLORITO DE SÓDIO  5LT",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 3,
+        "minStock": 1,
+        "solicitar": 0,
+        "expirationDate": "2026-09-01",
+        "expirationDate2": "2026-10-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-060",
+        "name": "ONDANSETRONA  SOLUÇÃO INJETÁVEL 2 MG/ ML -  2 ML AMPOLA  (NAUSEDRON) UNID",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 6,
+        "minStock": 10,
+        "solicitar": 4,
+        "expirationDate": "2027-11-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-061",
+        "name": "LENÇOL DESCARTAVÉL (PCTE C/10)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 5,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-062",
+        "name": "LUVA GROSSA PARA LIMPEZA  (UNID)",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 4,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-04-01",
+        "expirationDate2": "2027-11-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260401",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-063",
+        "name": "PROMETAZINA 25MG/ML   2ML/AMPOLA (UNID)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 1,
+        "minStock": 4,
+        "solicitar": 3,
+        "expirationDate": "2026-02-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-064",
+        "name": "LUVA DE PROCEDIMENTO  P",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 5,
+        "minStock": 3,
+        "solicitar": 0,
+        "expirationDate": "2027-07-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270701",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-065",
+        "name": "MOP ÚMIDO  ESCOVÃO (UNID)",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 8,
+        "minStock": 1,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-066",
+        "name": "TENOXICAN  PÓ LIÓFILO INJETÁVEL 20MG FRASCO-AMPOLA (TILATIL)",
+        "category": "Fármaco Comum",
+        "originalCategory": "MEDICAMENTOS",
+        "currentStock": 3,
+        "minStock": 6,
+        "solicitar": 3,
+        "expirationDate": "2027-04-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270401",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-067",
+        "name": "LUVA DE PROCEDIMENTO  M",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 6,
+        "minStock": 7,
+        "solicitar": 1,
+        "expirationDate": "2027-02-01",
+        "expirationDate2": "2028-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-068",
+        "name": "PILHAS PEQUENAS (UNID)",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 2,
+        "minStock": 8,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-069",
+        "name": "LUVA DE PROCEDIMENTO  G",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 6,
+        "minStock": 5,
+        "solicitar": 0,
+        "expirationDate": "2026-11-01",
+        "expirationDate2": "2028-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-070",
+        "name": "SABÃO LÍQUIDO NEUTRO  5LT",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 3,
+        "minStock": 1,
+        "solicitar": 0,
+        "expirationDate": "2026-02-01",
+        "expirationDate2": "2027-03-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-071",
+        "name": "SOLUÇÃO RINGER LACTATO  500ml  BOLSA/FRASCO (UNID)",
+        "category": "Soluções Parenterais",
+        "originalCategory": "SOLUÇÕES PARENTERAIS",
+        "currentStock": 21,
+        "minStock": 15,
+        "solicitar": 0,
+        "expirationDate": "2028-04-01",
+        "expirationDate2": "2028-06-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280401",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-072",
+        "name": "MANTA TÉRMICA ALUMINIZADA (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 15,
+        "solicitar": 15,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-073",
+        "name": "SACO DE LIXO BRANCO INFECTANTE 60 LT",
+        "category": "Desinfetantes & Biossegurança",
+        "originalCategory": "DESINFETANTES E LIMPEZA",
+        "currentStock": 6,
+        "minStock": 10,
+        "solicitar": 5,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-074",
+        "name": "SOLUÇÃO FISIOLÓGICA 0,9%   500ml  BOLSA/FRASCO (UNID)",
+        "category": "Soluções Parenterais",
+        "originalCategory": "SOLUÇÕES PARENTERAIS",
+        "currentStock": 19,
+        "minStock": 15,
+        "solicitar": 0,
+        "expirationDate": "2028-08-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-075",
+        "name": "MÁSCARA N95",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 17,
+        "minStock": 20,
+        "solicitar": 3,
+        "expirationDate": "1930-06-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-19300601",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-076",
+        "name": "MÁSCARA DESCARTÁVEL (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 70,
+        "minStock": 40,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-077",
+        "name": "REGISTRO DE ATENDIMENTO  RAPH :",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-078",
+        "name": "AGULHA DESCARTÁVEL 25x07  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 13,
+        "minStock": 20,
+        "solicitar": 7,
+        "expirationDate": "2026-07-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260701",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-079",
+        "name": "POLIFIX EXTENSOR  ADULTO (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 24,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2027-05-01",
+        "expirationDate2": "2028-10-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270501",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-080",
+        "name": "Nº INICIAL DO RAPH:",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-081",
+        "name": "AGULHA DESCARTÁVEL 40X12  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 12,
+        "minStock": 30,
+        "solicitar": 18,
+        "expirationDate": "2030-03-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20300301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-082",
+        "name": "SERINGA DESCARTÁVEL 10ML  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 2,
+        "minStock": 20,
+        "solicitar": 20,
+        "expirationDate": "2030-11-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20301101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-083",
+        "name": "Nº FINAL DO RAPH:",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-084",
+        "name": "ATADURA DE CREPOM  20CM (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 5,
+        "minStock": 20,
+        "solicitar": 15,
+        "expirationDate": "2029-03-01",
+        "expirationDate2": "2029-07-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20290301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-085",
+        "name": "SERINGA DESCARTÁVEL 20ML  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 15,
+        "minStock": 20,
+        "solicitar": 10,
+        "expirationDate": "2030-11-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20301101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-086",
+        "name": "FOLHA DE REGISTRO DE TIH",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 4,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-087",
+        "name": "AVENTAL DESCARTÁVEL (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 20,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-088",
+        "name": "SONDA ASPIRAÇÃO Nº 04  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 6,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2027-03-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-089",
+        "name": "REGISTRO DE CHECKLIST",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-090",
+        "name": "BOUGIE DE INTUBAÇÃO (5cmX 60 OU 70 cm ), SEM LÚMEN",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 2,
+        "solicitar": 2,
+        "expirationDate": "2026-03-01",
+        "expirationDate2": "2026-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260301",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-091",
+        "name": "SONDA ASPIRAÇÃO Nº 06  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 4,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2027-11-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20271101",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-092",
+        "name": "REGISTRO DE  RECOLHIMENTO DE  VALORES",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 0,
+        "minStock": 1,
+        "solicitar": 1,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-093",
+        "name": "CÂNULAS NASOFARÍNGEAS   ( 1 ) n°6  ( 2 ) n° 7",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 3,
+        "minStock": 6,
+        "solicitar": 3,
+        "expirationDate": "2028-08-01",
+        "expirationDate2": "2028-09-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-094",
+        "name": "SONDA ASPIRAÇÃO Nº 08  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 13,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2028-09-01",
+        "expirationDate2": "2029-05-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20280901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-095",
+        "name": "REGISTRO DE PSICOTRÓPICO",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 5,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-096",
+        "name": "CIRCUITO P/ ASPIRAÇÃO  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 9,
+        "minStock": 10,
+        "solicitar": 1,
+        "expirationDate": "2026-09-01",
+        "expirationDate2": "2027-06-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-097",
+        "name": "SONDA ASPIRAÇÃO Nº 12  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 10,
+        "solicitar": 10,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-098",
+        "name": "REGISTRO DE ÓBITO",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 5,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-099",
+        "name": "CIRCUITO P/ OXIGENOTERAPIA  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 7,
+        "minStock": 5,
+        "solicitar": 0,
+        "expirationDate": "2027-05-01",
+        "expirationDate2": "2027-06-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270501",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-100",
+        "name": "SONDA ASPIRAÇÃO Nº 16  (UNID)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 10,
+        "solicitar": 10,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-101",
+        "name": "AMBU ADULTO",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 17,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2025-08-01",
+        "expirationDate2": "2025-10-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20250801",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-102",
+        "name": "EQUIPO DE BOMBA INFUSORA LIFEMED  SIMPLES",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 13,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2029-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20291201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-103",
+        "name": "AMBU PEDIÁTRICO",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 5,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-06-01",
+        "expirationDate2": "2026-09-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20260601",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-104",
+        "name": "02 para troca",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-105",
+        "name": "EQUIPO DE BOMBA INFUSORA LIFEMED FOTOSENSIVEL",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 32,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "1930-02-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-19300201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-106",
+        "name": "AMBU NEONATAL",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 5,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-107",
+        "name": "05 para troca",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-108",
+        "name": "CIRCUITO DE RESPIRADOR OXYLOG 3000",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 7,
+        "minStock": 6,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-109",
+        "name": "MASCARA DE OXIGENOTERAPIA ADULTO",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 26,
+        "minStock": 10,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-110",
+        "name": "SONDA ASPIRAÇÃO Nº 14  (UNID)",
+        "category": "Impressos Oficiais & RAPH",
+        "originalCategory": "IMPRESSOS",
+        "currentStock": 16,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2027-09-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20270901",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-111",
+        "name": "MASCARA DE OXIGENOTERAPIA PEDIÁTRICA",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 8,
+        "minStock": 5,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-112",
+        "name": "MASCARA DE NEBULIZAÇÃO ADULTO",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 5,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-113",
+        "name": "MASCARA DE NEBULIZAÇÃO PEDIÁTRICA",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 2,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-114",
+        "name": "MASCARA LARÍNGEA nº 2",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 4,
+        "solicitar": 4,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-115",
+        "name": "MASCARA LARÍNGEA nº 3",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 7,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-116",
+        "name": "MASCARA LARÍNGEA nº 4",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 3,
+        "minStock": 4,
+        "solicitar": 1,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-117",
+        "name": "MASCARA LARÍNGEA nº 5",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 6,
+        "minStock": 4,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-118",
+        "name": "KIT COMPLETO DE CÂNULAS DE GUEDEL (0 - 5)",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-119",
+        "name": "+ (2 nº0) (1 nº1) (2 nº2) (3 nº3) (1 nº4)",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-120",
+        "name": "COLAR CERVICAL RN",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 2,
+        "solicitar": 2,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-121",
+        "name": "COLAR CERVICAL PP",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 3,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-122",
+        "name": "+ 4 Inf",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-123",
+        "name": "COLAR CERVICAL P",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 2,
+        "solicitar": 2,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-124",
+        "name": "COLAR CERVICAL M",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 2,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-125",
+        "name": "COLAR CERVICAL G",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 7,
+        "minStock": 2,
+        "solicitar": 0,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-126",
+        "name": "+ 2 Reguláveis",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-127",
+        "name": "DRENO DE TÓRAX nº 12",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 2,
+        "solicitar": 2,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-128",
+        "name": "1 nº 10 + 1 nº 24",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-129",
+        "name": "DRENO DE TÓRAX nº 28",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 1,
+        "minStock": 2,
+        "solicitar": 1,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-130",
+        "name": "DRENO DE TÓRAX nº 30",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 2,
+        "solicitar": 2,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-131",
+        "name": "DRENO DE TÓRAX nº 33",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 2,
+        "solicitar": 2,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-132",
+        "name": "1 nº 32",
+        "category": "Material/Descartável APH",
+        "originalCategory": "INSUMOS",
+        "currentStock": 0,
+        "minStock": 0,
+        "solicitar": 0,
+        "expirationDate": "",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOTE-PADRÃO",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-133",
+        "name": "SELO D´ÁGUA",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 3,
+        "minStock": 4,
+        "solicitar": 1,
+        "expirationDate": "2025-10-01",
+        "expirationDate2": "2026-09-01",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20251001",
+        "location": "Almoxarifado Central UASA"
+    },
+    {
+        "id": "ALM-134",
+        "name": "TREE WAY",
+        "category": "Equipamento Biomédico",
+        "originalCategory": "EQUIPAMENTOS",
+        "currentStock": 0,
+        "minStock": 6,
+        "solicitar": 6,
+        "expirationDate": "2026-12-01",
+        "expirationDate2": "",
+        "manufacturer": "Padrão CBMERJ / DGOA",
+        "serialLot": "LOT-20261201",
+        "location": "Almoxarifado Central UASA"
+    }
+];
+
         const DEFAULT_O2 = [
             { id: "O2-01", name: "Cilindro Fibra Carbono Luxfer 4.7L", aircraft: "Esquilo (Bombeiro 01)", capacityL: 1000, pressurePSI: 2000, hydroTest: "2029-01-15", status: "OPERACIONAL (100%)" },
             { id: "O2-02", name: "Cilindro Alumínio Portátil ME 2.9L", aircraft: "Mochila Vias Aéreas", capacityL: 680, pressurePSI: 1950, hydroTest: "2028-06-10", status: "OPERACIONAL (98%)" },
@@ -137,7 +2016,7 @@
             const [activeTab, setActiveTab] = useState('dashboard');
             
             // Dados de Estado
-            const [items, setItems] = useState([]);
+            const [items, setItems] = useState(DEFAULT_ALMOXARIFADO_ITEMS);
             const [transactions, setTransactions] = useState([]);
             const [kits, setKits] = useState(DEFAULT_KITS);
             const [cilindrosO2, setCilindrosO2] = useState(DEFAULT_O2);
@@ -220,7 +2099,7 @@
                     const res = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
                     const data = await res.json();
                     
-                    if (data.items && Array.isArray(data.items)) {
+                    if (data.items && Array.isArray(data.items) && data.items.length >= 10) {
                         setItems(data.items.map(row => ({
                             id: row[0],
                             name: String(row[1] || ''),
@@ -230,9 +2109,13 @@
                             serialLot: String(row[5] || ''),
                             currentStock: Number(row[6]) || 0,
                             minStock: Number(row[7]) || 0,
-                            category: String(row[8] || (String(row[1] || '').toLowerCase().includes('desfibrilador') || String(row[1] || '').toLowerCase().includes('bomba') ? 'Equipamento Biomédico' : 'Fármaco Comum')),
-                            location: String(row[9] || 'Farmácia UASA')
+                            category: String(row[8] || 'Material/Descartável APH'),
+                            location: String(row[9] || 'Almoxarifado Central UASA'),
+                            solicitar: Math.max(0, (Number(row[7]) || 0) - (Number(row[6]) || 0))
                         })));
+                    } else {
+                        // Mantém os 134 itens oficiais do DBM1/GOA
+                        setItems(DEFAULT_ALMOXARIFADO_ITEMS);
                     }
 
                     if (data.transactions && Array.isArray(data.transactions)) {
@@ -545,9 +2428,14 @@
                 const term = searchTerm.toLowerCase();
                 return items.filter(i => {
                     const matchText = i.name.toLowerCase().includes(term) || 
-                                      i.serialLot.toLowerCase().includes(term) || 
-                                      i.manufacturer.toLowerCase().includes(term);
-                    const matchCat = categoryFilter === 'TODOS' || i.category === categoryFilter;
+                                      (i.serialLot && i.serialLot.toLowerCase().includes(term)) || 
+                                      (i.manufacturer && i.manufacturer.toLowerCase().includes(term));
+                    let matchCat = true;
+                    if (categoryFilter === 'SOLICITAR') {
+                        matchCat = Number(i.currentStock) < Number(i.minStock);
+                    } else if (categoryFilter !== 'TODOS') {
+                        matchCat = i.category === categoryFilter;
+                    }
                     return matchText && matchCat;
                 });
             }, [items, searchTerm, categoryFilter]);
@@ -918,12 +2806,15 @@
                                                 onChange={e => setCategoryFilter(e.target.value)}
                                                 className="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-xs font-bold text-slate-300 uppercase outline-none focus:border-blue-500"
                                             >
-                                                <option value="TODOS">Todas as Categorias</option>
-                                                <option value="Fármaco Comum">Fármacos Comuns</option>
-                                                <option value="Controlado (Port. 344)">Psicotrópicos (Port. 344)</option>
-                                                <option value="Material/Descartável APH">Materiais & Descartáveis</option>
-                                                <option value="Equipamento Biomédico">Equipamentos Biomédicos</option>
-                                                <option value="Gás Medicinal">Gases Medicinais (O2)</option>
+                                                <option value="TODOS">Todas as Categorias (134 Itens)</option>
+                                                <option value="SOLICITAR">🔴 APENAS NECESSIDADES (SOLICITAR AO DMOP)</option>
+                                                <option value="Fármaco Comum">💊 Fármacos Comuns</option>
+                                                <option value="Controlado (Port. 344)">🔒 Psicotrópicos (Port. 344)</option>
+                                                <option value="Soluções Parenterais">💧 Soluções Parenterais (Soro/Ringer)</option>
+                                                <option value="Material/Descartável APH">🩹 Insumos & Descartáveis APH</option>
+                                                <option value="Equipamento Biomédico">⚡ Equipamentos & Ventilação</option>
+                                                <option value="Desinfetantes & Biossegurança">🧼 Desinfecção & Biossegurança</option>
+                                                <option value="Impressos Oficiais & RAPH">📋 Impressos Oficiais & RAPH</option>
                                             </select>
                                         </div>
 
@@ -947,11 +2838,12 @@
                                         <table className="w-full text-left min-w-[850px]">
                                             <thead className="bg-slate-950/80 border-b border-slate-800 text-[9px] font-black text-slate-400 uppercase tracking-widest">
                                                 <tr>
-                                                    <th className="px-6 py-4">Insumo & Detalhes</th>
-                                                    <th className="px-6 py-4">Categoria</th>
-                                                    <th className="px-6 py-4 text-center">Validade (FEFO)</th>
-                                                    <th className="px-6 py-4 text-center">Carga / Mínimo</th>
-                                                    <th className="px-6 py-4 text-right">Ações Operacionais</th>
+                                                    <th className="px-5 py-4">Insumo Oficial</th>
+                                                    <th className="px-4 py-4">Categoria</th>
+                                                    <th className="px-4 py-4 text-center">1ª e 2ª Validade</th>
+                                                    <th className="px-4 py-4 text-center">Carga / Ideal</th>
+                                                    <th className="px-4 py-4 text-center">Solicitar</th>
+                                                    <th className="px-5 py-4 text-right">Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-slate-800/60 text-xs">
@@ -984,17 +2876,18 @@
                                                                     {item.category}
                                                                 </span>
                                                             </td>
-                                                            <td className="px-6 py-4 text-center">
-                                                                <span className="font-bold text-slate-200 block">{formatBRDate(item.expirationDate)}</span>
+                                                            <td className="px-4 py-4 text-center">
+                                                                <span className="font-bold text-slate-200 block text-[11px]">{formatBRDate(item.expirationDate)}</span>
+                                                                {item.expirationDate2 && (
+                                                                    <span className="text-[9px] text-slate-400 block mt-0.5">2ª Val: {formatBRDate(item.expirationDate2)}</span>
+                                                                )}
                                                                 {isExpired ? (
                                                                     <span className="inline-block mt-0.5 text-[8px] font-black uppercase text-red-400 bg-red-500/20 px-2 py-0.5 rounded-full border border-red-500/30">VENCIDO</span>
                                                                 ) : isSoon ? (
-                                                                    <span className="inline-block mt-0.5 text-[8px] font-black uppercase text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">{days} dias restantes</span>
-                                                                ) : (
-                                                                    <span className="inline-block mt-0.5 text-[8px] font-bold uppercase text-emerald-400">Regular</span>
-                                                                )}
+                                                                    <span className="inline-block mt-0.5 text-[8px] font-black uppercase text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">{days} dias</span>
+                                                                ) : null}
                                                             </td>
-                                                            <td className="px-6 py-4 text-center">
+                                                            <td className="px-4 py-4 text-center">
                                                                 <span className={`inline-block px-3 py-1 rounded-xl font-black text-xs border ${
                                                                     isLowStock
                                                                         ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
@@ -1003,7 +2896,16 @@
                                                                     {item.currentStock} / {item.minStock} un
                                                                 </span>
                                                             </td>
-                                                            <td className="px-6 py-4 text-right space-x-1.5 whitespace-nowrap">
+                                                            <td className="px-4 py-4 text-center">
+                                                                {Number(item.solicitar || Math.max(0, item.minStock - item.currentStock)) > 0 ? (
+                                                                    <span className="inline-block px-2.5 py-1 rounded-lg font-black text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                                                        +{item.solicitar || Math.max(0, item.minStock - item.currentStock)}
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="text-[10px] font-bold text-slate-600">0</span>
+                                                                )}
+                                                            </td>
+                                                            <td className="px-5 py-4 text-right space-x-1.5 whitespace-nowrap">
                                                                 <button
                                                                     onClick={() => {
                                                                         setSelectedItem(item);
