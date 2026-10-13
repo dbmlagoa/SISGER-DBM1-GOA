@@ -665,16 +665,16 @@
                 </p>
               </div>
               <div style="display: flex; gap: 12px;">
-                <button class="btn-secondary" onclick="document.getElementById('sigmat-frame').src += ''">
+                <button class="btn-secondary" onclick="document.getElementById('sigmat-frame').src = 'modules/sigmat.html?t=' + Date.now()">
                   🔄 Recarregar Dados
                 </button>
-                <a href="modules/sigmat.html" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                <a href="modules/sigmat.html?v=2.0" target="_blank" rel="noopener noreferrer" class="btn-primary">
                   ↗ Abrir em Janela Dedicada
                 </a>
               </div>
             </div>
           </div>
-          <iframe id="sigmat-frame" class="embed-full-frame" src="modules/sigmat.html"></iframe>
+          <iframe id="sigmat-frame" class="embed-full-frame" src="modules/sigmat.html?v=2.0"></iframe>
         </section>
 
         <!-- ==================================================================
