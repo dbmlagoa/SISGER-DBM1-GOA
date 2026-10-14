@@ -1935,6 +1935,34 @@
                 } catch (e) {}
             };
 
+            // Sessão individual do militar (exigida a cada acesso ao sistema; encerrada ao fechar navegador/aba)
+            const safeSessionGet = (key) => {
+                try { 
+                    if(typeof window !== 'undefined' && window.sessionStorage) {
+                        const val = window.sessionStorage.getItem(key);
+                        return val ? JSON.parse(val) : null;
+                    }
+                    return null;
+                } catch (e) { return null; }
+            };
+            const safeSessionSet = (key, value) => {
+                try { 
+                    if(typeof window !== 'undefined' && window.sessionStorage) {
+                        sessionStorage.setItem(key, JSON.stringify(value)); 
+                    }
+                } catch (e) {}
+            };
+            const safeSessionRemove = (key) => {
+                try { 
+                    if(typeof window !== 'undefined' && window.sessionStorage) {
+                        sessionStorage.removeItem(key); 
+                    }
+                } catch (e) {}
+            };
+
+            // Purga qualquer credencial fixa ou residual persistida no localStorage para garantir exigência de login
+            safeStorageRemove('sigmat_operator');
+
             const isDamageType = (type) => {
                 if (!type) return false;
                 const str = String(type).toUpperCase();
@@ -1972,12 +2000,8 @@
             };
 
             const App = () => {
-                // Operador ativo com fallback seguro para Subten Gomes (Fiel DMOP) para nunca bloquear a navegação
-                const [operator, setOperator] = useState(() => safeStorageGet('sigmat_operator') || {
-                    grad: 'SUBTEN',
-                    name: 'GOMES',
-                    rg: '22194'
-                });
+                // Operador autenticado via login individual por RG e Senha (sem credencial fixa/automática)
+                const [operator, setOperator] = useState(() => safeSessionGet('sigmat_operator'));
                 const [authMode, setAuthMode] = useState('login'); 
                 const [authError, setAuthError] = useState('');
                 const [authLoading, setAuthLoading] = useState(false);
@@ -2164,27 +2188,38 @@
                     setAuthLoading(true);
                     setAuthError('');
 
-                    const rg = e.target.rg.value;
-                    const password = e.target.password.value;
+                    const rg = String(e.target.rg.value || '').trim();
+                    const password = String(e.target.password.value || '').trim();
                     const payload = authMode === 'login' 
                         ? { action: "authenticateOperator", rg, password }
-                        : { action: "registerOperator", grad: e.target.grad.value, name: e.target.name.value, rg, password };
+                        : { action: "registerOperator", grad: String(e.target.grad.value || '').trim(), name: String(e.target.name.value || '').trim(), rg, password };
 
                     if (typeof google !== 'undefined' && google.script && google.script.run) {
                         if (authMode === 'login') {
                             google.script.run.withSuccessHandler((res) => {
                                 setAuthLoading(false);
-                                if (res.success) { setOperator(res.user); safeStorageSet('sigmat_operator', res.user); } 
-                                else { setAuthError(res.message); }
+                                if (res.success) { 
+                                    setOperator(res.user); 
+                                    safeSessionSet('sigmat_operator', res.user); 
+                                    safeStorageRemove('sigmat_operator');
+                                } else { 
+                                    setAuthError(res.message); 
+                                }
                             }).withFailureHandler(() => {
                                 setAuthLoading(false); setAuthError("Erro de ligação ao servidor.");
                             }).authenticateOperator({ rg, password });
                         } else {
-                            const grad = e.target.grad.value; const name = e.target.name.value;
+                            const grad = String(e.target.grad.value || '').trim(); 
+                            const name = String(e.target.name.value || '').trim();
                             google.script.run.withSuccessHandler((res) => {
                                 setAuthLoading(false);
-                                if (res.success) { setOperator(res.user); safeStorageSet('sigmat_operator', res.user); } 
-                                else { setAuthError(res.message); }
+                                if (res.success) { 
+                                    setOperator(res.user); 
+                                    safeSessionSet('sigmat_operator', res.user); 
+                                    safeStorageRemove('sigmat_operator');
+                                } else { 
+                                    setAuthError(res.message); 
+                                }
                             }).withFailureHandler(() => {
                                 setAuthLoading(false); setAuthError("Erro ao tentar registar.");
                             }).registerOperator({ grad, name, rg, password });
@@ -2194,15 +2229,23 @@
                             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                             const res = await response.json();
                             if (res.success) {
-                                setOperator(res.user); safeStorageSet('sigmat_operator', res.user);
-                            } else { setAuthError(res.message); }
-                        } catch (err) { setAuthError("Erro de comunicação com o servidor."); } 
-                        finally { setAuthLoading(false); }
+                                setOperator(res.user); 
+                                safeSessionSet('sigmat_operator', res.user); 
+                                safeStorageRemove('sigmat_operator');
+                            } else { 
+                                setAuthError(res.message); 
+                            }
+                        } catch (err) { 
+                            setAuthError("Erro de comunicação com o servidor."); 
+                        } finally { 
+                            setAuthLoading(false); 
+                        }
                     }
                 };
 
                 const handleLogout = () => {
                     setOperator(null);
+                    safeSessionRemove('sigmat_operator');
                     safeStorageRemove('sigmat_operator');
                 };
 
@@ -2333,7 +2376,7 @@
                         minStock: Number(f.minStock.value) || 1
                     };
                     
-                    const auditString = `${operator.grad} ${operator.name} (RG: ${operator.rg})`;
+                    const auditString = operator ? `${operator.grad} ${operator.name} (RG: ${operator.rg})` : 'FIEL DMOP';
                     handleAction("saveItem", { item, auditUser: auditString });
                 };
 

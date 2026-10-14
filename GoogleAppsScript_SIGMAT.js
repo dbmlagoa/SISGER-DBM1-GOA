@@ -155,8 +155,8 @@ function getItemsSheet(ss) {
 function getUsersSheet(ss) {
   var sheets = ss.getSheets();
   for (var i = 0; i < sheets.length; i++) {
-    var norm = sheets[i].getName().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    if (norm === "users" || norm === "usuarios") return sheets[i];
+    var norm = normSheetName(sheets[i].getName());
+    if (norm === "users" || norm === "usuarios" || norm === "usuario" || norm.indexOf("usuario") !== -1 || norm.indexOf("user") !== -1) return sheets[i];
   }
   return ss.getSheetByName("users");
 }
@@ -197,7 +197,7 @@ function getData() {
  */
 function authenticateOperator(data) {
   var ss = getSpreadsheet();
-  var usersSheet = ss.getSheetByName("users");
+  var usersSheet = getUsersSheet(ss);
   if (!usersSheet || usersSheet.getLastRow() < 2) {
     return { success: false, message: "Nenhum operador cadastrado no sistema. Por favor, crie uma conta." };
   }
@@ -236,7 +236,7 @@ function registerOperator(data) {
   try {
     lock.waitLock(10000);
     var ss = getSpreadsheet();
-    var usersSheet = ss.getSheetByName("users");
+    var usersSheet = getUsersSheet(ss);
     if (!usersSheet) {
       usersSheet = ss.insertSheet("users");
       usersSheet.appendRow(["Graduação", "Nome de Guerra", "RG", "Senha", "Data Cadastro"]);
