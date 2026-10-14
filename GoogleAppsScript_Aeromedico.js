@@ -168,7 +168,9 @@ function doPost(e) {
     var data = JSON.parse(raw);
     var action = data.action || "";
 
-    if (action === "authenticateOperator") {
+    if (action === "getData") {
+      return jsonResponse(getData());
+    } else if (action === "authenticateOperator") {
       return jsonResponse(authenticateOperator(data));
     } else if (action === "registerOperator") {
       return jsonResponse(registerOperator(data));
@@ -302,8 +304,8 @@ function registerOperator(data) {
     }
 
     var grad = String(data.grad || "").trim().toUpperCase();
-    var name = String(data.name || "").trim().toUpperCase();
-    var pass = String(data.password || "").trim();
+    var name = String(data.name || data.warName || "").trim().toUpperCase();
+    var pass = String(data.password || data.pass || "").trim();
     var role = String(data.role || "Médico de Voo").trim();
     var dataCad = new Date().toISOString();
 

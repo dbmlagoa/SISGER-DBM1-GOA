@@ -76,7 +76,7 @@
     <script type="text/babel" data-presets="react,env">
         const { useState, useEffect, useMemo, useRef } = React;
 
-        const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwU9B_t1p_yZ_wK8t1UjD4l6x0pM1q2r3s4t5u6v7w8/exec";
+        const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDyH6IjZV4G0OyKYpj_dqPmNNNnuc1VqevkE5Ik8Dlw2iM_jCypBcR33Hu7xM2qegI/exec";
 
         const safeSessionGet = (key) => {
             try { return typeof window !== 'undefined' && window.sessionStorage ? sessionStorage.getItem(key) : null; } catch (e) { return null; }
@@ -94,7 +94,13 @@
             try { if (typeof window !== 'undefined' && window.localStorage) localStorage.setItem(key, val); } catch (e) {}
         };
 
-        try { localStorage.removeItem('sigaero_operator'); } catch (e) {}
+        try { 
+            localStorage.removeItem('sigaero_operator'); 
+            const curUrl = localStorage.getItem('sigaero_script_url');
+            if (!curUrl || curUrl.includes('AKfycbwU9B_t1p_yZ')) {
+                localStorage.setItem('sigaero_script_url', DEFAULT_SCRIPT_URL);
+            }
+        } catch (e) {}
 
         const formatBRDate = (val) => {
             if (!val) return '---';
@@ -2481,11 +2487,16 @@
 
         // API Caller para Google Apps Script
         const callGAS = async (scriptUrl, action, payload = {}) => {
-            if (!scriptUrl || scriptUrl.trim() === "" || scriptUrl.includes("AKfycbwU9B_t1p_yZ")) {
-                console.warn("[SIG-AEROMÉDICO] Executando em modo local/cache demonstrativo.");
-                return { status: "local_demo", message: "Operação executada localmente." };
+            if (!scriptUrl || scriptUrl.trim() === "") {
+                console.warn("[SIG-AEROMÉDICO] URL da API não configurada.");
+                return { status: "local_demo", success: false, message: "URL não configurada." };
             }
             try {
+                if (action === 'getData' || action === 'ping') {
+                    const res = await fetch(`${scriptUrl}?action=${action}`, { method: 'GET' });
+                    const data = await res.json();
+                    return data;
+                }
                 const res = await fetch(scriptUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -2495,14 +2506,14 @@
                 return data;
             } catch (err) {
                 console.error("[SIG-AEROMÉDICO] Erro de rede GAS:", err);
-                return { status: "error", message: err.message || "Erro de conexão" };
+                return { status: "error", success: false, message: err.message || "Erro de conexão" };
             }
         };
 
         // ====================================================================
         // COMPONENTE: TELA DE LOGIN & CADASTRO DE MILITAR
         // ====================================================================
-        const LoginScreen = ({ onLogin, onRegister, users }) => {
+        const LoginScreen = ({ onLogin, onRegister, users, scriptUrl }) => {
             const [mode, setMode] = useState('login'); // 'login' ou 'register'
             const [rg, setRg] = useState('');
             const [password, setPassword] = useState('');
@@ -2518,7 +2529,7 @@
             const [err, setErr] = useState('');
             const [loading, setLoading] = useState(false);
 
-            const handleLogin = (e) => {
+            const handleLogin = async (e) => {
                 e.preventDefault();
                 setErr('');
                 if (!rg.trim() || !password.trim()) {
@@ -2526,28 +2537,51 @@
                     return;
                 }
                 setLoading(true);
-                setTimeout(() => {
-                    // Busca local ou API
-                    const found = users.find(u => String(u.rg).trim() === String(rg).trim());
-                    if (found) {
-                        if (found.pass && String(found.pass) !== String(password)) {
-                            setErr('Senha incorreta para este RG.');
+                
+                // 1. Tenta autenticação online na Planilha Google
+                if (scriptUrl) {
+                    try {
+                        const res = await callGAS(scriptUrl, 'authenticateOperator', { rg: rg.trim(), password: password.trim() });
+                        if (res && res.success && res.user) {
                             setLoading(false);
+                            onLogin({
+                                grad: res.user.grad,
+                                warName: res.user.name,
+                                rg: res.user.rg,
+                                role: res.user.role
+                            });
                             return;
+                        } else if (res && res.success === false && res.message) {
+                            if (res.message.includes('Senha incorreta')) {
+                                setErr(res.message);
+                                setLoading(false);
+                                return;
+                            }
                         }
-                        onLogin(found);
-                    } else {
-                        // Se não encontrou no catálogo padrão, permite acesso como militar registrado
-                        onLogin({
-                            grad: "Militar",
-                            warName: `RG ${rg}`,
-                            rg: rg.trim(),
-                            role: "Operador Aeromédico",
-                            pass: password
-                        });
+                    } catch (netErr) {
+                        console.warn("Auth online falhou, tentando base local:", netErr);
                     }
-                    setLoading(false);
-                }, 300);
+                }
+
+                // 2. Fallback de militares padrão
+                const found = users.find(u => String(u.rg).trim() === String(rg).trim());
+                if (found) {
+                    if (found.pass && String(found.pass) !== String(password)) {
+                        setErr('Senha incorreta para este RG.');
+                        setLoading(false);
+                        return;
+                    }
+                    onLogin(found);
+                } else {
+                    onLogin({
+                        grad: "Militar",
+                        warName: `RG ${rg}`,
+                        rg: rg.trim(),
+                        role: "Operador Aeromédico",
+                        pass: password
+                    });
+                }
+                setLoading(false);
             };
 
             const handleRegister = (e) => {
@@ -4359,8 +4393,8 @@
                 setTestStatus(null);
                 const res = await callGAS(url, 'getData');
                 setTesting(false);
-                if (res.status === 'success') {
-                    setTestStatus({ ok: true, msg: 'Conexão estabelecida com sucesso com a Planilha Dedicada!' });
+                if (res.success || res.status === 'success') {
+                    setTestStatus({ ok: true, msg: 'Conexão estabelecida com sucesso com a Planilha Dedicada do SIG-AEROMÉDICO!' });
                 } else if (res.status === 'local_demo') {
                     setTestStatus({ ok: false, msg: 'URL padrão/vazia: operando em cache local demonstrativo.' });
                 } else {
@@ -5418,26 +5452,91 @@
             useEffect(() => {
                 let isMounted = true;
                 const loadRemoteData = async () => {
-                    if (scriptUrl && !scriptUrl.includes("AKfycbwU9B_t1p_yZ")) {
+                    if (scriptUrl) {
                         setSyncStatus('syncing');
                         const res = await callGAS(scriptUrl, 'getData');
                         if (isMounted) {
-                            if (res.status === 'success' && res.data) {
+                            if (res && res.success) {
                                 setSyncStatus('online');
-                                if (res.data.almoxarifado && res.data.almoxarifado.length > 0) {
-                                    setAlmoxItems(res.data.almoxarifado);
+                                if (res.almox && res.almox.length > 0) {
+                                    const mappedAlmox = res.almox.map((row, idx) => ({
+                                        id: row[0] || `ALM-${idx + 1}`,
+                                        name: row[1] || 'Item sem nome',
+                                        category: row[2] || 'Insumos Gerais',
+                                        unit: row[3] || 'un',
+                                        currentStock: Number(row[4]) || 0,
+                                        minStock: Number(row[5]) || 0,
+                                        solicitar: Number(row[6]) || 0,
+                                        expirationDate: row[7] ? String(row[7]).split('T')[0] : '',
+                                        expirationDate2: row[8] ? String(row[8]).split('T')[0] : '',
+                                        serialLot: row[9] || '',
+                                        manufacturer: row[10] || '',
+                                        location: row[11] || 'Almoxarifado Central DBM1',
+                                        obs: row[12] || ''
+                                    }));
+                                    setAlmoxItems(mappedAlmox);
                                 }
-                                if (res.data.socorros && res.data.socorros.length > 0) {
-                                    setSocorrosList(res.data.socorros);
+                                if (res.socorros && res.socorros.length > 0) {
+                                    const mappedSoc = res.socorros.map((row, idx) => ({
+                                        id: `SOC-${idx + 1}`,
+                                        dataHora: row[0] || '',
+                                        item: row[1] || '',
+                                        tipo: row[2] || 'USO',
+                                        quantidade: Number(row[3]) || 1,
+                                        numEvento: row[4] || '',
+                                        raphTih: row[5] || '',
+                                        tipoOcorrencia: row[6] || '',
+                                        militar: row[7] || '',
+                                        rg: row[8] || '',
+                                        reporAlmox: row[9] === true || row[9] === 'SIM',
+                                        obs: row[10] || ''
+                                    }));
+                                    setSocorrosList(mappedSoc);
                                 }
-                                if (res.data.voos && res.data.voos.length > 0) {
-                                    setVoosList(res.data.voos);
+                                if (res.voos && res.voos.length > 0) {
+                                    const mappedVoos = res.voos.map((row, idx) => ({
+                                        id: row[0] || `VOO-${idx + 1}`,
+                                        data: row[1] ? String(row[1]).split('T')[0] : '',
+                                        aeronave: row[2] || '',
+                                        numEvento: row[3] || '',
+                                        raph: row[4] || '',
+                                        solicitante: row[5] || '',
+                                        local: row[6] || '',
+                                        tipo: row[7] || '',
+                                        subtipo: row[8] || '',
+                                        paciente: row[10] || '',
+                                        idade: row[11] || '',
+                                        sexo: row[12] || '',
+                                        gravidade: row[13] || '',
+                                        diagnostico: row[14] || '',
+                                        hospital: row[16] || '',
+                                        pilotos: row[17] || '',
+                                        medicos: row[18] || '',
+                                        enfermeiros: row[19] || '',
+                                        partida: row[21] || '',
+                                        regresso: row[22] || '',
+                                        minutosVoo: Number(row[23]) || 0,
+                                        obs: row[24] || ''
+                                    }));
+                                    setVoosList(mappedVoos);
                                 }
-                                if (res.data.passagens && res.data.passagens.length > 0) {
-                                    setPassagensList(res.data.passagens);
-                                }
-                                if (res.data.users && res.data.users.length > 0) {
-                                    setUsers(res.data.users);
+                                if (res.passagens && res.passagens.length > 0) {
+                                    const mappedPas = res.passagens.map((row, idx) => ({
+                                        id: row[0] || `PAS-${idx + 1}`,
+                                        data: row[1] ? String(row[1]).split('T')[0] : '',
+                                        aeronave: row[2] || '',
+                                        ocorrencias: row[3] || '',
+                                        eletronicos: row[4] || '',
+                                        psicotropicos: row[5] || '',
+                                        base: row[6] || '',
+                                        pendencias: row[7] || '',
+                                        equipeTransmite: row[9] || '',
+                                        rgTransmite: row[10] || '',
+                                        equipeAssume: row[11] || '',
+                                        rgAssume: row[12] || '',
+                                        dataHora: row[13] || ''
+                                    }));
+                                    setPassagensList(mappedPas);
                                 }
                             } else {
                                 setSyncStatus('local');
@@ -5572,6 +5671,7 @@
                             onLogin={handleLogin} 
                             onRegister={handleRegister} 
                             users={users} 
+                            scriptUrl={scriptUrl}
                         />
                         {toast && (
                             <div className={`fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 border animate-in slide-in-from-bottom duration-200 ${
