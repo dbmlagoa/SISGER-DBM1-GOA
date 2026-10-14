@@ -120,9 +120,16 @@ function navigateTo(viewId) {
     window.fecharMenuMobile();
   }
 
-  // Lazy loaders
+  // Lazy loaders & cache-busting
   if (viewId === "briefing" && window.initAeroBriefingModule) {
     window.initAeroBriefingModule();
+  }
+  if (viewId === "aeromedico") {
+    const frame = document.getElementById("aeromedico-frame");
+    if (frame && !frame.dataset.v3Loaded) {
+      frame.dataset.v3Loaded = "true";
+      frame.src = "modules/aeromedico.html?v=3.2&t=" + Date.now();
+    }
   }
 }
 
