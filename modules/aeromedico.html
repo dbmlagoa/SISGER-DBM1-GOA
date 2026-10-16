@@ -6286,16 +6286,35 @@
         const TabSocorros = ({ 
             socorrosList, 
             onOpenNewSocorro, 
+            onOpenHistorico,
             operator,
-            onReporLancamento 
+            onReporLancamento,
+            onEditLancamento,
+            onRequestDelete
         }) => {
             const [searchTerm, setSearchTerm] = useState('');
             const [typeFilter, setTypeFilter] = useState('TODOS');
             const [reporFilter, setReporFilter] = useState('TODOS');
             const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-            const filteredList = useMemo(() => {
-                return (socorrosList || []).filter(s => {
+            // Função para verificar se a data está dentro dos últimos N dias (4 dias por padrão)
+            const isWithinLastNDays = (dateString, nDays = 4) => {
+                if (!dateString) return false;
+                const d = new Date(dateString);
+                if (isNaN(d.getTime())) return false;
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - (nDays - 1));
+                cutoff.setHours(0, 0, 0, 0);
+                return d >= cutoff;
+            };
+
+            // Lista filtrada limitada aos últimos 4 dias para exibição na página
+            const listWithin4Days = useMemo(() => {
+                return (socorrosList || []).filter(s => isWithinLastNDays(s.dataHora, 4));
+            }, [socorrosList]);
+
+            const visibleList = useMemo(() => {
+                return listWithin4Days.filter(s => {
                     const matchSearch = 
                         (s.item && s.item.toLowerCase().includes(searchTerm.toLowerCase())) ||
                         (s.tipo && s.tipo.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -6303,6 +6322,7 @@
                         (s.numDocumento && s.numDocumento.toLowerCase().includes(searchTerm.toLowerCase())) ||
                         (s.numEvento && s.numEvento.toLowerCase().includes(searchTerm.toLowerCase())) ||
                         (s.paciente && s.paciente.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                        (s.militar && s.militar.toLowerCase().includes(searchTerm.toLowerCase())) ||
                         (s.obs && s.obs.toLowerCase().includes(searchTerm.toLowerCase())) ||
                         (s.observacao && s.observacao.toLowerCase().includes(searchTerm.toLowerCase()));
                     
@@ -6317,9 +6337,40 @@
 
                     return matchSearch && matchType && matchRepor;
                 });
-            }, [socorrosList, searchTerm, typeFilter, reporFilter]);
+            }, [listWithin4Days, searchTerm, typeFilter, reporFilter]);
 
-            // Contadores
+            // Estatísticas de Hoje
+            const todayStats = useMemo(() => {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const todayItems = (socorrosList || []).filter(s => {
+                    if (!s.dataHora) return false;
+                    return String(s.dataHora).split('T')[0] === todayStr;
+                });
+                
+                let utilizados = 0;
+                let repostos = 0;
+                let aRepor = 0;
+                
+                todayItems.forEach(s => {
+                    const t = (s.tipo || s.type || 'Uso').toLowerCase();
+                    const qtd = Number(s.quantidade) || 1;
+                    const qtdRep = Number(s.qtdRetirada) || qtd;
+                    if (t.includes('uso')) {
+                        utilizados += qtd;
+                        if (s.reposto || s.jaRetirouDeposito) {
+                            repostos += qtdRep;
+                        } else {
+                            aRepor += qtd;
+                        }
+                    } else if (t.includes('reposi')) {
+                        repostos += qtd;
+                    }
+                });
+
+                return { utilizados, repostos, aRepor, total: todayItems.length };
+            }, [socorrosList]);
+
+            // Contagem geral de A Repor
             const countARepor = useMemo(() => {
                 return (socorrosList || []).filter(s => s.statusRepor === 'A_REPOR' || (s.reposto === false && s.jaRetirouDeposito === false)).length;
             }, [socorrosList]);
@@ -6346,7 +6397,7 @@
                         </div>
                     </div>
 
-                    {/* Barra de Controles, Busca, Filtros e Botão Registrar Lançamento */}
+                    {/* Barra de Controles, Busca, Filtros, Histórico e Novo Lançamento */}
                     <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-3">
                             <div className="relative flex-1">
@@ -6354,7 +6405,7 @@
                                     type="text"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="Buscar por item, tipo, RAPH/TIH ou observação..."
+                                    placeholder="Buscar por item, tipo, RAPH/TIH ou militar..."
                                     className="w-full bg-white border-2 border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600"
                                 />
                                 <div className="absolute left-3 top-3 text-slate-500">
@@ -6381,7 +6432,7 @@
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-2 shrink-0 flex-wrap">
                             {/* Filtro A Repor */}
                             <button
                                 type="button"
@@ -6401,6 +6452,17 @@
                                 )}
                             </button>
 
+                            {/* Botão Histórico com filtro por data */}
+                            <button
+                                type="button"
+                                onClick={onOpenHistorico}
+                                className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-extrabold text-xs transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                                title="Consultar histórico completo de movimentações com filtro por data"
+                            >
+                                <span className="text-sm">📜</span>
+                                <span>Histórico</span>
+                            </button>
+
                             {/* Botão Registrar Lançamento */}
                             <button
                                 type="button"
@@ -6413,108 +6475,169 @@
                         </div>
                     </div>
 
-                    {/* Linha do Tempo / Lista de Lançamentos de Socorros */}
-                    {filteredList.length === 0 ? (
-                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-12 text-center shadow-sm">
-                            <Icon name="socorros" className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                            <h3 className="text-base font-black text-slate-900">Nenhum lançamento encontrado</h3>
-                            <p className="text-xs text-slate-600 mt-1">Clique em "Registrar Lançamento" acima para apontar insumos utilizados, reposições ou avarias.</p>
+                    {/* Container da Linha do Tempo em Formato de Lista (Últimos 4 dias) */}
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+                        {/* Cabeçalho da Linha do Tempo */}
+                        <div className="border-b border-slate-100 pb-3">
+                            <div className="flex items-center justify-between gap-3 flex-wrap">
+                                <h3 className="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+                                    <span className="text-slate-800 text-base">🕒</span>
+                                    <span>Linha do tempo (últimos 4 dias)</span>
+                                </h3>
+                                <span className="text-xs text-slate-500 font-semibold bg-sand-50 px-2.5 py-1 rounded-lg border border-sand-300">
+                                    {visibleList.length} registro(s) exibido(s)
+                                </span>
+                            </div>
+                            <p className="text-xs font-bold text-slate-600 mt-1">
+                                Hoje: <strong className="text-slate-900">{todayStats.utilizados}</strong> utilizados · <strong className="text-slate-900">{todayStats.repostos}</strong> repostos{todayStats.aRepor > 0 ? <span> · <strong className="text-amber-800">{todayStats.aRepor}</strong> a repor</span> : ''}
+                            </p>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {filteredList.map((soc, idx) => {
-                                const isARepor = soc.statusRepor === 'A_REPOR' || (soc.reposto === false && soc.jaRetirouDeposito === false);
-                                const tipoNome = soc.tipo || soc.type || 'Uso';
-                                
-                                return (
-                                    <div key={soc.id || idx} className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col justify-between hover:border-slate-400 transition-all">
-                                        <div>
-                                            {/* Cabeçalho do Cartão: Tipo e Hora automática */}
-                                            <div className="flex items-center justify-between gap-2 mb-2.5">
-                                                <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-lg border ${
-                                                    tipoNome === 'Reposição do depósito' ? 'bg-emerald-100 text-emerald-900 border-emerald-300' :
-                                                    tipoNome === 'Falta detectada' ? 'bg-amber-100 text-amber-900 border-amber-300' :
-                                                    tipoNome === 'Avaria detectada' ? 'bg-rose-100 text-rose-900 border-rose-300' :
-                                                    'bg-blue-100 text-blue-900 border-blue-300'
+
+                        {/* Lista de Registros */}
+                        {visibleList.length === 0 ? (
+                            <div className="p-8 text-center text-slate-500 text-xs space-y-2">
+                                <p className="font-bold text-slate-700">Nenhum lançamento registrado nos últimos 4 dias.</p>
+                                <p className="text-slate-500">Clique em "Registrar Lançamento" para iniciar ou em "Histórico" para buscar datas anteriores.</p>
+                            </div>
+                        ) : (
+                            <div className="divide-y divide-slate-100">
+                                {visibleList.map((soc, idx) => {
+                                    const isARepor = soc.statusRepor === 'A_REPOR' || (soc.reposto === false && soc.jaRetirouDeposito === false);
+                                    const tipoNome = soc.tipo || soc.type || 'Uso';
+                                    const isReporType = tipoNome === 'Reposição do depósito' || tipoNome === 'Reposição';
+                                    const horaStr = soc.dataHora ? new Date(soc.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--';
+                                    const dataStr = soc.dataHora ? new Date(soc.dataHora).toLocaleDateString('pt-BR') : '';
+                                    const isToday = dataStr === new Date().toLocaleDateString('pt-BR');
+
+                                    return (
+                                        <div 
+                                            key={soc.id || idx} 
+                                            className="py-3 px-1.5 sm:px-2.5 hover:bg-sand-50/70 rounded-xl transition-colors flex items-start justify-between gap-3 group"
+                                        >
+                                            <div className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0">
+                                                {/* Hora (e data se não for hoje) */}
+                                                <div className="shrink-0 w-11 sm:w-14 text-left pt-0.5">
+                                                    <span className="text-xs sm:text-sm font-black text-slate-900 block leading-tight">{horaStr}</span>
+                                                    {!isToday && (
+                                                        <span className="text-[10px] font-bold text-slate-500 block leading-none mt-0.5">{dataStr.slice(0, 5)}</span>
+                                                    )}
+                                                </div>
+
+                                                {/* Badge de Tipo */}
+                                                <span className={`shrink-0 text-[11px] font-black uppercase px-2.5 py-0.5 rounded-lg text-white ${
+                                                    isReporType ? 'bg-[#2e7d32]' :
+                                                    tipoNome === 'Falta detectada' ? 'bg-amber-600' :
+                                                    tipoNome === 'Avaria detectada' ? 'bg-rose-700' :
+                                                    'bg-[#1565c0]'
                                                 }`}>
-                                                    {tipoNome}
+                                                    {isReporType ? 'Reposição' : tipoNome === 'Falta detectada' ? 'Falta' : tipoNome === 'Avaria detectada' ? 'Avaria' : 'Uso'}
                                                 </span>
 
-                                                <span className="text-[11px] font-bold text-slate-600">
-                                                    ⏰ {soc.dataHora ? `${new Date(soc.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : 'Hoje'}
-                                                </span>
-                                            </div>
+                                                {/* Conteúdo Principal */}
+                                                <div className="flex-1 min-w-0">
+                                                    {/* Linha 1: Item ×Qtd · Documento e Suffix */}
+                                                    <div className="text-xs sm:text-sm leading-snug flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+                                                        <strong className="text-slate-950 font-black">
+                                                            {soc.item || soc.itemName || 'Insumo Operacional'} ×{soc.quantidade}
+                                                        </strong>
 
-                                            {/* Item e Quantidade */}
-                                            <div className="my-2">
-                                                <h4 className="text-sm font-black text-slate-900 leading-snug">
-                                                    {soc.quantidade}x {soc.item || soc.itemName || 'Insumo Operacional'}
-                                                </h4>
-                                                {soc.raphTih && (
-                                                    <div className="mt-1 flex items-center gap-1.5 text-xs font-mono font-bold text-rose-700">
-                                                        <span>📋</span>
-                                                        <span>{soc.raphTih}</span>
+                                                        {soc.raphTih && (
+                                                            <span className="text-[#b48033] font-bold">
+                                                                · {soc.raphTih}
+                                                            </span>
+                                                        )}
+
+                                                        {/* Status de Reposição / Retirada */}
+                                                        {isReporType ? (
+                                                            <span className="text-slate-600 font-medium text-xs">
+                                                                ↳ retirada do depósito
+                                                            </span>
+                                                        ) : (soc.reposto || soc.jaRetirouDeposito) ? (
+                                                            <span className="text-emerald-700 font-extrabold text-xs">
+                                                                ✓ reposto ×{soc.qtdRetirada || soc.quantidade}
+                                                            </span>
+                                                        ) : isARepor ? (
+                                                            <span className="inline-flex items-center gap-1.5">
+                                                                <span className="text-amber-700 font-extrabold text-xs">⏳ a repor</span>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => onReporLancamento(soc)}
+                                                                    className="px-2 py-0.5 rounded-md bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-[10px] shadow-xs transition-all flex items-center gap-1"
+                                                                    title="Confirmar retirada e dar baixa no depósito"
+                                                                >
+                                                                    <span>📦 Repor</span>
+                                                                </button>
+                                                            </span>
+                                                        ) : null}
                                                     </div>
-                                                )}
-                                            </div>
 
-                                            {/* Observações */}
-                                            {(soc.observacao || soc.obs) && (
-                                                <div className="mt-2.5 p-2 rounded-xl bg-sand-50 border border-sand-300 text-xs text-slate-800">
-                                                    <p className="font-medium">{soc.observacao || soc.obs}</p>
-                                                </div>
-                                            )}
+                                                    {/* Linha 2: Subtexto descritivo e Militar */}
+                                                    <div className="text-[11px] text-slate-600 mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                                        {(soc.observacao || soc.obs) ? (
+                                                            <span className="text-slate-700 font-medium">{soc.observacao || soc.obs}</span>
+                                                        ) : (soc.jaRetirouDeposito && !isReporType) ? (
+                                                            <span className="text-slate-500 font-medium">Retirado do depósito no mesmo lançamento</span>
+                                                        ) : null}
 
-                                            {/* Foto Anexada (se houver) */}
-                                            {soc.foto && (
-                                                <div className="mt-2.5 flex items-center gap-2">
-                                                    <img
-                                                        src={soc.foto}
-                                                        alt="Registro"
-                                                        onClick={() => setSelectedPhoto(soc.foto)}
-                                                        className="w-12 h-12 object-cover rounded-lg border-2 border-slate-300 cursor-pointer hover:opacity-80 transition-opacity shadow-xs"
-                                                        title="Clique para ampliar a foto"
-                                                    />
-                                                    <span className="text-[10px] text-slate-500 font-semibold">📷 Foto anexada</span>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Rodapé do Cartão com Status de Reposição e Botão Repor */}
-                                        <div className="mt-4 pt-3 border-t-2 border-slate-100 flex flex-col gap-2">
-                                            <div className="flex items-center justify-between text-[11px] text-slate-700">
-                                                <span>Resp: <strong className="text-slate-900">{soc.militar || 'UASA'}</strong></span>
-                                                <span className="font-semibold text-slate-500">{formatBRDate(soc.dataHora)}</span>
-                                            </div>
-
-                                            {/* Reposição no Almoxarifado */}
-                                            <div className="flex items-center justify-between pt-1">
-                                                {isARepor ? (
-                                                    <div className="w-full flex items-center justify-between bg-amber-50 border border-amber-300 rounded-xl p-1.5 px-2">
-                                                        <span className="text-[11px] font-black text-amber-900 flex items-center gap-1">
-                                                            ⏳ A repor na mochila
+                                                        <span className="uppercase font-bold text-slate-700">
+                                                            {soc.militar ? soc.militar.toUpperCase() : 'OFICIAL AEROMÉDICO'}
                                                         </span>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => onReporLancamento(soc)}
-                                                            className="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs shadow-xs transition-all flex items-center gap-1"
-                                                            title="Confirmar retirada do depósito e dar baixa no estoque"
-                                                        >
-                                                            <span>📦 Repor</span>
-                                                        </button>
+
+                                                        {soc.foto && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setSelectedPhoto(soc.foto)}
+                                                                className="text-rose-700 hover:text-rose-900 font-bold inline-flex items-center gap-1 text-[11px] ml-1"
+                                                                title="Visualizar foto anexada"
+                                                            >
+                                                                <span>📷 Ver anexo</span>
+                                                            </button>
+                                                        )}
                                                     </div>
-                                                ) : (
-                                                    <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded-xl">
-                                                        <span>✓ Reposto do depósito</span>
-                                                    </span>
-                                                )}
+                                                </div>
+                                            </div>
+
+                                            {/* Ações: Editar e Apagar */}
+                                            <div className="flex items-center gap-1 shrink-0 pt-0.5">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onEditLancamento(soc)}
+                                                    className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                                                    title="Editar / Corrigir este lançamento"
+                                                >
+                                                    <span className="text-xs">✏️</span>
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onRequestDelete(soc)}
+                                                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors font-bold text-base leading-none"
+                                                    title="Apagar este lançamento"
+                                                >
+                                                    ✕
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* Rodapé com aviso dos 4 dias e atalho do Histórico */}
+                        <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600">
+                            <div className="flex items-center gap-2">
+                                <span className="text-slate-400">ℹ️</span>
+                                <span>Exibindo lançamentos referentes aos últimos 4 dias. Para consultar datas anteriores, utilize o botão <strong>Histórico</strong>.</span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={onOpenHistorico}
+                                className="px-3 py-1.5 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-800 font-bold text-xs border border-sand-300 transition-all flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
+                            >
+                                <span>📜 Abrir Histórico Completo</span>
+                            </button>
                         </div>
-                    )}
+                    </div>
 
                     {/* Modal para Visualização da Foto Ampliada */}
                     {selectedPhoto && (
@@ -8206,6 +8329,764 @@
             );
         };
 
+        // 5.1 Modal de Edição / Correção de Lançamento do Socorro
+        const ModalEditarSocorro = ({ isOpen, onClose, socorro, almoxItems, checklistCatalog, onSave, operator }) => {
+            if (!isOpen || !socorro) return null;
+
+            const [tipo, setTipo] = useState(socorro.tipo || 'Uso');
+            const [quantidade, setQuantidade] = useState(Number(socorro.quantidade) || 1);
+            const [itemSearchQuery, setItemSearchQuery] = useState(socorro.item || '');
+            const [selectedItem, setSelectedItem] = useState(null);
+            const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+            
+            const [tipoOcorrencia, setTipoOcorrencia] = useState(socorro.tipoOcorrencia || 'RAPH');
+            const [numDocumento, setNumDocumento] = useState(socorro.numDocumento || (socorro.raphTih ? String(socorro.raphTih).replace(/^(RAPH|TIH|Outro)\s*/i, '') : ''));
+            
+            const [jaRetirouDeposito, setJaRetirouDeposito] = useState(socorro.jaRetirouDeposito || socorro.reposto || false);
+            const [qtdRetirada, setQtdRetirada] = useState(Number(socorro.qtdRetirada) || Number(socorro.quantidade) || 1);
+            
+            const [observacao, setObservacao] = useState(socorro.observacao || socorro.obs || '');
+            const [foto, setFoto] = useState(socorro.foto || null);
+            const fileInputRef = useRef(null);
+
+            // Lista unificada para busca
+            const searchableItems = useMemo(() => {
+                const list = [];
+                const seen = new Set();
+                (checklistCatalog || []).forEach(it => {
+                    const name = (it.nome || it.name || '').trim();
+                    if (name && !seen.has(name.toLowerCase())) {
+                        seen.add(name.toLowerCase());
+                        list.push({
+                            id: it.id || `CHK-${name}`,
+                            name: name,
+                            category: it.grupo || it.aba || it.compartimento || 'Checklist Diário',
+                            isPsico: it.aba === 'PSICOTROPICOS' || (it.grupo && it.grupo.toLowerCase().includes('psicotr'))
+                        });
+                    }
+                });
+                (almoxItems || []).forEach(it => {
+                    const name = (it.name || '').trim();
+                    if (name && !seen.has(name.toLowerCase())) {
+                        seen.add(name.toLowerCase());
+                        list.push({
+                            id: it.id,
+                            name: name,
+                            category: it.category || 'Almoxarifado Central',
+                            isPsico: (it.category && it.category.toLowerCase().includes('psicotr')) || false,
+                            stock: it.currentStock
+                        });
+                    }
+                });
+                return list;
+            }, [checklistCatalog, almoxItems]);
+
+            const filteredItems = useMemo(() => {
+                if (!itemSearchQuery.trim()) return searchableItems.slice(0, 15);
+                const q = itemSearchQuery.toLowerCase();
+                return searchableItems.filter(it => 
+                    it.name.toLowerCase().includes(q) || 
+                    it.category.toLowerCase().includes(q)
+                ).slice(0, 20);
+            }, [searchableItems, itemSearchQuery]);
+
+            const isPsicotropico = useMemo(() => {
+                if (selectedItem && selectedItem.isPsico) return true;
+                const q = (selectedItem ? selectedItem.name : itemSearchQuery).toLowerCase();
+                return ['fentanil', 'morfina', 'midazolam', 'cetamina', 'etomidato', 'succinilcolina', 'vecurônio'].some(p => q.includes(p));
+            }, [selectedItem, itemSearchQuery]);
+
+            const handlePhotoUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('A imagem deve ter no máximo 5MB.');
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onloadend = () => setFoto(reader.result);
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const itemName = selectedItem ? selectedItem.name : itemSearchQuery.trim();
+                if (!itemName) {
+                    alert('Por favor, informe o Item do socorro.');
+                    return;
+                }
+
+                if (isPsicotropico && !numDocumento.trim()) {
+                    alert('⚠️ ATENÇÃO: Em substâncias e medicamentos psicotrópicos, o número do RAPH ou do TIH é OBRIGATÓRIO!');
+                    return;
+                }
+
+                // Calcula variação de reposição no almoxarifado (delta)
+                const oldReporQtd = (socorro.reposto || socorro.jaRetirouDeposito || socorro.tipo === 'Reposição do depósito') ? (Number(socorro.qtdRetirada || socorro.quantidade) || 1) : 0;
+                const newReporQtd = (jaRetirouDeposito || tipo === 'Reposição do depósito') ? (Number(qtdRetirada) || Number(quantidade) || 1) : 0;
+                const deltaStock = newReporQtd - oldReporQtd;
+
+                const docStr = numDocumento.trim() ? `${tipoOcorrencia} ${numDocumento.trim()}` : '';
+
+                const updated = {
+                    ...socorro,
+                    tipo: tipo,
+                    item: itemName,
+                    almoxItemId: selectedItem ? selectedItem.id : socorro.almoxItemId,
+                    quantidade: Number(quantidade) || 1,
+                    tipoOcorrencia: tipoOcorrencia,
+                    numDocumento: numDocumento.trim(),
+                    raphTih: docStr || (tipo === 'Uso' ? 'Atendimento' : tipo),
+                    isPsicotropico: isPsicotropico,
+                    jaRetirouDeposito: jaRetirouDeposito,
+                    qtdRetirada: (jaRetirouDeposito || tipo === 'Reposição do depósito') ? (Number(qtdRetirada) || Number(quantidade) || 1) : 0,
+                    reposto: jaRetirouDeposito || tipo === 'Reposição do depósito',
+                    statusRepor: (jaRetirouDeposito || tipo === 'Reposição do depósito') ? 'REPOSTO' : 'A_REPOR',
+                    observacao: observacao.trim(),
+                    obs: observacao.trim(),
+                    foto: foto,
+                    editadoEm: new Date().toISOString(),
+                    editadoPor: operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico'
+                };
+
+                onSave(updated, deltaStock);
+                onClose();
+            };
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
+                            <h3 className="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+                                <span className="text-blue-600">✏️</span>
+                                <span>Editar lançamento do socorro</span>
+                            </h3>
+                            <button type="button" onClick={onClose} className="p-1 rounded-lg text-slate-500 hover:text-slate-900 text-xl font-black">×</button>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4 my-4 text-xs">
+                            {/* Tipo */}
+                            <div>
+                                <label className="block font-bold text-slate-800 mb-1.5">Tipo de Lançamento:</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {[
+                                        { id: 'Uso', label: 'Uso', color: 'border-blue-500 bg-blue-50 text-blue-950' },
+                                        { id: 'Reposição do depósito', label: 'Reposição do depósito', color: 'border-emerald-500 bg-emerald-50 text-emerald-950' },
+                                        { id: 'Falta detectada', label: 'Falta detectada', color: 'border-amber-500 bg-amber-50 text-amber-950' },
+                                        { id: 'Avaria detectada', label: 'Avaria detectada', color: 'border-rose-500 bg-rose-50 text-rose-950' }
+                                    ].map(t => {
+                                        const selected = tipo === t.id;
+                                        return (
+                                            <button
+                                                key={t.id}
+                                                type="button"
+                                                onClick={() => setTipo(t.id)}
+                                                className={`py-2 px-3 rounded-xl text-xs font-bold border-2 transition-all text-left flex items-center justify-between ${
+                                                    selected ? `${t.color} font-black shadow-xs ring-1 ring-slate-400` : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+                                                }`}
+                                            >
+                                                <span>{t.label}</span>
+                                                {selected && <span className="font-black text-blue-600">✓</span>}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Qtd e Item */}
+                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                <div className="sm:col-span-1">
+                                    <label className="block font-bold text-slate-800 mb-1">Qtd:</label>
+                                    <div className="relative flex items-center">
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={quantidade}
+                                            onChange={(e) => setQuantidade(Math.max(1, parseInt(e.target.value) || 1))}
+                                            className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm font-black text-slate-900 pr-9 focus:border-blue-600 focus:outline-none"
+                                            required
+                                        />
+                                        <div className="absolute right-1 inset-y-1 flex flex-col justify-center">
+                                            <button type="button" onClick={() => setQuantidade(prev => prev + 1)} className="px-1 text-slate-600 hover:text-slate-950 leading-none text-[9px] font-black">▲</button>
+                                            <button type="button" onClick={() => setQuantidade(prev => Math.max(1, prev - 1))} className="px-1 text-slate-600 hover:text-slate-950 leading-none text-[9px] font-black">▼</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="sm:col-span-3 relative">
+                                    <label className="block font-bold text-slate-800 mb-1">Item:</label>
+                                    <input
+                                        type="text"
+                                        value={itemSearchQuery}
+                                        onChange={(e) => {
+                                            setItemSearchQuery(e.target.value);
+                                            setSelectedItem(null);
+                                            setIsDropdownOpen(true);
+                                        }}
+                                        onFocus={() => setIsDropdownOpen(true)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:border-blue-600 focus:outline-none"
+                                        required
+                                    />
+                                    {isDropdownOpen && filteredItems.length > 0 && (
+                                        <div className="absolute left-0 right-0 top-full mt-1 bg-white border-2 border-slate-300 rounded-xl shadow-xl z-50 max-h-44 overflow-y-auto custom-scrollbar divide-y divide-slate-100">
+                                            {filteredItems.map((it, idx) => (
+                                                <div
+                                                    key={it.id || idx}
+                                                    onClick={() => {
+                                                        setSelectedItem(it);
+                                                        setItemSearchQuery(it.name);
+                                                        setIsDropdownOpen(false);
+                                                    }}
+                                                    className="p-2 hover:bg-sand-100 cursor-pointer flex items-center justify-between text-xs"
+                                                >
+                                                    <span className="font-bold text-slate-900">{it.name}</span>
+                                                    <span className="text-[10px] text-slate-500">{it.category}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Ocorrência / RAPH / TIH */}
+                            <div className="p-3 rounded-xl bg-sand-50 border border-sand-300 space-y-2">
+                                <label className="font-bold text-slate-800">Ocorrência do socorro (RAPH/TIH):</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                    <div className="flex bg-slate-200 p-0.5 rounded-xl border border-slate-300 gap-1">
+                                        {['RAPH', 'TIH', 'Outro'].map(opc => (
+                                            <button
+                                                key={opc}
+                                                type="button"
+                                                onClick={() => setTipoOcorrencia(opc)}
+                                                className={`flex-1 py-1 rounded-lg text-xs font-bold transition-all ${
+                                                    tipoOcorrencia === opc ? 'bg-white text-blue-700 font-black shadow-xs' : 'text-slate-700'
+                                                }`}
+                                            >
+                                                {opc}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className="sm:col-span-2">
+                                        <input
+                                            type="text"
+                                            value={numDocumento}
+                                            onChange={(e) => setNumDocumento(e.target.value)}
+                                            placeholder="Nº do documento"
+                                            className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-slate-900 focus:outline-none"
+                                            required={isPsicotropico}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Reposição */}
+                            <div className="p-3.5 rounded-xl bg-white border-2 border-slate-200 space-y-2">
+                                <label className="block font-bold text-slate-900">Já retirou do depósito para repor a mochila?</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setJaRetirouDeposito(false)}
+                                        className={`py-2 px-3 rounded-xl text-xs font-bold border-2 ${!jaRetirouDeposito ? 'bg-amber-50 border-amber-500 text-amber-950 font-black' : 'bg-white border-slate-300'}`}
+                                    >
+                                        Não — repor depois
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setJaRetirouDeposito(true)}
+                                        className={`py-2 px-3 rounded-xl text-xs font-bold border-2 ${jaRetirouDeposito ? 'bg-emerald-50 border-emerald-500 text-emerald-950 font-black' : 'bg-white border-slate-300'}`}
+                                    >
+                                        Sim, já retirei
+                                    </button>
+                                </div>
+
+                                {jaRetirouDeposito && (
+                                    <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-300 flex items-center justify-between gap-3 mt-2">
+                                        <label className="font-bold text-emerald-950 text-xs">Qtd retirada do depósito:</label>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={qtdRetirada}
+                                            onChange={(e) => setQtdRetirada(Math.max(1, parseInt(e.target.value) || 1))}
+                                            className="w-24 bg-white border-2 border-emerald-400 rounded-xl px-2.5 py-1 text-xs font-black text-slate-900"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Observação */}
+                            <div>
+                                <label className="block font-bold text-slate-800 mb-1">Observação:</label>
+                                <textarea
+                                    rows="2"
+                                    value={observacao}
+                                    onChange={(e) => setObservacao(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl p-2.5 text-xs text-slate-900 font-medium focus:outline-none"
+                                ></textarea>
+                            </div>
+
+                            {/* Foto */}
+                            <div>
+                                <label className="block font-bold text-slate-800 mb-1">Foto:</label>
+                                <input type="file" accept="image/*" ref={fileInputRef} onChange={handlePhotoUpload} className="hidden" />
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                                        className="px-3 py-1.5 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-xs font-bold"
+                                    >
+                                        📷 {foto ? 'Alterar Foto' : 'Anexar Foto'}
+                                    </button>
+                                    {foto && (
+                                        <button type="button" onClick={() => setFoto(null)} className="text-rose-600 hover:underline text-xs font-bold">
+                                            Remover foto
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Botões */}
+                            <div className="flex items-center gap-2 pt-3 border-t-2 border-slate-200">
+                                <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-bold">
+                                    Cancelar
+                                </button>
+                                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black shadow-md">
+                                    Salvar Alterações
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        // 5.2 Modal de Confirmação de Exclusão de Lançamento
+        const ModalConfirmarExclusao = ({ isOpen, onClose, socorro, onConfirm }) => {
+            if (!isOpen || !socorro) return null;
+
+            const isRepor = socorro.reposto || socorro.jaRetirouDeposito || socorro.tipo === 'Reposição do depósito' || socorro.tipo === 'Reposição';
+            const qtdEstorno = isRepor ? (Number(socorro.qtdRetirada || socorro.quantidade) || 1) : 0;
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white border-2 border-rose-300 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                        {/* Cabeçalho */}
+                        <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                            <h3 className="text-base font-black text-rose-800 flex items-center gap-2">
+                                <span>⚠️</span>
+                                <span>Confirmar Exclusão</span>
+                            </h3>
+                            <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-800 text-xl font-bold">×</button>
+                        </div>
+
+                        {/* Mensagem Padrão Obrigatória */}
+                        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-950 font-bold leading-relaxed">
+                            Apagar este lançamento? (a exclusão fica na auditoria; se for reposição, o item volta ao saldo do depósito)
+                        </div>
+
+                        {/* Resumo do Lançamento a Apagar */}
+                        <div className="p-3 rounded-xl bg-sand-50 border border-sand-300 text-xs space-y-1.5">
+                            <div className="flex justify-between text-slate-700">
+                                <span className="font-semibold">Item:</span>
+                                <strong className="text-slate-900">{socorro.item || socorro.itemName} ×{socorro.quantidade}</strong>
+                            </div>
+                            <div className="flex justify-between text-slate-700">
+                                <span className="font-semibold">Tipo:</span>
+                                <span className="font-bold text-slate-900">{socorro.tipo || socorro.type}</span>
+                            </div>
+                            {socorro.raphTih && (
+                                <div className="flex justify-between text-slate-700">
+                                    <span className="font-semibold">Ocorrência:</span>
+                                    <span className="font-bold text-amber-800">{socorro.raphTih}</span>
+                                </div>
+                            )}
+                            <div className="flex justify-between text-slate-700">
+                                <span className="font-semibold">Data / Hora:</span>
+                                <span className="font-medium text-slate-800">
+                                    {socorro.dataHora ? `${new Date(socorro.dataHora).toLocaleDateString('pt-BR')} ${new Date(socorro.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : 'Hoje'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Aviso sobre reversão de estoque */}
+                        {qtdEstorno > 0 ? (
+                            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-emerald-950 font-bold flex items-start gap-2">
+                                <span className="text-base">📦</span>
+                                <div>
+                                    <p className="font-black">Reversão Automática de Estoque:</p>
+                                    <p className="font-medium text-emerald-900 mt-0.5">
+                                        <strong>+{qtdEstorno} un</strong> de <em>"{socorro.item || socorro.itemName}"</em> retornarão ao saldo do Almoxarifado Central imediatamente.
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="p-2.5 rounded-xl bg-slate-100 border border-slate-200 text-[11px] text-slate-600 font-medium">
+                                ℹ️ Este item estava marcado como "a repor" ou não deu saída do depósito; o estoque do Almoxarifado não será alterado.
+                            </div>
+                        )}
+
+                        {/* Botões de Ação */}
+                        <div className="flex items-center gap-2 pt-2">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="flex-1 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-bold text-xs transition-all"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    onConfirm(socorro);
+                                    onClose();
+                                }}
+                                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md shadow-rose-900/20 transition-all flex items-center justify-center gap-1.5"
+                            >
+                                <span>🗑️ Sim, apagar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 5.3 Modal de Histórico de Movimentações da Página Socorros
+        const ModalHistoricoSocorros = ({ 
+            isOpen, 
+            onClose, 
+            socorrosList, 
+            onEditLancamento, 
+            onRequestDelete, 
+            onReporLancamento 
+        }) => {
+            if (!isOpen) return null;
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0];
+
+            const [startDate, setStartDate] = useState(thirtyDaysAgoStr);
+            const [endDate, setEndDate] = useState(todayStr);
+            const [typeFilter, setTypeFilter] = useState('TODOS');
+            const [searchTerm, setSearchTerm] = useState('');
+            const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+            const handleQuickDate = (days) => {
+                if (days === 'TODOS') {
+                    setStartDate('2020-01-01');
+                    setEndDate(todayStr);
+                } else if (days === 'HOJE') {
+                    setStartDate(todayStr);
+                    setEndDate(todayStr);
+                } else if (days === 'MES') {
+                    const firstDay = new Date();
+                    firstDay.setDate(1);
+                    setStartDate(firstDay.toISOString().split('T')[0]);
+                    setEndDate(todayStr);
+                } else {
+                    const d = new Date();
+                    d.setDate(d.getDate() - days);
+                    setStartDate(d.toISOString().split('T')[0]);
+                    setEndDate(todayStr);
+                }
+            };
+
+            const filteredHistory = useMemo(() => {
+                return (socorrosList || []).filter(s => {
+                    if (s.dataHora) {
+                        const itemDateStr = String(s.dataHora).split('T')[0];
+                        if (startDate && itemDateStr < startDate) return false;
+                        if (endDate && itemDateStr > endDate) return false;
+                    }
+
+                    if (typeFilter !== 'TODOS') {
+                        const t = s.tipo || s.type || 'Uso';
+                        if (typeFilter === 'Uso' && (t !== 'Uso' && t !== 'USO')) return false;
+                        if (typeFilter !== 'Uso' && t !== typeFilter) return false;
+                    }
+
+                    if (searchTerm.trim()) {
+                        const q = searchTerm.toLowerCase();
+                        const match = 
+                            (s.item && s.item.toLowerCase().includes(q)) ||
+                            (s.raphTih && s.raphTih.toLowerCase().includes(q)) ||
+                            (s.numDocumento && s.numDocumento.toLowerCase().includes(q)) ||
+                            (s.militar && s.militar.toLowerCase().includes(q)) ||
+                            (s.obs && s.obs.toLowerCase().includes(q)) ||
+                            (s.observacao && s.observacao.toLowerCase().includes(q));
+                        if (!match) return false;
+                    }
+
+                    return true;
+                });
+            }, [socorrosList, startDate, endDate, typeFilter, searchTerm]);
+
+            const stats = useMemo(() => {
+                let utilizados = 0;
+                let repostos = 0;
+                let aRepor = 0;
+                filteredHistory.forEach(s => {
+                    const t = (s.tipo || s.type || 'Uso').toLowerCase();
+                    const qtd = Number(s.quantidade) || 1;
+                    const qtdRep = Number(s.qtdRetirada) || qtd;
+                    if (t.includes('uso')) {
+                        utilizados += qtd;
+                        if (s.reposto || s.jaRetirouDeposito) repostos += qtdRep;
+                        else aRepor += qtd;
+                    } else if (t.includes('reposi')) {
+                        repostos += qtd;
+                    }
+                });
+                return { total: filteredHistory.length, utilizados, repostos, aRepor };
+            }, [filteredHistory]);
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] flex flex-col">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200 shrink-0">
+                            <div>
+                                <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                                    <span>📜</span>
+                                    <span>Histórico de Movimentações de Socorros</span>
+                                </h3>
+                                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                                    Consulta completa de lançamentos com filtros avançados por período, tipo e status.
+                                </p>
+                            </div>
+                            <button type="button" onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 text-2xl font-black leading-none">×</button>
+                        </div>
+
+                        <div className="py-3.5 space-y-3 shrink-0 border-b border-slate-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                                <div className="sm:col-span-3">
+                                    <label className="block text-xs font-bold text-slate-700 mb-1">De (Data Inicial):</label>
+                                    <input
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-900 focus:border-rose-600 focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="sm:col-span-3">
+                                    <label className="block text-xs font-bold text-slate-700 mb-1">Até (Data Final):</label>
+                                    <input
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-900 focus:border-rose-600 focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="sm:col-span-4">
+                                    <label className="block text-xs font-bold text-slate-700 mb-1">Buscar por termo:</label>
+                                    <input
+                                        type="text"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        placeholder="Item, RAPH, militar..."
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-900 focus:border-rose-600 focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="sm:col-span-2">
+                                    <label className="block text-xs font-bold text-slate-700 mb-1">Tipo:</label>
+                                    <select
+                                        value={typeFilter}
+                                        onChange={(e) => setTypeFilter(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900 focus:outline-none"
+                                    >
+                                        <option value="TODOS">Todos</option>
+                                        <option value="Uso">Uso</option>
+                                        <option value="Reposição do depósito">Reposição</option>
+                                        <option value="Falta detectada">Falta</option>
+                                        <option value="Avaria detectada">Avaria</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 flex-wrap text-xs">
+                                <span className="font-bold text-slate-500 text-[11px] mr-1">Atalhos:</span>
+                                {[
+                                    { label: 'Hoje', action: () => handleQuickDate('HOJE') },
+                                    { label: 'Últimos 7 dias', action: () => handleQuickDate(7) },
+                                    { label: 'Últimos 15 dias', action: () => handleQuickDate(15) },
+                                    { label: 'Últimos 30 dias', action: () => handleQuickDate(30) },
+                                    { label: 'Mês Atual', action: () => handleQuickDate('MES') },
+                                    { label: 'Todos', action: () => handleQuickDate('TODOS') }
+                                ].map(chip => (
+                                    <button
+                                        key={chip.label}
+                                        type="button"
+                                        onClick={chip.action}
+                                        className="px-2.5 py-1 rounded-lg bg-sand-100 hover:bg-sand-200 text-slate-800 text-[11px] font-bold border border-sand-300 transition-colors"
+                                    >
+                                        {chip.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="py-2.5 shrink-0 flex items-center justify-between text-xs text-slate-700 font-bold bg-sand-50/70 px-3 rounded-xl border border-sand-200 flex-wrap gap-2">
+                            <div className="flex items-center gap-3">
+                                <span>Total: <strong className="text-slate-950">{stats.total}</strong> lançamentos</span>
+                                <span>·</span>
+                                <span>Utilizados: <strong className="text-blue-900">{stats.utilizados}</strong></span>
+                                <span>·</span>
+                                <span>Repostos: <strong className="text-emerald-900">{stats.repostos}</strong></span>
+                                {stats.aRepor > 0 && (
+                                    <>
+                                        <span>·</span>
+                                        <span className="text-amber-800">A repor: <strong>{stats.aRepor}</strong></span>
+                                    </>
+                                )}
+                            </div>
+                            <span className="text-[11px] text-slate-500 font-medium">
+                                Período: {new Date(startDate + 'T00:00:00').toLocaleDateString('pt-BR')} até {new Date(endDate + 'T23:59:59').toLocaleDateString('pt-BR')}
+                            </span>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto custom-scrollbar my-2 divide-y divide-slate-100 pr-1">
+                            {filteredHistory.length === 0 ? (
+                                <div className="py-12 text-center text-slate-500 text-xs">
+                                    <p className="font-bold text-slate-700">Nenhum registro encontrado no período selecionado.</p>
+                                    <p className="text-slate-500 mt-1">Ajuste o intervalo de datas ou o termo de busca acima.</p>
+                                </div>
+                            ) : (
+                                filteredHistory.map((soc, idx) => {
+                                    const isARepor = soc.statusRepor === 'A_REPOR' || (soc.reposto === false && soc.jaRetirouDeposito === false);
+                                    const tipoNome = soc.tipo || soc.type || 'Uso';
+                                    const isReporType = tipoNome === 'Reposição do depósito' || tipoNome === 'Reposição';
+                                    const horaStr = soc.dataHora ? new Date(soc.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--';
+                                    const dataStr = soc.dataHora ? new Date(soc.dataHora).toLocaleDateString('pt-BR') : '';
+
+                                    return (
+                                        <div key={soc.id || idx} className="py-3 px-1.5 sm:px-2.5 hover:bg-sand-50/70 rounded-xl transition-colors flex items-start justify-between gap-3 group">
+                                            <div className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0">
+                                                <div className="shrink-0 w-16 text-left pt-0.5">
+                                                    <span className="text-xs font-black text-slate-900 block leading-tight">{horaStr}</span>
+                                                    <span className="text-[10px] font-bold text-slate-500 block leading-none mt-0.5">{dataStr}</span>
+                                                </div>
+
+                                                <span className={`shrink-0 text-[11px] font-black uppercase px-2 py-0.5 rounded-lg text-white ${
+                                                    isReporType ? 'bg-[#2e7d32]' :
+                                                    tipoNome === 'Falta detectada' ? 'bg-amber-600' :
+                                                    tipoNome === 'Avaria detectada' ? 'bg-rose-700' :
+                                                    'bg-[#1565c0]'
+                                                }`}>
+                                                    {isReporType ? 'Reposição' : tipoNome === 'Falta detectada' ? 'Falta' : tipoNome === 'Avaria detectada' ? 'Avaria' : 'Uso'}
+                                                </span>
+
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-xs sm:text-sm leading-snug flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+                                                        <strong className="text-slate-950 font-black">
+                                                            {soc.item || soc.itemName || 'Insumo Operacional'} ×{soc.quantidade}
+                                                        </strong>
+                                                        {soc.raphTih && (
+                                                            <span className="text-[#b48033] font-bold">
+                                                                · {soc.raphTih}
+                                                            </span>
+                                                        )}
+                                                        {isReporType ? (
+                                                            <span className="text-slate-600 font-medium text-xs">↳ retirada do depósito</span>
+                                                        ) : (soc.reposto || soc.jaRetirouDeposito) ? (
+                                                            <span className="text-emerald-700 font-extrabold text-xs">✓ reposto ×{soc.qtdRetirada || soc.quantidade}</span>
+                                                        ) : isARepor ? (
+                                                            <span className="inline-flex items-center gap-1.5">
+                                                                <span className="text-amber-700 font-extrabold text-xs">⏳ a repor</span>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => onReporLancamento(soc)}
+                                                                    className="px-2 py-0.5 rounded-md bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-[10px]"
+                                                                >
+                                                                    📦 Repor
+                                                                </button>
+                                                            </span>
+                                                        ) : null}
+                                                    </div>
+
+                                                    <div className="text-[11px] text-slate-600 mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                                        {(soc.observacao || soc.obs) && (
+                                                            <span className="text-slate-700 font-medium">{soc.observacao || soc.obs}</span>
+                                                        )}
+                                                        <span className="uppercase font-bold text-slate-700">{soc.militar || 'UASA'}</span>
+                                                        {soc.foto && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setSelectedPhoto(soc.foto)}
+                                                                className="text-rose-700 font-bold inline-flex items-center gap-1 text-[11px]"
+                                                            >
+                                                                📷 Ver anexo
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-1 shrink-0 pt-0.5">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        onClose();
+                                                        onEditLancamento(soc);
+                                                    }}
+                                                    className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                                                    title="Editar lançamento"
+                                                >
+                                                    <span className="text-xs">✏️</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        onClose();
+                                                        onRequestDelete(soc);
+                                                    }}
+                                                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors font-bold text-base leading-none"
+                                                    title="Apagar este lançamento"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+
+                        <div className="pt-3 border-t-2 border-slate-200 shrink-0 flex items-center justify-between">
+                            <button
+                                type="button"
+                                onClick={() => window.print()}
+                                className="px-3.5 py-2 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-800 font-bold text-xs border border-sand-300 transition-all flex items-center gap-1.5"
+                            >
+                                <span>🖨️ Imprimir Histórico</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-6 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs transition-all shadow-sm"
+                            >
+                                Fechar
+                            </button>
+                        </div>
+                    </div>
+
+                    {selectedPhoto && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedPhoto(null)}>
+                            <div className="bg-white p-3 rounded-2xl max-w-lg w-full shadow-2xl relative" onClick={e => e.stopPropagation()}>
+                                <div className="flex justify-between items-center pb-2 border-b">
+                                    <span className="text-xs font-bold text-slate-800">📷 Imagem Anexada</span>
+                                    <button type="button" onClick={() => setSelectedPhoto(null)} className="text-slate-500 font-black text-lg">×</button>
+                                </div>
+                                <img src={selectedPhoto} alt="Registro Ampliado" className="w-full h-auto max-h-[70vh] object-contain rounded-xl mt-2" />
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         // 6. Modal de Novo Voo
         const ModalNovoVoo = ({ isOpen, onClose, onSave, operator }) => {
             const [aeronave, setAeronave] = useState('Guardião 01 (Esquilo AS350)');
@@ -8576,6 +9457,9 @@
             const [isSettingsOpen, setIsSettingsOpen] = useState(false);
             const [isNovoItemOpen, setIsNovoItemOpen] = useState(false);
             const [isNovoSocorroOpen, setIsNovoSocorroOpen] = useState(false);
+            const [isHistoricoOpen, setIsHistoricoOpen] = useState(false);
+            const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, socorro: null });
+            const [editSocorroData, setEditSocorroData] = useState({ isOpen: false, socorro: null });
             const [isNovoVooOpen, setIsNovoVooOpen] = useState(false);
             const [isNovaPassagemOpen, setIsNovaPassagemOpen] = useState(false);
 
@@ -8914,6 +9798,74 @@
                 }
             };
 
+            const handleDeleteSocorro = async (soc) => {
+                if (!soc) return;
+                const isRepor = soc.reposto || soc.jaRetirouDeposito || soc.tipo === 'Reposição do depósito' || soc.tipo === 'Reposição';
+                const qtdEstorno = isRepor ? (Number(soc.qtdRetirada || soc.quantidade) || 1) : 0;
+
+                // 1. Se for reposição ou tiver retirado do depósito, o item volta ao saldo do Almoxarifado
+                if (qtdEstorno > 0) {
+                    setAlmoxItems(prev => {
+                        return prev.map(item => {
+                            if (item.name.toLowerCase() === soc.item.toLowerCase() || (item.name && soc.item.toLowerCase().includes(item.name.toLowerCase()))) {
+                                const cur = Number(item.currentStock) || 0;
+                                return { ...item, currentStock: cur + qtdEstorno };
+                            }
+                            return item;
+                        });
+                    });
+                }
+
+                // 2. Remove da lista de socorros
+                setSocorrosList(prev => prev.filter(s => s.id !== soc.id));
+
+                showToast(`Lançamento excluído com sucesso! ${qtdEstorno > 0 ? `Estornadas +${qtdEstorno} un no Almoxarifado.` : ''}`);
+
+                // 3. Sincroniza com Google Apps Script e registra auditoria
+                try {
+                    await callGAS(scriptUrl, 'deleteSocorro', {
+                        socorro: soc,
+                        operator: operator,
+                        qtdEstorno: qtdEstorno
+                    });
+                } catch(e) {
+                    console.warn("Erro ao sincronizar exclusão no GAS:", e);
+                }
+            };
+
+            const handleUpdateSocorro = async (updatedSoc, deltaStock) => {
+                if (!updatedSoc) return;
+
+                // 1. Ajusta saldo do Almoxarifado conforme a variação delta
+                if (deltaStock !== 0) {
+                    setAlmoxItems(prev => {
+                        return prev.map(item => {
+                            if (item.name.toLowerCase() === updatedSoc.item.toLowerCase() || (item.name && updatedSoc.item.toLowerCase().includes(item.name.toLowerCase()))) {
+                                const cur = Number(item.currentStock) || 0;
+                                return { ...item, currentStock: Math.max(0, cur - deltaStock) };
+                            }
+                            return item;
+                        });
+                    });
+                }
+
+                // 2. Atualiza item na lista de socorros
+                setSocorrosList(prev => prev.map(s => s.id === updatedSoc.id ? updatedSoc : s));
+
+                showToast(`Lançamento atualizado com sucesso! ${deltaStock !== 0 ? `Estoque ajustado (${deltaStock > 0 ? `-${deltaStock}` : `+${Math.abs(deltaStock)}`}).` : ''}`);
+
+                // 3. Sincroniza alteração no GAS
+                try {
+                    await callGAS(scriptUrl, 'updateSocorro', {
+                        socorro: updatedSoc,
+                        operator: operator,
+                        deltaStock: deltaStock
+                    });
+                } catch(e) {
+                    console.warn("Erro ao atualizar socorro no GAS:", e);
+                }
+            };
+
             const handleConfirmMovimento = (mov) => {
                 setAlmoxItems(prev => {
                     return prev.map(item => {
@@ -9043,8 +9995,11 @@
                                 <TabSocorros
                                     socorrosList={socorrosList}
                                     onOpenNewSocorro={() => setIsNovoSocorroOpen(true)}
+                                    onOpenHistorico={() => setIsHistoricoOpen(true)}
                                     operator={operator}
                                     onReporLancamento={handleReporLancamento}
+                                    onEditLancamento={(soc) => setEditSocorroData({ isOpen: true, socorro: soc })}
+                                    onRequestDelete={(soc) => setDeleteModalData({ isOpen: true, socorro: soc })}
                                 />
                             )}
 
@@ -9141,6 +10096,32 @@
                         almoxItems={almoxItems}
                         checklistCatalog={checklistCatalog}
                         onSave={handleSaveSocorro}
+                        operator={operator}
+                    />
+
+                    <ModalHistoricoSocorros
+                        isOpen={isHistoricoOpen}
+                        onClose={() => setIsHistoricoOpen(false)}
+                        socorrosList={socorrosList}
+                        onEditLancamento={(soc) => setEditSocorroData({ isOpen: true, socorro: soc })}
+                        onRequestDelete={(soc) => setDeleteModalData({ isOpen: true, socorro: soc })}
+                        onReporLancamento={handleReporLancamento}
+                    />
+
+                    <ModalConfirmarExclusao
+                        isOpen={deleteModalData.isOpen}
+                        onClose={() => setDeleteModalData({ isOpen: false, socorro: null })}
+                        socorro={deleteModalData.socorro}
+                        onConfirm={handleDeleteSocorro}
+                    />
+
+                    <ModalEditarSocorro
+                        isOpen={editSocorroData.isOpen}
+                        onClose={() => setEditSocorroData({ isOpen: false, socorro: null })}
+                        socorro={editSocorroData.socorro}
+                        almoxItems={almoxItems}
+                        checklistCatalog={checklistCatalog}
+                        onSave={handleUpdateSocorro}
                         operator={operator}
                     />
 

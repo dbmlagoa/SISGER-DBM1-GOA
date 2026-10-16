@@ -211,6 +211,10 @@ function doPost(e) {
       return jsonResponse(moveAlmox(data));
     } else if (action === "registerSocorro") {
       return jsonResponse(registerSocorro(data));
+    } else if (action === "deleteSocorro") {
+      return jsonResponse(deleteSocorro(data));
+    } else if (action === "updateSocorro") {
+      return jsonResponse(updateSocorro(data));
     } else if (action === "saveChecklist") {
       return jsonResponse(saveChecklist(data));
     } else if (action === "sendChecklistEmail") {
@@ -610,6 +614,180 @@ function registerSocorro(payload) {
     return { success: true, message: "Lançamento de socorro registrado com sucesso!" };
   } catch (err) {
     return { success: false, message: "Erro ao registrar socorro: " + err.toString() };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Exclui lançamento de Socorros, grava auditoria e estorna saldo no Almoxarifado se for reposição
+ */
+function deleteSocorro(payload) {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    var ss = getSpreadsheet();
+    var socSheet = getSocorrosSheet(ss);
+    var s = payload.socorro || {};
+    var op = payload.operator || {};
+    var qtdEstorno = Number(payload.qtdEstorno) || 0;
+    var targetDateIso = String(s.dataHora || "").trim();
+    var targetItem = String(s.item || s.itemName || "").toLowerCase().trim();
+
+    // 1. Grava registro na aba de Auditoria AM_AUDITORIA
+    var auditSheet = getOrCreateSheet(ss, "AM_AUDITORIA", [
+      "DataHora Exclusão", "DataHora Original", "Item", "Tipo", "Quantidade", 
+      "RAPH/TIH", "Operador Exclusão", "RG Exclusão", "Estorno Almoxarifado", "Motivo/Observação"
+    ]);
+    auditSheet.appendRow([
+      new Date().toISOString(),
+      s.dataHora || "---",
+      s.item || s.itemName || "Material",
+      s.tipo || s.type || "USO",
+      Number(s.quantidade || s.quantity) || 1,
+      s.raphTih || "---",
+      op.warName ? (op.grad + " " + op.warName) : (op.name || "Oficial Aeromédico"),
+      op.rg || "---",
+      qtdEstorno > 0 ? ("SIM (+" + qtdEstorno + " un estornadas)") : "NÃO",
+      "Exclusão de lançamento pelo usuário no SIG Aeromédico"
+    ]);
+
+    // 2. Se for reposição ou tiver baixa no depósito, o item volta ao saldo do depósito (estorno)
+    if (qtdEstorno > 0) {
+      if (s.almoxItemId) {
+        moveAlmox({
+          itemId: s.almoxItemId,
+          type: "ENTRADA",
+          quantity: qtdEstorno
+        });
+      } else if (targetItem) {
+        try {
+          var almoxSh = getAlmoxSheet(ss);
+          if (almoxSh.getLastRow() >= 2) {
+            var almoxData = almoxSh.getRange(2, 1, almoxSh.getLastRow() - 1, 5).getValues();
+            for (var a = 0; a < almoxData.length; a++) {
+              var rowName = String(almoxData[a][1] || "").toLowerCase().trim();
+              if (rowName === targetItem || (rowName && (targetItem.indexOf(rowName) !== -1 || rowName.indexOf(targetItem) !== -1))) {
+                var curStock = Number(almoxData[a][4]) || 0;
+                almoxSh.getRange(a + 2, 5).setValue(curStock + qtdEstorno);
+                break;
+              }
+            }
+          }
+        } catch(eAlmox) {
+          Logger.log("Aviso ao estornar almoxarifado por nome: " + eAlmox);
+        }
+      }
+    }
+
+    // 3. Localiza e remove o registro correspondente da planilha AM_SOCORROS
+    if (socSheet.getLastRow() >= 2) {
+      var socData = socSheet.getRange(2, 1, socSheet.getLastRow() - 1, 3).getValues();
+      for (var i = socData.length - 1; i >= 0; i--) {
+        var rowDate = String(socData[i][0] || "").trim();
+        var rowItem = String(socData[i][1] || "").toLowerCase().trim();
+        var matchDate = targetDateIso ? (rowDate.indexOf(targetDateIso.slice(0, 16)) !== -1) : false;
+        var matchItem = rowItem === targetItem || (rowItem && targetItem && (targetItem.indexOf(rowItem) !== -1 || rowItem.indexOf(targetItem) !== -1));
+        if (matchDate && matchItem) {
+          socSheet.deleteRow(i + 2);
+          break;
+        }
+      }
+    }
+
+    return { success: true, message: "Lançamento excluído com sucesso e auditoria registrada!" };
+  } catch (err) {
+    return { success: false, message: "Erro ao excluir socorro: " + err.toString() };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Atualiza/Corrige lançamento de Socorros e ajusta saldo do Almoxarifado conforme delta
+ */
+function updateSocorro(payload) {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    var ss = getSpreadsheet();
+    var socSheet = getSocorrosSheet(ss);
+    var s = payload.socorro || {};
+    var op = payload.operator || {};
+    var deltaStock = Number(payload.deltaStock) || 0; // se positivo: retirar mais; se negativo: estornar
+    var targetDateIso = String(s.dataHora || "").trim();
+    var targetItem = String(s.item || s.itemName || "").toLowerCase().trim();
+
+    // 1. Grava auditoria de alteração
+    var auditSheet = getOrCreateSheet(ss, "AM_AUDITORIA", [
+      "DataHora Exclusão", "DataHora Original", "Item", "Tipo", "Quantidade", 
+      "RAPH/TIH", "Operador Exclusão", "RG Exclusão", "Estorno Almoxarifado", "Motivo/Observação"
+    ]);
+    auditSheet.appendRow([
+      new Date().toISOString(),
+      s.dataHora || "---",
+      s.item || s.itemName || "Material",
+      s.tipo || s.type || "USO",
+      Number(s.quantidade || s.quantity) || 1,
+      s.raphTih || "---",
+      op.warName ? (op.grad + " " + op.warName) : (op.name || "Oficial Aeromédico"),
+      op.rg || "---",
+      deltaStock !== 0 ? ("DELTA: " + deltaStock) : "SEM ALTERAÇÃO ESTOQUE",
+      "Edição/Correção de lançamento de socorro"
+    ]);
+
+    // 2. Ajusta saldo do almoxarifado se houve variação na reposição
+    if (deltaStock !== 0) {
+      if (s.almoxItemId) {
+        moveAlmox({
+          itemId: s.almoxItemId,
+          type: deltaStock > 0 ? "SAIDA" : "ENTRADA",
+          quantity: Math.abs(deltaStock)
+        });
+      } else if (targetItem) {
+        try {
+          var almoxSh = getAlmoxSheet(ss);
+          if (almoxSh.getLastRow() >= 2) {
+            var almoxData = almoxSh.getRange(2, 1, almoxSh.getLastRow() - 1, 5).getValues();
+            for (var a = 0; a < almoxData.length; a++) {
+              var rowName = String(almoxData[a][1] || "").toLowerCase().trim();
+              if (rowName === targetItem || (rowName && (targetItem.indexOf(rowName) !== -1 || rowName.indexOf(targetItem) !== -1))) {
+                var curStock = Number(almoxData[a][4]) || 0;
+                almoxSh.getRange(a + 2, 5).setValue(Math.max(0, curStock - deltaStock));
+                break;
+              }
+            }
+          }
+        } catch(eAlmox) {
+          Logger.log("Aviso ao ajustar almoxarifado na edição: " + eAlmox);
+        }
+      }
+    }
+
+    // 3. Atualiza linha em AM_SOCORROS se encontrada
+    if (socSheet.getLastRow() >= 2) {
+      var socData = socSheet.getRange(2, 1, socSheet.getLastRow() - 1, 3).getValues();
+      for (var i = socData.length - 1; i >= 0; i--) {
+        var rowDate = String(socData[i][0] || "").trim();
+        var rowItem = String(socData[i][1] || "").toLowerCase().trim();
+        var matchDate = targetDateIso ? (rowDate.indexOf(targetDateIso.slice(0, 16)) !== -1) : false;
+        var matchItem = rowItem === targetItem || (rowItem && targetItem && (targetItem.indexOf(rowItem) !== -1 || rowItem.indexOf(targetItem) !== -1));
+        if (matchDate && matchItem) {
+          var targetRow = i + 2;
+          socSheet.getRange(targetRow, 2).setValue(s.item || s.itemName);
+          socSheet.getRange(targetRow, 3).setValue(s.tipo || s.type);
+          socSheet.getRange(targetRow, 4).setValue(Number(s.quantidade || s.quantity) || 1);
+          socSheet.getRange(targetRow, 6).setValue(s.raphTih || "---");
+          socSheet.getRange(targetRow, 10).setValue(s.reposto || s.jaRetirouDeposito ? "SIM (" + (s.qtdRetirada || s.quantidade) + " un)" : "NÃO");
+          socSheet.getRange(targetRow, 11).setValue(s.observacao || s.obs || "");
+          break;
+        }
+      }
+    }
+
+    return { success: true, message: "Lançamento atualizado com sucesso!" };
+  } catch (err) {
+    return { success: false, message: "Erro ao atualizar socorro: " + err.toString() };
   } finally {
     lock.releaseLock();
   }
