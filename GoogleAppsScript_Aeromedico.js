@@ -223,6 +223,32 @@ function getData() {
     checklists = checklistSheet.getRange(2, 1, checklistSheet.getLastRow() - 1, 11).getValues();
   }
 
+  // Leitura consolidada dos registros de realização do checklist
+  var resumoSheet = getOrCreateSheet(ss, "AM_CHECKLIST_RESUMO", [
+    "ID", "Data", "Aeronave", "Status", "Total Conferidos", "Alterações Relatadas", 
+    "Lacre Psicotrópicos", "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
+  ]);
+  var checklistResumo = [];
+  if (resumoSheet && resumoSheet.getLastRow() > 1) {
+    var rawRes = resumoSheet.getRange(2, 1, resumoSheet.getLastRow() - 1, 12).getValues();
+    checklistResumo = rawRes.map(function(r) {
+      return {
+        id: String(r[0] || ""),
+        data: String(r[1] || ""),
+        aeronave: String(r[2] || ""),
+        status: String(r[3] || ""),
+        totalConferidos: Number(r[4]) || 0,
+        totalNCs: Number(r[5]) || 0,
+        lacrePsicotropicos: String(r[6] || ""),
+        observacoesGerais: String(r[7] || ""),
+        operator: String(r[8] || ""),
+        rg: String(r[9] || ""),
+        email: String(r[10] || ""),
+        dataHoraRegistro: String(r[11] || "")
+      };
+    });
+  }
+
   var voos = [];
   if (voosSheet && voosSheet.getLastRow() > 1) {
     voos = voosSheet.getRange(2, 1, voosSheet.getLastRow() - 1, 24).getValues();
@@ -253,6 +279,7 @@ function getData() {
     almox: almox,
     socorros: socorros,
     checklists: checklists,
+    checklistResumo: checklistResumo,
     voos: voos,
     passagens: passagens,
     users: users,
@@ -539,40 +566,74 @@ function saveChecklist(payload) {
     var opRg = op.rg || "---";
     var opEmail = op.email || "";
 
-    // 1. Grava itens checados na aba AM_CHECKLIST
+    // 1. Grava na aba AM_CHECKLIST APENAS as alterações relatadas (NCs / Anomalias)
+    // Para os itens sem alteração, NÃO gera 220 linhas; registra apenas as alterações apontadas
+    var alterations = payload.alterations || payload.ncs || chk.ncs || [];
     var rowsToAppend = [];
-    for (var i = 0; i < items.length; i++) {
-      var it = items[i];
-      rowsToAppend.push([
-        dataConf,
-        aero,
-        it.aba || "MATERIAIS",
-        it.nome || it.name || "",
-        it.status || "OK",
-        it.tipoNc || it.ncType || "",
-        it.foto || "",
-        it.obs || it.notes || "",
-        opNome,
-        opRg,
-        nowIso
-      ]);
+
+    // Se foram passadas alterações explícitas
+    if (alterations && alterations.length > 0) {
+      for (var i = 0; i < alterations.length; i++) {
+        var alt = alterations[i];
+        rowsToAppend.push([
+          dataConf,
+          aero,
+          alt.aba || "MATERIAIS",
+          alt.nome || alt.itemName || alt.name || "Item",
+          "ALTERAÇÃO RELATADA (NC)",
+          alt.tipoNc || alt.ncType || "NÃO CONFORME",
+          alt.foto || alt.photo || "",
+          alt.obs || alt.notes || "",
+          opNome,
+          opRg,
+          nowIso
+        ]);
+      }
+    } else if (items && items.length > 0) {
+      // Fallback: filtra dos itens apenas os que possuem status NC ou tipo de NC
+      for (var j = 0; j < items.length; j++) {
+        var it = items[j];
+        if (it.status === "NC" || (it.ncType && it.ncType.trim() !== "")) {
+          rowsToAppend.push([
+            dataConf,
+            aero,
+            it.aba || "MATERIAIS",
+            it.nome || it.name || "Item",
+            "ALTERAÇÃO RELATADA (NC)",
+            it.tipoNc || it.ncType || "NÃO CONFORME",
+            it.foto || "",
+            it.obs || it.notes || "",
+            opNome,
+            opRg,
+            nowIso
+          ]);
+        }
+      }
     }
+
     if (rowsToAppend.length > 0) {
       var startRow = chkSheet.getLastRow() + 1;
       chkSheet.getRange(startRow, 1, rowsToAppend.length, 11).setValues(rowsToAppend);
     }
 
-    // 2. Grava linha consolidada na aba AM_CHECKLIST_RESUMO
+    // 2. Grava na aba AM_CHECKLIST_RESUMO a informação consolidada de que o checklist foi realizado
+    var totalAlt = rowsToAppend.length;
+    var statusRealizacao = totalAlt > 0 
+      ? "REALIZADO COM ALTERAÇÕES (" + totalAlt + " NC)" 
+      : "REALIZADO SEM ALTERAÇÕES (100% OPERANTE)";
+
     var resumoSheet = getOrCreateSheet(ss, "AM_CHECKLIST_RESUMO", [
-      "ID", "Data", "Aeronave", "Total Conferidos", "Não Conformidades", "Lacre Psicotrópicos", 
-      "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
+      "ID", "Data", "Aeronave", "Status", "Total Conferidos", "Alterações Relatadas", 
+      "Lacre Psicotrópicos", "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
     ]);
+
     resumoSheet.appendRow([
       chk.id || ("CHK-" + Date.now()),
       dataConf,
       aero,
-      items.length || chk.totalConferidos || 0,
-      chk.totalNCs !== undefined ? chk.totalNCs : (chk.ncs ? chk.ncs.length : 0),
+      statusRealizacao,
+      payload.totalConferidos || chk.totalConferidos || 220,
+      totalAlt,
       chk.lacrePsicotropicos || chk.sealNumber || "---",
       obsGerais,
       opNome,
