@@ -8664,18 +8664,23 @@
                 setIsExporting(true);
                 try {
                     const printContainer = document.createElement('div');
-                    printContainer.style.width = '700px';
-                    printContainer.style.margin = '0 auto';
-                    printContainer.style.padding = '0';
-                    printContainer.style.boxSizing = 'border-box';
-                    printContainer.style.margin = '0 auto';
-                    printContainer.style.padding = '2px';
-                    printContainer.style.background = '#ffffff';
-                    printContainer.style.fontFamily = 'Arial, Helvetica, sans-serif';
-                    printContainer.style.color = '#000000';
-                    printContainer.style.boxSizing = 'border-box';
-                    printContainer.style.fontSize = '7.5px';
-                    printContainer.style.lineHeight = '1.1';
+                    printContainer.setAttribute('id', 'pdf-pedido-mensal-render');
+                    printContainer.style.cssText = [
+                        'position: fixed',
+                        'left: 0',
+                        'top: 0',
+                        'width: 760px',
+                        'margin: 0',
+                        'padding: 4px',
+                        'box-sizing: border-box',
+                        'background: #ffffff',
+                        'font-family: Arial, Helvetica, sans-serif',
+                        'color: #000000',
+                        'font-size: 7.5px',
+                        'line-height: 1.1',
+                        'z-index: -1',
+                        'pointer-events: none'
+                    ].join(';');
 
                     const dataFormatada = new Date(dataPedido + 'T12:00:00').toLocaleDateString('pt-BR');
                     const agora = new Date();
@@ -8743,9 +8748,9 @@
                                 <td style="width: 33.33%; padding: 0; border: none; border-right: 1.5px solid #000;">
                                     <table style="width: 100%; border-collapse: collapse;">
                                         <tr>
-                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 44px);">MEDICAMENTOS</th>
-                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
-                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
+                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 64px);">MEDICAMENTOS</th>
+                                            <th style="font-size: 6px; text-align: center; width: 32px; min-width: 32px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
+                                            <th style="font-size: 6px; text-align: center; width: 32px; min-width: 32px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
                                         </tr>
                                         <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
                                         <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
@@ -8800,9 +8805,9 @@
                                 <td style="width: 33.33%; padding: 0; border: none; border-right: 1.5px solid #000;">
                                     <table style="width: 100%; border-collapse: collapse;">
                                         <tr>
-                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 44px);">INSUMOS</th>
-                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
-                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
+                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 64px);">INSUMOS</th>
+                                            <th style="font-size: 6px; text-align: center; width: 32px; min-width: 32px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
+                                            <th style="font-size: 6px; text-align: center; width: 32px; min-width: 32px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
                                         </tr>
                                         <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA ADULTO/ INFANTIL.</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA ADULTO/ INFANTIL.')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
                                         <!-- Linha especial Equipo Bomba Infusora -->
@@ -8851,9 +8856,9 @@
                                 <td style="width: 33.33%; padding: 0; border: none;">
                                     <table style="width: 100%; border-collapse: collapse;">
                                         <tr>
-                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 44px);">INSUMOS</th>
-                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
-                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
+                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 64px);">INSUMOS</th>
+                                            <th style="font-size: 6px; text-align: center; width: 32px; min-width: 32px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
+                                            <th style="font-size: 6px; text-align: center; width: 32px; min-width: 32px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
                                         </tr>
                                         <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº2,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº2,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
                                         <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº3,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº3,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
@@ -8986,7 +8991,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 2px 4px; font-size: 6.8px; color: #000000; border-top: 1px solid #000; margin-top: 3px;">
                             <div>
                                 <div style="font-weight: bold;">ALMOXARIFADO MÉDICO E FARMÁCIA DA DSE</div>
-                                <div>Gerado por ${operadorNome} em ${dataHoje} ${horaMin} · GOA-RJ</div>
+                                <div>Gerado por ${operadorNome} em ${dataHoje} às ${horaMin} · DBM1/GOA - Lagoa</div>
                             </div>
                             <div style="font-weight: bold; font-size: 7.5px;">
                                 ${dataHoje}
@@ -8996,27 +9001,72 @@
 
                     document.body.appendChild(printContainer);
 
-                    const opt = {
-                        margin: [4, 5, 4, 5],
-                        filename: `Pedido de Material Mensal - GOA - ${competencia}.pdf`,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { 
-                            scale: 2, 
-                            useCORS: true, 
-                            letterRendering: true,
-                            logging: false,
-                            scrollY: 0,
-                            windowWidth: 700
-                        },
-                        jsPDF: { 
-                            unit: 'mm', 
-                            format: 'a4', 
-                            orientation: 'portrait' 
-                        }
-                    };
+                    // Carrega html2canvas e jsPDF (o bundle do html2pdf nao os expoe globalmente)
+                    const loadScript = (src) => new Promise((resolve, reject) => {
+                        const s = document.createElement('script');
+                        s.src = src;
+                        s.onload = resolve;
+                        s.onerror = () => reject(new Error('Falha ao carregar ' + src));
+                        document.head.appendChild(s);
+                    });
+                    if (!window.html2canvas) {
+                        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+                    }
+                    if (!(window.jspdf && window.jspdf.jsPDF)) {
+                        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+                    }
 
-                    await html2pdf().set(opt).from(printContainer).save();
-                    document.body.removeChild(printContainer);
+                    // Aguarda o brasao carregar antes da captura
+                    await Promise.all(Array.from(printContainer.querySelectorAll('img')).map(img =>
+                        img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
+                    ));
+
+                    // Captura sempre a partir do topo/esquerda da janela (evita deslocamento lateral)
+                    const prevScrollX = window.scrollX;
+                    const prevScrollY = window.scrollY;
+                    window.scrollTo(0, 0);
+
+                    const renderW = printContainer.offsetWidth;
+                    const renderH = printContainer.offsetHeight;
+                    let canvas;
+                    try {
+                        canvas = await window.html2canvas(printContainer, {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: '#ffffff',
+                            logging: false,
+                            x: 0,
+                            y: 0,
+                            scrollX: 0,
+                            scrollY: 0,
+                            width: renderW,
+                            height: renderH,
+                            windowWidth: Math.max(renderW, document.documentElement.clientWidth),
+                            windowHeight: Math.max(renderH, document.documentElement.clientHeight)
+                        });
+                    } finally {
+                        window.scrollTo(prevScrollX, prevScrollY);
+                        if (printContainer.parentNode) document.body.removeChild(printContainer);
+                    }
+
+                    // Monta o PDF A4 com a imagem inteira, centralizada e dentro das margens
+                    const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+                    const pageW = pdf.internal.pageSize.getWidth();
+                    const pageH = pdf.internal.pageSize.getHeight();
+                    const margem = 6;
+                    const maxW = pageW - margem * 2;
+                    const maxH = pageH - margem * 2;
+                    const ratio = canvas.height / canvas.width;
+                    let imgW = maxW;
+                    let imgH = imgW * ratio;
+                    if (imgH > maxH) {
+                        imgH = maxH;
+                        imgW = imgH / ratio;
+                    }
+                    const posX = (pageW - imgW) / 2;
+                    const posY = margem;
+                    pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', posX, posY, imgW, imgH);
+                    pdf.save(`Pedido de Material Mensal - GOA - ${competencia}.pdf`);
 
                     // Salva registro da emissão no estado e no GAS
                     if (onSavePedido) {
