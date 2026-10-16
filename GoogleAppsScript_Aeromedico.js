@@ -34,6 +34,37 @@
 
 var SPREADSHEET_ID = ""; // Deixe vazio se vinculado diretamente à planilha
 
+/**
+ * ============================================================================
+ * PROCEDIMENTO DE AUTORIZAÇÃO DE E-MAIL (EXECUTAR UMA VEZ NO APPS SCRIPT):
+ * ============================================================================
+ * Se o sistema apresentar mensagem de permissão para MailApp.sendEmail:
+ * 1. Na planilha Google, acesse: Extensões > Apps Script.
+ * 2. No menu suspenso de funções no topo, selecione: AUTORIZAR_ENVIO_DE_EMAIL
+ * 3. Clique em 'Executar' (botão de Play).
+ * 4. Uma janela do Google solicitará autorização: clique em 'Revisar permissões',
+ *    selecione sua conta Google (ex: dbmlagoa@gmail.com), clique em 'Avançado' >
+ *    'Acessar SIG-Aeromédico (não seguro)' e clique em 'Permitir'.
+ * 5. Pronto! O envio de e-mails via Web App estará 100% liberado e operacional.
+ * ============================================================================
+ */
+function AUTORIZAR_ENVIO_DE_EMAIL() {
+  var userEmail = Session.getActiveUser().getEmail() || Session.getEffectiveUser().getEmail() || "dbmlagoa@gmail.com";
+  Logger.log("Iniciando concessão de permissão de e-mail para: " + userEmail);
+  try {
+    MailApp.sendEmail({
+      to: userEmail,
+      subject: "[SIG-AEROMÉDICO] Autorização de Envio de E-mail Concedida com Sucesso",
+      body: "A autorização do Google Apps Script para envio de e-mails automáticos do SIG-Aeromédico foi concluída com êxito!"
+    });
+    Logger.log("Permissão concedida e e-mail de teste enviado para " + userEmail);
+    return "SUCESSO: Permissão concedida! E-mail de teste enviado para " + userEmail;
+  } catch (err) {
+    Logger.log("Erro ao conceder autorização: " + err.toString());
+    throw err;
+  }
+}
+
 function getSpreadsheet() {
   if (SPREADSHEET_ID && SPREADSHEET_ID.trim() !== "") {
     try {
@@ -226,26 +257,45 @@ function getData() {
   // Leitura consolidada dos registros de realização do checklist
   var resumoSheet = getOrCreateSheet(ss, "AM_CHECKLIST_RESUMO", [
     "ID", "Data", "Aeronave", "Status", "Total Conferidos", "Alterações Relatadas", 
-    "Lacre Psicotrópicos", "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
+    "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
   ]);
   var checklistResumo = [];
   if (resumoSheet && resumoSheet.getLastRow() > 1) {
-    var rawRes = resumoSheet.getRange(2, 1, resumoSheet.getLastRow() - 1, 12).getValues();
+    var lastCol = Math.max(11, resumoSheet.getLastColumn());
+    var rawRes = resumoSheet.getRange(2, 1, resumoSheet.getLastRow() - 1, lastCol).getValues();
+    var firstRowHeaders = resumoSheet.getRange(1, 1, 1, lastCol).getValues()[0] || [];
+    var hasLacre = firstRowHeaders.some(function(h) { return String(h).toLowerCase().indexOf("lacre") !== -1; });
+
     checklistResumo = rawRes.map(function(r) {
-      return {
-        id: String(r[0] || ""),
-        data: String(r[1] || ""),
-        aeronave: String(r[2] || ""),
-        status: String(r[3] || ""),
-        totalConferidos: Number(r[4]) || 0,
-        totalNCs: Number(r[5]) || 0,
-        lacrePsicotropicos: String(r[6] || ""),
-        observacoesGerais: String(r[7] || ""),
-        operator: String(r[8] || ""),
-        rg: String(r[9] || ""),
-        email: String(r[10] || ""),
-        dataHoraRegistro: String(r[11] || "")
-      };
+      if (hasLacre) {
+        return {
+          id: String(r[0] || ""),
+          data: String(r[1] || ""),
+          aeronave: String(r[2] || ""),
+          status: String(r[3] || ""),
+          totalConferidos: Number(r[4]) || 0,
+          totalNCs: Number(r[5]) || 0,
+          observacoesGerais: String(r[7] || ""),
+          operator: String(r[8] || ""),
+          rg: String(r[9] || ""),
+          email: String(r[10] || ""),
+          dataHoraRegistro: String(r[11] || "")
+        };
+      } else {
+        return {
+          id: String(r[0] || ""),
+          data: String(r[1] || ""),
+          aeronave: String(r[2] || ""),
+          status: String(r[3] || ""),
+          totalConferidos: Number(r[4]) || 0,
+          totalNCs: Number(r[5]) || 0,
+          observacoesGerais: String(r[6] || ""),
+          operator: String(r[7] || ""),
+          rg: String(r[8] || ""),
+          email: String(r[9] || ""),
+          dataHoraRegistro: String(r[10] || "")
+        };
+      }
     });
   }
 
@@ -626,23 +676,43 @@ function saveChecklist(payload) {
 
     var resumoSheet = getOrCreateSheet(ss, "AM_CHECKLIST_RESUMO", [
       "ID", "Data", "Aeronave", "Status", "Total Conferidos", "Alterações Relatadas", 
-      "Lacre Psicotrópicos", "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
+      "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
     ]);
 
-    resumoSheet.appendRow([
-      chk.id || ("CHK-" + Date.now()),
-      dataConf,
-      aero,
-      statusRealizacao,
-      totalConf,
-      totalAlt,
-      chk.lacrePsicotropicos || chk.sealNumber || "---",
-      obsGerais,
-      opNome,
-      opRg,
-      opEmail,
-      nowIso
-    ]);
+    var lastColResumo = Math.max(1, resumoSheet.getLastColumn());
+    var firstRowResumo = resumoSheet.getRange(1, 1, 1, lastColResumo).getValues()[0] || [];
+    var hasLacreResumo = firstRowResumo.some(function(h) { return String(h).toLowerCase().indexOf("lacre") !== -1; });
+
+    if (hasLacreResumo) {
+      resumoSheet.appendRow([
+        chk.id || ("CHK-" + Date.now()),
+        dataConf,
+        aero,
+        statusRealizacao,
+        totalConf,
+        totalAlt,
+        "---", // Lacre eliminado
+        obsGerais,
+        opNome,
+        opRg,
+        opEmail,
+        nowIso
+      ]);
+    } else {
+      resumoSheet.appendRow([
+        chk.id || ("CHK-" + Date.now()),
+        dataConf,
+        aero,
+        statusRealizacao,
+        totalConf,
+        totalAlt,
+        obsGerais,
+        opNome,
+        opRg,
+        opEmail,
+        nowIso
+      ]);
+    }
 
     // 3. Interação direta com o banco de dados do Almoxarifado
     var almoxSheet = getAlmoxSheet(ss);
@@ -759,16 +829,32 @@ function sendChecklistEmail(payload) {
       attachments.push(pdfBlob);
     }
 
-    MailApp.sendEmail({
-      to: to,
-      subject: subject,
-      htmlBody: htmlBody,
-      attachments: attachments
-    });
-
-    return { success: true, message: "E-mail com checklist enviado com sucesso para " + to + "!" };
+    try {
+      MailApp.sendEmail({
+        to: to,
+        subject: subject,
+        htmlBody: htmlBody,
+        attachments: attachments
+      });
+      return { success: true, message: "E-mail com checklist enviado com sucesso para " + to + "!" };
+    } catch (sendErr) {
+      var errStr = sendErr.toString();
+      if (errStr.indexOf("permissão") !== -1 || errStr.indexOf("permission") !== -1 || errStr.indexOf("MailApp") !== -1) {
+        return {
+          success: false,
+          needsAuth: true,
+          message: "⚠️ Permissão de e-mail pendente no Google Apps Script.\n\n" +
+                   "Para habilitar o envio em 30 segundos:\n" +
+                   "1. Abra a planilha vinculada > Extensões > Apps Script\n" +
+                   "2. Selecione a função 'AUTORIZAR_ENVIO_DE_EMAIL' e clique em 'Executar'\n" +
+                   "3. Conceda a autorização do Google.\n\n" +
+                   "O arquivo PDF do checklist já foi baixado no seu computador!"
+        };
+      }
+      return { success: false, message: "Erro ao enviar e-mail: " + errStr };
+    }
   } catch (e) {
-    return { success: false, message: "Erro ao enviar e-mail: " + e.toString() };
+    return { success: false, message: "Erro ao processar e-mail: " + e.toString() };
   }
 }
 

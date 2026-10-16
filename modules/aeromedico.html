@@ -4241,7 +4241,7 @@
         ];
 
         const DEFAULT_PASSAGENS = [
-            { id: "PAS-01", data: "2026-10-14", aeronave: "Guardião 01 (Esquilo AS350)", equipeTransmite: "Cap BM Méd Petrus (RG 49917)", rgTransmite: "49917", equipeAssume: "Maj BM Méd Rodolfo (RG 45324)", rgAssume: "45324", turno: "Plantão Alfa", base: "Base GOA / Jacarepaguá - Prontidão Operacional 100%", eletronicos: "Monitores testados, carga 100%. Cilindros com > 180 bar.", psicotropicos: "Conferidas todas as ampolas do 1º SOS e Reserva. Estojo lacrado.", lacre: "LAC-2026-0842", ocorrencias: "01 Resgate primário BR-101 Itaboraí (Politrauma grave). Estabilizado no HMMC.", pendencias: "Receber 2 equipos fotossensíveis da farmácia central.", dataHora: "2026-10-14T07:00:00" }
+            { id: "PAS-01", data: "2026-10-14", aeronave: "Guardião 01 (Esquilo AS350)", equipeTransmite: "Cap BM Méd Petrus (RG 49917)", rgTransmite: "49917", equipeAssume: "Maj BM Méd Rodolfo (RG 45324)", rgAssume: "45324", turno: "Plantão Alfa", base: "Base GOA / Jacarepaguá - Prontidão Operacional 100%", eletronicos: "Monitores testados, carga 100%. Cilindros com > 180 bar.", psicotropicos: "Conferidas todas as ampolas do 1º SOS e Reserva.", ocorrencias: "01 Resgate primário BR-101 Itaboraí (Politrauma grave). Estabilizado no HMMC.", pendencias: "Receber 2 equipos fotossensíveis da farmácia central.", dataHora: "2026-10-14T07:00:00" }
         ];
 
         const DEFAULT_USERS = [
@@ -5170,7 +5170,7 @@
             });
 
             // Campo para o Lacre do Estojo de Psicotrópicos
-            const [sealNumber, setSealNumber] = useState('LAC-2026-0842');
+            // Informação de lacre eliminada conforme solicitação
 
             // Estado da Tabela de Psicotrópicos com conciliação automática por localização
             const [psicoState, setPsicoState] = useState([
@@ -5279,7 +5279,7 @@
                     id: `CHK-${Date.now()}`,
                     data: new Date().toISOString(),
                     aeronave: selectedAircraft,
-                    lacrePsicotropicos: sealNumber,
+                    // lacrePsicotropicos eliminado
                     operator: operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico',
                     rg: operator ? operator.rg : '---',
                     email: operator ? operator.email : '',
@@ -5319,142 +5319,158 @@
             const handleExportPDF = async (shouldDownload = true, shouldEmail = false) => {
                 const record = buildCurrentRecord();
 
-                // Monta HTML do documento para renderização do PDF
+                // Monta HTML do documento para renderização do PDF com largura e margens perfeitas
                 const pdfContainer = document.createElement('div');
-                pdfContainer.style.padding = '30px';
+                pdfContainer.style.position = 'fixed';
+                pdfContainer.style.top = '0';
+                pdfContainer.style.left = '0';
+                pdfContainer.style.width = '794px'; // 210mm a 96DPI (Largura exata A4)
+                pdfContainer.style.minHeight = '1123px';
+                pdfContainer.style.padding = '24px 28px';
+                pdfContainer.style.boxSizing = 'border-box';
                 pdfContainer.style.fontFamily = 'Arial, sans-serif';
-                pdfContainer.style.color = '#1a1612';
-                pdfContainer.style.background = '#ffffff';
+                pdfContainer.style.color = '#0f172a';
+                pdfContainer.style.backgroundColor = '#ffffff';
+                pdfContainer.style.zIndex = '-99999';
+                pdfContainer.style.opacity = '1';
+                document.body.appendChild(pdfContainer);
 
                 const ncsRows = record.ncs.length > 0 
-                    ? record.ncs.map(nc => `<tr><td style="padding:6px;border:1px solid #ddd;font-weight:bold;">${nc.itemName}</td><td style="padding:6px;border:1px solid #ddd;color:#c00;">${nc.ncType}</td><td style="padding:6px;border:1px solid #ddd;">${nc.notes || '---'}</td></tr>`).join('')
-                    : '<tr><td colspan="3" style="padding:8px;border:1px solid #ddd;text-align:center;color:#16a34a;font-weight:bold;">✓ Nenhuma Não Conformidade apontada. Todos os itens operacionais.</td></tr>';
+                    ? record.ncs.map(nc => `<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#0f172a;">${nc.itemName}</td><td style="padding:6px 8px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold;">${nc.ncType}</td><td style="padding:6px 8px;border:1px solid #cbd5e1;color:#334155;">${nc.notes || '---'}</td></tr>`).join('')
+                    : '<tr><td colspan="3" style="padding:8px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold;">✓ Nenhuma Não Conformidade apontada. Todos os itens operacionais e conformes.</td></tr>';
 
                 const psicoRows = psicoState.map(p => {
                     const total = (Number(p.sos1)||0) + (Number(p.vencidos)||0) + (Number(p.reserva)||0) + (Number(p.aw169)||0);
                     const conf = total === p.controle;
                     return `<tr>
-                        <td style="padding:5px;border:1px solid #ddd;font-weight:bold;">${p.name}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.sos1}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.vencidos}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.reserva}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.aw169}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;font-weight:bold;">${total}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.controle}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;color:${conf ? '#16a34a' : '#dc2626'};font-weight:bold;">${conf ? '✓ Confere' : '⚠️ Dif: ' + (total - p.controle)}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.utilizados || 0}</td>
-                        <td style="padding:5px;border:1px solid #ddd;text-align:center;">${p.reposto || 0}</td>
+                        <td style="padding:4px 6px;border:1px solid #cbd5e1;font-weight:bold;color:#0f172a;">${p.name}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.sos1}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.vencidos}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.reserva}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.aw169}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;font-weight:bold;color:#0f172a;">${total}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.controle}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:${conf ? '#16a34a' : '#dc2626'};font-weight:bold;">${conf ? '✓ Confere' : '⚠️ Dif: ' + (total - p.controle)}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.utilizados || 0}</td>
+                        <td style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">${p.reposto || 0}</td>
                     </tr>`;
                 }).join('');
 
                 pdfContainer.innerHTML = `
-                    <div style="border-bottom: 2px solid #dc2626; padding-bottom: 15px; margin-bottom: 20px;">
-                        <h2 style="margin:0;color:#dc2626;font-size:18px;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h2>
-                        <h3 style="margin:3px 0 0;font-size:14px;color:#333;">DBM 1 / GOA • UNIDADE DE APOIO E SOCORRO AÉREO (UASA)</h3>
-                        <h4 style="margin:4px 0 0;font-size:13px;color:#666;">RELATÓRIO OFICIAL DE CONFERÊNCIA DIÁRIA DE PRONTIDÃO</h4>
+                    <div style="border-bottom: 2px solid #dc2626; padding-bottom: 10px; margin-bottom: 14px;">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                            <div>
+                                <h2 style="margin:0;color:#dc2626;font-size:16px;font-weight:800;letter-spacing:0.5px;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h2>
+                                <h3 style="margin:3px 0 0;font-size:13px;color:#1e293b;font-weight:700;">DBM 1 / GOA • UNIDADE DE APOIO E SOCORRO AÉREO (UASA)</h3>
+                                <h4 style="margin:4px 0 0;font-size:12px;color:#475569;font-weight:600;">RELATÓRIO OFICIAL DE CONFERÊNCIA DIÁRIA DE PRONTIDÃO</h4>
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="display:inline-block;padding:3px 8px;background:#fee2e2;border:1px solid #f87171;color:#991b1b;font-size:10px;font-weight:800;border-radius:4px;">OFICIAL</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <table style="width:100%;margin-bottom:20px;border-collapse:collapse;font-size:12px;">
+                    <table style="width:100%;margin-bottom:14px;border-collapse:collapse;font-size:11px;">
                         <tr>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;width:25%;font-weight:bold;">AERONAVE:</td>
-                            <td style="padding:6px;border:1px solid #e2d7c7;font-weight:bold;color:#dc2626;">${record.aeronave}</td>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;width:25%;font-weight:bold;">DATA/HORA:</td>
-                            <td style="padding:6px;border:1px solid #e2d7c7;">${formatBRDate(record.data)} - ${new Date(record.data).toLocaleTimeString('pt-BR')}</td>
+                            <td style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;width:22%;font-weight:bold;color:#334155;">AERONAVE:</td>
+                            <td style="padding:6px 8px;border:1px solid #cbd5e1;width:28%;font-weight:800;color:#dc2626;">${record.aeronave}</td>
+                            <td style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;width:22%;font-weight:bold;color:#334155;">DATA/HORA:</td>
+                            <td style="padding:6px 8px;border:1px solid #cbd5e1;width:28%;font-weight:600;color:#0f172a;">${formatBRDate(record.data)} - ${new Date(record.data).toLocaleTimeString('pt-BR')}</td>
                         </tr>
                         <tr>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;font-weight:bold;">MILITAR RESPONSÁVEL:</td>
-                            <td style="padding:6px;border:1px solid #e2d7c7;">${record.operator} (RG: ${record.rg})</td>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;font-weight:bold;">E-MAIL REGISTRADO:</td>
-                            <td style="padding:6px;border:1px solid #e2d7c7;">${record.email || 'Não informado'}</td>
+                            <td style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;font-weight:bold;color:#334155;">RESPONSÁVEL:</td>
+                            <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:700;color:#0f172a;">${record.operator} (RG: ${record.rg})</td>
+                            <td style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;font-weight:bold;color:#334155;">E-MAIL REGISTRADO:</td>
+                            <td style="padding:6px 8px;border:1px solid #cbd5e1;color:#0f172a;">${record.email || 'Não informado'}</td>
                         </tr>
                         <tr>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;font-weight:bold;">TOTAL CONFERIDOS:</td>
-                            <td style="padding:6px;border:1px solid #e2d7c7;font-weight:bold;">${record.totalConferidos} itens</td>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;font-weight:bold;">NÃO CONFORMIDADES:</td>
-                            <td style="padding:6px;border:1px solid #e2d7c7;color:${record.totalNCs > 0 ? '#dc2626' : '#16a34a'};font-weight:bold;">${record.totalNCs} NC(s)</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:6px;background:#f8f5ee;border:1px solid #e2d7c7;font-weight:bold;">LACRE PSICOTRÓPICOS:</td>
-                            <td colspan="3" style="padding:6px;border:1px solid #e2d7c7;font-weight:bold;font-family:monospace;">${record.lacrePsicotropicos}</td>
+                            <td style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;font-weight:bold;color:#334155;">TOTAL CONFERIDOS:</td>
+                            <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:800;color:#0f172a;">${record.totalConferidos} itens (100% conferido)</td>
+                            <td style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;font-weight:bold;color:#334155;">NÃO CONFORMIDADES:</td>
+                            <td style="padding:6px 8px;border:1px solid #cbd5e1;color:${record.totalNCs > 0 ? '#dc2626' : '#16a34a'};font-weight:800;">${record.totalNCs > 0 ? record.totalNCs + ' alteração(ões)' : '✓ 0 NC (Conforme)'}</td>
                         </tr>
                     </table>
 
-                    <h4 style="margin:20px 0 8px;font-size:13px;border-bottom:1px solid #ccc;padding-bottom:4px;">1. APONTAMENTO DE NÃO CONFORMIDADES (NCs)</h4>
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:20px;">
+                    <h4 style="margin:12px 0 5px;font-size:11px;font-weight:800;color:#0f172a;text-transform:uppercase;border-bottom:1px solid #cbd5e1;padding-bottom:3px;">1. APONTAMENTO DE NÃO CONFORMIDADES (NCs)</h4>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
                         <thead>
-                            <tr style="background:#f0ebe1;">
-                                <th style="padding:6px;border:1px solid #ddd;text-align:left;">Item</th>
-                                <th style="padding:6px;border:1px solid #ddd;text-align:left;width:150px;">Tipo de NC</th>
-                                <th style="padding:6px;border:1px solid #ddd;text-align:left;">Observações / Providência</th>
+                            <tr style="background:#f1f5f9;">
+                                <th style="padding:5px 7px;border:1px solid #cbd5e1;text-align:left;width:45%;color:#0f172a;">Item</th>
+                                <th style="padding:5px 7px;border:1px solid #cbd5e1;text-align:left;width:25%;color:#0f172a;">Tipo de Alteração</th>
+                                <th style="padding:5px 7px;border:1px solid #cbd5e1;text-align:left;width:30%;color:#0f172a;">Observações / Providência</th>
                             </tr>
                         </thead>
                         <tbody>${ncsRows}</tbody>
                     </table>
 
-                    <h4 style="margin:20px 0 8px;font-size:13px;border-bottom:1px solid #ccc;padding-bottom:4px;">2. MAPA DE PSICOTRÓPICOS (PORTARIA 344)</h4>
-                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:20px;">
+                    <h4 style="margin:12px 0 5px;font-size:11px;font-weight:800;color:#0f172a;text-transform:uppercase;border-bottom:1px solid #cbd5e1;padding-bottom:3px;">2. MAPA DE PSICOTRÓPICOS (PORTARIA SVS/MS Nº 344/1998)</h4>
+                    <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:14px;">
                         <thead>
-                            <tr style="background:#f0ebe1;">
-                                <th style="padding:5px;border:1px solid #ddd;">Medicação</th>
-                                <th style="padding:5px;border:1px solid #ddd;">1º SOS</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Venc.</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Reserva</th>
-                                <th style="padding:5px;border:1px solid #ddd;">AW-169</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Total</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Ctrl</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Situação</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Usado</th>
-                                <th style="padding:5px;border:1px solid #ddd;">Reposto</th>
+                            <tr style="background:#f1f5f9;">
+                                <th style="padding:4px 6px;border:1px solid #cbd5e1;text-align:left;color:#0f172a;">Medicação</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">1º SOS</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">Venc.</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">Reserva</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">AW-169</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;font-weight:800;color:#0f172a;">Total</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">Ctrl</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">Situação</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">Usado</th>
+                                <th style="padding:4px;border:1px solid #cbd5e1;text-align:center;color:#0f172a;">Reposto</th>
                             </tr>
                         </thead>
                         <tbody>${psicoRows}</tbody>
                     </table>
 
-                    <h4 style="margin:20px 0 8px;font-size:13px;border-bottom:1px solid #ccc;padding-bottom:4px;">3. OBSERVAÇÕES GERAIS</h4>
-                    <div style="padding:10px;border:1px solid #ddd;background:#fcfbf8;font-size:11px;min-height:50px;margin-bottom:30px;">
-                        ${record.observacoesGerais || 'Nenhuma observação geral registrada.'}
+                    <h4 style="margin:12px 0 5px;font-size:11px;font-weight:800;color:#0f172a;text-transform:uppercase;border-bottom:1px solid #cbd5e1;padding-bottom:3px;">3. OBSERVAÇÕES GERAIS</h4>
+                    <div style="padding:8px 10px;border:1px solid #cbd5e1;background:#f8fafc;font-size:10.5px;min-height:36px;margin-bottom:20px;color:#0f172a;">
+                        ${record.observacoesGerais || 'Nenhuma alteração ou observação geral relatada durante a conferência.'}
                     </div>
 
-                    <div style="margin-top:40px;text-align:center;">
-                        <p style="margin:0;font-size:12px;font-weight:bold;">_____________________________________________________</p>
-                        <p style="margin:4px 0 0;font-size:12px;font-weight:bold;">${record.operator}</p>
-                        <p style="margin:2px 0 0;font-size:11px;color:#555;">RG Militar: ${record.rg} • DBM 1 / GOA - CBMERJ</p>
+                    <div style="margin-top:20px;text-align:center;page-break-inside:avoid;">
+                        <p style="margin:0;font-size:11px;font-weight:bold;color:#475569;">_____________________________________________________</p>
+                        <p style="margin:4px 0 0;font-size:11.5px;font-weight:800;color:#0f172a;">${record.operator}</p>
+                        <p style="margin:2px 0 0;font-size:10px;color:#475569;">RG Militar: ${record.rg} • DBM 1 / GOA - CBMERJ</p>
                     </div>
                 `;
 
                 const opt = {
-                    margin: 10,
+                    margin: [6, 6, 6, 6],
                     filename: `Checklist_${record.aeronave.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`,
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true, 
+                        scrollY: 0, 
+                        scrollX: 0,
+                        windowWidth: 794
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
                 };
 
-                if (shouldDownload) {
-                    setIsExportingPDF(true);
-                    try {
+                try {
+                    if (shouldDownload) {
+                        setIsExportingPDF(true);
                         await html2pdf().set(opt).from(pdfContainer).save();
                         if (showToast) showToast('PDF gerado e baixado com sucesso!');
-                    } catch(e) {
-                        console.error('Erro ao baixar PDF:', e);
-                        alert('Erro ao gerar PDF: ' + e.message);
-                    } finally {
                         setIsExportingPDF(false);
                     }
-                }
 
-                if (shouldEmail) {
-                    if (!operator || !operator.email) {
-                        alert('E-mail do operador não cadastrado. Por favor, atualize seu cadastro com um e-mail válido.');
-                        return;
-                    }
+                    if (shouldEmail) {
+                        if (!operator || !operator.email) {
+                            alert('E-mail do operador não cadastrado. Por favor, atualize seu cadastro com um e-mail válido.');
+                            return;
+                        }
 
-                    setIsSendingEmail(true);
-                    try {
+                        setIsSendingEmail(true);
                         const pdfWorker = html2pdf().set(opt).from(pdfContainer);
                         const pdfBlob = await pdfWorker.output('blob');
                         
-                        // Converte para base64
+                        // Também faz o download automático localmente para garantir posse do arquivo
+                        const downloadWorker = html2pdf().set(opt).from(pdfContainer);
+                        await downloadWorker.save();
+
                         const reader = new FileReader();
                         reader.readAsDataURL(pdfBlob);
                         reader.onloadend = async () => {
@@ -5475,24 +5491,38 @@
                                 }
                             };
 
-                            const res = await callGAS(scriptUrl, 'sendChecklistEmail', emailPayload);
-                            if (res && res.success) {
-                                if (showToast) showToast(`E-mail com PDF enviado para ${operator.email}!`);
-                                else alert(`Checklist em PDF encaminhado para ${operator.email}!`);
-                            } else {
-                                alert('Erro ao encaminhar e-mail: ' + (res.message || 'Falha de comunicação.'));
+                            try {
+                                const res = await callGAS(scriptUrl, 'sendChecklistEmail', emailPayload);
+                                if (res && res.success) {
+                                    if (showToast) showToast(`E-mail com PDF enviado para ${operator.email}!`);
+                                    else alert(`Checklist em PDF encaminhado para ${operator.email}!`);
+                                } else {
+                                    let msg = (res && res.message) ? res.message : 'Erro ao encaminhar e-mail via Google Apps Script.';
+                                    if (!msg.includes('baixado')) {
+                                        msg += '\n\nO arquivo PDF do checklist já foi baixado com sucesso em seu computador!';
+                                    }
+                                    alert(msg);
+                                }
+                            } catch(errCall) {
+                                alert('Erro de comunicação ao enviar e-mail: ' + errCall.message + '\n\nO PDF do checklist já foi baixado com sucesso em seu computador.');
+                            } finally {
+                                setIsSendingEmail(false);
                             }
-                            setIsSendingEmail(false);
                         };
-                    } catch(e) {
-                        console.error('Erro ao enviar por email:', e);
-                        alert('Erro ao enviar e-mail com PDF: ' + e.message);
-                        setIsSendingEmail(false);
+                    }
+                } catch(e) {
+                    console.error('Erro ao gerar/enviar PDF:', e);
+                    alert('Erro no processamento do PDF: ' + e.message);
+                } finally {
+                    setIsExportingPDF(false);
+                    setIsSendingEmail(false);
+                    if (pdfContainer.parentNode) {
+                        pdfContainer.parentNode.removeChild(pdfContainer);
                     }
                 }
             };
 
-                        const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
+            const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
 
             // Alerta SÓ PODE ser verde se o checklist foi REALIZADO COMPLETO (todos os 210 itens checados)
             const isChecklistRealizadoHoje = useMemo(() => {
@@ -6060,16 +6090,7 @@
                                         Informe a quantidade em cada localização. O sistema soma e confere contra o total de controle. Valores pré-carregados da última conferência — ajuste só o que mudou.
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-2 shrink-0">
-                                    <label className="text-xs font-bold text-amber-900">Lacre do Estojo:</label>
-                                    <input
-                                        type="text"
-                                        value={sealNumber}
-                                        onChange={(e) => setSealNumber(e.target.value)}
-                                        placeholder="Ex: LAC-2026-0842"
-                                        className="bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-amber-950 focus:outline-none focus:border-amber-500 w-36 shadow-sm"
-                                    />
-                                </div>
+
                             </div>
 
                             {/* Tabela de Psicotrópicos com colunas oficiais */}
@@ -6784,7 +6805,7 @@
                             </tr>
                             <tr>
                                 <td style="padding: 6px; font-weight: bold;">3. Psicotrópicos (Portaria 344)</td>
-                                <td style="padding: 6px;">${pas.psicotropicos || 'Conferidas ampolas 1º SOS e Reserva.'} - <strong>Lacre:</strong> ${pas.lacre || 'LAC-2026-0842'}</td>
+                                <td style="padding: 6px;">${pas.psicotropicos || 'Conferidas ampolas 1º SOS e Reserva.'}</td>
                             </tr>
                             <tr>
                                 <td style="padding: 6px; font-weight: bold;">4. Ocorrências do Plantão</td>
@@ -6878,8 +6899,8 @@
                                         <p className="text-slate-300 mt-0.5">{pas.eletronicos}</p>
                                     </div>
                                     <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
-                                        <span className="text-[10px] uppercase font-bold text-amber-400">Psicotrópicos & Lacre:</span>
-                                        <p className="text-slate-300 mt-0.5">{pas.psicotropicos} - Lacre: <strong className="font-mono text-amber-300">{pas.lacre}</strong></p>
+                                        <span className="text-[10px] uppercase font-bold text-amber-400">Psicotrópicos:</span>
+                                        <p className="text-slate-300 mt-0.5">{pas.psicotropicos}</p>
                                     </div>
                                     <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
                                         <span className="text-[10px] uppercase font-bold text-rose-400">Pendências / Avisos:</span>
@@ -7235,7 +7256,7 @@
                                     rows="3"
                                     value={notes}
                                     onChange={(e) => setNotes(e.target.value)}
-                                    placeholder="Ex: Embalagem violada, lacre rompido ou data de validade expirada..."
+                                    placeholder="Ex: Embalagem danificada, lacre/selo ausente ou data de validade expirada..."
                                     className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
                                 ></textarea>
                             </div>
@@ -7914,7 +7935,6 @@
             const [base, setBase] = useState('Base GOA Jacarepaguá - Prontidão 100%');
             const [eletronicos, setEletronicos] = useState('Monitores Corpuls 3 e Ventiladores testados, carga 100%. Cilindros com > 180 bar.');
             const [psicotropicos, setPsicotropicos] = useState('Conferidas ampolas de Fentanil, Morfina e Midazolam.');
-            const [lacre, setLacre] = useState('LAC-2026-0842');
             const [ocorrencias, setOcorrencias] = useState('Nenhuma intercorrência grave no plantão.');
             const [pendencias, setPendencias] = useState('Nenhuma');
 
@@ -7937,7 +7957,6 @@
                     base,
                     eletronicos,
                     psicotropicos,
-                    lacre,
                     ocorrencias,
                     pendencias
                 };
@@ -8016,25 +8035,14 @@
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Psicotrópicos:</label>
-                                    <input
-                                        type="text"
-                                        value={psicotropicos}
-                                        onChange={(e) => setPsicotropicos(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Lacre do Estojo:</label>
-                                    <input
-                                        type="text"
-                                        value={lacre}
-                                        onChange={(e) => setLacre(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-amber-300"
-                                    />
-                                </div>
+                            <div>
+                                <label className="block font-semibold text-slate-300 mb-1">Psicotrópicos:</label>
+                                <input
+                                    type="text"
+                                    value={psicotropicos}
+                                    onChange={(e) => setPsicotropicos(e.target.value)}
+                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                />
                             </div>
 
                             <div>
