@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>SIG-Aeromédico • DBM1 / GOA - CBMERJ</title>
+    <title>SIG-Aeromédico • DBM1/GOA - Lagoa - CBMERJ</title>
     
     <!-- Escudo anti-crash para LocalStorage/SessionStorage em iframes restritos -->
     <script>
@@ -168,7 +168,7 @@
         <div class="min-h-screen flex flex-col items-center justify-center bg-sand-100 text-slate-800">
             <div class="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mb-4"></div>
             <p class="text-sm font-semibold tracking-wider uppercase text-slate-400">Carregando SIG-Aeromédico...</p>
-            <p class="text-xs text-slate-500 mt-1">DBM 1 / GOA • CBMERJ</p>
+            <p class="text-xs text-slate-500 mt-1">DBM1/GOA - Lagoa • CBMERJ</p>
         </div>
     </div>
 
@@ -234,6 +234,7 @@
                 socorros: "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z M12 6v6m-3-3h6",
                 almoxarifado: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
                 voos: "M12 19l9 2-9-18-9 18 9-2zm0 0v-8",
+                chart: "M3 3v18h18M9 17V9m4 8v-4m4 4V5", 
                 passagem: "M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4",
                 calculadora: "M19.428 15.428a2 2 0 0 0-1.022-.547l-2.387-.477a6 6 0 0 0-3.86.517l-.318.158a6 6 0 0 1-3.86.517L6.05 15.21a2 2 0 0 0-1.806.547M8 4h8l-1 1v5.172a2 2 0 0 0 .586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 0 0 9 10.172V5L8 4z",
                 settings: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z",
@@ -4241,7 +4242,7 @@
         ];
 
         const DEFAULT_PASSAGENS = [
-            { id: "PAS-01", data: "2026-10-14", aeronave: "Guardião 01 (Esquilo AS350)", equipeTransmite: "Cap BM Méd Petrus (RG 49917)", rgTransmite: "49917", equipeAssume: "Maj BM Méd Rodolfo (RG 45324)", rgAssume: "45324", turno: "Plantão Alfa", base: "Base GOA / Jacarepaguá - Prontidão Operacional 100%", eletronicos: "Monitores testados, carga 100%. Cilindros com > 180 bar.", psicotropicos: "Conferidas todas as ampolas do 1º SOS e Reserva.", ocorrencias: "01 Resgate primário BR-101 Itaboraí (Politrauma grave). Estabilizado no HMMC.", pendencias: "Receber 2 equipos fotossensíveis da farmácia central.", dataHora: "2026-10-14T07:00:00" }
+            { id: "PAS-01", data: "2026-10-14", aeronave: "Guardião 01 (Esquilo AS350)", equipeTransmite: "Cap BM Méd Petrus (RG 49917)", rgTransmite: "49917", equipeAssume: "Maj BM Méd Rodolfo (RG 45324)", rgAssume: "45324", turno: "Plantão Alfa", base: "Base GOA / DBM1/GOA - Lagoa - Prontidão Operacional 100%", eletronicos: "Monitores testados, carga 100%. Cilindros com > 180 bar.", psicotropicos: "Conferidas todas as ampolas do 1º SOS e Reserva.", ocorrencias: "01 Resgate primário BR-101 Itaboraí (Politrauma grave). Estabilizado no HMMC.", pendencias: "Receber 2 equipos fotossensíveis da farmácia central.", dataHora: "2026-10-14T07:00:00" }
         ];
 
         const DEFAULT_USERS = [
@@ -4449,7 +4450,7 @@
                                 <Icon name="socorros" className="w-9 h-9" />
                             </div>
                             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">SIG-AEROMÉDICO</h1>
-                            <p className="text-xs uppercase tracking-widest font-bold text-rose-600 mt-0.5">DBM 1 / GOA • CBMERJ</p>
+                            <p className="text-xs uppercase tracking-widest font-bold text-rose-600 mt-0.5">DBM1/GOA - Lagoa • CBMERJ</p>
                             <p className="text-xs text-slate-500 mt-1">Gestão de Saúde, Insumos, Checklist & Missões UASA</p>
                         </div>
 
@@ -4757,8 +4758,8 @@
                 { id: 'socorros', label: 'Socorros', icon: 'socorros', badge: null },
                 { id: 'almoxarifado', label: 'Almoxarifado Médico', icon: 'almoxarifado', badge: criticalStockCount + expiryAlertCount > 0 ? `${criticalStockCount + expiryAlertCount}` : null, badgeColor: 'bg-amber-500/20 text-amber-300' },
                 { id: 'voos', label: 'Dados de Voos', icon: 'voos', badge: null },
-                { id: 'passagem', label: 'Passagem de Serviço', icon: 'passagem', badge: null },
-                { id: 'calculadora', label: 'Calculadora O₂', icon: 'calculadora', badge: null }
+                { id: 'estatisticas', label: 'Estatísticas de Eventos', icon: 'chart', badge: null },
+                { id: 'passagem', label: 'Passagem de Serviço', icon: 'passagem', badge: null }
             ];
 
             const sidebarContent = (
@@ -4798,7 +4799,7 @@
                     {/* Rodapé da Barra Lateral */}
                     <div className="p-4 border-t border-sand-300 bg-sand-100/60 text-center">
                         <p className="text-[11px] font-bold text-slate-800">SIG-Aeromédico v3.0</p>
-                        <p className="text-[10px] text-slate-400">CBMERJ • DBM1 Jacarepaguá</p>
+                        <p className="text-[10px] text-slate-400">CBMERJ • DBM1/GOA - Lagoa</p>
                     </div>
                 </div>
             );
@@ -4877,7 +4878,7 @@
                                     <span>BASE GOA 100% OPERACIONAL</span>
                                 </div>
                                 <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                                    Prontidão UASA • DBM 1
+                                    Prontidão UASA • DBM1/GOA - Lagoa
                                 </h2>
                                 <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1 max-w-xl">
                                     Aeronave Principal Guardião 01 (Esquilo) e Equipamentos Biomédicos conferidos para resgate aeromédico e transporte inter-hospitalar.
@@ -5354,7 +5355,7 @@
                         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
                             <div>
                                 <h2 style="margin:0;color:#dc2626;font-size:16px;font-weight:800;letter-spacing:0.5px;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h2>
-                                <h3 style="margin:3px 0 0;font-size:13px;color:#1e293b;font-weight:700;">DBM 1 / GOA • UNIDADE DE APOIO E SOCORRO AÉREO (UASA)</h3>
+                                <h3 style="margin:3px 0 0;font-size:13px;color:#1e293b;font-weight:700;">DBM1/GOA - Lagoa • UNIDADE DE APOIO E SOCORRO AÉREO (UASA)</h3>
                                 <h4 style="margin:4px 0 0;font-size:12px;color:#475569;font-weight:600;">RELATÓRIO OFICIAL DE CONFERÊNCIA DIÁRIA DE PRONTIDÃO</h4>
                             </div>
                             <div style="text-align:right;">
@@ -5423,7 +5424,7 @@
                     <div style="margin-top:20px;text-align:center;page-break-inside:avoid;">
                         <p style="margin:0;font-size:11px;font-weight:bold;color:#475569;">_____________________________________________________</p>
                         <p style="margin:4px 0 0;font-size:11.5px;font-weight:800;color:#0f172a;">${record.operator}</p>
-                        <p style="margin:2px 0 0;font-size:10px;color:#475569;">RG Militar: ${record.rg} • DBM 1 / GOA - CBMERJ</p>
+                        <p style="margin:2px 0 0;font-size:10px;color:#475569;">RG Militar: ${record.rg} • DBM1/GOA - Lagoa - CBMERJ</p>
                     </div>
                 `;
 
@@ -7120,325 +7121,950 @@
         // ====================================================================
         // COMPONENTE: ABA PASSAGEM DE SERVIÇO (6 BLOCOS REGULAMENTARES)
         // ====================================================================
-        const TabPassagem = ({ 
-            passagensList, 
-            onOpenNovaPassagem, 
-            operator 
-        }) => {
-            const handlePrintTermo = (pas) => {
-                const element = document.createElement('div');
-                element.className = "p-8 bg-white text-slate-900";
-                element.innerHTML = `
-                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
-                        <h2 style="margin: 0; font-size: 16px; font-weight: bold; text-transform: uppercase;">Corpo de Bombeiros Militar do Estado do Rio de Janeiro</h2>
-                        <h3 style="margin: 3px 0; font-size: 14px; font-weight: bold;">Grupamento de Operações Aéreas • DBM 1 / Jacarepaguá</h3>
-                        <h4 style="margin: 3px 0; font-size: 13px; color: #b91c1c;">UNIDADE DE APOIO E SOCORRO AÉREO (UASA)</h4>
-                        <p style="margin: 5px 0 0; font-size: 12px; font-weight: bold;">TERMO DE TRANSMISSÃO E ASSUNÇÃO DE SERVIÇO AEROMÉDICO</p>
-                    </div>
+        // ====================================================================
+        // COMPONENTE: ABA PASSAGEM DE SERVIÇO (FORMULÁRIO INTEGRADO NO CORPO)
+        // ====================================================================
+        const TabPassagem = ({ passagensList, onSavePassagem, operator }) => {
+            const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+            const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+            const [formData, setFormData] = useState({
+                ocorrencias: '',
+                material: '',
+                medicamentos: '',
+                aeronaves: '',
+                pendencias: '',
+                observacoes: '',
+                status: 'A_PREENCHER'
+            });
 
-                    <div style="font-size: 11px; line-height: 1.6; margin-bottom: 15px;">
-                        <p><strong>Data da Passagem:</strong> ${formatBRDate(pas.data)} às ${pas.dataHora ? pas.dataHora.substring(11, 16) : '07:00'} | <strong>Turno:</strong> ${pas.turno || 'Alfa'}</p>
-                        <p><strong>Aeronave Alocada:</strong> ${pas.aeronave}</p>
-                        <p><strong>Equipe que Transmite (Saiente):</strong> ${pas.equipeTransmite} (RG ${pas.rgTransmite})</p>
-                        <p><strong>Equipe que Assume (Entrante):</strong> ${pas.equipeAssume} (RG ${pas.rgAssume})</p>
-                    </div>
+            // Localiza ou carrega a passagem para o dia selecionado
+            useEffect(() => {
+                const found = (passagensList || []).find(p => p.data === selectedDate);
+                if (found) {
+                    setFormData({
+                        ocorrencias: found.ocorrencias || '',
+                        material: found.material || '',
+                        medicamentos: found.medicamentos || '',
+                        aeronaves: found.aeronaves || '',
+                        pendencias: found.pendencias || '',
+                        observacoes: found.observacoes || '',
+                        status: found.status || 'ENVIADA'
+                    });
+                } else {
+                    try {
+                        const draftKey = `sigaero_draft_passagem_${selectedDate}`;
+                        const draft = localStorage.getItem(draftKey);
+                        if (draft) {
+                            setFormData(JSON.parse(draft));
+                        } else {
+                            setFormData({
+                                ocorrencias: '',
+                                material: '',
+                                medicamentos: '',
+                                aeronaves: '',
+                                pendencias: '',
+                                observacoes: '',
+                                status: 'A_PREENCHER'
+                            });
+                        }
+                    } catch(e) {
+                        setFormData({
+                            ocorrencias: '',
+                            material: '',
+                            medicamentos: '',
+                            aeronaves: '',
+                            pendencias: '',
+                            observacoes: '',
+                            status: 'A_PREENCHER'
+                        });
+                    }
+                }
+            }, [selectedDate, passagensList]);
 
-                    <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 20px;" border="1">
-                        <thead>
-                            <tr style="background: #f1f5f9;">
-                                <th style="padding: 6px; text-align: left; width: 30%;">Bloco Regulamentar</th>
-                                <th style="padding: 6px; text-align: left;">Descrição / Conformidade</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding: 6px; font-weight: bold;">1. Aeronaves & Base</td>
-                                <td style="padding: 6px;">${pas.base || 'Prontidão Operacional 100%'}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px; font-weight: bold;">2. Eletrônicos & O₂</td>
-                                <td style="padding: 6px;">${pas.eletronicos || 'Monitores testados, carga 100%. Cilindros com > 180 bar.'}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px; font-weight: bold;">3. Psicotrópicos (Portaria 344)</td>
-                                <td style="padding: 6px;">${pas.psicotropicos || 'Conferidas ampolas 1º SOS e Reserva.'}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px; font-weight: bold;">4. Ocorrências do Plantão</td>
-                                <td style="padding: 6px;">${pas.ocorrencias || 'Sem ocorrências no plantão anterior.'}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px; font-weight: bold;">5. Pendências Técnicas</td>
-                                <td style="padding: 6px;">${pas.pendencias || 'Nenhuma pendência operacional registrada.'}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            const isEnviada = formData.status === 'ENVIADA';
 
-                    <div style="font-size: 10px; margin-top: 30px; line-height: 1.5; text-align: justify;">
-                        <p><strong>DECLARAÇÃO:</strong> Declaramos para os devidos fins regulamentares que realizamos a rigorosa conferência física dos equipamentos biomédicos, cilindros de gases medicinais e substâncias sob controle especial (Portaria SVS/MS nº 344/1998), assumindo a responsabilidade sanitária e operacional das missões aeromédicas.</p>
-                    </div>
-
-                    <div style="margin-top: 50px; display: flex; justify-content: space-between;">
-                        <div style="text-align: center; width: 45%; border-top: 1px solid #000; padding-top: 5px; font-size: 11px;">
-                            <strong>${pas.equipeTransmite}</strong><br/>Médico / Enfermeiro Saiente
-                        </div>
-                        <div style="text-align: center; width: 45%; border-top: 1px solid #000; padding-top: 5px; font-size: 11px;">
-                            <strong>${pas.equipeAssume}</strong><br/>Médico / Enfermeiro Entrante
-                        </div>
-                    </div>
-                `;
-
-                const opt = {
-                    margin: 10,
-                    filename: `Passagem_Servico_${pas.data || 'UASA'}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-
-                html2pdf().set(opt).from(element).save();
+            // Navegação entre datas
+            const handlePrevDay = () => {
+                const d = new Date(selectedDate + 'T12:00:00');
+                d.setDate(d.getDate() - 1);
+                setSelectedDate(d.toISOString().split('T')[0]);
             };
 
+            const handleNextDay = () => {
+                const d = new Date(selectedDate + 'T12:00:00');
+                d.setDate(d.getDate() + 1);
+                setSelectedDate(d.toISOString().split('T')[0]);
+            };
+
+            const handleToday = () => {
+                setSelectedDate(new Date().toISOString().split('T')[0]);
+            };
+
+            const handleChange = (field, val) => {
+                if (isEnviada) return;
+                setFormData(prev => ({
+                    ...prev,
+                    [field]: val,
+                    status: 'RASCUNHO'
+                }));
+            };
+
+            const handleSaveDraft = () => {
+                try {
+                    localStorage.setItem(`sigaero_draft_passagem_${selectedDate}`, JSON.stringify({
+                        ...formData,
+                        status: 'RASCUNHO'
+                    }));
+                } catch(e) {}
+                alert(`Rascunho da passagem de ${new Date(selectedDate + 'T12:00:00').toLocaleDateString('pt-BR')} salvo com sucesso!`);
+            };
+
+            const handleConfirmEnvio = () => {
+                setIsConfirmOpen(false);
+                const record = {
+                    id: `PAS-${selectedDate}-${Date.now().toString().slice(-4)}`,
+                    data: selectedDate,
+                    ...formData,
+                    status: 'ENVIADA',
+                    militarTransmite: operator ? `${operator.grad} ${operator.warName} (RG: ${operator.rg})` : 'Oficial Aeromédico',
+                    dataHoraEnvio: new Date().toISOString()
+                };
+
+                if (onSavePassagem) {
+                    onSavePassagem(record);
+                }
+
+                setFormData(prev => ({ ...prev, status: 'ENVIADA' }));
+                try {
+                    localStorage.removeItem(`sigaero_draft_passagem_${selectedDate}`);
+                } catch(e) {}
+            };
+
+            const dataFormatadaBR = new Date(selectedDate + 'T12:00:00').toLocaleDateString('pt-BR');
+
             return (
-                <div className="space-y-6 tab-fade-in">
-                    {/* Header */}
-                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                            <h3 className="text-base font-black text-slate-900">Transmissão de Plantão Aeromédico</h3>
-                            <p className="text-xs text-slate-400">
-                                6 Blocos Regulamentares de Transmissão entre as Equipes Médicas do DBM 1 / GOA
-                            </p>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={onOpenNovaPassagem}
-                            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold text-xs shadow-lg shadow-rose-900/30 transition-all flex items-center gap-2"
-                        >
-                            <Icon name="plus" className="w-4 h-4" />
-                            <span>Nova Passagem de Serviço</span>
-                        </button>
-                    </div>
-
-                    {/* Histórico de Passagens */}
-                    <div className="space-y-4">
-                        {passagensList.map((pas, idx) => (
-                            <div key={pas.id || idx} className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-slate-200">
+                <div className="space-y-6 tab-fade-in max-w-5xl mx-auto">
+                    {/* Header Principal da Passagem de Serviço */}
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-slate-200">
+                            <div>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center font-black">
+                                        <Icon name="passagem" className="w-5 h-5" />
+                                    </div>
                                     <div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                                                {pas.turno || 'Plantão'}
-                                            </span>
-                                            <span className="text-xs font-extrabold text-slate-900">
-                                                {formatBRDate(pas.data)} • {pas.aeronave}
-                                            </span>
-                                        </div>
-                                        <p className="text-xs text-slate-400 mt-1">
-                                            Transmite: <strong className="text-slate-200">{pas.equipeTransmite}</strong> &rarr; Assume: <strong className="text-emerald-400">{pas.equipeAssume}</strong>
+                                        <h2 className="text-lg font-black text-slate-900">Passagem de Serviço</h2>
+                                        <p className="text-xs text-slate-400 font-semibold">
+                                            DBM1/GOA - Lagoa • Registro Oficial Diário de Transmissão Operacional
                                         </p>
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => handlePrintTermo(pas)}
-                                        className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-300 text-xs font-extrabold transition-all flex items-center gap-1.5 shrink-0"
-                                    >
-                                        <Icon name="download" className="w-4 h-4 text-rose-400" />
-                                        <span>Exportar Termo PDF</span>
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 text-xs">
-                                    <div className="p-3 rounded-xl bg-sand-50 border border-sand-300">
-                                        <span className="text-[10px] uppercase font-bold text-slate-400">Eletrônicos & O₂:</span>
-                                        <p className="text-slate-300 mt-0.5">{pas.eletronicos}</p>
-                                    </div>
-                                    <div className="p-3 rounded-xl bg-sand-50 border border-sand-300">
-                                        <span className="text-[10px] uppercase font-bold text-amber-400">Psicotrópicos:</span>
-                                        <p className="text-slate-300 mt-0.5">{pas.psicotropicos}</p>
-                                    </div>
-                                    <div className="p-3 rounded-xl bg-sand-50 border border-sand-300">
-                                        <span className="text-[10px] uppercase font-bold text-rose-400">Pendências / Avisos:</span>
-                                        <p className="text-slate-300 mt-0.5">{pas.pendencias || 'Nenhuma pendência'}</p>
                                     </div>
                                 </div>
                             </div>
-                        ))}
+
+                            {/* Controles de Navegação de Data */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={handlePrevDay}
+                                    title="Dia anterior"
+                                    className="p-2 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-900 font-bold transition-all shadow-sm"
+                                >
+                                    ◀
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleToday}
+                                    className="px-3 py-2 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-900 text-xs font-black transition-all shadow-sm"
+                                >
+                                    Hoje
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleNextDay}
+                                    title="Próximo dia"
+                                    className="p-2 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-900 font-bold transition-all shadow-sm"
+                                >
+                                    ▶
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Banner Informativo e Status */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-sand-50 p-3.5 rounded-xl border border-sand-300">
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm font-black text-slate-900">
+                                        Passagem de {dataFormatadaBR}
+                                    </span>
+                                    {isEnviada ? (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                            ✓ Enviada (Bloqueada)
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-300">
+                                            ✍️ A preencher
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-xs text-slate-500 font-semibold mt-1">
+                                    Salve como rascunho quantas vezes quiser. Enviar avisa o militar de amanhã.
+                                </p>
+                            </div>
+
+                            {/* Botões de Ação do Topo */}
+                            {!isEnviada && (
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={handleSaveDraft}
+                                        className="px-4 py-2 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-800 text-xs font-black transition-all shadow-sm"
+                                    >
+                                        Salvar rascunho
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsConfirmOpen(true)}
+                                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-black shadow-lg shadow-rose-900/30 transition-all"
+                                    >
+                                        Enviar passagem
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
+
+                    {/* Formulário com os 6 Campos Oficiais no Corpo da Página */}
+                    <div className="grid grid-cols-1 gap-4">
+                        {/* 1. Ocorrências do dia */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-black text-slate-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-rose-600"></span>
+                                    Ocorrências do dia
+                                </label>
+                                <span className="text-[11px] text-slate-400 font-semibold">Atendimentos e missões</span>
+                            </div>
+                            <p className="text-xs text-slate-500 italic">
+                                O que aconteceu no serviço: atendimentos, intercorrências, o que fugiu do rotineiro.
+                            </p>
+                            <textarea
+                                rows="3"
+                                disabled={isEnviada}
+                                value={formData.ocorrencias}
+                                onChange={(e) => handleChange('ocorrencias', e.target.value)}
+                                placeholder="Descreva os acionamentos, missões de resgate ou transferências realizadas..."
+                                className="w-full bg-sand-50/60 border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600 disabled:opacity-75 disabled:bg-slate-100"
+                            />
+                        </div>
+
+                        {/* 2. Material e equipamento */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-black text-slate-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-sky-600"></span>
+                                    Material e equipamento
+                                </label>
+                                <span className="text-[11px] text-slate-400 font-semibold">Equipamentos médicos & O₂</span>
+                            </div>
+                            <p className="text-xs text-slate-500 italic">
+                                Defeito, falta, equipamento que foi para manutenção, o que precisa de conferência.
+                            </p>
+                            <textarea
+                                rows="3"
+                                disabled={isEnviada}
+                                value={formData.material}
+                                onChange={(e) => handleChange('material', e.target.value)}
+                                placeholder="Status do monitor desfibrilador, ventilador mecânico, cilindros de O₂, etc..."
+                                className="w-full bg-sand-50/60 border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600 disabled:opacity-75 disabled:bg-slate-100"
+                            />
+                        </div>
+
+                        {/* 3. Medicamentos e insumos */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-black text-slate-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                    Medicamentos e insumos
+                                </label>
+                                <span className="text-[11px] text-slate-400 font-semibold">Farmácia e Almoxarifado</span>
+                            </div>
+                            <p className="text-xs text-slate-500 italic">
+                                Faltas, vencimentos próximos, o que foi consumido e precisa repor.
+                            </p>
+                            <textarea
+                                rows="3"
+                                disabled={isEnviada}
+                                value={formData.medicamentos}
+                                onChange={(e) => handleChange('medicamentos', e.target.value)}
+                                placeholder="Indique consumo de psicotrópicos, reposições de ampolas e itens sob controle..."
+                                className="w-full bg-sand-50/60 border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600 disabled:opacity-75 disabled:bg-slate-100"
+                            />
+                        </div>
+
+                        {/* 4. Aeronaves */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-black text-slate-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-amber-600"></span>
+                                    Aeronaves
+                                </label>
+                                <span className="text-[11px] text-slate-400 font-semibold">Operacionalidade da frota</span>
+                            </div>
+                            <p className="text-xs text-slate-500 italic">
+                                Situação das aeronaves do aeromédico no dia.
+                            </p>
+                            <textarea
+                                rows="3"
+                                disabled={isEnviada}
+                                value={formData.aeronaves}
+                                onChange={(e) => handleChange('aeronaves', e.target.value)}
+                                placeholder="Disponibilidade e status de BM02, BM04, BM05, BM06, BM07, SAÚDE01, SAÚDE02..."
+                                className="w-full bg-sand-50/60 border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600 disabled:opacity-75 disabled:bg-slate-100"
+                            />
+                        </div>
+
+                        {/* 5. Pendências para o próximo serviço */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-black text-slate-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-purple-600"></span>
+                                    Pendências para o próximo serviço
+                                </label>
+                                <span className="text-[11px] text-slate-400 font-semibold">Avisos e Transmissão</span>
+                            </div>
+                            <p className="text-xs text-slate-500 italic">
+                                O que fica pendente e quem assume precisa resolver.
+                            </p>
+                            <textarea
+                                rows="3"
+                                disabled={isEnviada}
+                                value={formData.pendencias}
+                                onChange={(e) => handleChange('pendencias', e.target.value)}
+                                placeholder="Recargas agendadas, reposições aguardando DSE, devoluções de prontuários..."
+                                className="w-full bg-sand-50/60 border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600 disabled:opacity-75 disabled:bg-slate-100"
+                            />
+                        </div>
+
+                        {/* 6. Observações gerais */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-black text-slate-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-slate-600"></span>
+                                    Observações gerais
+                                </label>
+                                <span className="text-[11px] text-slate-400 font-semibold">Informações complementares</span>
+                            </div>
+                            <p className="text-xs text-slate-500 italic">
+                                Qualquer coisa que não coube nos campos acima.
+                            </p>
+                            <textarea
+                                rows="3"
+                                disabled={isEnviada}
+                                value={formData.observacoes}
+                                onChange={(e) => handleChange('observacoes', e.target.value)}
+                                placeholder="Outras notas pertinentes ao serviço da equipe de prontidão..."
+                                className="w-full bg-sand-50/60 border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600 disabled:opacity-75 disabled:bg-slate-100"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Barra de Ações Inferior */}
+                    {!isEnviada && (
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick={handleSaveDraft}
+                                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-800 text-xs font-black transition-all shadow-sm"
+                            >
+                                Salvar rascunho
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsConfirmOpen(true)}
+                                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-black shadow-lg shadow-rose-900/30 transition-all"
+                            >
+                                Enviar passagem
+                            </button>
+                        </div>
+                    )}
+
+                    {/* MODAL DE CONFIRMAÇÃO DUPLA ANTES DE ENVIAR */}
+                    {isConfirmOpen && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+                            <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-300 text-amber-600 flex items-center justify-center font-black">
+                                        <Icon name="alert" className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-base font-black text-slate-900">Confirmar Envio da Passagem?</h3>
+                                        <p className="text-xs text-slate-400 font-semibold">Passagem de {dataFormatadaBR}</p>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold leading-relaxed">
+                                    ⚠️ <strong>Atenção:</strong> Após enviar, esta passagem de serviço será gravada em definitivo no banco de dados e <u>não será mais possível alterar o registro</u>.
+                                </div>
+
+                                <p className="text-xs text-slate-600 font-semibold">
+                                    Deseja realmente confirmar e arquivar a passagem de serviço deste plantão?
+                                </p>
+
+                                <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsConfirmOpen(false)}
+                                        className="flex-1 py-2.5 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-800 text-xs font-black transition-all"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleConfirmEnvio}
+                                        className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-black shadow-lg shadow-rose-900/30 transition-all"
+                                    >
+                                        Confirmar e Enviar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         };
 
         // ====================================================================
-        // COMPONENTE: ABA CALCULADORA DE AUTONOMIA DE OXIGÊNIO (O₂)
+        // COMPONENTE: ABA ESTATÍSTICAS DE EVENTOS (GRÁFICOS & 5 TABELAS OFICIAIS)
         // ====================================================================
-        const TabCalculadora = () => {
-            const [cylinderType, setCylinderType] = useState('0.16'); // M9 = 0.16, Spencer = 0.28, Fixo = 1.56
-            const [pressure, setPressure] = useState(2000); // Em PSI
-            const [unit, setUnit] = useState('PSI'); // 'PSI' ou 'BAR'
-            const [safetyMargin, setSafetyMargin] = useState(500); // PSI
-            const [flowRate, setFlowRate] = useState(10); // L/min
+        const TabEstatisticas = ({ voosList, operator }) => {
+            const [selectedAno, setSelectedAno] = useState('2026');
+            const [activeTabSub, setActiveTabSub] = useState('VISAO_GERAL'); // 'VISAO_GERAL', 'TABELAS'
+            const [isExporting, setIsExporting] = useState(false);
 
-            // Fatores de conversão e cálculo
-            const factor = Number(cylinderType);
+            const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
 
-            // Converter se a entrada for em BAR
-            const currentPsi = unit === 'BAR' ? pressure * 14.5038 : pressure;
-            const marginPsi = unit === 'BAR' ? safetyMargin * 14.5038 : safetyMargin;
+            const gruposCatalogo = [
+                {
+                    grupo: 'CLÍNICO',
+                    subtipos: ['MAL SÚBITO', 'PCR']
+                },
+                {
+                    grupo: 'ACIDENTES E VIOLÊNCIA',
+                    subtipos: [
+                        'AFOGAMENTO GRAU 1', 'AFOGAMENTO GRAU 2', 'AFOGAMENTO GRAU 3',
+                        'AFOGAMENTO GRAU 4', 'AFOGAMENTO GRAU 5', 'AFOGAMENTO GRAU 6',
+                        'AGRESSÃO', 'ATROPELAMENTO', 'CAPOTAMENTO', 'COLISÃO',
+                        'QUEDA DE ALTURA', 'QUEDA DE BICICLETA', 'QUEDA DE MOTO',
+                        'QUEIMADURA', 'SUICÍDIO/TENTATIVA'
+                    ]
+                },
+                {
+                    grupo: 'PSIQUIÁTRICO',
+                    subtipos: ['TRANSTORNO PSIQUIÁTRICO']
+                },
+                {
+                    grupo: 'OBSTÉTRICO',
+                    subtipos: ['TRABALHO DE PARTO']
+                },
+                {
+                    grupo: 'TIH',
+                    subtipos: ['TIH ADULTO', 'TIH PEDIÁTRICO', 'TIH NEONATAL']
+                },
+                {
+                    grupo: 'OUTROS',
+                    subtipos: ['TRANSPORTE DE ÓRGÃOS VITAIS', 'OUTROS']
+                }
+            ];
 
-            // Autonomia Útil com Margem Segura
-            const usefulPsi = Math.max(0, currentPsi - marginPsi);
-            const usefulMinutes = flowRate > 0 ? Math.floor((usefulPsi * factor) / flowRate) : 0;
-            const totalMinutes = flowRate > 0 ? Math.floor((currentPsi * factor) / flowRate) : 0;
+            const desfechosColunas = [
+                'VÍTIMA REMOVIDA DE AERONAVE',
+                'ÓBITO NO LOCAL',
+                'VÍTIMA ATENDIDA E LIBERADA',
+                'VÍTIMA REMOVIDA POR AMBULÂNCIA',
+                'VÍTIMA RECUSOU REMOÇÃO',
+                'SOCORRO CANCELADO',
+                'VÍTIMA JÁ REMOVIDA',
+                'VÍTIMA NÃO ENCONTRADA',
+                'SEM VÍTIMA'
+            ];
 
-            const usefulHours = `${Math.floor(usefulMinutes / 60)}h ${usefulMinutes % 60}m`;
-            const totalHours = `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`;
+            // Filtra voos do ano selecionado
+            const voosAno = useMemo(() => {
+                return (voosList || []).filter(v => {
+                    const d = v.data || '';
+                    return d.startsWith(selectedAno);
+                });
+            }, [voosList, selectedAno]);
 
-            const isLow = usefulMinutes < 30;
+            // Totais de Resumo
+            const statsResumo = useMemo(() => {
+                const totalEventos = voosAno.length;
+                const totalVitimas = voosAno.filter(v => v.comVitima).length;
+                const totalMinutos = voosAno.reduce((acc, v) => acc + (Number(v.minutosVoo) || 0), 0);
+                const afogamentosCount = voosAno.filter(v => (v.subtipo || '').toUpperCase().includes('AFOGAMENTO')).length;
+                const horasStr = `${Math.floor(totalMinutos / 60)}h ${totalMinutos % 60}m`;
+                return { totalEventos, totalVitimas, totalMinutos, horasStr, afogamentosCount };
+            }, [voosAno]);
+
+            // Exportar CSV compatível com Excel
+            const handleExportCSV = () => {
+                const lines = [];
+                lines.push('RELATÓRIO ESTATÍSTICO DE EVENTOS AEROMÉDICOS - DBM1/GOA - LAGOA');
+                lines.push('Ano de Referência: ' + selectedAno + ';Data da Emissão: ' + new Date().toLocaleDateString('pt-BR'));
+                lines.push('');
+                lines.push('TABELA 1 - EVENTOS ATENDIDOS POR MÊS');
+                lines.push('GRUPO;TIPO DE EVENTO;' + meses.join(';') + ';TOTAL');
+
+                gruposCatalogo.forEach(g => {
+                    g.subtipos.forEach(st => {
+                        const rowMeses = meses.map((_, mIdx) => {
+                            return voosAno.filter(v => {
+                                const vm = new Date(v.data + 'T12:00:00').getMonth();
+                                return vm === mIdx && (v.subtipo || '').toUpperCase() === st;
+                            }).length;
+                        });
+                        const rowTot = rowMeses.reduce((a, b) => a + b, 0);
+                        lines.push(g.grupo + ';' + st + ';' + rowMeses.join(';') + ';' + rowTot);
+                    });
+                });
+
+                lines.push('');
+                lines.push('TABELA 2 - VÍTIMAS POR EVENTO');
+                lines.push('GRUPO;TIPO DE EVENTO;' + meses.join(';') + ';TOTAL');
+                gruposCatalogo.forEach(g => {
+                    g.subtipos.forEach(st => {
+                        const rowMeses = meses.map((_, mIdx) => {
+                            return voosAno.filter(v => {
+                                const vm = new Date(v.data + 'T12:00:00').getMonth();
+                                return vm === mIdx && v.comVitima && (v.subtipo || '').toUpperCase() === st;
+                            }).length;
+                        });
+                        const rowTot = rowMeses.reduce((a, b) => a + b, 0);
+                        lines.push(g.grupo + ';' + st + ';' + rowMeses.join(';') + ';' + rowTot);
+                    });
+                });
+
+                lines.push('');
+                lines.push('TABELA 3 - HORAS POR EVENTO (H:MM)');
+                lines.push('GRUPO;TIPO DE EVENTO;' + meses.join(';') + ';TOTAL HORAS');
+                gruposCatalogo.forEach(g => {
+                    g.subtipos.forEach(st => {
+                        const rowMesesMin = meses.map((_, mIdx) => {
+                            return voosAno.filter(v => {
+                                const vm = new Date(v.data + 'T12:00:00').getMonth();
+                                return vm === mIdx && (v.subtipo || '').toUpperCase() === st;
+                            }).reduce((sum, v) => sum + (Number(v.minutosVoo) || 0), 0);
+                        });
+                        const rowTotMin = rowMesesMin.reduce((a, b) => a + b, 0);
+                        const rowMesesStr = rowMesesMin.map(m => Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0'));
+                        const totStr = Math.floor(rowTotMin / 60) + ':' + String(rowTotMin % 60).padStart(2, '0');
+                        lines.push(g.grupo + ';' + st + ';' + rowMesesStr.join(';') + ';' + totStr);
+                    });
+                });
+
+                const csv = lines.join(String.fromCharCode(13, 10));
+                const blob = new Blob([String.fromCharCode(0xFEFF) + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Estatisticas_Aeromedico_DBM1_GOA_' + selectedAno + '.csv';
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+
+            // Exportar PDF do Relatório
+            const handleExportPDF = async () => {
+                setIsExporting(true);
+                try {
+                    const el = document.getElementById('relatorio-estatisticas-print');
+                    if (!el) return;
+                    const opt = {
+                        margin: [6, 6, 6, 6],
+                        filename: `Relatorio_Estatistico_Aeromedico_${selectedAno}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                    };
+                    await html2pdf().set(opt).from(el).save();
+                } catch(e) {
+                    console.error("Erro ao gerar PDF:", e);
+                } finally {
+                    setIsExporting(false);
+                }
+            };
 
             return (
-                <div className="space-y-6 tab-fade-in max-w-4xl mx-auto">
-                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 shadow-sm">
-                        <div className="flex items-center gap-3 pb-4 border-b-2 border-slate-200">
-                            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center">
-                                <Icon name="calculadora" className="w-6 h-6" />
+                <div className="space-y-6 tab-fade-in max-w-7xl mx-auto">
+                    {/* Header Principal de Estatísticas */}
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 text-purple-600 flex items-center justify-center font-black">
+                                <Icon name="chart" className="w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">Calculadora Aeronáutica de Autonomia de O₂</h3>
-                                <p className="text-xs text-slate-400">
-                                    Cálculo padronizado de vazão e tempo de oxigenoterapia para voos de resgate e transporte
+                                <h3 className="text-base font-black text-slate-900">Estatísticas de Eventos Aeromédicos</h3>
+                                <p className="text-xs text-slate-400 font-semibold">
+                                    DBM1/GOA - Lagoa • Consolidação de Atendimentos, Vítimas, Horas de Voo e Desfechos
                                 </p>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                            {/* Painel de Controles */}
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-xs font-semibold text-slate-300 mb-1">Tipo de Cilindro</label>
-                                    <select
-                                        value={cylinderType}
-                                        onChange={(e) => setCylinderType(e.target.value)}
-                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-3 py-2.5 text-xs font-extrabold text-slate-900 focus:outline-none focus:border-rose-500"
-                                    >
-                                        <option value="0.16">Cilindro Portátil Alumínio M9 (Fator 0.16 - Maleta O2)</option>
-                                        <option value="0.28">Cilindro Spencer / Mochila (Fator 0.28 - Vias Aéreas)</option>
-                                        <option value="1.56">Cilindro Fixo da Aeronave (Fator 1.56 - Suporte Prolongado)</option>
-                                        <option value="2.40">Cilindro Fixo Reserva Grande (Fator 2.40 - Sobreaviso)</option>
-                                    </select>
-                                </div>
+                        <div className="flex items-center gap-2">
+                            <select
+                                value={selectedAno}
+                                onChange={(e) => setSelectedAno(e.target.value)}
+                                className="bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-black text-slate-900 focus:outline-none focus:border-rose-600"
+                            >
+                                <option value="2026">Ano 2026</option>
+                                <option value="2025">Ano 2025</option>
+                                <option value="2024">Ano 2024</option>
+                            </select>
 
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-semibold text-slate-300 mb-1">Pressão Atual ({unit})</label>
-                                        <input
-                                            type="number"
-                                            value={pressure}
-                                            onChange={(e) => setPressure(Number(e.target.value))}
-                                            className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-semibold text-slate-300 mb-1">Unidade</label>
-                                        <div className="flex bg-slate-200 p-1 rounded-xl border-2 border-slate-300">
-                                            <button
-                                                type="button"
-                                                onClick={() => setUnit('PSI')}
-                                                className={`flex-1 py-1 text-xs font-bold rounded-lg ${unit === 'PSI' ? 'bg-sky-600 text-white' : 'text-slate-400'}`}
-                                            >
-                                                PSI
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setUnit('BAR')}
-                                                className={`flex-1 py-1 text-xs font-bold rounded-lg ${unit === 'BAR' ? 'bg-sky-600 text-white' : 'text-slate-400'}`}
-                                            >
-                                                BAR
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <button
+                                type="button"
+                                onClick={handleExportCSV}
+                                className="px-3.5 py-2 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-900 font-black text-xs transition-all flex items-center gap-1.5 shadow-sm"
+                            >
+                                📊 <span>Excel / CSV</span>
+                            </button>
 
-                                <div>
-                                    <div className="flex justify-between text-xs font-semibold text-slate-300 mb-1">
-                                        <span>Fluxo Prescrito</span>
-                                        <span className="font-bold text-rose-400">{flowRate} L/min</span>
-                                    </div>
-                                    <input
-                                        type="range"
-                                        min="1"
-                                        max="15"
-                                        step="1"
-                                        value={flowRate}
-                                        onChange={(e) => setFlowRate(Number(e.target.value))}
-                                        className="w-full accent-rose-600 cursor-pointer"
-                                    />
-                                    <div className="flex justify-between text-[10px] text-slate-500">
-                                        <span>1 L/min (Cateter)</span>
-                                        <span>10 L/min (Máscara c/ reservatório)</span>
-                                        <span>15 L/min (IOT/Respirador)</span>
-                                    </div>
-                                </div>
+                            <button
+                                type="button"
+                                onClick={handleExportPDF}
+                                disabled={isExporting}
+                                className="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-xs shadow-lg shadow-rose-900/30 transition-all flex items-center gap-1.5"
+                            >
+                                📄 <span>{isExporting ? 'Gerando...' : 'Exportar PDF'}</span>
+                            </button>
+                        </div>
+                    </div>
 
-                                <div>
-                                    <label className="block text-xs font-semibold text-slate-300 mb-1">Margem de Segurança ({unit})</label>
-                                    <input
-                                        type="number"
-                                        value={safetyMargin}
-                                        onChange={(e) => setSafetyMargin(Number(e.target.value))}
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
-                                    />
-                                    <p className="text-[10px] text-slate-500 mt-1">Margem regulamentar para pouso seguro e imprevistos</p>
-                                </div>
+                    {/* Cards de Métricas do Ano */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total de Eventos</span>
+                            <div className="text-2xl font-black text-slate-900 mt-1">{statsResumo.totalEventos}</div>
+                            <span className="text-[11px] font-semibold text-rose-600">Missões registradas</span>
+                        </div>
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total de Vítimas</span>
+                            <div className="text-2xl font-black text-slate-900 mt-1">{statsResumo.totalVitimas}</div>
+                            <span className="text-[11px] font-semibold text-emerald-600">Pacientes atendidos</span>
+                        </div>
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tempo Total de Voo</span>
+                            <div className="text-2xl font-black text-slate-900 mt-1">{statsResumo.horasStr}</div>
+                            <span className="text-[11px] font-semibold text-sky-600">Horas acumuladas</span>
+                        </div>
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Afogamentos</span>
+                            <div className="text-2xl font-black text-slate-900 mt-1">{statsResumo.afogamentosCount}</div>
+                            <span className="text-[11px] font-semibold text-amber-600">Graus 1 a 6</span>
+                        </div>
+                    </div>
+
+                    {/* Conteúdo Imprimível para o PDF */}
+                    <div id="relatorio-estatisticas-print" className="space-y-6">
+                        {/* 1. TABELA: EVENTOS ATENDIDOS */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm overflow-x-auto">
+                            <div className="mb-3">
+                                <h4 className="text-sm font-black text-slate-900">1. Eventos Atendidos</h4>
+                                <p className="text-xs text-slate-400 font-semibold">
+                                    Quantos eventos de cada subtipo foram atendidos, por mês no ano {selectedAno}.
+                                </p>
                             </div>
+                            <table className="w-full text-[11px] border-collapse border border-slate-300">
+                                <thead>
+                                    <tr className="bg-slate-100 text-slate-800 font-black border-b border-slate-300">
+                                        <th className="p-2 border border-slate-300 text-left">GRUPO</th>
+                                        <th className="p-2 border border-slate-300 text-left">TIPO DE EVENTO</th>
+                                        {meses.map(m => (
+                                            <th key={m} className="p-1.5 border border-slate-300 text-center w-8">{m}</th>
+                                        ))}
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL</th>
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL POR GRUPO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {gruposCatalogo.map(g => {
+                                        const totalGrupo = g.subtipos.reduce((gAcc, st) => {
+                                            return gAcc + voosAno.filter(v => (v.subtipo || '').toUpperCase() === st).length;
+                                        }, 0);
 
-                            {/* Painel de Resultados Visuais */}
-                            <div className="flex flex-col justify-between p-5 rounded-2xl bg-sand-50 border border-slate-800/80">
-                                <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Autonomia Útil de Voo (Margem Segura):</span>
-                                    <div className="flex items-baseline gap-2 mt-2">
-                                        <span className={`text-4xl sm:text-5xl font-black ${isLow ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>
-                                            {usefulMinutes}
-                                        </span>
-                                        <span className="text-xl font-bold text-slate-400">minutos</span>
-                                        <span className="text-xs font-bold text-slate-400">({usefulHours})</span>
-                                    </div>
+                                        return g.subtipos.map((st, idx) => {
+                                            const countsMes = meses.map((_, mIdx) => {
+                                                return voosAno.filter(v => {
+                                                    const m = new Date(v.data + 'T12:00:00').getMonth();
+                                                    return m === mIdx && (v.subtipo || '').toUpperCase() === st;
+                                                }).length;
+                                            });
+                                            const totalLinha = countsMes.reduce((a, b) => a + b, 0);
 
-                                    {isLow && (
-                                        <div className="mt-3 p-2.5 rounded-xl bg-red-950/60 border border-red-800/80 text-red-200 text-xs flex items-center gap-2">
-                                            <Icon name="alert" className="w-4 h-4 shrink-0 text-red-400" />
-                                            <span>ALERTA: Autonomia inferior a 30 minutos! Substituir cilindro.</span>
-                                        </div>
-                                    )}
+                                            return (
+                                                <tr key={st} className="hover:bg-slate-50 border-b border-slate-200 font-medium">
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 font-black bg-slate-50 text-slate-900 align-top">
+                                                            {g.grupo}
+                                                        </td>
+                                                    )}
+                                                    <td className="p-2 border border-slate-300 text-slate-800">{st}</td>
+                                                    {countsMes.map((c, mIdx) => (
+                                                        <td key={mIdx} className={`p-1.5 border border-slate-300 text-center ${c > 0 ? 'font-bold text-rose-600 bg-rose-50/50' : 'text-slate-400'}`}>
+                                                            {c}
+                                                        </td>
+                                                    ))}
+                                                    <td className="p-2 border border-slate-300 text-center font-black bg-slate-50 text-slate-900">{totalLinha}</td>
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 text-center font-black bg-slate-100 text-slate-900 align-middle">
+                                                            {totalGrupo}
+                                                        </td>
+                                                    )}
+                                                </tr>
+                                            );
+                                        });
+                                    })}
+                                    {/* Linha Total Mensal */}
+                                    <tr className="bg-slate-200 font-black text-slate-900 border-t-2 border-slate-400">
+                                        <td colSpan="2" className="p-2 border border-slate-300 text-right">TOTAL MENSAL:</td>
+                                        {meses.map((_, mIdx) => {
+                                            const totMes = voosAno.filter(v => new Date(v.data + 'T12:00:00').getMonth() === mIdx).length;
+                                            return (
+                                                <td key={mIdx} className="p-1.5 border border-slate-300 text-center font-black">{totMes}</td>
+                                            );
+                                        })}
+                                        <td className="p-2 border border-slate-300 text-center bg-rose-100 text-rose-900 font-black">{voosAno.length}</td>
+                                        <td className="p-2 border border-slate-300 text-center bg-rose-100 text-rose-900 font-black">{voosAno.length}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                                    <div className="mt-6 pt-4 border-t border-slate-800 space-y-2 text-xs">
-                                        <div className="flex justify-between text-slate-400">
-                                            <span>Tempo Total até o Esgotamento:</span>
-                                            <strong className="text-slate-200">{totalMinutes} min ({totalHours})</strong>
-                                        </div>
-                                        <div className="flex justify-between text-slate-400">
-                                            <span>Volume de O₂ Disponível:</span>
-                                            <strong className="text-slate-200">{Math.round(currentPsi * factor)} Litros</strong>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="mt-6 pt-4 border-t border-slate-800/80 text-center">
-                                    <p className="text-[11px] text-slate-500 italic">
-                                        Fórmula: Autonomia = (Pressão - Margem) × Fator / Fluxo
-                                    </p>
-                                </div>
+                        {/* 2. TABELA: VÍTIMAS POR EVENTO */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm overflow-x-auto">
+                            <div className="mb-3">
+                                <h4 className="text-sm font-black text-slate-900">2. Vítimas por Evento</h4>
+                                <p className="text-xs text-slate-400 font-semibold">
+                                    Só conta o evento em que houve vítima — evento com duas vítimas são dois lançamentos.
+                                </p>
                             </div>
+                            <table className="w-full text-[11px] border-collapse border border-slate-300">
+                                <thead>
+                                    <tr className="bg-slate-100 text-slate-800 font-black border-b border-slate-300">
+                                        <th className="p-2 border border-slate-300 text-left">GRUPO</th>
+                                        <th className="p-2 border border-slate-300 text-left">TIPO DE EVENTO</th>
+                                        {meses.map(m => (
+                                            <th key={m} className="p-1.5 border border-slate-300 text-center w-8">{m}</th>
+                                        ))}
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL</th>
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL POR GRUPO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {gruposCatalogo.map(g => {
+                                        const totalGrupoVit = g.subtipos.reduce((gAcc, st) => {
+                                            return gAcc + voosAno.filter(v => v.comVitima && (v.subtipo || '').toUpperCase() === st).length;
+                                        }, 0);
+
+                                        return g.subtipos.map((st, idx) => {
+                                            const countsMes = meses.map((_, mIdx) => {
+                                                return voosAno.filter(v => {
+                                                    const m = new Date(v.data + 'T12:00:00').getMonth();
+                                                    return m === mIdx && v.comVitima && (v.subtipo || '').toUpperCase() === st;
+                                                }).length;
+                                            });
+                                            const totalLinha = countsMes.reduce((a, b) => a + b, 0);
+
+                                            return (
+                                                <tr key={st} className="hover:bg-slate-50 border-b border-slate-200 font-medium">
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 font-black bg-slate-50 text-slate-900 align-top">
+                                                            {g.grupo}
+                                                        </td>
+                                                    )}
+                                                    <td className="p-2 border border-slate-300 text-slate-800">{st}</td>
+                                                    {countsMes.map((c, mIdx) => (
+                                                        <td key={mIdx} className={`p-1.5 border border-slate-300 text-center ${c > 0 ? 'font-bold text-emerald-600 bg-emerald-50/50' : 'text-slate-400'}`}>
+                                                            {c}
+                                                        </td>
+                                                    ))}
+                                                    <td className="p-2 border border-slate-300 text-center font-black bg-slate-50 text-slate-900">{totalLinha}</td>
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 text-center font-black bg-slate-100 text-slate-900 align-middle">
+                                                            {totalGrupoVit}
+                                                        </td>
+                                                    )}
+                                                </tr>
+                                            );
+                                        });
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* 3. TABELA: HORAS POR EVENTO */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm overflow-x-auto">
+                            <div className="mb-3">
+                                <h4 className="text-sm font-black text-slate-900">3. Horas por Evento</h4>
+                                <p className="text-xs text-slate-400 font-semibold">
+                                    Soma do tempo de voo (partida → regresso) de cada subtipo, em h:mm real.
+                                </p>
+                            </div>
+                            <table className="w-full text-[11px] border-collapse border border-slate-300">
+                                <thead>
+                                    <tr className="bg-slate-100 text-slate-800 font-black border-b border-slate-300">
+                                        <th className="p-2 border border-slate-300 text-left">GRUPO</th>
+                                        <th className="p-2 border border-slate-300 text-left">TIPO DE EVENTO</th>
+                                        {meses.map(m => (
+                                            <th key={m} className="p-1.5 border border-slate-300 text-center w-12">{m}</th>
+                                        ))}
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL</th>
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL POR GRUPO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {gruposCatalogo.map(g => {
+                                        const totalGrupoMin = g.subtipos.reduce((gAcc, st) => {
+                                            return gAcc + voosAno.filter(v => (v.subtipo || '').toUpperCase() === st).reduce((sum, v) => sum + (Number(v.minutosVoo) || 0), 0);
+                                        }, 0);
+                                        const totGrupoStr = `${Math.floor(totalGrupoMin / 60)}:${String(totalGrupoMin % 60).padStart(2, '0')}`;
+
+                                        return g.subtipos.map((st, idx) => {
+                                            const minsMes = meses.map((_, mIdx) => {
+                                                return voosAno.filter(v => {
+                                                    const m = new Date(v.data + 'T12:00:00').getMonth();
+                                                    return m === mIdx && (v.subtipo || '').toUpperCase() === st;
+                                                }).reduce((sum, v) => sum + (Number(v.minutosVoo) || 0), 0);
+                                            });
+                                            const totLinhaMin = minsMes.reduce((a, b) => a + b, 0);
+                                            const totLinhaStr = `${Math.floor(totLinhaMin / 60)}:${String(totLinhaMin % 60).padStart(2, '0')}`;
+
+                                            return (
+                                                <tr key={st} className="hover:bg-slate-50 border-b border-slate-200 font-medium">
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 font-black bg-slate-50 text-slate-900 align-top">
+                                                            {g.grupo}
+                                                        </td>
+                                                    )}
+                                                    <td className="p-2 border border-slate-300 text-slate-800">{st}</td>
+                                                    {minsMes.map((m, mIdx) => {
+                                                        const str = `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
+                                                        return (
+                                                            <td key={mIdx} className={`p-1.5 border border-slate-300 text-center font-mono ${m > 0 ? 'font-bold text-sky-600 bg-sky-50/50' : 'text-slate-400'}`}>
+                                                                {str}
+                                                            </td>
+                                                        );
+                                                    })}
+                                                    <td className="p-2 border border-slate-300 text-center font-black font-mono bg-slate-50 text-slate-900">{totLinhaStr}</td>
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 text-center font-black font-mono bg-slate-100 text-slate-900 align-middle">
+                                                            {totGrupoStr}
+                                                        </td>
+                                                    )}
+                                                </tr>
+                                            );
+                                        });
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* 4. TABELA: DESFECHO DOS EVENTOS */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm overflow-x-auto">
+                            <div className="mb-3">
+                                <h4 className="text-sm font-black text-slate-900">4. Desfecho dos Atendimentos</h4>
+                                <p className="text-xs text-slate-400 font-semibold">
+                                    Como terminou cada atendimento aeromédico realizado no período.
+                                </p>
+                            </div>
+                            <table className="w-full text-[10px] border-collapse border border-slate-300">
+                                <thead>
+                                    <tr className="bg-slate-100 text-slate-800 font-black border-b border-slate-300">
+                                        <th className="p-2 border border-slate-300 text-left">GRUPO</th>
+                                        <th className="p-2 border border-slate-300 text-left">TIPO DE EVENTO</th>
+                                        {desfechosColunas.map(d => (
+                                            <th key={d} className="p-1 border border-slate-300 text-center max-w-[70px] leading-tight text-[9px]">{d}</th>
+                                        ))}
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {gruposCatalogo.map(g => {
+                                        return g.subtipos.map((st, idx) => {
+                                            const countsDesfecho = desfechosColunas.map(col => {
+                                                return voosAno.filter(v => (v.subtipo || '').toUpperCase() === st && (v.desfecho || '').toUpperCase() === col).length;
+                                            });
+                                            const totalLinha = countsDesfecho.reduce((a, b) => a + b, 0);
+
+                                            return (
+                                                <tr key={st} className="hover:bg-slate-50 border-b border-slate-200 font-medium">
+                                                    {idx === 0 && (
+                                                        <td rowSpan={g.subtipos.length} className="p-2 border border-slate-300 font-black bg-slate-50 text-slate-900 align-top">
+                                                            {g.grupo}
+                                                        </td>
+                                                    )}
+                                                    <td className="p-2 border border-slate-300 text-slate-800">{st}</td>
+                                                    {countsDesfecho.map((c, cIdx) => (
+                                                        <td key={cIdx} className={`p-1 border border-slate-300 text-center ${c > 0 ? 'font-bold text-rose-600 bg-rose-50/50' : 'text-slate-400'}`}>
+                                                            {c}
+                                                        </td>
+                                                    ))}
+                                                    <td className="p-2 border border-slate-300 text-center font-black bg-slate-50 text-slate-900">{totalLinha}</td>
+                                                </tr>
+                                            );
+                                        });
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* 5. TABELA: ESTATÍSTICA DE AFOGAMENTOS */}
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm overflow-x-auto">
+                            <div className="mb-3">
+                                <h4 className="text-sm font-black text-slate-900">5. Estatística de Afogamentos</h4>
+                                <p className="text-xs text-slate-400 font-semibold">
+                                    Afogamentos por grau (1 a 6), mês a mês no ano {selectedAno}.
+                                </p>
+                            </div>
+                            <table className="w-full text-[11px] border-collapse border border-slate-300">
+                                <thead>
+                                    <tr className="bg-slate-100 text-slate-800 font-black border-b border-slate-300">
+                                        <th className="p-2 border border-slate-300 text-left">GRAU</th>
+                                        {meses.map(m => (
+                                            <th key={m} className="p-1.5 border border-slate-300 text-center w-8">{m}</th>
+                                        ))}
+                                        <th className="p-2 border border-slate-300 text-center bg-slate-200 font-black">TOTAL ANUAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {[1, 2, 3, 4, 5, 6].map(grau => {
+                                        const grauName = `AFOGAMENTO GRAU ${grau}`;
+                                        const countsMes = meses.map((_, mIdx) => {
+                                            return voosAno.filter(v => {
+                                                const m = new Date(v.data + 'T12:00:00').getMonth();
+                                                return m === mIdx && (v.subtipo || '').toUpperCase() === grauName;
+                                            }).length;
+                                        });
+                                        const totAnual = countsMes.reduce((a, b) => a + b, 0);
+
+                                        return (
+                                            <tr key={grau} className="hover:bg-slate-50 border-b border-slate-200 font-medium">
+                                                <td className="p-2 border border-slate-300 font-black text-slate-900 bg-slate-50">{grauName}</td>
+                                                {countsMes.map((c, mIdx) => (
+                                                    <td key={mIdx} className={`p-1.5 border border-slate-300 text-center ${c > 0 ? 'font-bold text-rose-600 bg-rose-50/50' : 'text-slate-400'}`}>
+                                                        {c}
+                                                    </td>
+                                                ))}
+                                                <td className="p-2 border border-slate-300 text-center font-black bg-rose-50 text-rose-900">{totAnual}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             );
         };
-
-        // ====================================================================
-        // COMPONENTES: MODAIS DO SISTEMA
-        // ====================================================================
 
         // 1. Modal de Configurações da Planilha Google (Opção A)
         const ModalSettings = ({ isOpen, onClose, scriptUrl, onSaveScriptUrl }) => {
@@ -7966,7 +8592,7 @@
 
             const [competencia, setCompetencia] = useState('2026-10');
             const [dataPedido, setDataPedido] = useState(new Date().toISOString().split('T')[0]);
-            const [obm, setObm] = useState('DBM 1/GOA - Jacarepaguá');
+            const [obm, setObm] = useState('DBM1/GOA - Lagoa');
             const [celularFuncional, setCelularFuncional] = useState('(21) 98596-3344');
             const [militarSolicitante, setMilitarSolicitante] = useState(
                 operator ? `${operator.grad} ${operator.warName} (RG: ${operator.rg})` : 'Cap BM Méd Petrus (RG: 49917)'
@@ -8038,7 +8664,10 @@
                 setIsExporting(true);
                 try {
                     const printContainer = document.createElement('div');
-                    printContainer.style.width = '780px';
+                    printContainer.style.width = '700px';
+                    printContainer.style.margin = '0 auto';
+                    printContainer.style.padding = '0';
+                    printContainer.style.boxSizing = 'border-box';
                     printContainer.style.margin = '0 auto';
                     printContainer.style.padding = '2px';
                     printContainer.style.background = '#ffffff';
@@ -8097,7 +8726,7 @@
                                         </tr>
                                         <tr>
                                             <td style="border: none; padding: 3px 5px; font-size: 8px; font-weight: bold;">
-                                                OBM: ${obm || 'GOA/Aeromédico (1º SOS, AW e UASA)'}
+                                                OBM: ${obm || 'DBM1/GOA - Lagoa'}
                                             </td>
                                         </tr>
                                     </table>
@@ -8368,7 +8997,7 @@
                     document.body.appendChild(printContainer);
 
                     const opt = {
-                        margin: [4, 4, 4, 4],
+                        margin: [4, 5, 4, 5],
                         filename: `Pedido de Material Mensal - GOA - ${competencia}.pdf`,
                         image: { type: 'jpeg', quality: 0.98 },
                         html2canvas: { 
@@ -8376,7 +9005,8 @@
                             useCORS: true, 
                             letterRendering: true,
                             logging: false,
-                            scrollY: 0
+                            scrollY: 0,
+                            windowWidth: 700
                         },
                         jsPDF: { 
                             unit: 'mm', 
@@ -8820,7 +9450,7 @@
                     <div style="border-bottom: 2px solid #b91c1c; padding-bottom: 8px; margin-bottom: 12px; text-align: center;">
                         <h4 style="margin: 0; font-size: 11px; font-weight: bold;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h4>
                         <h3 style="margin: 2px 0; font-size: 12px; font-weight: 800; color: #b91c1c;">RELATÓRIO OFICIAL DE CONFERÊNCIA DO ALMOXARIFADO MÉDICO</h3>
-                        <h4 style="margin: 2px 0; font-size: 10px; font-weight: bold; color: #334155;">GRUPAMENTO DE OPERAÇÕES AÉREAS • DBM 1 / GOA</h4>
+                        <h4 style="margin: 2px 0; font-size: 10px; font-weight: bold; color: #334155;">GRUPAMENTO DE OPERAÇÕES AÉREAS • DBM1/GOA - Lagoa</h4>
                         <p style="margin: 4px 0 0; font-size: 9.5px; font-weight: bold;">
                             Período: ${new Date(startDate + 'T00:00:00').toLocaleDateString('pt-BR')} até ${new Date(endDate + 'T23:59:59').toLocaleDateString('pt-BR')} · Entradas: ${stats.entradas} · Saídas: ${stats.saidas} · Itens: ${stats.totalItens}
                         </p>
@@ -10276,159 +10906,716 @@
         };
 
         // 6. Modal de Novo Voo
+        // ====================================================================
+        // COMPONENTE: MODAL REGISTRAR VOO AEROMÉDICO (COMPLETO)
+        // ====================================================================
         const ModalNovoVoo = ({ isOpen, onClose, onSave, operator }) => {
-            const [aeronave, setAeronave] = useState('Guardião 01 (Esquilo AS350)');
-            const [numEvento, setNumEvento] = useState('C2026-0814');
-            const [paciente, setPaciente] = useState('');
-            const [diagnostico, setDiagnostico] = useState('');
-            const [local, setLocal] = useState('');
-            const [hospital, setHospital] = useState('HMMC');
-            const [partida, setPartida] = useState('09:00');
-            const [regresso, setRegresso] = useState('10:00');
-            const [minutosVoo, setMinutosVoo] = useState(60);
-
             if (!isOpen) return null;
 
-            const handleSave = (e) => {
+            const [dataVoo, setDataVoo] = useState(new Date().toISOString().split('T')[0]);
+            const [aeronave, setAeronave] = useState('BM02');
+            const [outraAeronave, setOutraAeronave] = useState('');
+            
+            // Tripulação por Trigramas Oficiais
+            const [pilotos, setPilotos] = useState([]);
+            const [medicos, setMedicos] = useState([]);
+            const [enfermeiros, setEnfermeiros] = useState([]);
+            const [tecnicos, setTecnicos] = useState([]);
+            const [pse, setPse] = useState('');
+
+            // Solicitante e Identificação do Evento
+            const [solicitante, setSolicitante] = useState('COAPH');
+            const [outroSolicitante, setOutroSolicitante] = useState('');
+            const [numEvento, setNumEvento] = useState('');
+            const [raphRtih, setRaphRtih] = useState('');
+            const [local, setLocal] = useState('');
+            const [tipoEvento, setTipoEvento] = useState('EVAM');
+            const [subtipoEvento, setSubtipoEvento] = useState('MAL SÚBITO');
+
+            // Dados da Vítima
+            const [comVitima, setComVitima] = useState(true);
+            const [vitimaNome, setVitimaNome] = useState('');
+            const [vitimaIdade, setVitimaIdade] = useState('');
+            const [vitimaCor, setVitimaCor] = useState('Parda');
+            const [vitimaSexo, setVitimaSexo] = useState('Masculino');
+            const [diagnostico, setDiagnostico] = useState('');
+            const [removidaAeronave, setRemovidaAeronave] = useState(true);
+            const [desembarque, setDesembarque] = useState('');
+            const [ase, setAse] = useState('NA');
+            const [hospital, setHospital] = useState('');
+            const [desfecho, setDesfecho] = useState('VÍTIMA REMOVIDA DE AERONAVE');
+            const [observacoes, setObservacoes] = useState('');
+
+            // Tempo de Voo
+            const [partida, setPartida] = useState('08:00');
+            const [regresso, setRegresso] = useState('08:45');
+            const [periodo, setPeriodo] = useState('DIURNO');
+
+            // Cálculo dinâmico do tempo total de voo
+            const totalVooCalc = useMemo(() => {
+                if (!partida || !regresso) return { minutos: 0, formatado: '—' };
+                try {
+                    const [h1, m1] = partida.split(':').map(Number);
+                    const [h2, m2] = regresso.split(':').map(Number);
+                    let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+                    if (diff < 0) diff += 24 * 60; // Voo após meia-noite
+                    const h = Math.floor(diff / 60);
+                    const m = diff % 60;
+                    return {
+                        minutos: diff,
+                        formatado: `${h}:${String(m).padStart(2, '0')} (${diff} min)`
+                    };
+                } catch(e) {
+                    return { minutos: 0, formatado: '—' };
+                }
+            }, [partida, regresso]);
+
+            // Trigramas Oficiais
+            const catalogoPilotos = [
+                'DOS — TEN-CEL ROBERTO MARTINS DOS SANTOS', 'TIT — TEN-CEL LIUCAS TITONELLI NUNES',
+                'DVS — TEN-CEL DAVIS FERREIRA DE LIMA', 'ROD — MAJ GLAUBER PEREIRA RODRIGUES',
+                'VIM — MAJ JULIO GONCALVES VIMERCATI FERREIRA PINTO', 'GAM — MAJ ALESSANDRA ALVES DA GAMA GOMES DE ARAUJO',
+                'FER — MAJ Ferrão', 'THO — MAJ THOMAS GOMES DUTRA', 'BUX — MAJ RODRIGO FAILLACE BUXBAUM',
+                'BAR — MAJ RODRIGO DA SILVA BARBOSA', 'LIB — MAJ IGOR LIBÓRIO DE AZEVEDO', 'CAL — MAJ Carelli',
+                'LSI — CAP LEANDRO DA SILVA REGO', 'TAM — CAP TAMIRIS VELLOZO GAMA CANDEZ',
+                'CGO — CAP DIEGO MARTINS DA CUNHA GOMES', 'PTR — CAP PETRUS VELLOZO FRANCISCO',
+                'RAI — CAP RAINER DE OLIVEIRA ALVES', 'MOT — CEL SERGIO FELIPE MONTEIRO',
+                'VER — CEL MARIO LUIZ PEREIRA VERDINI', 'DEG — TEN-CEL ALEXANDER DELGADO DE OLIVEIRA',
+                'DMA — MAJ DIEGO FERNANDEZ DE MACEDO', 'TAV — MAJ ALAN DA COSTA TAVARES',
+                'HCA — MAJ HUGO CAMPOS DIAS', 'RAU — MAJ RODOLFO AUGUSTO FRANÇA CAMPOS',
+                'NAS — CAP RODRIGO LUIZ DO NASCIMENTO PEREIRA', 'THA — CAP Thalles Filipe'
+            ];
+
+            const catalogoMedicos = [
+                'CAV — TEN-CEL JULIANA OLIVA CARAVELOS BARRA DO PACO', 'BAS — TEN-CEL RAPHAEL DE FIGUEIREDO BASTOS',
+                'LMO — TEN-CEL LEONARDO DE MOURA FERREIRA', 'FGA — TEN-CEL FRANCISCO GONCALVES GABRIEL',
+                'JRA — MAJ Juliana Rangel', 'DUQ — MAJ RODRIGO DUQUE ESTRADA ANTELO',
+                'REG — MAJ RODRIGO GASPAR GOMES DO REGO BARROS', 'LEU — CAP LUIZ EUGENIO TEIXEIRA FERNANDES'
+            ];
+
+            const catalogoEnfermeiros = [
+                'AOL — MAJ ROGES ALVIM DE OLIVEIRA', 'BEN — MAJ JOSE BENTO DE ASSIS JUNIOR',
+                'SAT — CAP WELINGTON LOURENCO SANTANA', 'DAM — CAP DANIELLE DOS SANTOS A MORIM',
+                'FRA — CAP FERNANDA GARCIA RAMOS', 'LYR — CAP RODRIGO PIMENTEL LYRA'
+            ];
+
+            const catalogoTecnicos = [
+                'NON — SUBTEN RAIMUNDO NONATO ALBINO DE LIMA', 'TOS — SUBTEN MARCOS LUIS TOSCANO DA CRUZ',
+                'RSO — SUBTEN RODRIGO DE SOUZA MOTHE', 'HER — SUBTEN CARLOS EDUARDO HERDY',
+                'VEI — SUBTEN AMILTON JOSE VERISSIMO JALOTO', 'RBO — SUBTEN ROBERTO BOM',
+                'MAT — SUBTEN ALEXANDRE GOMES MATIAS', 'ADR — SUBTEN ADRIANO ROBERTO FIGUEIREDO COSTA',
+                'EBA — SUBTEN EMANOEL BARBOSA DA SILVA', 'DIA — SUBTEN ARICRESTO DIAS DA SILVA',
+                'SOU — SUBTEN FABIO SOUZA SILVA', 'ROA — SUBTEN RONAN GONÇALVES LIMA',
+                'FIL — SUBTEN CARLOS FILEMON DE SOUZA PINTO', 'DAV — SUBTEN DAVID FONTES LOPES',
+                'ROG — SUBTEN ROGERIO DE OLIVEIRA ROCHA', 'MEX — SUBTEN MARIO ALEX DOS SANTOS DE JESUS',
+                'ARC — SUBTEN MIGUEL ARCHANJO AMBROSIO', 'ISM — SUBTEN ANTONIO DE SOUZA ISMAEL',
+                'LUZ — SUBTEN LUIZ CARLOS PEREIRA LIMA', 'LEM — SUBTEN LUIS LEMOS RAMOS',
+                'MAG — SUBTEN CARLOS MAGNO OLIVEIRA DE SOUZA', 'GOM — SUBTEN RENATO MACHADO GOMES',
+                'NAN — SUBTEN ADEMILTON NANTES', 'RGO — SUBTEN RODRIGO GONCALO DE OLIVEIRA',
+                'JOE — SUBTEN JOEMIO FARIA RODRIGUES JUNIOR', 'ROB — SUBTEN ROBINSON DOS SANTOS OLIVEIRA',
+                'ROQ — SUBTEN RAMON ROQUE GONCALVES DOS SANTOS', 'FRN — 1º SGT FERNANDO DE SOUZA COSTA',
+                'MAI — 2º SGT RODRIGO CRISTIANO SOARES MAIA', 'FAB — 2º SGT FABIO MELLO MADUREIRA',
+                'CAM — 2º SGT MOISES CAMARGO DA COSTA', 'PLM — 2º SGT Paloma Tavares',
+                'ALO — 2º SGT ALINE LOPES DA SILVA NOGUEIRA', 'DAC — 2º SGT DACIEL PEREIRA DA SILVA',
+                'FES — 2º SGT FERNANDES APOSTOLO DE OLIVEIRA JUNIOR', 'MAR — 2º SGT ALAN FERREIRA MARCONI',
+                'PER — 2º SGT PERICLES GOMES DE ALMEIDA PEREIRA', 'RAM — 2º SGT DIEGO RAMOS COSTA',
+                'WAN — 2º SGT WALLACE WANDER MOREIRA DUARTE', 'SER — 2º SGT GUIDO ARAÚJO PORTO SERAFINI',
+                'SIL — 2º SGT RAFAEL SILVEIRA DE OLIVEIRA', 'RMO — 2º SGT RUI TEODORO MOTA FERNANDES',
+                'GLO — 3º SGT GABRIEL VINICIUS LOBATO RIBEIRO'
+            ];
+
+            const subtiposList = [
+                'MAL SÚBITO', 'PCR', 'AFOGAMENTO GRAU 1', 'AFOGAMENTO GRAU 2', 'AFOGAMENTO GRAU 3',
+                'AFOGAMENTO GRAU 4', 'AFOGAMENTO GRAU 5', 'AFOGAMENTO GRAU 6', 'AGRESSÃO', 'ATROPELAMENTO',
+                'CAPOTAMENTO', 'COLISÃO', 'QUEDA DE ALTURA', 'QUEDA DE BICICLETA', 'QUEDA DE MOTO',
+                'QUEIMADURA', 'SUICÍDIO/TENTATIVA', 'TRANSTORNO PSIQUIÁTRICO', 'TRABALHO DE PARTO',
+                'TIH ADULTO', 'TIH PEDIÁTRICO', 'TIH NEONATAL', 'TRANSPORTE DE ÓRGÃOS VITAIS',
+                'OUTROS (descrever em Observações)'
+            ];
+
+            const desfechosList = [
+                'VÍTIMA REMOVIDA DE AERONAVE', 'ÓBITO NO LOCAL', 'VÍTIMA ATENDIDA E LIBERADA',
+                'VÍTIMA REMOVIDA POR AMBULÂNCIA', 'VÍTIMA RECUSOU REMOÇÃO', 'SOCORRO CANCELADO',
+                'VÍTIMA JÁ REMOVIDA', 'VÍTIMA NÃO ENCONTRADA', 'SEM VÍTIMA'
+            ];
+
+            const toggleTrigrama = (list, setList, val) => {
+                const trig = val.split(' — ')[0].trim();
+                setList(prev => prev.includes(trig) ? prev.filter(t => t !== trig) : [...prev, trig]);
+            };
+
+            const handleSubmit = (e) => {
                 e.preventDefault();
-                const newVoo = {
+                if (!numEvento.trim()) {
+                    alert("Informe o Número do Evento!");
+                    return;
+                }
+
+                const aeroFinal = aeronave === 'Outra' ? (outraAeronave || 'Outra') : aeronave;
+                const solFinal = solicitante === 'Outro' ? (outroSolicitante || 'Outro') : solicitante;
+
+                const vooRec = {
                     id: `VOO-${Date.now()}`,
-                    data: new Date().toISOString().split('T')[0],
-                    aeronave,
-                    numEvento,
-                    paciente: paciente || 'Paciente Socorrido',
-                    diagnostico: diagnostico || 'Resgate Aeromédico',
-                    local: local || 'Cena da Ocorrência',
-                    hospital: hospital || 'Hospital de Referência',
-                    pilotos: 'Equipe GOA',
-                    medicos: `${operator.grad} ${operator.warName}`,
-                    enfermeiros: 'Equipe UASA',
+                    data: dataVoo,
+                    aeronave: aeroFinal,
+                    pilotos,
+                    medicos,
+                    enfermeiros,
+                    tecnicos,
+                    pse: pse.trim(),
+                    solicitante: solFinal,
+                    numEvento: numEvento.trim().toUpperCase(),
+                    raph: raphRtih.trim().toUpperCase(),
+                    local: local.trim(),
+                    tipo: tipoEvento,
+                    subtipo: subtipoEvento,
+                    comVitima,
+                    paciente: comVitima ? (vitimaNome.trim().toUpperCase() || 'NFPA') : 'SEM VÍTIMA',
+                    vitimaIdade: comVitima ? (vitimaIdade.trim() || 'NFPA') : '',
+                    vitimaCor: comVitima ? vitimaCor : '',
+                    vitimaSexo: comVitima ? vitimaSexo : '',
+                    diagnostico: comVitima ? (diagnostico.trim() || 'Não Informado') : '---',
+                    removida: comVitima ? removidaAeronave : false,
+                    desembarque: desembarque.trim() || 'NA',
+                    ase: ase.trim() || 'NA',
+                    hospital: hospital.trim() || 'NA',
+                    desfecho,
+                    observacoes: observacoes.trim(),
                     partida,
                     regresso,
-                    minutosVoo: Number(minutosVoo) || 45
+                    periodo,
+                    minutosVoo: totalVooCalc.minutos,
+                    horasVooFormatada: totalVooCalc.formatado,
+                    operador: operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico'
                 };
-                onSave(newVoo);
+
+                onSave(vooRec);
                 onClose();
             };
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
-                            <h3 className="text-sm font-black text-slate-900">Registrar Missão Aérea</h3>
-                            <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
-                                <Icon name="x" className="w-5 h-5" />
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl">
+                        {/* Header do Modal */}
+                        <div className="flex items-center justify-between p-4 sm:p-5 border-b-2 border-slate-200 bg-sand-50/50 rounded-t-2xl">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-sky-100 border border-sky-300 text-sky-700 flex items-center justify-center font-black">
+                                    <Icon name="voos" className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-slate-900">➕ Registrar voo aeromédico</h3>
+                                    <p className="text-xs text-slate-400 font-semibold">DBM1/GOA - Lagoa • Missões e Horas de Voo</p>
+                                </div>
+                            </div>
+                            <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-800 p-1 text-2xl font-bold">
+                                &times;
                             </button>
                         </div>
 
-                        <form onSubmit={handleSave} className="space-y-3 my-4 text-xs">
-                            <div className="grid grid-cols-2 gap-2">
+                        {/* Corpo com Scroll do Formulário */}
+                        <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto text-xs">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Aeronave:</label>
+                                    <label className="block font-black text-slate-800 mb-1">Data *</label>
+                                    <input
+                                        type="date"
+                                        value={dataVoo}
+                                        onChange={(e) => setDataVoo(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block font-black text-slate-800 mb-1">Aeronave *</label>
                                     <select
                                         value={aeronave}
                                         onChange={(e) => setAeronave(e.target.value)}
-                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-3 py-2 text-xs font-extrabold text-slate-900 focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
                                     >
-                                        <option value="Guardião 01 (Esquilo AS350)">Guardião 01</option>
-                                        <option value="Guardião 02 (EC130 B4)">Guardião 02</option>
-                                        <option value="Guardião 03 (AW119 Koala)">Guardião 03</option>
-                                        <option value="Guardião 05 (AW169)">Guardião 05</option>
+                                        <option value="">— selecione —</option>
+                                        <option value="BM02">BM02</option>
+                                        <option value="BM04">BM04</option>
+                                        <option value="BM05">BM05</option>
+                                        <option value="BM06">BM06</option>
+                                        <option value="BM07">BM07</option>
+                                        <option value="SAÚDE01">SAÚDE01</option>
+                                        <option value="SAÚDE02">SAÚDE02</option>
+                                        <option value="Outra">Outra (inserir identificação no campo "Considerações Finais")</option>
                                     </select>
+                                    {aeronave === 'Outra' && (
+                                        <input
+                                            type="text"
+                                            placeholder="Identificação da aeronave..."
+                                            value={outraAeronave}
+                                            onChange={(e) => setOutraAeronave(e.target.value)}
+                                            className="w-full mt-2 bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-900 font-bold"
+                                        />
+                                    )}
                                 </div>
+                            </div>
+
+                            {/* SEÇÃO TRIPULAÇÃO COM SELEÇÃO DE TRIGRAMAS */}
+                            <div className="bg-sand-50/70 border-2 border-slate-200 rounded-2xl p-4 space-y-3">
                                 <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Nº Evento:</label>
+                                    <h4 className="font-black text-slate-900 text-xs flex items-center gap-1.5">
+                                        <span>👥 Tripulação *</span>
+                                    </h4>
+                                    <p className="text-[11px] text-slate-500 italic mt-0.5">
+                                        Somente os trigramas dos membros da tripulação (Piloto, Copiloto [se houver], Médico, Enfermeiro, Técnico em Enfermagem/Operador Aerotático). Havendo PSE, inserir nome e função.
+                                    </p>
+                                </div>
+
+                                {/* Pilotos */}
+                                <div>
+                                    <label className="block font-black text-slate-800 text-[11px] mb-1">
+                                        Pilotos: <strong className="text-rose-600">{pilotos.join(', ') || 'nenhum selecionado'}</strong>
+                                    </label>
+                                    <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1.5 bg-white border border-slate-300 rounded-xl">
+                                        {catalogoPilotos.map(p => {
+                                            const trig = p.split(' — ')[0].trim();
+                                            const active = pilotos.includes(trig);
+                                            return (
+                                                <button
+                                                    key={trig}
+                                                    type="button"
+                                                    onClick={() => toggleTrigrama(pilotos, setPilotos, p)}
+                                                    className={`px-2 py-0.5 rounded-lg text-[10px] font-black border transition-all ${
+                                                        active ? 'bg-rose-600 text-white border-rose-600' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                                                    }`}
+                                                    title={p}
+                                                >
+                                                    {trig}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Médicos */}
+                                <div>
+                                    <label className="block font-black text-slate-800 text-[11px] mb-1">
+                                        Médicos: <strong className="text-emerald-600">{medicos.join(', ') || 'nenhum selecionado'}</strong>
+                                    </label>
+                                    <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto p-1.5 bg-white border border-slate-300 rounded-xl">
+                                        {catalogoMedicos.map(m => {
+                                            const trig = m.split(' — ')[0].trim();
+                                            const active = medicos.includes(trig);
+                                            return (
+                                                <button
+                                                    key={trig}
+                                                    type="button"
+                                                    onClick={() => toggleTrigrama(medicos, setMedicos, m)}
+                                                    className={`px-2 py-0.5 rounded-lg text-[10px] font-black border transition-all ${
+                                                        active ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                                                    }`}
+                                                    title={m}
+                                                >
+                                                    {trig}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Enfermeiros */}
+                                <div>
+                                    <label className="block font-black text-slate-800 text-[11px] mb-1">
+                                        Enfermeiros: <strong className="text-sky-600">{enfermeiros.join(', ') || 'nenhum selecionado'}</strong>
+                                    </label>
+                                    <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto p-1.5 bg-white border border-slate-300 rounded-xl">
+                                        {catalogoEnfermeiros.map(e => {
+                                            const trig = e.split(' — ')[0].trim();
+                                            const active = enfermeiros.includes(trig);
+                                            return (
+                                                <button
+                                                    key={trig}
+                                                    type="button"
+                                                    onClick={() => toggleTrigrama(enfermeiros, setEnfermeiros, e)}
+                                                    className={`px-2 py-0.5 rounded-lg text-[10px] font-black border transition-all ${
+                                                        active ? 'bg-sky-600 text-white border-sky-600' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                                                    }`}
+                                                    title={e}
+                                                >
+                                                    {trig}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Técnicos / OAT */}
+                                <div>
+                                    <label className="block font-black text-slate-800 text-[11px] mb-1">
+                                        Técnicos / OAT: <strong className="text-purple-600">{tecnicos.join(', ') || 'nenhum selecionado'}</strong>
+                                    </label>
+                                    <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1.5 bg-white border border-slate-300 rounded-xl">
+                                        {catalogoTecnicos.map(t => {
+                                            const trig = t.split(' — ')[0].trim();
+                                            const active = tecnicos.includes(trig);
+                                            return (
+                                                <button
+                                                    key={trig}
+                                                    type="button"
+                                                    onClick={() => toggleTrigrama(tecnicos, setTecnicos, t)}
+                                                    className={`px-2 py-0.5 rounded-lg text-[10px] font-black border transition-all ${
+                                                        active ? 'bg-purple-600 text-white border-purple-600' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                                                    }`}
+                                                    title={t}
+                                                >
+                                                    {trig}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* PSE */}
+                                <div>
+                                    <label className="block font-black text-slate-800 text-[11px] mb-1">PSE (Nome e Função se houver):</label>
                                     <input
                                         type="text"
+                                        placeholder="Ex: Dr. Silva (Médico Regulador convidado)..."
+                                        value={pse}
+                                        onChange={(e) => setPse(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-900 font-bold"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* SOLICITANTE E IDENTIFICAÇÃO DO EVENTO */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label className="block font-black text-slate-800 mb-1">Solicitante *</label>
+                                    <select
+                                        value={solicitante}
+                                        onChange={(e) => setSolicitante(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
+                                    >
+                                        <option value="">— selecione —</option>
+                                        <option value="COAPH">COAPH</option>
+                                        <option value="SOAER">SOAER</option>
+                                        <option value="GV (Praia)">GV (Praia)</option>
+                                        <option value="Outro">Outro…</option>
+                                    </select>
+                                    {solicitante === 'Outro' && (
+                                        <input
+                                            type="text"
+                                            placeholder="Descreva solicitante..."
+                                            value={outroSolicitante}
+                                            onChange={(e) => setOutroSolicitante(e.target.value)}
+                                            className="w-full mt-2 bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-900 font-bold"
+                                        />
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block font-black text-slate-800 mb-1">Nº de Evento *</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ex.: C20260113639"
                                         value={numEvento}
                                         onChange={(e) => setNumEvento(e.target.value)}
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold font-mono text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block font-black text-slate-800 mb-1">Nº RAPH/RTIH *</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ex: 4921 / RTIH-08"
+                                        value={raphRtih}
+                                        onChange={(e) => setRaphRtih(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
                                     />
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block font-bold text-slate-800 mb-1">Paciente / Diagnóstico:</label>
-                                <input
-                                    type="text"
-                                    value={paciente}
-                                    onChange={(e) => setPaciente(e.target.value)}
-                                    placeholder="Nome do paciente"
-                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500 mb-2"
-                                />
-                                <input
-                                    type="text"
-                                    value={diagnostico}
-                                    onChange={(e) => setDiagnostico(e.target.value)}
-                                    placeholder="Diagnóstico / Natureza"
-                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Origem / Local:</label>
+                                    <label className="block font-black text-slate-800 mb-1">Local *</label>
                                     <input
                                         type="text"
+                                        placeholder="Em TIH, 'origem x destino'..."
                                         value={local}
                                         onChange={(e) => setLocal(e.target.value)}
-                                        placeholder="Ex: Rodovia Rio-Santos"
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
                                     />
                                 </div>
+
                                 <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Hospital de Destino:</label>
-                                    <input
-                                        type="text"
-                                        value={hospital}
-                                        onChange={(e) => setHospital(e.target.value)}
-                                        placeholder="Ex: HMMC / Alberto Torres"
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
-                                    />
+                                    <label className="block font-black text-slate-800 mb-1">Tipo de Evento *</label>
+                                    <select
+                                        value={tipoEvento}
+                                        onChange={(e) => setTipoEvento(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
+                                    >
+                                        <option value="">— selecione —</option>
+                                        <option value="EVAM">EVAM</option>
+                                        <option value="TIH">TIH</option>
+                                        <option value="TROV">TROV</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block font-black text-slate-800 mb-1">Subtipo de Evento *</label>
+                                    <select
+                                        value={subtipoEvento}
+                                        onChange={(e) => setSubtipoEvento(e.target.value)}
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-rose-600"
+                                        required
+                                    >
+                                        <option value="">— selecione —</option>
+                                        {subtiposList.map(st => (
+                                            <option key={st} value={st}>{st}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-2">
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Decolagem:</label>
-                                    <input
-                                        type="time"
-                                        value={partida}
-                                        onChange={(e) => setPartida(e.target.value)}
-                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono text-white focus:outline-none"
-                                    />
+                            {/* SEÇÃO DA VÍTIMA */}
+                            <div className="bg-sand-50/70 border-2 border-slate-200 rounded-2xl p-4 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <label className="font-black text-slate-900 text-xs">Evento com vítima? *</label>
+                                    <div className="flex items-center gap-3">
+                                        <label className="flex items-center gap-1.5 cursor-pointer font-bold text-xs text-slate-800">
+                                            <input
+                                                type="radio"
+                                                name="comVitima"
+                                                checked={comVitima === true}
+                                                onChange={() => setComVitima(true)}
+                                            />
+                                            Sim
+                                        </label>
+                                        <label className="flex items-center gap-1.5 cursor-pointer font-bold text-xs text-slate-800">
+                                            <input
+                                                type="radio"
+                                                name="comVitima"
+                                                checked={comVitima === false}
+                                                onChange={() => setComVitima(false)}
+                                            />
+                                            Não
+                                        </label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Corte Motor:</label>
-                                    <input
-                                        type="time"
-                                        value={regresso}
-                                        onChange={(e) => setRegresso(e.target.value)}
-                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono text-white focus:outline-none"
-                                    />
+
+                                {comVitima && (
+                                    <div className="space-y-3 pt-2 border-t border-slate-200">
+                                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                            <div className="sm:col-span-2">
+                                                <label className="block font-black text-slate-800 mb-1">Nome * (Iniciais ou NFPA)</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Iniciais da vítima ou NFPA"
+                                                    value={vitimaNome}
+                                                    onChange={(e) => setVitimaNome(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">Idade * (ou NFPA)</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Idade ou NFPA"
+                                                    value={vitimaIdade}
+                                                    onChange={(e) => setVitimaIdade(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">Cor *</label>
+                                                <select
+                                                    value={vitimaCor}
+                                                    onChange={(e) => setVitimaCor(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                >
+                                                    <option value="Branca">Branca</option>
+                                                    <option value="Parda">Parda</option>
+                                                    <option value="Preta">Preta</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">Sexo *</label>
+                                                <select
+                                                    value={vitimaSexo}
+                                                    onChange={(e) => setVitimaSexo(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                >
+                                                    <option value="Masculino">Masculino</option>
+                                                    <option value="Feminino">Feminino</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="block font-black text-slate-800 mb-1">Diagnóstico *</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Hipótese diagnóstica / Lesões..."
+                                                    value={diagnostico}
+                                                    onChange={(e) => setDiagnostico(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">Vítima removida? *</label>
+                                                <select
+                                                    value={removidaAeronave ? 'Sim' : 'Não'}
+                                                    onChange={(e) => setRemovidaAeronave(e.target.value === 'Sim')}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                >
+                                                    <option value="Sim">Sim</option>
+                                                    <option value="Não">Não</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">Desembarque *</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Hospital ou local ASE..."
+                                                    value={desembarque}
+                                                    onChange={(e) => setDesembarque(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">ASE *</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="ASE empenhada ou NA"
+                                                    value={ase}
+                                                    onChange={(e) => setAse(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block font-black text-slate-800 mb-1">Hospital *</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Hospital de destino..."
+                                                    value={hospital}
+                                                    onChange={(e) => setHospital(e.target.value)}
+                                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block font-black text-slate-800 mb-1">Desfecho do Evento *</label>
+                                            <select
+                                                value={desfecho}
+                                                onChange={(e) => setDesfecho(e.target.value)}
+                                                className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900"
+                                                required
+                                            >
+                                                {desfechosList.map(df => (
+                                                    <option key={df} value={df}>{df}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* OBSERVAÇÕES */}
+                            <div>
+                                <label className="block font-black text-slate-800 mb-1">Observações</label>
+                                <textarea
+                                    rows="2"
+                                    placeholder="Observações que não couberam nos campos anteriores..."
+                                    value={observacoes}
+                                    onChange={(e) => setObservacoes(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-rose-600"
+                                />
+                            </div>
+
+                            {/* TEMPO DE VOO */}
+                            <div className="bg-sand-50/70 border-2 border-slate-200 rounded-2xl p-4 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="font-black text-slate-900 text-xs flex items-center gap-1.5">
+                                        <span>⏱️ Tempo de voo — opcional</span>
+                                    </h4>
+                                    <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
+                                        Total: {totalVooCalc.formatado}
+                                    </span>
                                 </div>
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Minutos Voo:</label>
-                                    <input
-                                        type="number"
-                                        value={minutosVoo}
-                                        onChange={(e) => setMinutosVoo(e.target.value)}
-                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono font-bold text-emerald-400 focus:outline-none"
-                                    />
+                                <p className="text-[11px] text-slate-500 italic">
+                                    Não existia no formulário — na planilha era preenchido à mão depois. É daqui que sai a aba "Horas por evento".
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                                    <div>
+                                        <label className="block font-bold text-slate-800 mb-1">Partida (HH:MM):</label>
+                                        <input
+                                            type="time"
+                                            value={partida}
+                                            onChange={(e) => setPartida(e.target.value)}
+                                            className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold font-mono text-slate-900"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block font-bold text-slate-800 mb-1">Regresso (HH:MM):</label>
+                                        <input
+                                            type="time"
+                                            value={regresso}
+                                            onChange={(e) => setRegresso(e.target.value)}
+                                            className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold font-mono text-slate-900"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block font-bold text-slate-800 mb-1">Período:</label>
+                                        <div className="flex items-center gap-3 pt-1">
+                                            <label className="flex items-center gap-1 cursor-pointer font-bold text-xs text-slate-800">
+                                                <input
+                                                    type="radio"
+                                                    name="periodo"
+                                                    checked={periodo === 'DIURNO'}
+                                                    onChange={() => setPeriodo('DIURNO')}
+                                                />
+                                                DIURNO
+                                            </label>
+                                            <label className="flex items-center gap-1 cursor-pointer font-bold text-xs text-slate-800">
+                                                <input
+                                                    type="radio"
+                                                    name="periodo"
+                                                    checked={periodo === 'NOTURNO'}
+                                                    onChange={() => setPeriodo('NOTURNO')}
+                                                />
+                                                NOTURNO
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2 pt-3 border-t border-slate-800">
+                            {/* Botões de Ação */}
+                            <div className="flex items-center gap-3 pt-3 border-t-2 border-slate-200">
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition-colors"
+                                    className="flex-1 py-2.5 rounded-xl bg-white border-2 border-slate-300 hover:bg-slate-100 text-slate-800 text-xs font-black transition-all"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold shadow-lg shadow-sky-900/30 transition-colors"
+                                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white text-xs font-black shadow-lg shadow-sky-900/30 transition-all"
                                 >
                                     Registrar Voo
                                 </button>
@@ -10439,172 +11626,6 @@
             );
         };
 
-        // 7. Modal de Nova Passagem de Serviço
-        const ModalNovaPassagem = ({ isOpen, onClose, onSave, operator }) => {
-            const [turno, setTurno] = useState('Plantão Alfa');
-            const [aeronave, setAeronave] = useState('Guardião 01 (Esquilo AS350)');
-            const [equipeTransmite, setEquipeTransmite] = useState(`${operator.grad} ${operator.warName}`);
-            const [rgTransmite, setRgTransmite] = useState(operator.rg);
-            const [equipeAssume, setEquipeAssume] = useState('');
-            const [rgAssume, setRgAssume] = useState('');
-            const [base, setBase] = useState('Base GOA Jacarepaguá - Prontidão 100%');
-            const [eletronicos, setEletronicos] = useState('Monitores Corpuls 3 e Ventiladores testados, carga 100%. Cilindros com > 180 bar.');
-            const [psicotropicos, setPsicotropicos] = useState('Conferidas ampolas de Fentanil, Morfina e Midazolam.');
-            const [ocorrencias, setOcorrencias] = useState('Nenhuma intercorrência grave no plantão.');
-            const [pendencias, setPendencias] = useState('Nenhuma');
-
-            if (!isOpen) return null;
-
-            const handleSave = (e) => {
-                e.preventDefault();
-                if (!equipeAssume.trim()) return;
-
-                const newPas = {
-                    id: `PAS-${Date.now()}`,
-                    data: new Date().toISOString().split('T')[0],
-                    dataHora: new Date().toISOString(),
-                    turno,
-                    aeronave,
-                    equipeTransmite,
-                    rgTransmite,
-                    equipeAssume: equipeAssume.trim(),
-                    rgAssume: rgAssume.trim() || '---',
-                    base,
-                    eletronicos,
-                    psicotropicos,
-                    ocorrencias,
-                    pendencias
-                };
-
-                onSave(newPas);
-                onClose();
-            };
-
-            return (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
-                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
-                            <h3 className="text-sm font-black text-slate-900">Nova Passagem de Serviço (6 Blocos)</h3>
-                            <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
-                                <Icon name="x" className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSave} className="space-y-3 my-4 text-xs">
-                            <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Turno de Plantão:</label>
-                                    <select
-                                        value={turno}
-                                        onChange={(e) => setTurno(e.target.value)}
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
-                                    >
-                                        <option value="Plantão Alfa">Plantão Alfa</option>
-                                        <option value="Plantão Bravo">Plantão Bravo</option>
-                                        <option value="Plantão Charlie">Plantão Charlie</option>
-                                        <option value="Plantão Delta">Plantão Delta</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Aeronave Principal:</label>
-                                    <input
-                                        type="text"
-                                        value={aeronave}
-                                        onChange={(e) => setAeronave(e.target.value)}
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Equipe Transmite (Saiente):</label>
-                                    <input
-                                        type="text"
-                                        value={equipeTransmite}
-                                        onChange={(e) => setEquipeTransmite(e.target.value)}
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block font-bold text-slate-800 mb-1">Equipe Assume (Entrante):</label>
-                                    <input
-                                        type="text"
-                                        value={equipeAssume}
-                                        onChange={(e) => setEquipeAssume(e.target.value)}
-                                        placeholder="Ex: Maj Rodolfo"
-                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block font-bold text-slate-800 mb-1">Eletrônicos & Oxigenoterapia:</label>
-                                <input
-                                    type="text"
-                                    value={eletronicos}
-                                    onChange={(e) => setEletronicos(e.target.value)}
-                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block font-bold text-slate-800 mb-1">Psicotrópicos:</label>
-                                <input
-                                    type="text"
-                                    value={psicotropicos}
-                                    onChange={(e) => setPsicotropicos(e.target.value)}
-                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block font-bold text-slate-800 mb-1">Ocorrências Realizadas:</label>
-                                <textarea
-                                    rows="2"
-                                    value={ocorrencias}
-                                    onChange={(e) => setOcorrencias(e.target.value)}
-                                    className="w-full bg-white border-2 border-slate-300 rounded-xl p-2.5 text-xs text-slate-900 font-semibold focus:border-rose-600"
-                                ></textarea>
-                            </div>
-
-                            <div>
-                                <label className="block font-bold text-slate-800 mb-1">Pendências Técnicas / Suprimentos:</label>
-                                <input
-                                    type="text"
-                                    value={pendencias}
-                                    onChange={(e) => setPendencias(e.target.value)}
-                                    placeholder="Ex: Aguardando 2 equipos fotossensíveis"
-                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
-                                />
-                            </div>
-
-                            <div className="flex items-center gap-2 pt-3 border-t border-slate-800">
-                                <button
-                                    type="button"
-                                    onClick={onClose}
-                                    className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition-colors"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="flex-1 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold shadow-lg shadow-rose-900/30 transition-colors"
-                                >
-                                    Transmitir Plantão
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            );
-        };
-
-        // ====================================================================
-        // COMPONENTE PRINCIPAL: APLICAÇÃO SIG-AEROMÉDICO (APP)
-        // ====================================================================
         const App = () => {
             // 1. Estado de Autenticação Operacional (Estritamente SessionStorage)
             const [operator, setOperator] = useState(() => {
@@ -11266,16 +12287,19 @@
                                 />
                             )}
 
-                            {activeTab === 'passagem' && (
-                                <TabPassagem
-                                    passagensList={passagensList}
-                                    onOpenNovaPassagem={() => setIsNovaPassagemOpen(true)}
+                            {activeTab === 'estatisticas' && (
+                                <TabEstatisticas
+                                    voosList={voosList}
                                     operator={operator}
                                 />
                             )}
 
-                            {activeTab === 'calculadora' && (
-                                <TabCalculadora />
+                            {activeTab === 'passagem' && (
+                                <TabPassagem
+                                    passagensList={passagensList}
+                                    onSavePassagem={handleSavePassagem}
+                                    operator={operator}
+                                />
                             )}
                         </main>
                     </div>
@@ -11398,12 +12422,7 @@
                         operator={operator}
                     />
 
-                    <ModalNovaPassagem
-                        isOpen={isNovaPassagemOpen}
-                        onClose={() => setIsNovaPassagemOpen(false)}
-                        onSave={handleSaveNovaPassagem}
-                        operator={operator}
-                    />
+
 
                     {/* Notificação Toast */}
                     {toast && (

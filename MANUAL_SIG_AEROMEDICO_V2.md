@@ -1,6 +1,6 @@
 # Manual de Implantação e Operação • SIG-Aeromédico v2
-> **1º Destacamento de Bombeiro Militar / Grupamento de Operações Aéreas (DBM1/GOA - CBMERJ)**  
-> **Unidade Avançada de Suporte Aeromédico (UASA) • Aeroporto de Jacarepaguá (SBJR)**
+> **1º Destacamento de Bombeiro Militar / Grupamento de Operações Aéreas (DBM1/GOA - Lagoa)**  
+> **Avenida Borges de Medeiros, 1444 - Lagoa Rodrigo de Freitas, Rio de Janeiro - RJ**
 
 ---
 
