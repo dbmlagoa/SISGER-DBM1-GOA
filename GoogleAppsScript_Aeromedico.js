@@ -81,7 +81,7 @@ function getUsersSheet(ss) {
     var norm = normSheetName(sheets[i].getName());
     if (norm === "am_usuarios" || norm === "usuarios" || norm === "users" || norm.indexOf("usuario") !== -1) return sheets[i];
   }
-  return getOrCreateSheet(ss, "AM_USUARIOS", ["Graduação", "Nome de Guerra", "RG", "Senha", "Função", "Data Cadastro"]);
+  return getOrCreateSheet(ss, "AM_USUARIOS", ["Graduação", "Nome de Guerra", "RG", "Senha", "Função", "Email", "Data Cadastro"]);
 }
 
 function getAlmoxSheet(ss) {
@@ -182,6 +182,8 @@ function doPost(e) {
       return jsonResponse(registerSocorro(data));
     } else if (action === "saveChecklist") {
       return jsonResponse(saveChecklist(data));
+    } else if (action === "sendChecklistEmail") {
+      return jsonResponse(sendChecklistEmail(data));
     } else if (action === "saveVoo") {
       return jsonResponse(saveVoo(data));
     } else if (action === "savePassagem") {
@@ -231,6 +233,21 @@ function getData() {
     passagens = passagemSheet.getRange(2, 1, passagemSheet.getLastRow() - 1, 14).getValues();
   }
 
+  var usersSheet = getUsersSheet(ss);
+  var users = [];
+  if (usersSheet && usersSheet.getLastRow() > 1) {
+    var uRows = usersSheet.getRange(2, 1, usersSheet.getLastRow() - 1, 6).getValues();
+    users = uRows.map(function(r) {
+      return {
+        grad: String(r[0] || "").trim(),
+        warName: String(r[1] || "").trim(),
+        rg: String(r[2] || "").trim(),
+        role: String(r[4] || "").trim(),
+        email: String(r[5] || "").trim()
+      };
+    });
+  }
+
   return {
     success: true,
     almox: almox,
@@ -238,6 +255,7 @@ function getData() {
     checklists: checklists,
     voos: voos,
     passagens: passagens,
+    users: users,
     time: new Date().toISOString()
   };
 }
@@ -252,9 +270,10 @@ function authenticateOperator(data) {
     return { success: false, message: "Nenhum operador cadastrado no sistema. Por favor, crie sua conta." };
   }
 
-  var users = usersSheet.getRange(2, 1, usersSheet.getLastRow() - 1, 5).getValues();
-  var inputRg = String(data.rg || "").trim();
-  var inputPass = String(data.password || "").trim();
+  var users = usersSheet.getRange(2, 1, usersSheet.getLastRow() - 1, 6).getValues();
+  var inputRgRaw = String(data.rg || "").trim();
+  var inputRgDigits = inputRgRaw.replace(/\D/g, "");
+  var inputPass = String(data.password || data.pass || "").trim();
 
   for (var i = 0; i < users.length; i++) {
     var row = users[i];
@@ -263,12 +282,14 @@ function authenticateOperator(data) {
     var rg = String(row[2] || "").trim();
     var pass = String(row[3] || "").trim();
     var role = String(row[4] || "Oficial Aeromédico").trim();
+    var email = String(row[5] || "").trim();
+    var rowRgDigits = rg.replace(/\D/g, "");
 
-    if (rg === inputRg) {
+    if (rg === inputRgRaw || (inputRgDigits && rowRgDigits === inputRgDigits)) {
       if (pass === inputPass) {
         return {
           success: true,
-          user: { grad: grad, name: name, rg: rg, role: role }
+          user: { grad: grad, name: name, rg: rg, role: role, email: email }
         };
       } else {
         return { success: false, message: "Senha incorreta para o RG informado." };
@@ -280,7 +301,7 @@ function authenticateOperator(data) {
 }
 
 /**
- * Registro de Novo Militar no SIG-AEROMÉDICO
+ * Registro / Redefinição de Senha do Militar no SIG-AEROMÉDICO
  */
 function registerOperator(data) {
   var lock = LockService.getScriptLock();
@@ -289,32 +310,67 @@ function registerOperator(data) {
     var ss = getSpreadsheet();
     var usersSheet = getUsersSheet(ss);
 
-    var inputRg = String(data.rg || "").trim();
-    if (!inputRg) {
+    var inputRgRaw = String(data.rg || "").trim();
+    var inputRgDigits = inputRgRaw.replace(/\D/g, "");
+    if (!inputRgRaw) {
       return { success: false, message: "O RG do militar é obrigatório." };
-    }
-
-    if (usersSheet.getLastRow() > 1) {
-      var existingRgs = usersSheet.getRange(2, 3, usersSheet.getLastRow() - 1, 1).getValues();
-      for (var i = 0; i < existingRgs.length; i++) {
-        if (String(existingRgs[i][0]).trim() === inputRg) {
-          return { success: false, message: "Este RG já possui cadastro ativo no SIG-Aeromédico. Faça login diretamente." };
-        }
-      }
     }
 
     var grad = String(data.grad || "").trim().toUpperCase();
     var name = String(data.name || data.warName || "").trim().toUpperCase();
     var pass = String(data.password || data.pass || "").trim();
     var role = String(data.role || "Médico de Voo").trim();
+    var email = String(data.email || "").trim().toLowerCase();
     var dataCad = new Date().toISOString();
 
-    usersSheet.appendRow([grad, name, inputRg, pass, role, dataCad]);
+    if (!pass) {
+      return { success: false, message: "A senha de acesso é obrigatória." };
+    }
+
+    var existingRow = -1;
+    if (usersSheet.getLastRow() > 1) {
+      var existingData = usersSheet.getRange(2, 1, usersSheet.getLastRow() - 1, 6).getValues();
+      for (var i = 0; i < existingData.length; i++) {
+        var rRg = String(existingData[i][2] || "").trim();
+        var rRgDigits = rRg.replace(/\D/g, "");
+        if (rRg === inputRgRaw || (inputRgDigits && rRgDigits === inputRgDigits)) {
+          existingRow = i + 2;
+          break;
+        }
+      }
+    }
+
+    if (existingRow !== -1) {
+      // Atualização de cadastro existente / nova senha
+      var curGrad = usersSheet.getRange(existingRow, 1).getValue();
+      var curName = usersSheet.getRange(existingRow, 2).getValue();
+      var curRole = usersSheet.getRange(existingRow, 5).getValue();
+      var curEmail = usersSheet.getRange(existingRow, 6).getValue();
+
+      usersSheet.getRange(existingRow, 1, 1, 7).setValues([[
+        grad || curGrad,
+        name || curName,
+        inputRgRaw,
+        pass,
+        role || curRole,
+        email || curEmail,
+        dataCad
+      ]]);
+
+      return {
+        success: true,
+        message: "Cadastro e senha atualizados com sucesso no banco de dados!",
+        user: { grad: grad || curGrad, name: name || curName, rg: inputRgRaw, role: role || curRole, email: email || curEmail }
+      };
+    }
+
+    // Novo cadastro
+    usersSheet.appendRow([grad, name, inputRgRaw, pass, role, email, dataCad]);
 
     return {
       success: true,
       message: "Operador aeromédico registrado com sucesso!",
-      user: { grad: grad, name: name, rg: inputRg, role: role }
+      user: { grad: grad, name: name, rg: inputRgRaw, role: role, email: email }
     };
   } catch (err) {
     return { success: false, message: "Erro ao registrar militar: " + err.toString() };
@@ -462,42 +518,194 @@ function registerSocorro(payload) {
 }
 
 /**
- * Grava conferência do Checklist Diário
+ * Grava conferência do Checklist Diário e Interage com Almoxarifado
  */
 function saveChecklist(payload) {
   var lock = LockService.getScriptLock();
   try {
-    lock.waitLock(10000);
+    lock.waitLock(15000);
     var ss = getSpreadsheet();
     var chkSheet = getChecklistSheet(ss);
-    var items = payload.items || [];
-    var op = payload.operator || {};
-    var aero = payload.aeronave || "Esquilo (Bombeiro 01)";
-    var dataConf = payload.data || new Date().toISOString().split("T")[0];
+    
+    var chk = payload.checklist || payload || {};
+    var items = payload.items || chk.items || [];
+    var op = payload.operator || chk.operator || {};
+    var aero = payload.aeronave || chk.aeronave || "Bombeiro 02";
+    var dataConf = payload.data || chk.data || new Date().toISOString().split("T")[0];
+    var obsGerais = payload.observacoes || chk.observacoesGerais || chk.obs || "";
     var nowIso = new Date().toISOString();
 
+    var opNome = op.warName ? (op.grad + " " + op.warName) : (typeof op === "string" ? op : "Oficial Aeromédico");
+    var opRg = op.rg || "---";
+    var opEmail = op.email || "";
+
+    // 1. Grava itens checados na aba AM_CHECKLIST
+    var rowsToAppend = [];
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
-      chkSheet.appendRow([
+      rowsToAppend.push([
         dataConf,
         aero,
         it.aba || "MATERIAIS",
-        it.nome || "",
+        it.nome || it.name || "",
         it.status || "OK",
-        it.tipoNc || "",
+        it.tipoNc || it.ncType || "",
         it.foto || "",
-        it.obs || "",
-        op.warName ? (op.grad + " " + op.warName) : "Oficial Aeromédico",
-        op.rg || "---",
+        it.obs || it.notes || "",
+        opNome,
+        opRg,
         nowIso
       ]);
     }
+    if (rowsToAppend.length > 0) {
+      var startRow = chkSheet.getLastRow() + 1;
+      chkSheet.getRange(startRow, 1, rowsToAppend.length, 11).setValues(rowsToAppend);
+    }
 
-    return { success: true, message: "Checklist do dia salvo com sucesso!" };
+    // 2. Grava linha consolidada na aba AM_CHECKLIST_RESUMO
+    var resumoSheet = getOrCreateSheet(ss, "AM_CHECKLIST_RESUMO", [
+      "ID", "Data", "Aeronave", "Total Conferidos", "Não Conformidades", "Lacre Psicotrópicos", 
+      "Observações Gerais", "Responsável", "RG Responsável", "Email", "DataHora Registro"
+    ]);
+    resumoSheet.appendRow([
+      chk.id || ("CHK-" + Date.now()),
+      dataConf,
+      aero,
+      items.length || chk.totalConferidos || 0,
+      chk.totalNCs !== undefined ? chk.totalNCs : (chk.ncs ? chk.ncs.length : 0),
+      chk.lacrePsicotropicos || chk.sealNumber || "---",
+      obsGerais,
+      opNome,
+      opRg,
+      opEmail,
+      nowIso
+    ]);
+
+    // 3. Interação direta com o banco de dados do Almoxarifado
+    var almoxSheet = getAlmoxSheet(ss);
+    if (almoxSheet && almoxSheet.getLastRow() > 1) {
+      var almoxValues = almoxSheet.getRange(2, 1, almoxSheet.getLastRow() - 1, 13).getValues();
+      
+      // Aponta pendências de itens NC no Almoxarifado
+      var ncs = chk.ncs || payload.ncs || [];
+      for (var n = 0; n < ncs.length; n++) {
+        var ncItem = ncs[n];
+        var ncName = String(ncItem.itemName || ncItem.nome || "").toLowerCase().trim();
+        for (var a = 0; a < almoxValues.length; a++) {
+          var aName = String(almoxValues[a][1] || "").toLowerCase().trim();
+          if (aName && (ncName.indexOf(aName) !== -1 || aName.indexOf(ncName) !== -1)) {
+            var curObs = String(almoxValues[a][12] || "");
+            var alerta = "[NC CHECKLIST " + dataConf + " " + aero + ": " + (ncItem.ncType || "NC") + " - " + (ncItem.notes || "") + " por " + opNome + "]";
+            if (curObs.indexOf(alerta) === -1) {
+              almoxSheet.getRange(a + 2, 13).setValue((curObs + " " + alerta).trim());
+            }
+            break;
+          }
+        }
+      }
+
+      // Processa Psicotrópicos com baixa de reposição no almoxarifado
+      var psico = chk.psicotropicos || payload.psicotropicos || [];
+      for (var p = 0; p < psico.length; p++) {
+        var med = psico[p];
+        var used = Number(med.utilizados) || 0;
+        var rep = Number(med.reposto) || 0;
+        if (used > 0 || rep > 0) {
+          var medName = String(med.name || "").toLowerCase().trim();
+          for (var a2 = 0; a2 < almoxValues.length; a2++) {
+            var rowName = String(almoxValues[a2][1] || "").toLowerCase().trim();
+            if (rowName.indexOf(medName) !== -1) {
+              var curStock = Number(almoxValues[a2][4]) || 0;
+              var newStock = Math.max(0, curStock - rep);
+              almoxSheet.getRange(a2 + 2, 5).setValue(newStock);
+              break;
+            }
+          }
+          if (used > 0) {
+            getSocorrosSheet(ss).appendRow([
+              nowIso,
+              med.name + " (Psicotrópico)",
+              "CONSUMO_AERONAVE",
+              used,
+              "CHECKLIST-" + aero,
+              "---",
+              "Consumo Operacional",
+              opNome,
+              opRg,
+              rep > 0 ? ("SIM (" + rep + " reposto)") : "NÃO",
+              med.obs || obsGerais
+            ]);
+          }
+        }
+      }
+    }
+
+    return { 
+      success: true, 
+      message: "Checklist salvo com sucesso no banco de dados e sincronizado com o Almoxarifado!",
+      id: chk.id || ("CHK-" + Date.now())
+    };
   } catch (err) {
     return { success: false, message: "Erro ao salvar checklist: " + err.toString() };
   } finally {
     lock.releaseLock();
+  }
+}
+
+/**
+ * Envia Relatório de Checklist por E-mail ao Militar Responsável
+ */
+function sendChecklistEmail(payload) {
+  try {
+    var to = String(payload.to || (payload.operator && payload.operator.email) || "").trim();
+    if (!to || to.indexOf("@") === -1) {
+      return { success: false, message: "E-mail do operador não informado ou inválido." };
+    }
+
+    var aero = payload.aeronave || "Bombeiro Aeromédico";
+    var dataStr = payload.data || new Date().toISOString().split("T")[0];
+    var opNome = payload.operator ? (payload.operator.grad + " " + payload.operator.warName + " (RG " + payload.operator.rg + ")") : "Oficial";
+    var totalItens = payload.totalItens || 0;
+    var totalNCs = payload.totalNCs || 0;
+    var obs = payload.observacoes || "Nenhuma observação informada.";
+
+    var subject = "[SIG-AEROMÉDICO] Checklist Diário • " + aero + " • " + dataStr;
+    
+    var htmlBody = "<div style='font-family: Arial, sans-serif; color: #2b261f; line-height: 1.5; max-width: 650px; margin: 0 auto; border: 1px solid #e2d7c7; border-radius: 12px; overflow: hidden;'>" +
+      "<div style='background-color: #dc2626; color: #ffffff; padding: 18px 24px;'>" +
+      "<h2 style='margin: 0; font-size: 18px;'>CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h2>" +
+      "<h3 style='margin: 4px 0 0; font-size: 14px; font-weight: normal;'>DBM 1 / GOA • SIG-AEROMÉDICO</h3>" +
+      "</div>" +
+      "<div style='padding: 24px; background-color: #fcfbf9;'>" +
+      "<p style='font-size: 14px; margin-top: 0;'>Prezado(a) <strong>" + opNome + "</strong>,</p>" +
+      "<p style='font-size: 13px; color: #575043;'>Seu Checklist Diário foi registrado com sucesso no banco de dados do SIG-Aeromédico.</p>" +
+      "<table style='width: 100%; border-collapse: collapse; margin: 20px 0; background: #ffffff; border: 1px solid #e8dfd3; border-radius: 8px;'>" +
+      "<tr><td style='padding: 10px 14px; border-bottom: 1px solid #eee; font-weight: bold; width: 40%;'>Aeronave:</td><td style='padding: 10px 14px; border-bottom: 1px solid #eee; color: #dc2626; font-weight: bold;'>" + aero + "</td></tr>" +
+      "<tr><td style='padding: 10px 14px; border-bottom: 1px solid #eee; font-weight: bold;'>Data da Conferência:</td><td style='padding: 10px 14px; border-bottom: 1px solid #eee;'>" + dataStr + "</td></tr>" +
+      "<tr><td style='padding: 10px 14px; border-bottom: 1px solid #eee; font-weight: bold;'>Total de Itens Conferidos:</td><td style='padding: 10px 14px; border-bottom: 1px solid #eee;'>" + totalItens + "</td></tr>" +
+      "<tr><td style='padding: 10px 14px; border-bottom: 1px solid #eee; font-weight: bold;'>Não Conformidades (NCs):</td><td style='padding: 10px 14px; border-bottom: 1px solid #eee; color: " + (totalNCs > 0 ? "#dc2626" : "#16a34a") + "; font-weight: bold;'>" + totalNCs + "</td></tr>" +
+      "<tr><td style='padding: 10px 14px; font-weight: bold;'>Observações Gerais:</td><td style='padding: 10px 14px;'>" + obs + "</td></tr>" +
+      "</table>" +
+      "<p style='font-size: 12px; color: #8c8273;'>Comprovante oficial gerado pelo SIG-Aeromédico DBM 1 / GOA.</p>" +
+      "</div>" +
+      "</div>";
+
+    var attachments = [];
+    if (payload.pdfBase64) {
+      var pdfBlob = Utilities.newBlob(Utilities.base64Decode(payload.pdfBase64), "application/pdf", "Checklist_" + aero.replace(/\s+/g, "_") + "_" + dataStr + ".pdf");
+      attachments.push(pdfBlob);
+    }
+
+    MailApp.sendEmail({
+      to: to,
+      subject: subject,
+      htmlBody: htmlBody,
+      attachments: attachments
+    });
+
+    return { success: true, message: "E-mail com checklist enviado com sucesso para " + to + "!" };
+  } catch (e) {
+    return { success: false, message: "Erro ao enviar e-mail: " + e.toString() };
   }
 }
 
