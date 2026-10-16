@@ -9021,6 +9021,19 @@
                         img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
                     ));
 
+                    // Correção do deslocamento vertical do texto no html2canvas:
+                    // o preflight do Tailwind define img { display:block }, o que quebra a
+                    // medição da linha de base das fontes e joga o texto sobre as bordas das células.
+                    const pdfFixStyle = document.createElement('style');
+                    pdfFixStyle.setAttribute('data-pdf-fix', 'pedido-mensal');
+                    pdfFixStyle.innerHTML = `
+                        img { display: inline-block; }
+                        #pdf-pedido-mensal-render, #pdf-pedido-mensal-render * { line-height: 1.25 !important; }
+                        #pdf-pedido-mensal-render td, #pdf-pedido-mensal-render th { vertical-align: middle !important; }
+                        #pdf-pedido-mensal-render img { display: block; }
+                    `;
+                    document.head.appendChild(pdfFixStyle);
+
                     // Captura sempre a partir do topo/esquerda da janela (evita deslocamento lateral)
                     const prevScrollX = window.scrollX;
                     const prevScrollY = window.scrollY;
@@ -9042,11 +9055,17 @@
                             width: renderW,
                             height: renderH,
                             windowWidth: Math.max(renderW, document.documentElement.clientWidth),
-                            windowHeight: Math.max(renderH, document.documentElement.clientHeight)
+                            windowHeight: Math.max(renderH, document.documentElement.clientHeight),
+                            onclone: (clonedDoc) => {
+                                const st = clonedDoc.createElement('style');
+                                st.innerHTML = pdfFixStyle.innerHTML;
+                                clonedDoc.head.appendChild(st);
+                            }
                         });
                     } finally {
                         window.scrollTo(prevScrollX, prevScrollY);
                         if (printContainer.parentNode) document.body.removeChild(printContainer);
+                        if (pdfFixStyle.parentNode) pdfFixStyle.parentNode.removeChild(pdfFixStyle);
                     }
 
                     // Monta o PDF A4 com a imagem inteira, centralizada e dentro das margens
