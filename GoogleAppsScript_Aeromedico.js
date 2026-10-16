@@ -1170,7 +1170,7 @@ function savePedidoMensal(payload) {
     var row = [
       new Date().toISOString(),
       ped.competencia || "",
-      ped.obm || "DBM 1/GOA",
+      ped.obm || "DBM1/GOA - Lagoa",
       ped.dataPedido || "",
       op.warName ? (op.grad + " " + op.warName) : (ped.militarSolicitante || "Oficial Aeromédico"),
       op.rg || ped.rg || "---",
