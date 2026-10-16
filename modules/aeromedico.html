@@ -6657,6 +6657,8 @@
 
         // ====================================================================
         // CATÁLOGO OFICIAL DO PEDIDO MENSAL DE MATERIAIS — DSE (94 Itens em 3 Blocos)
+        const BRASAO_CBMERJ_BASE64 = "data:image/png;base64,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";
+
         const PEDIDO_MENSAL_CATALOG = [
             // MEDICAMENTOS — BLOCO 1 (34 itens)
             { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)', ideal: 10, defaultSaldo: 10 },
@@ -8031,172 +8033,385 @@
             // Verifica se este mês já foi emitido
             const emissaoRegistro = pedidosEmitidos ? pedidosEmitidos[competencia] : null;
 
-            // Geração de PDF no layout oficial da DSE
+            // Geração de PDF no layout oficial da DSE (Fidelidade 100% ao documento impresso original)
             const handleGerarPDF = async () => {
                 setIsExporting(true);
-                const printContainer = document.createElement('div');
-                printContainer.style.padding = '12px 18px';
-                printContainer.style.background = '#ffffff';
-                printContainer.style.fontFamily = 'Arial, sans-serif';
-                printContainer.style.color = '#000000';
-
-                // Tabela de Itens para o PDF
-                const renderBlockRows = (blocoNum) => {
-                    return itensPedido.filter(it => it.bloco === blocoNum).map((it, idx) => {
-                        const isRequested = Number(it.solicitado) > 0;
-                        return `
-                            <tr style="background:${isRequested ? '#f1f5f9' : (idx % 2 === 0 ? '#ffffff' : '#fafafa')}; font-size: 8.5px;">
-                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; font-weight:${isRequested ? 'bold' : 'normal'}; text-align: left;">${it.nome}</td>
-                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center;">${it.ideal !== null ? it.ideal : '—'}</td>
-                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center;">${it.saldo}</td>
-                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; font-weight: bold; color: ${it.sugerido > 0 ? '#b45309' : '#000'};">${it.sugerido}</td>
-                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; font-weight: 800; color: ${isRequested ? '#dc2626' : '#64748b'};">${it.solicitado}</td>
-                            </tr>
-                        `;
-                    }).join('');
-                };
-
-                const dataFormatada = new Date(dataPedido + 'T12:00:00').toLocaleDateString('pt-BR');
-                const agora = new Date();
-                const horaGeracao = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR');
-
-                printContainer.innerHTML = `
-                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px;">
-                        <img src="../assets/brasao_goa.png" style="height: 52px; float: left; margin-right: -52px;" alt="Brasão" />
-                        <h4 style="margin: 0; font-size: 11px; font-weight: bold; text-transform: uppercase;">GOVERNO DO ESTADO DO RIO DE JANEIRO • SECRETARIA DE DEFESA CIVIL</h4>
-                        <h3 style="margin: 2px 0; font-size: 12px; font-weight: bold;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h3>
-                        <h4 style="margin: 2px 0; font-size: 10px; font-weight: bold; color: #334155;">DIRETORIA DE SUPRIMENTO E EQUIPAMENTOS (DSE) • FARMÁCIA CENTRAL</h4>
-                        <h4 style="margin: 2px 0; font-size: 10.5px; font-weight: 800; color: #b91c1c;">GRUPAMENTO DE OPERAÇÕES AÉREAS (GOA) • SEÇÃO AEROMÉDICA</h4>
-                        <div style="margin-top: 5px; display: inline-block; background: #e2e8f0; border: 1px solid #94a3b8; padding: 2px 14px; font-weight: 800; font-size: 11px; border-radius: 4px;">
-                            PEDIDO DE MATERIAL MENSAL — COMPETÊNCIA: ${competencia}
-                        </div>
-                    </div>
-
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9px;">
-                        <tr>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; width: 18%; font-weight: bold;">OBM:</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; width: 32%; font-weight: bold;">${obm}</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; width: 18%; font-weight: bold;">DATA DO PEDIDO:</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; width: 32%;">${dataFormatada}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">SOLICITANTE:</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; font-weight: bold;">${militarSolicitante}</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">CELULAR FUNCIONAL:</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8;">${celularFuncional}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">FAIXA RAPH:</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8;">Nº ${raphInicial} até Nº ${raphFinal}</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">TOTAL SOLICITADO:</td>
-                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; font-weight: 800; color: #b91c1c;">${totals.itensCount} item(ns) · ${totals.unidadesSum} unidade(s)</td>
-                        </tr>
-                    </table>
-
-                    <div style="margin-top: 6px;">
-                        <div style="background: #0f172a; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 9.5px; border-radius: 3px 3px 0 0;">
-                            MEDICAMENTOS — BLOCO 1
-                        </div>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
-                            <thead>
-                                <tr style="background: #f1f5f9; font-size: 8.5px; font-weight: bold;">
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: left; width: 56%;">Item</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Ideal</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Saldo</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Sugerido</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Solicitado</th>
-                                </tr>
-                            </thead>
-                            <tbody>${renderBlockRows(1)}</tbody>
-                        </table>
-                    </div>
-
-                    <div style="margin-top: 6px;">
-                        <div style="background: #0f172a; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 9.5px; border-radius: 3px 3px 0 0;">
-                            INSUMOS — BLOCO 2
-                        </div>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
-                            <thead>
-                                <tr style="background: #f1f5f9; font-size: 8.5px; font-weight: bold;">
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: left; width: 56%;">Item</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Ideal</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Saldo</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Sugerido</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Solicitado</th>
-                                </tr>
-                            </thead>
-                            <tbody>${renderBlockRows(2)}</tbody>
-                        </table>
-                    </div>
-
-                    <div style="margin-top: 6px;">
-                        <div style="background: #0f172a; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 9.5px; border-radius: 3px 3px 0 0;">
-                            INSUMOS — BLOCO 3
-                        </div>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
-                            <thead>
-                                <tr style="background: #f1f5f9; font-size: 8.5px; font-weight: bold;">
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: left; width: 56%;">Item</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Ideal</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Saldo</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Sugerido</th>
-                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Solicitado</th>
-                                </tr>
-                            </thead>
-                            <tbody>${renderBlockRows(3)}</tbody>
-                        </table>
-                    </div>
-
-                    <!-- Rodapé Oficial com Informações do Usuário e Data/Hora da Geração -->
-                    <div style="margin-top: 14px; border-top: 1px solid #000; padding-top: 6px; font-size: 8.5px;">
-                        <div style="display: flex; justify-content: space-between; color: #334155;">
-                            <div>
-                                <strong>Documento Gerado Eletronicamente por:</strong> ${militarSolicitante}
-                            </div>
-                            <div>
-                                <strong>Data e Hora da Geração:</strong> ${horaGeracao}
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 36px; display: flex; justify-content: space-between; text-align: center; font-size: 8.5px;">
-                            <div style="width: 30%; border-top: 1px solid #000; padding-top: 4px;">
-                                <strong>${militarSolicitante}</strong><br/>Militar Solicitante (UASA/GOA)
-                            </div>
-                            <div style="width: 30%; border-top: 1px solid #000; padding-top: 4px;">
-                                <strong>Chefe da Seção de Saúde</strong><br/>DBM 1 / GOA
-                            </div>
-                            <div style="width: 30%; border-top: 1px solid #000; padding-top: 4px;">
-                                <strong>Diretoria de Suprimento (DSE)</strong><br/>Recebido em: ____/____/2026
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                const opt = {
-                    margin: [6, 6, 6, 6],
-                    filename: `Pedido_Material_Mensal_${competencia}_DBM1_GOA.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-
                 try {
+                    const printContainer = document.createElement('div');
+                    printContainer.style.width = '780px';
+                    printContainer.style.margin = '0 auto';
+                    printContainer.style.padding = '2px';
+                    printContainer.style.background = '#ffffff';
+                    printContainer.style.fontFamily = 'Arial, Helvetica, sans-serif';
+                    printContainer.style.color = '#000000';
+                    printContainer.style.boxSizing = 'border-box';
+                    printContainer.style.fontSize = '7.5px';
+                    printContainer.style.lineHeight = '1.1';
+
+                    const dataFormatada = new Date(dataPedido + 'T12:00:00').toLocaleDateString('pt-BR');
+                    const agora = new Date();
+                    const dataHoje = agora.toLocaleDateString('pt-BR');
+                    const horaMin = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const operadorNome = operator ? `${operator.name || operator.warName || 'MILITAR'} (${operator.warName || ''})` : (militarSolicitante || 'OFICIAL AEROMÉDICO');
+
+                    const getQty = (nome) => {
+                        const it = itensPedido.find(x => {
+                            const an = (x.nome || '').toLowerCase().replace(/\s+/g, ' ').trim();
+                            const bn = (nome || '').toLowerCase().replace(/\s+/g, ' ').trim();
+                            return an === bn || an.includes(bn) || bn.includes(an);
+                        });
+                        if (!it) return 0;
+                        const q = Number(it.solicitado);
+                        return isNaN(q) ? 0 : q;
+                    };
+
+                    printContainer.innerHTML = `
+                        <!-- CABEÇALHO SUPERIOR (3 BLOCOS) -->
+                        <table style="width: 100%; border-collapse: collapse; border: 1.5px solid #000; margin-bottom: 2px;">
+                            <tr>
+                                <!-- Coluna 1: OPERAÇÕES AÉREAS -->
+                                <td style="width: 28%; text-align: center; vertical-align: middle; padding: 6px 2px; border-right: 1.5px solid #000;">
+                                    <div style="font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">OPERAÇÕES AÉREAS</div>
+                                </td>
+                                
+                                <!-- Coluna 2: Brasão CBMERJ e DSE -->
+                                <td style="width: 38%; text-align: center; vertical-align: middle; padding: 2px; border-right: 1.5px solid #000;">
+                                    <img src="${BRASAO_CBMERJ_BASE64}" style="height: 38px; display: block; margin: 1px auto 2px auto;" alt="Brasão CBMERJ" />
+                                    <div style="font-size: 6.2px; font-weight: bold; line-height: 1.15;">CORPO DE BOMBEIRO DO ESTADO DO RIO DE JANEIRO</div>
+                                    <div style="font-size: 6.2px; font-weight: bold; line-height: 1.15;">DIRETORIA DE SOCORRO DE EMERGÊNCIA</div>
+                                    <div style="font-size: 6.2px; font-weight: bold; line-height: 1.15;">ALMOXARIFADO MÉDICO E FARMÁCIA DA DSE</div>
+                                </td>
+
+                                <!-- Coluna 3: Data, Celular, OBM -->
+                                <td style="width: 34%; padding: 0; vertical-align: middle;">
+                                    <table style="width: 100%; border-collapse: collapse; border: none;">
+                                        <tr>
+                                            <td style="border: none; border-bottom: 1px solid #000; padding: 3px 5px; font-size: 8.5px; font-weight: bold;">
+                                                DATA: ${dataFormatada}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: none; border-bottom: 1px solid #000; padding: 3px 5px; font-size: 8px; font-weight: bold;">
+                                                CELULAR FUNCIONAL: ${celularFuncional || ''}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: none; padding: 3px 5px; font-size: 8px; font-weight: bold;">
+                                                OBM: ${obm || 'GOA/Aeromédico (1º SOS, AW e UASA)'}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CORPO PRINCIPAL COM AS 3 COLUNAS LADO A LADO -->
+                        <table style="width: 100%; border-collapse: collapse; border: 1.5px solid #000; margin-bottom: 2px;">
+                            <tr style="vertical-align: top;">
+                                <!-- ========================================================= -->
+                                <!-- COLUNA 1 (33.33%) -->
+                                <!-- ========================================================= -->
+                                <td style="width: 33.33%; padding: 0; border: none; border-right: 1.5px solid #000;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 44px);">MEDICAMENTOS</th>
+                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
+                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ADRENALINA 1MG/ML - 1ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ADRENALINA 1MG/ML - 1ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁGUA DESTILADA 10ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁGUA DESTILADA 10ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">AMIODARONA 50MG/ML 3ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('AMIODARONA 50MG/ML 3ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ATROPINA 0,25MG/ML 1ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ATROPINA 0,25MG/ML 1ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">BICARBONATO DE SÓDIO 8,4% 10ML-AMPOLA</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('BICARBONATO DE SÓDIO 8,4% 10ML-AMPOLA')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">DIPIRONA 500MG/ML 2ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('DIPIRONA 500MG/ML 2ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">DOBUTAMINA 250MG/ML 20ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('DOBUTAMINA 250MG/ML 20ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">FENOTEROL (BROMIDRATO) 5MG/ML - 20ML</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('FENOTEROL (BROMIDRATO) 5MG/ML - 20ML')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">FUROSEMIDA 10MG/ML -2ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('FUROSEMIDA 10MG/ML -2ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">GLICOSE HIPERTÔNICA 25% 10ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('GLICOSE HIPERTÔNICA 25% 10ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">HIDRALAZINA (CLORIDRATO) 20MG/ML 1ML - AMPOLA</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('HIDRALAZINA (CLORIDRATO) 20MG/ML 1ML - AMPOLA')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">IPRATRÓPIO (BROMETO) 0,25MG/ML - 20ML</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('IPRATRÓPIO (BROMETO) 0,25MG/ML - 20ML')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ISOSSORBIDA 5MG / COMPRIMIDO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ISOSSORBIDA 5MG / COMPRIMIDO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">MAGNÉSIO (SULFATO) 10% 10mL - AMPOLA</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('MAGNÉSIO (SULFATO) 10% 10mL - AMPOLA')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">METILPREDNISOLONA (SUCCINATO SÓDICO) PÓ LIÓFILO INJETÁVEL 125MG-AMPOLA (SOLU-CORTEF) (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('METILPREDNISOLONA (SUCCINATO SÓDICO) PÓ LIÓFILO INJETÁVEL 125MG-AMPOLA (SOLU-CORTEF) (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">METOPROLOL (SUCCINATO) SOLUÇÃO INJETÁVEL 1MG/ML AMPOLA (SELOKEN)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('METOPROLOL (SUCCINATO) SOLUÇÃO INJETÁVEL 1MG/ML AMPOLA (SELOKEN)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">NITROGLICERINA SOLUÇÃO INJETÁVEL 5MG/ML 10ML-AMPOLA (TRIDIL)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('NITROGLICERINA SOLUÇÃO INJETÁVEL 5MG/ML 10ML-AMPOLA (TRIDIL)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">NOREPINEFRINA (HEMITARTARATO) SOLUÇÃO INJETÁVEL 2MG/4ML 4ML-AMPOLA.(NORADRENALINA)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('NOREPINEFRINA (HEMITARTARATO) SOLUÇÃO INJETÁVEL 2MG/4ML 4ML-AMPOLA.(NORADRENALINA)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ONDANSETRONA SOLUÇÃO INJETÁVEL 2 MG/ ML - 2 ML AMPOLA (NAUSEDRON) UNID</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ONDANSETRONA SOLUÇÃO INJETÁVEL 2 MG/ ML - 2 ML AMPOLA (NAUSEDRON) UNID')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">PROMETAZINA 25MG/ML 2ML/AMPOLA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('PROMETAZINA 25MG/ML 2ML/AMPOLA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TENOXICAN PÓ LIÓFILO INJETÁVEL 20MG FRASCO-AMPOLA (TILATIL)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TENOXICAN PÓ LIÓFILO INJETÁVEL 20MG FRASCO-AMPOLA (TILATIL)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        
+                                        <!-- Subheader SOLUÇÕES PARENTERAIS -->
+                                        <tr>
+                                            <td colspan="3" style="font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; border: 1px solid #000;">SOLUÇÕES PARENTERAIS</td>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SOLUÇÃO RINGER LACTATO 500ml BOLSA/FRASCO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SOLUÇÃO RINGER LACTATO 500ml BOLSA/FRASCO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SOLUÇÃO FISIOLÓGICA 0,9% 500ml BOLSA/FRASCO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SOLUÇÃO FISIOLÓGICA 0,9% 500ml BOLSA/FRASCO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+
+                                        <!-- Subheader INSUMOS (bloco 1) -->
+                                        <tr>
+                                            <td colspan="3" style="font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; border: 1px solid #000;">INSUMOS</td>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">AGULHA DESCARTÁVEL 25x07 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('AGULHA DESCARTÁVEL 25x07 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">AGULHA DESCARTÁVEL 40X12 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('AGULHA DESCARTÁVEL 40X12 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ATADURA DE CREPOM 20CM (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ATADURA DE CREPOM 20CM (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">AVENTAL DESCARTÁVEL (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('AVENTAL DESCARTÁVEL (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">BOUGIE DE INTUBAÇÃO (5cmX 60 OU 70 cm ), SEM LÚMEN</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('BOUGIE DE INTUBAÇÃO (5cmX 60 OU 70 cm ), SEM LÚMEN')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">CÂNULAS NASOFARÍNGEAS Nº6 ( 2 ) Nº7 ( 1 )</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('CÂNULAS NASOFARÍNGEAS Nº6 ( 2 ) Nº7 ( 1 )')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">CIRCUITO P/ ASPIRAÇÃO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('CIRCUITO P/ ASPIRAÇÃO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">CIRCUITO P/ OXIGENOTERAPIA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('CIRCUITO P/ OXIGENOTERAPIA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">CLAMP UMBILICAL (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('CLAMP UMBILICAL (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                    </table>
+                                </td>
+
+                                <!-- ========================================================= -->
+                                <!-- COLUNA 2 (33.33%) -->
+                                <!-- ========================================================= -->
+                                <td style="width: 33.33%; padding: 0; border: none; border-right: 1.5px solid #000;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 44px);">INSUMOS</th>
+                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
+                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA ADULTO/ INFANTIL.</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA ADULTO/ INFANTIL.')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <!-- Linha especial Equipo Bomba Infusora -->
+                                        <tr>
+                                            <td colspan="3" style="font-size: 6px; padding: 2px 3px; line-height: 1.1; font-weight: bold; text-align: center; border: 1px solid #000;">
+                                                EQUIPO DE BOMBA INFUSORA (UNID) LIFEMED SIMPLES ( ) FOTOSSENSÍVEL ( ) OBSERVAÇÃO COLOCAR A QUANTIDADE DENTRO PARÊNTESE NO MODELO CORRESPONDENTE
+                                            </td>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">EQUIPO DE SORO MACROGOTAS COM INJETOR LATERAL.(UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('EQUIPO DE SORO MACROGOTAS COM INJETOR LATERAL.(UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ESPARADRAPO ROLO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ESPARADRAPO ROLO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">FITA DE HGT OKMETER MATCH II</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('FITA DE HGT OKMETER MATCH II')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">FIXADOR DE TUBO OROTRAQUEAL AD/INF. (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('FIXADOR DE TUBO OROTRAQUEAL AD/INF. (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">FRASCO DE SECREÇÃO PARA VIAS AÉREAS</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('FRASCO DE SECREÇÃO PARA VIAS AÉREAS')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">GAZE HIDRÓFILA ESTÉRIL 7,5 X 7,5.COMPRESSA (PCTE C/10 UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('GAZE HIDRÓFILA ESTÉRIL 7,5 X 7,5.COMPRESSA (PCTE C/10 UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">GEL PARA ECG (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('GEL PARA ECG (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">JELCO INTRAVENOSO Nº 14 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('JELCO INTRAVENOSO Nº 14 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">JELCO INTRAVENOSO Nº 16 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('JELCO INTRAVENOSO Nº 16 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">JELCO INTRAVENOSO Nº 18 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('JELCO INTRAVENOSO Nº 18 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">JELCO INTRAVENOSO Nº 20 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('JELCO INTRAVENOSO Nº 20 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">JELCO INTRAVENOSO Nº 22 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('JELCO INTRAVENOSO Nº 22 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">JELCO INTRAVENOSO Nº 24 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('JELCO INTRAVENOSO Nº 24 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">KIT DE IDENTIFICAÇÃO PARA RECÉM NASCIDO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('KIT DE IDENTIFICAÇÃO PARA RECÉM NASCIDO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LÂMINA DE BISTURI COM CABO Nº10 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LÂMINA DE BISTURI COM CABO Nº10 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LANCETA PARA PUNÇÃO MANUAL (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LANCETA PARA PUNÇÃO MANUAL (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LENÇOL DESCARTAVÉL (PCTE C/10)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LENÇOL DESCARTAVÉL (PCTE C/10)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LUVA DE PROCEDIMENTO P</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LUVA DE PROCEDIMENTO P')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LUVA DE PROCEDIMENTO M</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LUVA DE PROCEDIMENTO M')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LUVA DE PROCEDIMENTO G</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LUVA DE PROCEDIMENTO G')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">MANTA TÉRMICA ALUMINIZADA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('MANTA TÉRMICA ALUMINIZADA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">MÁSCARA N95</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('MÁSCARA N95')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">MÁSCARA DESCARTÁVEL (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('MÁSCARA DESCARTÁVEL (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">POLIFIX EXTENSOR ADULTO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('POLIFIX EXTENSOR ADULTO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SERINGA DESCARTÁVEL 10ML (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SERINGA DESCARTÁVEL 10ML (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SERINGA DESCARTÁVEL 20ML (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SERINGA DESCARTÁVEL 20ML (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SONDA ASPIRAÇÃO Nº 04 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SONDA ASPIRAÇÃO Nº 04 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SONDA ASPIRAÇÃO Nº 06 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SONDA ASPIRAÇÃO Nº 06 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SONDA ASPIRAÇÃO Nº 12 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SONDA ASPIRAÇÃO Nº 12 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SONDA ASPIRAÇÃO Nº 16 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SONDA ASPIRAÇÃO Nº 16 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº2,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº2,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                    </table>
+                                </td>
+
+                                <!-- ========================================================= -->
+                                <!-- COLUNA 3 (33.33%) -->
+                                <!-- ========================================================= -->
+                                <td style="width: 33.33%; padding: 0; border: none;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <th style="font-size: 10px; font-weight: bold; text-align: center; padding: 2px; border: 1px solid #000; width: calc(100% - 44px);">INSUMOS</th>
+                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Solicitado</th>
+                                            <th style="font-size: 6px; text-align: center; width: 22px; max-width: 22px; padding: 1px 0; border: 1px solid #000;">Enviado</th>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº2,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº2,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº3,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº3,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº3,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº3,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº4,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº4,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº4,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº4,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº5,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº5,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº5,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº5,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº6,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº6,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº7,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº7,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº7,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº7,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº8,0 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº8,0 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">TOT Nº8,5 (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('TOT Nº8,5 (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+
+                                        <!-- Subheader DESINFETANTES E LIMPEZA -->
+                                        <tr>
+                                            <td colspan="3" style="font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; border: 1px solid #000;">DESINFETANTES E LIMPEZA</td>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁLCOOL GEL ANTI-SÉPTICO REFIL 500ML (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁLCOOL GEL ANTI-SÉPTICO REFIL 500ML (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">ÁLCOOL 70% ALMOTOLIA 100ML</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('ÁLCOOL 70% ALMOTOLIA 100ML')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">COLETOR DE PERFURO CORTANTE CAIXA 7 LTS</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('COLETOR DE PERFURO CORTANTE CAIXA 7 LTS')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">CLOREXIDINA ALCOÓLICA 0,5% ALMOTOLIA 100ML</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('CLOREXIDINA ALCOÓLICA 0,5% ALMOTOLIA 100ML')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">HIPOCLORITO DE SÓDIO 5LT</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('HIPOCLORITO DE SÓDIO 5LT')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">LUVA GROSSA PARA LIMPEZA (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('LUVA GROSSA PARA LIMPEZA (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">MOP ÚMIDO ESCOVÃO (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('MOP ÚMIDO ESCOVÃO (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">PILHAS PEQUENAS (UNID)</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('PILHAS PEQUENAS (UNID)')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SABÃO LÍQUIDO NEUTRO 5LT</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SABÃO LÍQUIDO NEUTRO 5LT')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">SACO DE LIXO BRANCO INFECTANTE 60 LT</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('SACO DE LIXO BRANCO INFECTANTE 60 LT')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+
+                                        <!-- Subheader IMPRESSOS -->
+                                        <tr>
+                                            <td colspan="3" style="font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; border: 1px solid #000;">IMPRESSOS</td>
+                                        </tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">REGISTRO DE ATENDIMENTO RAPH :</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('REGISTRO DE ATENDIMENTO RAPH :')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">Nº INICIAL DO RAPH:</td><td colspan="2" style="padding: 1px 4px; font-size: 7.5px; font-weight: bold; text-align: left; border: 1px solid #000;">${raphInicial || ''}</td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">Nº FINAL DO RAPH:</td><td colspan="2" style="padding: 1px 4px; font-size: 7.5px; font-weight: bold; text-align: left; border: 1px solid #000;">${raphFinal || ''}</td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">FOLHA DE REGISTRO DE TIH</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('FOLHA DE REGISTRO DE TIH')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">REGISTRO DE CHECKLIST</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('REGISTRO DE CHECKLIST')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">REGISTRO DE RECOLHIMENTO DE VALORES</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('REGISTRO DE RECOLHIMENTO DE VALORES')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">REGISTRO DE PSICOTRÓPICO</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('REGISTRO DE PSICOTRÓPICO')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        <tr><td style="padding: 1px 2px; font-size: 6.8px; border: 1px solid #000;">REGISTRO DE ÓBITO</td><td style="padding: 1px 2px; font-size: 7.5px; font-weight: bold; text-align: center; border: 1px solid #000;">${getQty('REGISTRO DE ÓBITO')}</td><td style="padding: 1px 2px; border: 1px solid #000;"></td></tr>
+                                        
+                                        <!-- Observação Box -->
+                                        <tr>
+                                            <td colspan="3" style="font-size: 5.6px; padding: 2px 3px; line-height: 1.1; text-align: justify; border: 1px solid #000;">
+                                                <strong>OBSERVAÇÃO:</strong> OS MATERIAIS RELACIONADOS ABAIXO SERÃO LIBERADOS SOMENTE A BASE DE TROCA MEDIANTE OSMESMOS DANIFICADOS E OU ATRAVÉS DE PARTE QUANDO PERDA DO MESMO: BALDE COM ESPREMEDOR; CABO DE MOP; BATERIA DE HGT ; PILHAS
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- RODAPÉ DE ASSINATURAS E PROTOCOLO -->
+                        <table style="width: 100%; border-collapse: collapse; border: 1.5px solid #000; margin-bottom: 2px;">
+                            <tr>
+                                <td colspan="2" style="padding: 3px 5px; font-size: 8px; font-weight: bold; border: 1px solid #000;">
+                                    NOME DO MILITAR E RG DA OBM SOLICITANTE: <span style="font-weight: normal; margin-left: 8px;">${militarSolicitante}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 65%; padding: 3px 5px; font-size: 8px; font-weight: bold; border: 1px solid #000;">
+                                    NOME DO MILITAR E RG DA OBM QUE RECEBEU ( CARIMBO):
+                                </td>
+                                <td style="width: 35%; padding: 3px 5px; font-size: 8px; font-weight: bold; border: 1px solid #000;">
+                                    DATA DO RECEBIMENTO:
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- USO INTERNO DO ALMOXARIFADO -->
+                        <table style="width: 100%; border-collapse: collapse; border: 1.5px solid #000; margin-bottom: 3px;">
+                            <tr>
+                                <th colspan="3" style="padding: 2px 4px; font-size: 11px; font-weight: bold; text-align: center; border-bottom: 1.5px solid #000;">
+                                    <span style="font-size: 14px; margin-right: 25px;">&#8681;</span>
+                                    USO INTERNO DO ALMOXARIFADO
+                                    <span style="font-size: 14px; margin-left: 25px;">&#8681;</span>
+                                </th>
+                            </tr>
+                            <tr style="font-size: 7.2px;">
+                                <td style="width: 48%; padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA E MILITAR QUE RECEBEU NO ALMOXARIFADO MÉDICO POR:
+                                </td>
+                                <td style="width: 26%; padding: 2px 4px; border: 1px solid #000; text-align: center; font-weight: bold;">
+                                    ( &nbsp; ) EMAIL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ( &nbsp; ) BALCÃO
+                                </td>
+                                <td style="width: 26%; padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA:<br/>
+                                    MILITAR:
+                                </td>
+                            </tr>
+                            <tr style="font-size: 7.2px;">
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA E MILITAR RESPONSÁVEL PELO TETO
+                                </td>
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA:<br/>
+                                    MILITAR:
+                                </td>
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    ( &nbsp; ) GRUPO CBA:<br/>
+                                    ( &nbsp; ) ALFA &nbsp;&nbsp; ( &nbsp; ) BRAVO &nbsp;&nbsp; ( &nbsp; ) CHARLIE
+                                </td>
+                            </tr>
+                            <tr style="font-size: 7.2px;">
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA E MILITAR RESPONSÁVEL PELA SEPARAÇÃO DO MATERIAL
+                                </td>
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    MILITAR:
+                                </td>
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA:
+                                </td>
+                            </tr>
+                            <tr style="font-size: 7.2px;">
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA E MILITAR RESPONSÁVEL PELA LIBERAÇÃO DO MATERIAL
+                                </td>
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    MILITAR:
+                                </td>
+                                <td style="padding: 2px 4px; border: 1px solid #000; font-weight: bold;">
+                                    DATA:
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- RODAPÉ EXATO SOLICITADO (apenas dados do usuário e data) -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 2px 4px; font-size: 6.8px; color: #000000; border-top: 1px solid #000; margin-top: 3px;">
+                            <div>
+                                <div style="font-weight: bold;">ALMOXARIFADO MÉDICO E FARMÁCIA DA DSE</div>
+                                <div>Gerado por ${operadorNome} em ${dataHoje} ${horaMin} · GOA-RJ</div>
+                            </div>
+                            <div style="font-weight: bold; font-size: 7.5px;">
+                                ${dataHoje}
+                            </div>
+                        </div>
+                    `;
+
+                    document.body.appendChild(printContainer);
+
+                    const opt = {
+                        margin: [4, 4, 4, 4],
+                        filename: `Pedido de Material Mensal - GOA - ${competencia}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { 
+                            scale: 2, 
+                            useCORS: true, 
+                            letterRendering: true,
+                            logging: false,
+                            scrollY: 0
+                        },
+                        jsPDF: { 
+                            unit: 'mm', 
+                            format: 'a4', 
+                            orientation: 'portrait' 
+                        }
+                    };
+
                     await html2pdf().set(opt).from(printContainer).save();
-                    onSavePedido({
-                        competencia,
-                        dataPedido,
-                        obm,
-                        celularFuncional,
-                        militarSolicitante,
-                        raphInicial,
-                        raphFinal,
-                        totalItens: totals.itensCount,
-                        totalUnidades: totals.unidadesSum,
-                        itens: itensPedido
-                    });
-                } catch(err) {
-                    console.error("Erro ao gerar PDF do pedido mensal:", err);
-                    alert("Erro ao gerar PDF. Verifique se o bloqueador de pop-ups está desativado.");
+                    document.body.removeChild(printContainer);
+
+                    // Salva registro da emissão no estado e no GAS
+                    if (onSavePedido) {
+                        onSavePedido({
+                            competencia,
+                            dataPedido,
+                            obm,
+                            celularFuncional,
+                            militarSolicitante,
+                            raphInicial,
+                            raphFinal,
+                            itens: itensPedido.map(it => ({
+                                nome: it.nome,
+                                bloco: it.bloco,
+                                ideal: it.ideal,
+                                saldo: it.saldo,
+                                sugerido: it.sugerido,
+                                solicitado: it.solicitado
+                            })),
+                            totais: totals
+                        });
+                    }
+                } catch (err) {
+                    console.error("Erro ao gerar PDF do Pedido Mensal:", err);
+                    alert("Ocorreu um erro ao gerar o PDF. Verifique o console.");
                 } finally {
                     setIsExporting(false);
                 }
