@@ -522,9 +522,10 @@ function moveAlmox(payload) {
     lock.waitLock(10000);
     var ss = getSpreadsheet();
     var sh = getAlmoxSheet(ss);
-    var itemId = String(payload.itemId || "").trim();
-    var tipo = String(payload.type || "SAIDA").toUpperCase();
-    var qty = Number(payload.quantity) || 0;
+    var m = payload.mov || payload || {};
+    var itemId = String(m.itemId || payload.itemId || "").trim();
+    var tipo = String(m.type || payload.type || "SAIDA").toUpperCase();
+    var qty = Number(m.quantity !== undefined ? m.quantity : payload.quantity) || 0;
 
     if (sh.getLastRow() < 2) return { success: false, message: "Almoxarifado vazio." };
     var ids = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues();
@@ -541,11 +542,19 @@ function moveAlmox(payload) {
     var curStock = Number(sh.getRange(targetRow, 5).getValue()) || 0;
     var newStock = curStock;
 
-    if (tipo === "ENTRADA") newStock += qty;
-    else if (tipo === "SAIDA") newStock = Math.max(0, curStock - qty);
-    else if (tipo === "AJUSTE") newStock = qty;
+    if (m.newStock !== undefined && m.newStock !== null) {
+      newStock = Number(m.newStock);
+    } else if (tipo === "ENTRADA") {
+      newStock += qty;
+    } else if (tipo === "SAIDA") {
+      newStock = Math.max(0, curStock - qty);
+    } else if (tipo === "AJUSTE") {
+      newStock = qty;
+    }
 
     sh.getRange(targetRow, 5).setValue(newStock);
+    if (m.lot || m.serialLot) sh.getRange(targetRow, 10).setValue(m.lot || m.serialLot);
+    if (m.expiry || m.expirationDate) sh.getRange(targetRow, 8).setValue(m.expiry || m.expirationDate);
 
     return { success: true, message: "Estoque atualizado com sucesso!", newStock: newStock };
   } catch (err) {
@@ -592,14 +601,14 @@ function registerSocorro(payload) {
           type: "SAIDA",
           quantity: almoxQtd
         });
-      } else if (s.itemName) {
+      } else if (s.itemName || s.item) {
         try {
           var almoxSh = getAlmoxSheet(ss);
           if (almoxSh.getLastRow() >= 2) {
             var almoxData = almoxSh.getRange(2, 1, almoxSh.getLastRow() - 1, 5).getValues();
             for (var a = 0; a < almoxData.length; a++) {
               var rowName = String(almoxData[a][1] || "").toLowerCase().trim();
-              var targetName = String(s.itemName).toLowerCase().trim();
+              var targetName = String(s.itemName || s.item).toLowerCase().trim();
               if (rowName === targetName || (rowName && (targetName.indexOf(rowName) !== -1 || rowName.indexOf(targetName) !== -1))) {
                 var curStock = Number(almoxData[a][4]) || 0;
                 almoxSh.getRange(a + 2, 5).setValue(Math.max(0, curStock - almoxQtd));
@@ -1198,3 +1207,120 @@ function jsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+/**
+ * Popula ou sincroniza a aba AM_ALMOXARIFADO da planilha SIG-AEROMEDICO DBM1-GOA
+ * com os 94 itens oficiais do Pedido Mensal (Ideal, Saldo e Sugerido).
+ * Esta função pode ser executada manualmente no editor do Google Apps Script.
+ */
+function popularAlmoxarifadoOficial() {
+  var ss = getSpreadsheet();
+  var sh = getAlmoxSheet(ss);
+  
+  // Limpa registros anteriores mantendo apenas o cabeçalho
+  if (sh.getLastRow() > 1) {
+    sh.getRange(2, 1, sh.getLastRow() - 1, 13).clearContent();
+  }
+  
+  var itens = [
+["ALM-001", "ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)", "Medicamentos e Farmacos", "UNID", 10, 10, 0, "2027-12-31", "", "LOT-2026-001", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-002", "ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA", "Medicamentos e Farmacos", "UNID", 16, 16, 0, "2027-12-31", "", "LOT-2026-002", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-003", "ADRENALINA 1MG/ML - 1ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 94, 80, 0, "2027-12-31", "", "LOT-2026-003", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-004", "ÁGUA DESTILADA 10ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 0, 20, 20, "2027-12-31", "", "LOT-2026-004", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-005", "AMIODARONA 50MG/ML 3ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 9, 12, 3, "2027-12-31", "", "LOT-2026-005", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-006", "ATROPINA 0,25MG/ML 1ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 30, 20, 0, "2027-12-31", "", "LOT-2026-006", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-007", "BICARBONATO DE SÓDIO 8,4% 10ML-AMPOLA", "Medicamentos e Farmacos", "UNID", 37, 50, 13, "2027-12-31", "", "LOT-2026-007", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-008", "DIPIRONA 500MG/ML 2ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 13, 20, 7, "2027-12-31", "", "LOT-2026-008", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-009", "DOBUTAMINA 250MG/ML 20ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 11, 4, 0, "2027-12-31", "", "LOT-2026-009", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-010", "FENOTEROL (BROMIDRATO) 5MG/ML - 20ML", "Medicamentos e Farmacos", "UNID", 0, 0, 0, "2027-12-31", "", "LOT-2026-010", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-011", "FUROSEMIDA 10MG/ML -2ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 12, 8, 0, "2027-12-31", "", "LOT-2026-011", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-012", "GLICOSE HIPERTÔNICA 25% 10ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 19, 20, 1, "2027-12-31", "", "LOT-2026-012", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-013", "HIDRALAZINA (CLORIDRATO) 20MG/ML 1ML - AMPOLA", "Medicamentos e Farmacos", "UNID", 3, 4, 1, "2027-12-31", "", "LOT-2026-013", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-014", "IPRATRÓPIO (BROMETO) 0,25MG/ML - 20ML", "Medicamentos e Farmacos", "UNID", 0, 1, 1, "2027-12-31", "", "LOT-2026-014", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-015", "ISOSSORBIDA 5MG / COMPRIMIDO (UNID)", "Medicamentos e Farmacos", "UNID", 20, 10, 0, "2027-12-31", "", "LOT-2026-015", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-016", "MAGNÉSIO (SULFATO) 10% 10mL - AMPOLA", "Medicamentos e Farmacos", "UNID", 17, 16, 0, "2027-12-31", "", "LOT-2026-016", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-017", "METILPREDNISOLONA (SUCCINATO SÓDICO) PÓ LIÓFILO INJETÁVEL 125MG-AMPOLA (SOLU-CORTEF) (UNID)", "Medicamentos e Farmacos", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-017", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-018", "METOPROLOL (SUCCINATO) SOLUÇÃO INJETÁVEL 1MG/ML AMPOLA (SELOKEN)", "Medicamentos e Farmacos", "UNID", 4, 4, 0, "2027-12-31", "", "LOT-2026-018", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-019", "NITROGLICERINA SOLUÇÃO INJETÁVEL 5MG/ML 10ML-AMPOLA (TRIDIL)", "Medicamentos e Farmacos", "UNID", 4, 4, 0, "2027-12-31", "", "LOT-2026-019", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-020", "NOREPINEFRINA (HEMITARTARATO) SOLUÇÃO INJETÁVEL 2MG/4ML 4ML-AMPOLA.(NORADRENALINA)", "Medicamentos e Farmacos", "UNID", 2, 4, 2, "2027-12-31", "", "LOT-2026-020", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-021", "ONDANSETRONA SOLUÇÃO INJETÁVEL 2 MG/ ML - 2 ML AMPOLA (NAUSEDRON) UNID", "Medicamentos e Farmacos", "UNID", 4, 10, 6, "2027-12-31", "", "LOT-2026-021", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-022", "PROMETAZINA 25MG/ML 2ML/AMPOLA (UNID)", "Medicamentos e Farmacos", "UNID", 3, 4, 1, "2027-12-31", "", "LOT-2026-022", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-023", "TENOXICAN PÓ LIÓFILO INJETÁVEL 20MG FRASCO-AMPOLA (TILATIL)", "Medicamentos e Farmacos", "UNID", 1, 0, 0, "2027-12-31", "", "LOT-2026-023", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-024", "SOLUÇÃO RINGER LACTATO 500ml BOLSA/FRASCO (UNID)", "Medicamentos e Farmacos", "UNID", 19, 15, 0, "2027-12-31", "", "LOT-2026-024", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-025", "SOLUÇÃO FISIOLÓGICA 0,9% 500ml BOLSA/FRASCO (UNID)", "Medicamentos e Farmacos", "UNID", 8, 15, 7, "2027-12-31", "", "LOT-2026-025", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-026", "AGULHA DESCARTÁVEL 25x07 (UNID)", "Medicamentos e Farmacos", "UNID", 23, 20, 0, "2027-12-31", "", "LOT-2026-026", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-027", "AGULHA DESCARTÁVEL 40X12 (UNID)", "Medicamentos e Farmacos", "UNID", 14, 30, 16, "2027-12-31", "", "LOT-2026-027", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-028", "ATADURA DE CREPOM 20CM (UNID)", "Medicamentos e Farmacos", "UNID", 17, 20, 3, "2027-12-31", "", "LOT-2026-028", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-029", "AVENTAL DESCARTÁVEL (UNID)", "Medicamentos e Farmacos", "UNID", 20, 10, 0, "2027-12-31", "", "LOT-2026-029", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-030", "BOUGIE DE INTUBAÇÃO (5cmX 60 OU 70 cm ), SEM LÚMEN", "Medicamentos e Farmacos", "UNID", 10, 2, 0, "2027-12-31", "", "LOT-2026-030", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-031", "CÂNULAS NASOFARÍNGEAS Nº6 ( 2 ) Nº7 ( 1 )", "Medicamentos e Farmacos", "UNID", 3, 6, 3, "2027-12-31", "", "LOT-2026-031", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-032", "CIRCUITO P/ ASPIRAÇÃO (UNID)", "Medicamentos e Farmacos", "UNID", 10, 10, 0, "2027-12-31", "", "LOT-2026-032", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-033", "CIRCUITO P/ OXIGENOTERAPIA (UNID)", "Medicamentos e Farmacos", "UNID", 7, 5, 0, "2027-12-31", "", "LOT-2026-033", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-034", "CLAMP UMBILICAL (UNID)", "Medicamentos e Farmacos", "UNID", 5, 2, 0, "2027-12-31", "", "LOT-2026-034", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 1"],
+["ALM-035", "ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA ADULTO/ INFANTIL.", "Insumos Gerais", "UNID", 130, 70, 0, "2027-12-31", "", "LOT-2026-035", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-036", "EQUIPO DE SORO MACROGOTAS COM INJETOR LATERAL.(UNID)", "Insumos Gerais", "UNID", 41, 30, 0, "2027-12-31", "", "LOT-2026-036", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-037", "ESPARADRAPO ROLO (UNID)", "Insumos Gerais", "UNID", 1, 2, 1, "2027-12-31", "", "LOT-2026-037", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-038", "FITA DE HGT OKMETER MATCH II", "Insumos Gerais", "UNID", 2, 1, 0, "2027-12-31", "", "LOT-2026-038", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-039", "FIXADOR DE TUBO OROTRAQUEAL AD/INF. (UNID)", "Insumos Gerais", "UNID", 16, 10, 0, "2027-12-31", "", "LOT-2026-039", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-040", "FRASCO DE SECREÇÃO PARA VIAS AÉREAS", "Insumos Gerais", "UNID", 11, 4, 0, "2027-12-31", "", "LOT-2026-040", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-041", "GAZE HIDRÓFILA ESTÉRIL 7,5 X 7,5.COMPRESSA (PCTE C/10 UNID)", "Insumos Gerais", "UNID", 48, 60, 12, "2027-12-31", "", "LOT-2026-041", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-042", "GEL PARA ECG (UNID)", "Insumos Gerais", "UNID", 3, 2, 0, "2027-12-31", "", "LOT-2026-042", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-043", "JELCO INTRAVENOSO Nº 14 (UNID)", "Insumos Gerais", "UNID", 17, 10, 0, "2027-12-31", "", "LOT-2026-043", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-044", "JELCO INTRAVENOSO Nº 16 (UNID)", "Insumos Gerais", "UNID", 13, 10, 0, "2027-12-31", "", "LOT-2026-044", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-045", "JELCO INTRAVENOSO Nº 18 (UNID)", "Insumos Gerais", "UNID", 29, 15, 0, "2027-12-31", "", "LOT-2026-045", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-046", "JELCO INTRAVENOSO Nº 20 (UNID)", "Insumos Gerais", "UNID", 24, 20, 0, "2027-12-31", "", "LOT-2026-046", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-047", "JELCO INTRAVENOSO Nº 22 (UNID)", "Insumos Gerais", "UNID", 9, 10, 1, "2027-12-31", "", "LOT-2026-047", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-048", "JELCO INTRAVENOSO Nº 24 (UNID)", "Insumos Gerais", "UNID", 5, 5, 0, "2027-12-31", "", "LOT-2026-048", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-049", "KIT DE IDENTIFICAÇÃO PARA RECÉM NASCIDO (UNID)", "Insumos Gerais", "UNID", 3, 2, 0, "2027-12-31", "", "LOT-2026-049", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-050", "LÂMINA DE BISTURI COM CABO Nº10 (UNID)", "Insumos Gerais", "UNID", 1, 6, 5, "2027-12-31", "", "LOT-2026-050", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-051", "LANCETA PARA PUNÇÃO MANUAL (UNID)", "Insumos Gerais", "UNID", 40, 30, 0, "2027-12-31", "", "LOT-2026-051", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-052", "LENÇOL DESCARTAVÉL (PCTE C/10)", "Insumos Gerais", "UNID", 5, 2, 0, "2027-12-31", "", "LOT-2026-052", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-053", "LUVA DE PROCEDIMENTO P", "Insumos Gerais", "UNID", 5, 3, 0, "2027-12-31", "", "LOT-2026-053", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-054", "LUVA DE PROCEDIMENTO M", "Insumos Gerais", "UNID", 6, 7, 1, "2027-12-31", "", "LOT-2026-054", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-055", "LUVA DE PROCEDIMENTO G", "Insumos Gerais", "UNID", 6, 5, 0, "2027-12-31", "", "LOT-2026-055", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-056", "MANTA TÉRMICA ALUMINIZADA (UNID)", "Insumos Gerais", "UNID", 11, 15, 4, "2027-12-31", "", "LOT-2026-056", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-057", "MÁSCARA N95", "Insumos Gerais", "UNID", 16, 20, 4, "2027-12-31", "", "LOT-2026-057", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-058", "MÁSCARA DESCARTÁVEL (UNID)", "Insumos Gerais", "UNID", 70, 40, 0, "2027-12-31", "", "LOT-2026-058", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-059", "POLIFIX EXTENSOR ADULTO (UNID)", "Insumos Gerais", "UNID", 24, 10, 0, "2027-12-31", "", "LOT-2026-059", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-060", "SERINGA DESCARTÁVEL 10ML (UNID)", "Insumos Gerais", "UNID", 18, 20, 2, "2027-12-31", "", "LOT-2026-060", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-061", "SERINGA DESCARTÁVEL 20ML (UNID)", "Insumos Gerais", "UNID", 13, 20, 7, "2027-12-31", "", "LOT-2026-061", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-062", "SONDA ASPIRAÇÃO Nº 04 (UNID)", "Insumos Gerais", "UNID", 6, 4, 0, "2027-12-31", "", "LOT-2026-062", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-063", "SONDA ASPIRAÇÃO Nº 06 (UNID)", "Insumos Gerais", "UNID", 4, 4, 0, "2027-12-31", "", "LOT-2026-063", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-064", "SONDA ASPIRAÇÃO Nº 12 (UNID)", "Insumos Gerais", "UNID", 0, 10, 10, "2027-12-31", "", "LOT-2026-064", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-065", "SONDA ASPIRAÇÃO Nº 16 (UNID)", "Insumos Gerais", "UNID", 0, 10, 10, "2027-12-31", "", "LOT-2026-065", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-066", "TOT Nº2,0 (UNID)", "Insumos Gerais", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-066", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 2"],
+["ALM-067", "TOT Nº2,5 (UNID)", "Insumos Gerais", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-067", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-068", "TOT Nº3,0 (UNID)", "Insumos Gerais", "UNID", 5, 2, 0, "2027-12-31", "", "LOT-2026-068", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-069", "TOT Nº3,5 (UNID)", "Insumos Gerais", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-069", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-070", "TOT Nº4,0 (UNID)", "Insumos Gerais", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-070", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-071", "TOT Nº4,5 (UNID)", "Insumos Gerais", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-071", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-072", "TOT Nº5,0 (UNID)", "Insumos Gerais", "UNID", 7, 6, 0, "2027-12-31", "", "LOT-2026-072", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-073", "TOT Nº5,5 (UNID)", "Insumos Gerais", "UNID", 6, 6, 0, "2027-12-31", "", "LOT-2026-073", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-074", "TOT Nº6,0 (UNID)", "Insumos Gerais", "UNID", 6, 6, 0, "2027-12-31", "", "LOT-2026-074", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-075", "TOT Nº7,0 (UNID)", "Insumos Gerais", "UNID", 13, 10, 0, "2027-12-31", "", "LOT-2026-075", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-076", "TOT Nº7,5 (UNID)", "Insumos Gerais", "UNID", 11, 10, 0, "2027-12-31", "", "LOT-2026-076", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-077", "TOT Nº8,0 (UNID)", "Insumos Gerais", "UNID", 7, 10, 3, "2027-12-31", "", "LOT-2026-077", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-078", "TOT Nº8,5 (UNID)", "Insumos Gerais", "UNID", 8, 6, 0, "2027-12-31", "", "LOT-2026-078", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-079", "ÁLCOOL GEL ANTI-SÉPTICO REFIL 500ML (UNID)", "Insumos Gerais", "UNID", 0, 0, 0, "2027-12-31", "", "LOT-2026-079", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-080", "ÁLCOOL 70% ALMOTOLIA 100ML", "Insumos Gerais", "UNID", 7, 10, 3, "2027-12-31", "", "LOT-2026-080", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-081", "COLETOR DE PERFURO CORTANTE CAIXA 7 LTS", "Insumos Gerais", "UNID", 3, 2, 0, "2027-12-31", "", "LOT-2026-081", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-082", "CLOREXIDINA ALCOÓLICA 0,5% ALMOTOLIA 100ML", "Insumos Gerais", "UNID", 2, 4, 2, "2027-12-31", "", "LOT-2026-082", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-083", "HIPOCLORITO DE SÓDIO 5LT", "Insumos Gerais", "UNID", 3, 1, 0, "2027-12-31", "", "LOT-2026-083", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-084", "LUVA GROSSA PARA LIMPEZA (UNID)", "Insumos Gerais", "UNID", 3, 4, 1, "2027-12-31", "", "LOT-2026-084", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-085", "MOP ÚMIDO ESCOVÃO (UNID)", "Insumos Gerais", "UNID", 8, 1, 0, "2027-12-31", "", "LOT-2026-085", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-086", "PILHAS PEQUENAS (UNID)", "Insumos Gerais", "UNID", 2, 8, 6, "2027-12-31", "", "LOT-2026-086", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-087", "SABÃO LÍQUIDO NEUTRO 5LT", "Insumos Gerais", "UNID", 3, 1, 0, "2027-12-31", "", "LOT-2026-087", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-088", "SACO DE LIXO BRANCO INFECTANTE 60 LT", "Insumos Gerais", "UNID", 0, 10, 10, "2027-12-31", "", "LOT-2026-088", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-089", "REGISTRO DE ATENDIMENTO RAPH :", "Insumos Gerais", "UNID", 2, 2, 0, "2027-12-31", "", "LOT-2026-089", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-090", "FOLHA DE REGISTRO DE TIH", "Insumos Gerais", "UNID", 4, 2, 0, "2027-12-31", "", "LOT-2026-090", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-091", "REGISTRO DE CHECKLIST", "Insumos Gerais", "UNID", 0, 0, 0, "2027-12-31", "", "LOT-2026-091", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-092", "REGISTRO DE RECOLHIMENTO DE VALORES", "Insumos Gerais", "UNID", 0, 1, 1, "2027-12-31", "", "LOT-2026-092", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-093", "REGISTRO DE PSICOTRÓPICO", "Insumos Gerais", "UNID", 5, 4, 0, "2027-12-31", "", "LOT-2026-093", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"],
+["ALM-094", "REGISTRO DE ÓBITO", "Insumos Gerais", "UNID", 5, 2, 0, "2027-12-31", "", "LOT-2026-094", "CBMERJ", "Almoxarifado Central DBM1", "Bloco 3"]
+  ];
+  
+  sh.getRange(2, 1, itens.length, 13).setValues(itens);
+  Logger.log("Almoxarifado populado com sucesso com os " + itens.length + " itens oficiais!");
+  return "Sucesso: " + itens.length + " itens gravados em AM_ALMOXARIFADO.";
+}
+
