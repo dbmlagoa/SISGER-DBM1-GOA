@@ -578,12 +578,33 @@ function registerSocorro(payload) {
     socSheet.appendRow(row);
 
     // Se solicitado reposição imediata, realiza a baixa no estoque do almoxarifado
-    if (s.reporAlmox && s.almoxItemId) {
-      moveAlmox({
-        itemId: s.almoxItemId,
-        type: "SAIDA",
-        quantity: Number(s.reporQtd) || Number(s.quantity) || 1
-      });
+    if (s.reporAlmox) {
+      var almoxQtd = Number(s.reporQtd) || Number(s.quantity) || 1;
+      if (s.almoxItemId) {
+        moveAlmox({
+          itemId: s.almoxItemId,
+          type: "SAIDA",
+          quantity: almoxQtd
+        });
+      } else if (s.itemName) {
+        try {
+          var almoxSh = getAlmoxSheet(ss);
+          if (almoxSh.getLastRow() >= 2) {
+            var almoxData = almoxSh.getRange(2, 1, almoxSh.getLastRow() - 1, 5).getValues();
+            for (var a = 0; a < almoxData.length; a++) {
+              var rowName = String(almoxData[a][1] || "").toLowerCase().trim();
+              var targetName = String(s.itemName).toLowerCase().trim();
+              if (rowName === targetName || (rowName && (targetName.indexOf(rowName) !== -1 || rowName.indexOf(targetName) !== -1))) {
+                var curStock = Number(almoxData[a][4]) || 0;
+                almoxSh.getRange(a + 2, 5).setValue(Math.max(0, curStock - almoxQtd));
+                break;
+              }
+            }
+          }
+        } catch(eAlmox) {
+          Logger.log("Aviso ao baixar almoxarifado por nome: " + eAlmox);
+        }
+      }
     }
 
     return { success: true, message: "Lançamento de socorro registrado com sucesso!" };
