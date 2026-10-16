@@ -42,20 +42,6 @@
             theme: {
                 extend: {
                     colors: {
-                        slate: {
-                            950: '#f8f5ee', // Fundo principal em tom areia nobre
-                            900: '#ffffff', // Cartões e modais em branco puro
-                            850: '#fcfbf8', // Marfim areia claro
-                            800: '#efe8dc', // Chips, tags e fundos neutros
-                            700: '#dfd5c4', // Bordas delicadas em tom areia
-                            600: '#9c8e7b', // Bordas ativas
-                            500: '#6e6456', // Texto secundário
-                            400: '#524a3f', // Texto muted de boa leitura
-                            300: '#383229', // Texto de parágrafos
-                            200: '#25201a', // Texto de títulos escuros
-                            100: '#1a1612', // Títulos principais
-                            50: '#faf8f5'
-                        },
                         sand: {
                             50: '#fcfbf8',
                             100: '#f8f5ee',
@@ -82,23 +68,22 @@
     
     <style>
         :root {
-            --bg-sand: #f8f5ee;
+            --bg-sand: #f8f6f0;
             --bg-white: #ffffff;
-            --border-sand: #e6ded2;
-            --border-sand-dark: #dfd5c4;
-            --text-main: #1a1612;
-            --text-sub: #524a3f;
+            --text-dark: #0f172a;
+            --text-muted: #334155;
+            --border-light: #cbd5e1;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f8f5ee !important;
-            color: #1a1612 !important;
+            background-color: #f8f6f0 !important;
+            color: #0f172a !important;
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
         }
-        
+
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #efe8dc; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #dfd5c4; border-radius: 4px; }
@@ -107,48 +92,64 @@
         .tab-fade-in { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TEMA CLARO: Cartões em Branco Puro e Bordas Areia */
+        /* REGRAS MANDATÓRIAS DE CONTRASTE: FONTES ESCURAS EM TODOS OS ELEMENTOS */
+        body, p, span, h1, h2, h3, h4, h5, h6, label, div, td, th, li, a {
+            color: #0f172a;
+        }
+
+        /* Fundo claro para caixas, cartões e botões */
+        .bg-slate-950 {
+            background-color: #f8f6f0 !important;
+        }
         .bg-slate-900 {
             background-color: #ffffff !important;
-            border-color: #e6ded2 !important;
-            box-shadow: 0 4px 16px -2px rgba(90, 75, 55, 0.05), 0 2px 6px -1px rgba(90, 75, 55, 0.03);
-        }
-        .bg-slate-950 {
-            background-color: #f8f5ee !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.04);
         }
         .bg-slate-800 {
-            background-color: #efe8dc !important;
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
         }
-        .border-slate-800 {
-            border-color: #e6ded2 !important;
+        .bg-slate-100 {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
         }
-        .border-slate-700 {
-            border-color: #dfd5c4 !important;
-        }
-
-        /* Contraste em Títulos e Textos nos Cartões Brancos */
-        .bg-slate-900 h1, .bg-slate-900 h2, .bg-slate-900 h3, .bg-slate-900 h4, .bg-slate-900 h5,
-        .bg-slate-950 h1, .bg-slate-950 h2, .bg-slate-950 h3, .bg-slate-950 h4, .bg-slate-950 h5 {
-            color: #1a1612 !important;
+        .border-slate-800, .border-slate-700, .border-slate-300, .border-slate-200 {
+            border-color: #cbd5e1 !important;
         }
 
-        /* Textos brancos padrão viram escuros, EXCETO em botões coloridos */
-        .text-white:not(button.bg-rose-600 *):not(button.bg-red-600 *):not(button.bg-emerald-600 *):not(button.bg-amber-600 *):not(button.bg-sky-600 *):not(.keep-white) {
-            color: #1a1612;
+        /* Classes text-slate com letras escuras e legíveis */
+        .text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700 {
+            color: #0f172a !important;
         }
-        
-        button.bg-rose-600, button.bg-red-600, button.bg-emerald-600, .keep-white {
+        .text-slate-600, .text-slate-500 {
+            color: #334155 !important;
+        }
+        .text-slate-400, .text-slate-300 {
+            color: #475569 !important;
+        }
+
+        /* Botões sem preenchimento ativo: SEMPRE letras escuras */
+        button:not(.bg-rose-600):not(.bg-red-600):not(.bg-emerald-600):not(.bg-green-600) {
+            color: #0f172a !important;
+        }
+        button:not(.bg-rose-600):not(.bg-red-600):not(.bg-emerald-600):not(.bg-green-600) * {
+            color: #0f172a !important;
+        }
+
+        /* Apenas botões e badges ativos coloridos recebem texto branco */
+        .bg-rose-600, .bg-rose-600 *,
+        .bg-red-600, .bg-red-600 *,
+        .bg-emerald-600, .bg-emerald-600 *,
+        .keep-white {
             color: #ffffff !important;
         }
-        button.bg-rose-600 *, button.bg-red-600 *, button.bg-emerald-600 * {
-            color: #ffffff !important;
-        }
 
-        /* Formulários e Inputs */
+        /* Inputs, selects e textareas com texto escuro e fundo branco */
         input:not([type="checkbox"]):not([type="radio"]), select, textarea {
             background-color: #ffffff !important;
-            color: #1a1612 !important;
-            border-color: #dfd5c4 !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
         }
         input:focus, select:focus, textarea:focus {
             border-color: #dc2626 !important;
@@ -193,7 +194,7 @@
         };
 
         try { 
-            localStorage.removeItem('sigaero_operator'); 
+            localStorage.removeItem('sigaero_operator'); localStorage.removeItem('sigaero_checklist_history'); 
             const curUrl = localStorage.getItem('sigaero_script_url');
             if (!curUrl || curUrl.includes('AKfycbwU9B_t1p_yZ')) {
                 localStorage.setItem('sigaero_script_url', DEFAULT_SCRIPT_URL);
@@ -5292,23 +5293,25 @@
                 };
             };
 
-            // Salvar Checklist do Plantão (com validação estrita e salvamento no fim)
+            // Salvar Checklist do Plantão (exige checklist COMPLETO de todos os 210 itens)
             const handleSaveCurrentChecklist = () => {
-                // Verifica itens pendentes no catálogo geral
                 const uncheckedMateriais = materiaisItems.filter(it => !checkState[it.id] || checkState[it.id].status === 'UNCHECKED').length;
                 const uncheckedElet = eletronicosItems.filter(it => !checkState[it.id] || checkState[it.id].status === 'UNCHECKED').length;
                 const totalUnchecked = uncheckedMateriais + uncheckedElet;
 
                 if (totalUnchecked > 0) {
-                    const confirmProceed = window.confirm(
-                        `Atenção: Existem ${totalUnchecked} item(ns) na posição "NÃO checado" (${uncheckedMateriais} em Materiais e ${uncheckedElet} em Eletrônicos).\n\n` +
-                        `Por norma operacional, cada item deve ser checado individualmente com [V] ou [X].\n\n` +
-                        `Deseja registrar o checklist mesmo com pendências apontadas?`
+                    alert(
+                        `⚠️ CHECKLIST INCOMPLETO!\n\n` +
+                        `Ainda restam ${totalUnchecked} item(ns) na posição "NÃO CHECADO" (${uncheckedMateriais} em Materiais e ${uncheckedElet} em Eletrônicos).\n\n` +
+                        `O checklist só pode ser registrado e validado após a conferência de TODOS os 210 itens.\n` +
+                        `Você pode checar item a item com [V] ou [X], ou clicar no botão "✓ Conferir Todos".`
                     );
-                    if (!confirmProceed) return;
+                    return;
                 }
 
                 const record = buildCurrentRecord();
+                record.isCompleto = true;
+                record.totalConferidos = checklistCatalog.length; // 210
                 onSaveChecklist(record);
             };
 
@@ -5491,12 +5494,16 @@
 
                         const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
 
+            // Alerta SÓ PODE ser verde se o checklist foi REALIZADO COMPLETO (todos os 210 itens checados)
             const isChecklistRealizadoHoje = useMemo(() => {
                 if (!checklistHistory || checklistHistory.length === 0) return false;
                 return checklistHistory.some(rec => {
                     const recDate = (rec.data || '').split('T')[0];
                     const recAero = (rec.aeronave || '').trim();
-                    return recDate === todayStr && recAero === selectedAircraft;
+                    const totalConf = Number(rec.totalConferidos) || 0;
+                    const totalCat = Number(rec.totalCatalogo) || 210;
+                    const isComplete = rec.isCompleto === true || totalConf >= totalCat;
+                    return recDate === todayStr && recAero === selectedAircraft && isComplete && totalConf >= 210;
                 });
             }, [checklistHistory, selectedAircraft, todayStr]);
 
@@ -5505,7 +5512,10 @@
                 return checklistHistory.find(rec => {
                     const recDate = (rec.data || '').split('T')[0];
                     const recAero = (rec.aeronave || '').trim();
-                    return recDate === todayStr && recAero === selectedAircraft;
+                    const totalConf = Number(rec.totalConferidos) || 0;
+                    const totalCat = Number(rec.totalCatalogo) || 210;
+                    const isComplete = rec.isCompleto === true || totalConf >= totalCat;
+                    return recDate === todayStr && recAero === selectedAircraft && isComplete && totalConf >= 210;
                 });
             }, [checklistHistory, selectedAircraft, todayStr]);
 
@@ -5603,11 +5613,12 @@
                             <button
                                 type="button"
                                 onClick={handleConferirTodos}
-                                className="px-3.5 py-2 rounded-xl bg-white hover:bg-emerald-50 text-slate-900 hover:text-emerald-800 border-2 border-slate-300 hover:border-emerald-500 font-black text-xs shadow-xs flex items-center gap-1.5 transition-all"
+                                className="px-4 py-2.5 rounded-xl bg-white hover:bg-emerald-50 text-slate-900 border-2 border-slate-300 hover:border-emerald-500 font-black text-xs shadow-sm flex items-center gap-1.5 transition-all"
+                                style={{ color: '#0f172a' }}
                                 title="Marcar todos os itens como conferidos (V)"
                             >
-                                <span className="text-emerald-600 font-black text-sm">✓</span>
-                                <span>Conferir Todos</span>
+                                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '14px' }}>✓</span>
+                                <span style={{ color: '#0f172a', fontWeight: 900 }}>Conferir Todos</span>
                             </button>
                         </div>
 
@@ -5622,37 +5633,52 @@
                         </div>
                     </div>
 
-                    {/* Sub-Abas do Checklist (Materiais, Eletrônicos, Psicotrópicos) */}
-                    <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-300 shadow-inner">
+                    {/* Sub-Abas do Checklist (Materiais, Eletrônicos, Psicotrópicos) com cores claras e letras escuras */}
+                    <div className="flex bg-slate-200 p-1.5 rounded-2xl border-2 border-slate-300 gap-1.5 shadow-sm">
                         <button
                             type="button"
                             onClick={() => setActiveSubTab('MATERIAIS')}
-                            className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
-                                activeSubTab === 'MATERIAIS' ? 'bg-white text-rose-700 shadow-sm border border-slate-300' : 'text-slate-800 hover:text-slate-950 font-bold'
+                            className={`flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
+                                activeSubTab === 'MATERIAIS'
+                                    ? 'bg-white text-rose-700 shadow-md border-2 border-rose-600'
+                                    : 'bg-white/90 hover:bg-white text-slate-900 border border-slate-300'
                             }`}
+                            style={{ color: activeSubTab === 'MATERIAIS' ? '#be123c' : '#0f172a' }}
                         >
                             <Icon name="almoxarifado" className="w-4 h-4 text-rose-600" />
-                            <span>1. MATERIAIS & KITS ({countMateriaisChecked}/129)</span>
+                            <span style={{ color: activeSubTab === 'MATERIAIS' ? '#be123c' : '#0f172a', fontWeight: 900 }}>
+                                1. MATERIAIS & KITS ({countMateriaisChecked}/129)
+                            </span>
                         </button>
                         <button
                             type="button"
                             onClick={() => setActiveSubTab('ELETRONICOS')}
-                            className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
-                                activeSubTab === 'ELETRONICOS' ? 'bg-white text-rose-700 shadow-sm border border-slate-300' : 'text-slate-800 hover:text-slate-950 font-bold'
+                            className={`flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
+                                activeSubTab === 'ELETRONICOS'
+                                    ? 'bg-white text-rose-700 shadow-md border-2 border-rose-600'
+                                    : 'bg-white/90 hover:bg-white text-slate-900 border border-slate-300'
                             }`}
+                            style={{ color: activeSubTab === 'ELETRONICOS' ? '#be123c' : '#0f172a' }}
                         >
                             <Icon name="calculadora" className="w-4 h-4 text-rose-600" />
-                            <span>2. ELETRÔNICOS BIOMÉDICOS ({totalEletronicosChecked}/81)</span>
+                            <span style={{ color: activeSubTab === 'ELETRONICOS' ? '#be123c' : '#0f172a', fontWeight: 900 }}>
+                                2. ELETRÔNICOS BIOMÉDICOS ({totalEletronicosChecked}/81)
+                            </span>
                         </button>
                         <button
                             type="button"
                             onClick={() => setActiveSubTab('PSICOTROPICOS')}
-                            className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
-                                activeSubTab === 'PSICOTROPICOS' ? 'bg-white text-rose-700 shadow-sm border border-slate-300' : 'text-slate-800 hover:text-slate-950 font-bold'
+                            className={`flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 ${
+                                activeSubTab === 'PSICOTROPICOS'
+                                    ? 'bg-white text-rose-700 shadow-md border-2 border-rose-600'
+                                    : 'bg-white/90 hover:bg-white text-slate-900 border border-slate-300'
                             }`}
+                            style={{ color: activeSubTab === 'PSICOTROPICOS' ? '#be123c' : '#0f172a' }}
                         >
                             <Icon name="shield" className="w-4 h-4 text-rose-600" />
-                            <span>3. PSICOTRÓPICOS (PORTARIA 344)</span>
+                            <span style={{ color: activeSubTab === 'PSICOTROPICOS' ? '#be123c' : '#0f172a', fontWeight: 900 }}>
+                                3. PSICOTRÓPICOS (PORTARIA 344)
+                            </span>
                         </button>
                     </div>
 
@@ -5753,8 +5779,9 @@
                                                                 : 'bg-white hover:bg-emerald-50 text-slate-900 hover:text-emerald-700 border border-slate-300 shadow-xs'
                                                         }`}
                                                         title="Conforme (V)"
+                                                        style={{ color: isOK ? '#ffffff' : '#0f172a' }}
                                                     >
-                                                        <span className={isOK ? "keep-white font-black" : "font-black"}>V</span>
+                                                        <span style={{ color: isOK ? '#ffffff' : '#0f172a', fontWeight: 900, fontSize: '13px' }}>V</span>
                                                     </button>
 
                                                     <button
@@ -5768,8 +5795,9 @@
                                                                 : 'bg-white hover:bg-rose-50 text-slate-900 hover:text-rose-700 border border-slate-300 shadow-xs'
                                                         }`}
                                                         title="Alteração (X)"
+                                                        style={{ color: isNC ? '#ffffff' : '#0f172a' }}
                                                     >
-                                                        <span className={isNC ? "keep-white font-black" : "font-black"}>X</span>
+                                                        <span style={{ color: isNC ? '#ffffff' : '#0f172a', fontWeight: 900, fontSize: '13px' }}>X</span>
                                                     </button>
 
                                                     {item.hasNA && (

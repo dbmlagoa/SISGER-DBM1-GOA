@@ -618,9 +618,11 @@ function saveChecklist(payload) {
 
     // 2. Grava na aba AM_CHECKLIST_RESUMO a informação consolidada de que o checklist foi realizado
     var totalAlt = rowsToAppend.length;
-    var statusRealizacao = totalAlt > 0 
-      ? "REALIZADO COM ALTERAÇÕES (" + totalAlt + " NC)" 
-      : "REALIZADO SEM ALTERAÇÕES (100% OPERANTE)";
+    var totalConf = Number(payload.totalConferidos !== undefined ? payload.totalConferidos : (chk.totalConferidos || 0));
+    var isCompleto = totalConf >= 210;
+    var statusRealizacao = isCompleto 
+      ? (totalAlt > 0 ? "REALIZADO COM ALTERAÇÕES (" + totalAlt + " NC)" : "REALIZADO SEM ALTERAÇÕES (100% OPERANTE)") 
+      : "INCOMPLETO PENDENTE (" + totalConf + "/210)";
 
     var resumoSheet = getOrCreateSheet(ss, "AM_CHECKLIST_RESUMO", [
       "ID", "Data", "Aeronave", "Status", "Total Conferidos", "Alterações Relatadas", 
@@ -632,7 +634,7 @@ function saveChecklist(payload) {
       dataConf,
       aero,
       statusRealizacao,
-      payload.totalConferidos || chk.totalConferidos || 220,
+      totalConf,
       totalAlt,
       chk.lacrePsicotropicos || chk.sealNumber || "---",
       obsGerais,
