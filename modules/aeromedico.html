@@ -98,10 +98,10 @@
         }
 
         /* Fundo claro para caixas, cartões e botões */
-        .bg-slate-950 {
+        .bg-sand-50 {
             background-color: #f8f6f0 !important;
         }
-        .bg-slate-900 {
+        .bg-white {
             background-color: #ffffff !important;
             border-color: #cbd5e1 !important;
             box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.04);
@@ -165,8 +165,8 @@
 </head>
 <body class="custom-scrollbar selection:bg-rose-600 selection:text-white">
     <div id="root">
-        <div class="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-slate-300">
-            <div class="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div class="min-h-screen flex flex-col items-center justify-center bg-sand-100 text-slate-800">
+            <div class="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mb-4"></div>
             <p class="text-sm font-semibold tracking-wider uppercase text-slate-400">Carregando SIG-Aeromédico...</p>
             <p class="text-xs text-slate-500 mt-1">DBM 1 / GOA • CBMERJ</p>
         </div>
@@ -4437,7 +4437,7 @@
             };
 
             return (
-                <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center p-4 relative overflow-hidden">
+                <div className="min-h-screen bg-gradient-to-b from-sand-100 via-sand-50 to-sand-200 flex flex-col justify-center items-center p-4 relative overflow-hidden">
                     {/* Elementos visuais sutis em tons areia e carmesim */}
                     <div className="absolute -top-32 -right-32 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -4454,7 +4454,7 @@
                         </div>
 
                         {/* Alternador de Abas */}
-                        <div className="flex bg-slate-800 p-1 rounded-xl mb-5 border border-slate-700/60">
+                        <div className="flex bg-slate-200 p-1 rounded-xl mb-5 border-2 border-slate-300">
                             <button
                                 type="button"
                                 onClick={() => { setMode('login'); setErr(''); setSuccessMsg(''); }}
@@ -4669,13 +4669,13 @@
 
         const Header = ({ operator, onLogout, onOpenSettings, syncStatus, onToggleMobileMenu }) => {
             return (
-                <header className="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+                <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b-2 border-sand-300 px-4 py-3 flex items-center justify-between shadow-xs">
                     {/* Lado Esquerdo */}
                     <div className="flex items-center gap-3">
                         <button
                             type="button"
                             onClick={onToggleMobileMenu}
-                            className="p-2 -ml-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 lg:hidden focus:outline-none"
+                            className="p-2 -ml-2 rounded-lg text-slate-700 hover:text-slate-950 hover:bg-sand-100 lg:hidden focus:outline-none"
                             title="Menu Lateral"
                         >
                             <Icon name="menu" className="w-6 h-6" />
@@ -4687,12 +4687,12 @@
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <span className="font-extrabold text-base tracking-tight text-white">SIG-AEROMÉDICO</span>
+                                    <span className="font-extrabold text-base tracking-tight text-slate-900">SIG-AEROMÉDICO</span>
                                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
                                         DBM1 / GOA
                                     </span>
                                 </div>
-                                <p className="text-[11px] text-slate-400 hidden sm:block">Unidade de Apoio e Socorro Aéreo (UASA)</p>
+                                <p className="text-[11px] text-slate-600 font-semibold hidden sm:block">Unidade de Apoio e Socorro Aéreo (UASA)</p>
                             </div>
                         </div>
                     </div>
@@ -4703,11 +4703,11 @@
                         <button
                             type="button"
                             onClick={onOpenSettings}
-                            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-xs transition-colors"
+                            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-sand-50 hover:bg-sand-100 border border-sand-300 text-xs transition-colors"
                             title="Configurações da Planilha Dedicada"
                         >
                             <span className={`w-2 h-2 rounded-full ${syncStatus === 'online' ? 'bg-emerald-500' : syncStatus === 'syncing' ? 'bg-amber-500 animate-ping' : 'bg-slate-400'}`}></span>
-                            <span className="text-slate-300 font-medium">
+                            <span className="text-slate-800 font-bold">
                                 {syncStatus === 'online' ? 'Planilha Conectada' : syncStatus === 'syncing' ? 'Sincronizando...' : 'Cache Local'}
                             </span>
                             <Icon name="settings" className="w-3.5 h-3.5 text-slate-400 ml-1" />
@@ -4729,13 +4729,13 @@
                                         </p>
                                     )}
                                 </div>
-                                <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-rose-400 font-bold text-xs uppercase shadow">
+                                <div className="w-8 h-8 rounded-full bg-sand-100 border border-sand-300 flex items-center justify-center text-rose-700 font-extrabold text-xs uppercase shadow">
                                     {operator.warName ? operator.warName.substring(0, 2) : "BM"}
                                 </div>
                                 <button
                                     type="button"
                                     onClick={onLogout}
-                                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition-colors"
+                                    className="p-1.5 rounded-lg text-slate-600 hover:text-rose-700 hover:bg-rose-50 transition-colors"
                                     title="Sair / Trocar Militar"
                                 >
                                     <Icon name="logout" className="w-5 h-5" />
@@ -4762,9 +4762,9 @@
             ];
 
             const sidebarContent = (
-                <div className="flex flex-col h-full bg-slate-900 border-r border-slate-800 w-64 select-none">
-                    <div className="p-4 border-b border-slate-800/80">
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Módulos Operacionais</p>
+                <div className="flex flex-col h-full bg-sand-50 border-r-2 border-sand-300 w-64 select-none">
+                    <div className="p-4 border-b border-sand-300">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Módulos Operacionais</p>
                     </div>
 
                     <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto custom-scrollbar">
@@ -4777,8 +4777,8 @@
                                     onClick={() => { onSelectTab(item.id); onCloseMobile(); }}
                                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                                         active
-                                            ? 'bg-rose-600 text-white shadow-md shadow-rose-900/30'
-                                            : 'text-slate-300 hover:bg-slate-800/70 hover:text-white'
+                                            ? 'bg-rose-700 text-white font-extrabold shadow-sm'
+                                            : 'text-slate-800 hover:bg-sand-200/70 hover:text-slate-950 font-bold'
                                     }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -4796,8 +4796,8 @@
                     </nav>
 
                     {/* Rodapé da Barra Lateral */}
-                    <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 text-center">
-                        <p className="text-[11px] font-bold text-slate-300">SIG-Aeromédico v3.0</p>
+                    <div className="p-4 border-t border-sand-300 bg-sand-100/60 text-center">
+                        <p className="text-[11px] font-bold text-slate-800">SIG-Aeromédico v3.0</p>
                         <p className="text-[10px] text-slate-400">CBMERJ • DBM1 Jacarepaguá</p>
                     </div>
                 </div>
@@ -4868,18 +4868,18 @@
             return (
                 <div className="space-y-6 tab-fade-in">
                     {/* Banner de Prontidão Operacional */}
-                    <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl p-5 shadow-xl relative overflow-hidden">
+                    <div className="bg-gradient-to-r from-sand-50 via-white to-sand-100 border-2 border-slate-200 rounded-2xl p-5 shadow-sm relative overflow-hidden">
                         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-rose-500/10 to-transparent pointer-events-none"></div>
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
                             <div>
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold mb-2">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold mb-2">
                                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                                     <span>BASE GOA 100% OPERACIONAL</span>
                                 </div>
-                                <h2 className="text-xl sm:text-2xl font-black text-white">
+                                <h2 className="text-xl sm:text-2xl font-black text-slate-900">
                                     Prontidão UASA • DBM 1
                                 </h2>
-                                <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
+                                <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1 max-w-xl">
                                     Aeronave Principal Guardião 01 (Esquilo) e Equipamentos Biomédicos conferidos para resgate aeromédico e transporte inter-hospitalar.
                                 </p>
                             </div>
@@ -4895,7 +4895,7 @@
                                 <button
                                     type="button"
                                     onClick={onOpenNewSocorro}
-                                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all flex items-center gap-2"
+                                    className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 border-2 border-slate-300 font-black text-xs transition-all flex items-center gap-2"
                                 >
                                     <Icon name="plus" className="w-4 h-4 text-rose-400" />
                                     <span>Lançar RAPH</span>
@@ -4909,17 +4909,17 @@
                         {/* Card 1: Estoque Crítico */}
                         <div 
                             onClick={() => onNavigate('almoxarifado')}
-                            className="bg-slate-900/90 border border-slate-800 hover:border-rose-500/50 rounded-2xl p-4 shadow-lg cursor-pointer transition-all group"
+                            className="bg-white border-2 border-slate-200 hover:border-slate-400 rounded-2xl p-4 shadow-sm cursor-pointer transition-all group"
                         >
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold text-slate-400">Estoque Crítico</span>
+                                <span className="text-xs font-bold text-slate-700">Estoque Crítico</span>
                                 <div className="p-2 rounded-xl bg-rose-500/10 text-rose-400 group-hover:scale-110 transition-transform">
                                     <Icon name="alert" className="w-5 h-5" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <p className="text-2xl sm:text-3xl font-black text-rose-400">{stats.criticalStockCount}</p>
-                                <p className="text-[11px] text-slate-500 mt-1">
+                                <p className="text-2xl sm:text-3xl font-black text-rose-700">{stats.criticalStockCount}</p>
+                                <p className="text-[11px] text-slate-600 font-medium mt-1">
                                     {stats.zeroStockCount > 0 ? `${stats.zeroStockCount} zerados totalmente` : 'Itens abaixo da cota ideal'}
                                 </p>
                             </div>
@@ -4928,58 +4928,58 @@
                         {/* Card 2: Validades FEFO */}
                         <div 
                             onClick={() => onNavigate('almoxarifado')}
-                            className="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-4 shadow-lg cursor-pointer transition-all group"
+                            className="bg-white border-2 border-slate-200 hover:border-slate-400 rounded-2xl p-4 shadow-sm cursor-pointer transition-all group"
                         >
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold text-slate-400">Validades & Vencimentos</span>
+                                <span className="text-xs font-bold text-slate-700">Validades & Vencimentos</span>
                                 <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 group-hover:scale-110 transition-transform">
                                     <Icon name="clock" className="w-5 h-5" />
                                 </div>
                             </div>
                             <div className="mt-3">
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-2xl sm:text-3xl font-black text-amber-400">{stats.expiringSoonCount}</span>
+                                    <span className="text-2xl sm:text-3xl font-black text-amber-700">{stats.expiringSoonCount}</span>
                                     {stats.expiredCount > 0 && (
                                         <span className="text-xs font-extrabold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">
                                             {stats.expiredCount} vencidos
                                         </span>
                                     )}
                                 </div>
-                                <p className="text-[11px] text-slate-500 mt-1">A vencer nos próximos 60 dias</p>
+                                <p className="text-[11px] text-slate-600 font-medium mt-1">A vencer nos próximos 60 dias</p>
                             </div>
                         </div>
 
                         {/* Card 3: Socorros Realizados */}
                         <div 
                             onClick={() => onNavigate('socorros')}
-                            className="bg-slate-900/90 border border-slate-800 hover:border-sky-500/50 rounded-2xl p-4 shadow-lg cursor-pointer transition-all group"
+                            className="bg-white border-2 border-slate-200 hover:border-slate-400 rounded-2xl p-4 shadow-sm cursor-pointer transition-all group"
                         >
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold text-slate-400">Socorros / RAPH</span>
+                                <span className="text-xs font-bold text-slate-700">Socorros / RAPH</span>
                                 <div className="p-2 rounded-xl bg-sky-500/10 text-sky-400 group-hover:scale-110 transition-transform">
                                     <Icon name="socorros" className="w-5 h-5" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <p className="text-2xl sm:text-3xl font-black text-sky-400">{stats.totalSocorros}</p>
-                                <p className="text-[11px] text-slate-500 mt-1">Atendimentos aeromédicos salvos</p>
+                                <p className="text-2xl sm:text-3xl font-black text-sky-700">{stats.totalSocorros}</p>
+                                <p className="text-[11px] text-slate-600 font-medium mt-1">Atendimentos aeromédicos salvos</p>
                             </div>
                         </div>
 
                         {/* Card 4: Horas de Voo */}
                         <div 
                             onClick={() => onNavigate('voos')}
-                            className="bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-4 shadow-lg cursor-pointer transition-all group"
+                            className="bg-white border-2 border-slate-200 hover:border-slate-400 rounded-2xl p-4 shadow-sm cursor-pointer transition-all group"
                         >
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold text-slate-400">Tempo de Voo (Mês)</span>
+                                <span className="text-xs font-bold text-slate-700">Tempo de Voo (Mês)</span>
                                 <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:scale-110 transition-transform">
                                     <Icon name="voos" className="w-5 h-5" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <p className="text-2xl sm:text-3xl font-black text-emerald-400">{stats.horasVooFormatada}</p>
-                                <p className="text-[11px] text-slate-500 mt-1">{stats.totalVoos} missões registradas</p>
+                                <p className="text-2xl sm:text-3xl font-black text-emerald-700">{stats.horasVooFormatada}</p>
+                                <p className="text-[11px] text-slate-600 font-medium mt-1">{stats.totalVoos} missões registradas</p>
                             </div>
                         </div>
                     </div>
@@ -4989,60 +4989,60 @@
                         <button
                             type="button"
                             onClick={() => onNavigate('checklist')}
-                            className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-left transition-all hover:bg-slate-800/80 group"
+                            className="p-3.5 rounded-xl bg-white border-2 border-slate-200 hover:border-slate-400 text-left transition-all hover:bg-sand-50 shadow-sm group"
                         >
                             <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                 <Icon name="checklist" className="w-4 h-4" />
                             </div>
-                            <p className="text-xs font-bold text-white">Checklist Diário</p>
-                            <p className="text-[10px] text-slate-400 mt-0.5">Mochilas, O2 e Psicotrópicos</p>
+                            <p className="text-xs font-extrabold text-slate-900">Checklist Diário</p>
+                            <p className="text-[10px] text-slate-600 font-medium mt-0.5">Mochilas, O2 e Psicotrópicos</p>
                         </button>
 
                         <button
                             type="button"
                             onClick={onOpenNewSocorro}
-                            className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-left transition-all hover:bg-slate-800/80 group"
+                            className="p-3.5 rounded-xl bg-white border-2 border-slate-200 hover:border-slate-400 text-left transition-all hover:bg-sand-50 shadow-sm group"
                         >
                             <div className="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                 <Icon name="plus" className="w-4 h-4" />
                             </div>
-                            <p className="text-xs font-bold text-white">Lançar Atendimento</p>
-                            <p className="text-[10px] text-slate-400 mt-0.5">RAPH / TIH e Insumos</p>
+                            <p className="text-xs font-extrabold text-slate-900">Lançar Atendimento</p>
+                            <p className="text-[10px] text-slate-600 font-medium mt-0.5">RAPH / TIH e Insumos</p>
                         </button>
 
                         <button
                             type="button"
                             onClick={() => onOpenMovimento(almoxItems[0])}
-                            className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-left transition-all hover:bg-slate-800/80 group"
+                            className="p-3.5 rounded-xl bg-white border-2 border-slate-200 hover:border-slate-400 text-left transition-all hover:bg-sand-50 shadow-sm group"
                         >
                             <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                 <Icon name="almoxarifado" className="w-4 h-4" />
                             </div>
-                            <p className="text-xs font-bold text-white">Movimentar Estoque</p>
-                            <p className="text-[10px] text-slate-400 mt-0.5">Entrada, Saída e Validade</p>
+                            <p className="text-xs font-extrabold text-slate-900">Movimentar Estoque</p>
+                            <p className="text-[10px] text-slate-600 font-medium mt-0.5">Entrada, Saída e Validade</p>
                         </button>
 
                         <button
                             type="button"
                             onClick={() => onNavigate('calculadora')}
-                            className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-left transition-all hover:bg-slate-800/80 group"
+                            className="p-3.5 rounded-xl bg-white border-2 border-slate-200 hover:border-slate-400 text-left transition-all hover:bg-sand-50 shadow-sm group"
                         >
                             <div className="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                 <Icon name="calculadora" className="w-4 h-4" />
                             </div>
-                            <p className="text-xs font-bold text-white">Autonomia de O₂</p>
-                            <p className="text-[10px] text-slate-400 mt-0.5">Calculadora de Voo</p>
+                            <p className="text-xs font-extrabold text-slate-900">Autonomia de O₂</p>
+                            <p className="text-[10px] text-slate-600 font-medium mt-0.5">Calculadora de Voo</p>
                         </button>
                     </div>
 
                     {/* Últimos Atendimentos & Checklists */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Últimos Socorros */}
-                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm">
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
                                     <Icon name="socorros" className="w-5 h-5 text-rose-400" />
-                                    <h3 className="text-sm font-bold text-white">Últimos Atendimentos (RAPH)</h3>
+                                    <h3 className="text-sm font-black text-slate-900">Últimos Atendimentos (RAPH)</h3>
                                 </div>
                                 <button
                                     type="button"
@@ -5055,10 +5055,10 @@
 
                             <div className="space-y-3">
                                 {socorrosList.slice(0, 3).map((soc, idx) => (
-                                    <div key={soc.id || idx} className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 flex items-center justify-between gap-3">
+                                    <div key={soc.id || idx} className="p-3 rounded-xl bg-sand-50 border border-sand-300 flex items-center justify-between gap-3">
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-xs font-bold text-white truncate">{soc.paciente || soc.raphTih}</span>
+                                                <span className="text-xs font-extrabold text-slate-900 truncate">{soc.paciente || soc.raphTih}</span>
                                                 <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
                                                     soc.gravidade === 'Vermelho' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                                                     soc.gravidade === 'Amarelo' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
@@ -5067,10 +5067,10 @@
                                                     {soc.gravidade || 'Primário'}
                                                 </span>
                                             </div>
-                                            <p className="text-[11px] text-slate-400 mt-0.5 truncate">{soc.tipoOcorrencia || soc.item}</p>
+                                            <p className="text-[11px] text-slate-700 mt-0.5 truncate">{soc.tipoOcorrencia || soc.item}</p>
                                         </div>
                                         <div className="text-right shrink-0">
-                                            <p className="text-[11px] font-bold text-slate-300">{soc.raphTih || soc.numEvento}</p>
+                                            <p className="text-[11px] font-bold text-slate-800">{soc.raphTih || soc.numEvento}</p>
                                             <p className="text-[10px] text-slate-500">{soc.militar || 'UASA'}</p>
                                         </div>
                                     </div>
@@ -5079,11 +5079,11 @@
                         </div>
 
                         {/* Itens mais Críticos do Almoxarifado */}
-                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm">
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
                                     <Icon name="alert" className="w-5 h-5 text-amber-400" />
-                                    <h3 className="text-sm font-bold text-white">Insumos em Alerta Imediato</h3>
+                                    <h3 className="text-sm font-black text-slate-900">Insumos em Alerta Imediato</h3>
                                 </div>
                                 <button
                                     type="button"
@@ -5101,9 +5101,9 @@
                                     .map((item, idx) => {
                                         const percent = Math.min(100, Math.round((Number(item.currentStock) / Math.max(1, Number(item.minStock))) * 100));
                                         return (
-                                            <div key={item.id || idx} className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
+                                            <div key={item.id || idx} className="p-3 rounded-xl bg-sand-50 border border-sand-300">
                                                 <div className="flex items-center justify-between gap-2">
-                                                    <p className="text-xs font-bold text-white truncate max-w-[240px]">{item.name}</p>
+                                                    <p className="text-xs font-extrabold text-slate-900 truncate max-w-[240px]">{item.name}</p>
                                                     <span className="text-[11px] font-bold text-rose-400">
                                                         {item.currentStock} / {item.minStock} {item.unit || 'un'}
                                                     </span>
@@ -5169,8 +5169,8 @@
                 return init;
             });
 
-            // Campo para o Lacre do Estojo de Psicotrópicos
-            // Informação de lacre eliminada conforme solicitação
+            
+            
 
             // Estado da Tabela de Psicotrópicos com conciliação automática por localização
             const [psicoState, setPsicoState] = useState([
@@ -5279,7 +5279,7 @@
                     id: `CHK-${Date.now()}`,
                     data: new Date().toISOString(),
                     aeronave: selectedAircraft,
-                    // lacrePsicotropicos eliminado
+                    
                     operator: operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico',
                     rg: operator ? operator.rg : '---',
                     email: operator ? operator.email : '',
@@ -5319,21 +5319,14 @@
             const handleExportPDF = async (shouldDownload = true, shouldEmail = false) => {
                 const record = buildCurrentRecord();
 
-                // Monta HTML do documento para renderização do PDF com largura e margens perfeitas
+                // Monta HTML do documento para renderização do PDF com layout A4 nítido
                 const pdfContainer = document.createElement('div');
-                pdfContainer.style.position = 'fixed';
-                pdfContainer.style.top = '0';
-                pdfContainer.style.left = '0';
-                pdfContainer.style.width = '794px'; // 210mm a 96DPI (Largura exata A4)
-                pdfContainer.style.minHeight = '1123px';
-                pdfContainer.style.padding = '24px 28px';
+                pdfContainer.style.width = '750px';
+                pdfContainer.style.padding = '20px';
                 pdfContainer.style.boxSizing = 'border-box';
                 pdfContainer.style.fontFamily = 'Arial, sans-serif';
                 pdfContainer.style.color = '#0f172a';
                 pdfContainer.style.backgroundColor = '#ffffff';
-                pdfContainer.style.zIndex = '-99999';
-                pdfContainer.style.opacity = '1';
-                document.body.appendChild(pdfContainer);
 
                 const ncsRows = record.ncs.length > 0 
                     ? record.ncs.map(nc => `<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#0f172a;">${nc.itemName}</td><td style="padding:6px 8px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold;">${nc.ncType}</td><td style="padding:6px 8px;border:1px solid #cbd5e1;color:#334155;">${nc.notes || '---'}</td></tr>`).join('')
@@ -5435,19 +5428,20 @@
                 `;
 
                 const opt = {
-                    margin: [6, 6, 6, 6],
+                    margin: 8,
                     filename: `Checklist_${record.aeronave.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`,
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
                         scale: 2, 
                         useCORS: true, 
                         scrollY: 0, 
-                        scrollX: 0,
-                        windowWidth: 794
+                        scrollX: 0
                     },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
+
+                const currentScrollY = window.scrollY || window.pageYOffset || 0;
+                window.scrollTo(0, 0);
 
                 try {
                     if (shouldDownload) {
@@ -5514,11 +5508,9 @@
                     console.error('Erro ao gerar/enviar PDF:', e);
                     alert('Erro no processamento do PDF: ' + e.message);
                 } finally {
+                    window.scrollTo(0, currentScrollY);
                     setIsExportingPDF(false);
                     setIsSendingEmail(false);
-                    if (pdfContainer.parentNode) {
-                        pdfContainer.parentNode.removeChild(pdfContainer);
-                    }
                 }
             };
 
@@ -5883,7 +5875,7 @@
                         </div>
                     )}
 
-                    SUB-ABA 2: ELETRÔNICOS BIOMÉDICOS */}
+                    {/* SUB-ABA 2: ELETRÔNICOS BIOMÉDICOS */}
                     {/* ------------------------------------------------------------- */}
                     {activeSubTab === 'ELETRONICOS' && (
                         <div className="space-y-4">
@@ -6075,7 +6067,7 @@
                         </div>
                     )}
 
-                    SUB-ABA 3: PSICOTRÓPICOS — CONTAGEM POR LOCALIZAÇÃO */}
+                    {/* SUB-ABA 3: PSICOTRÓPICOS — CONTAGEM POR LOCALIZAÇÃO */}
                     {/* ------------------------------------------------------------- */}
                     {activeSubTab === 'PSICOTROPICOS' && (
                         <div className="space-y-4">
@@ -6316,7 +6308,7 @@
             return (
                 <div className="space-y-6 tab-fade-in">
                     {/* Barra de Controles e Filtros */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-3">
                             <div className="relative flex-1">
                                 <input
@@ -6324,7 +6316,7 @@
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     placeholder="Buscar por RAPH, paciente, evento ou insumo..."
-                                    className="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600"
                                 />
                                 <div className="absolute left-3 top-2.5 text-slate-500">
                                     <Icon name="search" className="w-4 h-4" />
@@ -6345,7 +6337,7 @@
                                                   t === 'Verde' ? 'bg-emerald-600 text-white' :
                                                   t === 'Cinza' ? 'bg-slate-600 text-white' :
                                                   'bg-rose-600 text-white'
-                                                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                                                : 'bg-white text-slate-800 hover:bg-slate-100 border-2 border-slate-300 font-bold'
                                         }`}
                                     >
                                         {t}
@@ -6366,19 +6358,19 @@
 
                     {/* Tabela / Cards de Socorros */}
                     {filteredList.length === 0 ? (
-                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center">
+                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-12 text-center shadow-sm">
                             <Icon name="socorros" className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                            <h3 className="text-base font-bold text-white">Nenhum atendimento encontrado</h3>
+                            <h3 className="text-base font-black text-slate-900">Nenhum atendimento encontrado</h3>
                             <p className="text-xs text-slate-400 mt-1">Lançamentos de ocorrências com RAPH/TIH aparecerão aqui.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredList.map((soc, idx) => (
-                                <div key={soc.id || idx} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                                <div key={soc.id || idx} className="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:border-slate-400 transition-all">
                                     <div>
                                         <div className="flex items-center justify-between gap-2 mb-2">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-700">
+                                                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-900 border border-slate-300">
                                                     {soc.raphTih || 'RAPH'}
                                                 </span>
                                                 <span className="text-[11px] text-slate-400 font-mono">
@@ -6395,17 +6387,17 @@
                                             </span>
                                         </div>
 
-                                        <h4 className="text-sm font-bold text-white leading-tight">
+                                        <h4 className="text-sm font-black text-slate-900 leading-tight">
                                             {soc.paciente || 'Paciente Não Identificado'}
                                         </h4>
-                                        <p className="text-xs text-rose-400 font-semibold mt-1">
+                                        <p className="text-xs text-rose-700 font-bold mt-1">
                                             {soc.tipoOcorrencia || 'Socorro Aeromédico'}
                                         </p>
 
                                         {/* Insumo Consumido */}
-                                        <div className="mt-3 p-2.5 rounded-xl bg-slate-950 border border-slate-800/80">
+                                        <div className="mt-3 p-2.5 rounded-xl bg-sand-50 border border-sand-300">
                                             <p className="text-[10px] uppercase font-bold text-slate-400">Consumo de Insumos:</p>
-                                            <p className="text-xs font-bold text-slate-200 mt-0.5">
+                                            <p className="text-xs font-bold text-slate-900 mt-0.5">
                                                 {soc.quantidade}x {soc.item}
                                             </p>
                                             {soc.reporAlmox && (
@@ -6417,7 +6409,7 @@
                                         </div>
                                     </div>
 
-                                    <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+                                    <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-600 font-medium">
                                         <span>Resp: <strong className="text-slate-300">{soc.militar}</strong></span>
                                         <span>{formatBRDate(soc.dataHora)}</span>
                                     </div>
@@ -6479,7 +6471,7 @@
             return (
                 <div className="space-y-6 tab-fade-in">
                     {/* Barra Superior: Busca, Filtros e Botão Novo */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div className="relative flex-1">
                                 <input
@@ -6487,7 +6479,7 @@
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     placeholder="Pesquisar entre os 139 itens oficiais por nome, lote ou código..."
-                                    className="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600"
                                 />
                                 <div className="absolute left-3 top-3 text-slate-500">
                                     <Icon name="search" className="w-4 h-4" />
@@ -6514,7 +6506,7 @@
                                     className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                                         categoryFilter === cat
                                             ? 'bg-rose-600 text-white shadow'
-                                            : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                                            : 'bg-white text-slate-800 hover:bg-slate-100 border-2 border-slate-300 font-bold'
                                     }`}
                                 >
                                     {cat === 'TODOS' ? 'Todas as Categorias' : cat}
@@ -6559,8 +6551,8 @@
                     </div>
 
                     {/* Tabela de Itens (Desktop) e Cards (Mobile) */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
-                        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                        <div className="p-4 border-b-2 border-slate-200 flex items-center justify-between">
                             <p className="text-xs font-bold text-slate-300">
                                 Exibindo <span className="text-rose-400">{filteredItems.length}</span> de {almoxItems.length} insumos médicos
                             </p>
@@ -6570,7 +6562,7 @@
                         <div className="overflow-x-auto custom-scrollbar">
                             <table className="w-full text-left border-collapse">
                                 <thead>
-                                    <tr className="bg-slate-950/80 text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-800 font-extrabold">
+                                    <tr className="bg-slate-100 text-[10px] uppercase tracking-wider text-slate-800 border-b-2 border-slate-200 font-black">
                                         <th className="py-3 px-4">Item / Fármaco</th>
                                         <th className="py-3 px-3">Categoria</th>
                                         <th className="py-3 px-3 text-center">Estoque Atual</th>
@@ -6581,20 +6573,20 @@
                                         <th className="py-3 px-4 text-right">Ação</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-800/60 text-xs font-medium">
+                                <tbody className="divide-y divide-slate-200 text-xs font-medium">
                                     {filteredItems.map(item => {
                                         const days = getDaysUntilExpiry(item.expirationDate);
                                         const isCritical = Number(item.currentStock) <= Number(item.minStock);
                                         const isZero = Number(item.currentStock) === 0;
 
                                         return (
-                                            <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
+                                            <tr key={item.id} className="hover:bg-sand-50 transition-colors">
                                                 <td className="py-3 px-4">
-                                                    <p className="font-bold text-white text-xs">{item.name}</p>
+                                                    <p className="font-extrabold text-slate-900 text-xs">{item.name}</p>
                                                     <span className="text-[10px] font-mono text-slate-500">{item.id}</span>
                                                 </td>
                                                 <td className="py-3 px-3">
-                                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 font-bold">
                                                         {item.category}
                                                     </span>
                                                 </td>
@@ -6635,7 +6627,7 @@
                                                     <button
                                                         type="button"
                                                         onClick={() => onOpenMovimento(item)}
-                                                        className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white font-bold text-xs transition-all border border-slate-700"
+                                                        className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-slate-900 hover:text-rose-700 font-bold text-xs transition-all border-2 border-slate-300"
                                                     >
                                                         Movimentar
                                                     </button>
@@ -6678,13 +6670,13 @@
             return (
                 <div className="space-y-6 tab-fade-in">
                     {/* Header com Totais de Voo */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center">
                                 <Icon name="voos" className="w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="text-base font-extrabold text-white">Registro de Missões Aéreas</h3>
+                                <h3 className="text-base font-black text-slate-900">Registro de Missões Aéreas</h3>
                                 <p className="text-xs text-slate-400">
                                     Total Acumulado: <strong className="text-emerald-400">{horasFormatadas}</strong> ({voosList.length} missões)
                                 </p>
@@ -6698,7 +6690,7 @@
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     placeholder="Buscar voo por RAPH, paciente, local..."
-                                    className="bg-slate-950 border border-slate-700/80 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                                    className="bg-white border-2 border-slate-300 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600"
                                 />
                                 <div className="absolute left-2.5 top-2.5 text-slate-500">
                                     <Icon name="search" className="w-3.5 h-3.5" />
@@ -6719,7 +6711,7 @@
                     {/* Lista de Voos */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {filteredVoos.map((voo, idx) => (
-                            <div key={voo.id || idx} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3">
+                            <div key={voo.id || idx} className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
                                 <div className="flex items-start justify-between gap-2">
                                     <div>
                                         <div className="flex items-center gap-2">
@@ -6730,7 +6722,7 @@
                                                 {voo.numEvento}
                                             </span>
                                         </div>
-                                        <h4 className="text-sm font-bold text-white mt-1.5">{voo.paciente}</h4>
+                                        <h4 className="text-sm font-black text-slate-900 mt-1.5">{voo.paciente}</h4>
                                         <p className="text-xs text-rose-400 font-semibold">{voo.diagnostico}</p>
                                     </div>
                                     <div className="text-right">
@@ -6739,7 +6731,7 @@
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-2 text-xs text-slate-300 pt-2 border-t border-slate-800/80">
+                                <div className="grid grid-cols-2 gap-2 text-xs text-slate-700 pt-2 border-t border-slate-200">
                                     <div>
                                         <p className="text-[10px] uppercase font-bold text-slate-400">Origem / Local:</p>
                                         <p className="truncate font-medium">{voo.local}</p>
@@ -6750,7 +6742,7 @@
                                     </div>
                                 </div>
 
-                                <div className="text-[11px] text-slate-400 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                                <div className="text-[11px] text-slate-700 bg-sand-50 p-2.5 rounded-xl border border-sand-300 font-medium">
                                     <p><strong>Tripulação Médica:</strong> {voo.medicos} | {voo.enfermeiros}</p>
                                     <p><strong>Comando Aéreo:</strong> {voo.pilotos}</p>
                                 </div>
@@ -6846,9 +6838,9 @@
             return (
                 <div className="space-y-6 tab-fade-in">
                     {/* Header */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <h3 className="text-base font-extrabold text-white">Transmissão de Plantão Aeromédico</h3>
+                            <h3 className="text-base font-black text-slate-900">Transmissão de Plantão Aeromédico</h3>
                             <p className="text-xs text-slate-400">
                                 6 Blocos Regulamentares de Transmissão entre as Equipes Médicas do DBM 1 / GOA
                             </p>
@@ -6867,14 +6859,14 @@
                     {/* Histórico de Passagens */}
                     <div className="space-y-4">
                         {passagensList.map((pas, idx) => (
-                            <div key={pas.id || idx} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                            <div key={pas.id || idx} className="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-slate-200">
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
                                                 {pas.turno || 'Plantão'}
                                             </span>
-                                            <span className="text-xs font-bold text-white">
+                                            <span className="text-xs font-extrabold text-slate-900">
                                                 {formatBRDate(pas.data)} • {pas.aeronave}
                                             </span>
                                         </div>
@@ -6886,7 +6878,7 @@
                                     <button
                                         type="button"
                                         onClick={() => handlePrintTermo(pas)}
-                                        className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 shrink-0"
+                                        className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-300 text-xs font-extrabold transition-all flex items-center gap-1.5 shrink-0"
                                     >
                                         <Icon name="download" className="w-4 h-4 text-rose-400" />
                                         <span>Exportar Termo PDF</span>
@@ -6894,15 +6886,15 @@
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 text-xs">
-                                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
+                                    <div className="p-3 rounded-xl bg-sand-50 border border-sand-300">
                                         <span className="text-[10px] uppercase font-bold text-slate-400">Eletrônicos & O₂:</span>
                                         <p className="text-slate-300 mt-0.5">{pas.eletronicos}</p>
                                     </div>
-                                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
+                                    <div className="p-3 rounded-xl bg-sand-50 border border-sand-300">
                                         <span className="text-[10px] uppercase font-bold text-amber-400">Psicotrópicos:</span>
                                         <p className="text-slate-300 mt-0.5">{pas.psicotropicos}</p>
                                     </div>
-                                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
+                                    <div className="p-3 rounded-xl bg-sand-50 border border-sand-300">
                                         <span className="text-[10px] uppercase font-bold text-rose-400">Pendências / Avisos:</span>
                                         <p className="text-slate-300 mt-0.5">{pas.pendencias || 'Nenhuma pendência'}</p>
                                     </div>
@@ -6943,8 +6935,8 @@
 
             return (
                 <div className="space-y-6 tab-fade-in max-w-4xl mx-auto">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                        <div className="flex items-center gap-3 pb-4 border-b border-slate-800">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center gap-3 pb-4 border-b-2 border-slate-200">
                             <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center">
                                 <Icon name="calculadora" className="w-6 h-6" />
                             </div>
@@ -6964,7 +6956,7 @@
                                     <select
                                         value={cylinderType}
                                         onChange={(e) => setCylinderType(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-3 py-2.5 text-xs font-extrabold text-slate-900 focus:outline-none focus:border-rose-500"
                                     >
                                         <option value="0.16">Cilindro Portátil Alumínio M9 (Fator 0.16 - Maleta O2)</option>
                                         <option value="0.28">Cilindro Spencer / Mochila (Fator 0.28 - Vias Aéreas)</option>
@@ -6980,12 +6972,12 @@
                                             type="number"
                                             value={pressure}
                                             onChange={(e) => setPressure(Number(e.target.value))}
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-rose-500"
+                                            className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-slate-300 mb-1">Unidade</label>
-                                        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                                        <div className="flex bg-slate-200 p-1 rounded-xl border-2 border-slate-300">
                                             <button
                                                 type="button"
                                                 onClick={() => setUnit('PSI')}
@@ -7031,16 +7023,16 @@
                                         type="number"
                                         value={safetyMargin}
                                         onChange={(e) => setSafetyMargin(Number(e.target.value))}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
                                     />
                                     <p className="text-[10px] text-slate-500 mt-1">Margem regulamentar para pouso seguro e imprevistos</p>
                                 </div>
                             </div>
 
                             {/* Painel de Resultados Visuais */}
-                            <div className="flex flex-col justify-between p-5 rounded-2xl bg-slate-950 border border-slate-800/80">
+                            <div className="flex flex-col justify-between p-5 rounded-2xl bg-sand-50 border border-slate-800/80">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Autonomia Útil de Voo (Margem Segura):</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Autonomia Útil de Voo (Margem Segura):</span>
                                     <div className="flex items-baseline gap-2 mt-2">
                                         <span className={`text-4xl sm:text-5xl font-black ${isLow ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>
                                             {usefulMinutes}
@@ -7113,11 +7105,11 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-                        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+                        <div className="flex items-center justify-between pb-4 border-b-2 border-slate-200">
                             <div className="flex items-center gap-2.5">
                                 <Icon name="settings" className="w-5 h-5 text-rose-400" />
-                                <h3 className="text-base font-bold text-white">Configuração da Planilha Google (Opção A)</h3>
+                                <h3 className="text-base font-black text-slate-900">Configuração da Planilha Google (Opção A)</h3>
                             </div>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white p-1">
                                 <Icon name="x" className="w-5 h-5" />
@@ -7138,7 +7130,7 @@
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
                                     placeholder="https://script.google.com/macros/s/.../exec"
-                                    className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-sand-50 border border-slate-700/80 rounded-xl px-3 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-rose-500"
                                 />
                                 <p className="text-[10px] text-slate-500 mt-1">
                                     Cole a URL gerada após implantar o código oficial <code>GoogleAppsScript_Aeromedico.js</code>.
@@ -7157,7 +7149,7 @@
                                     type="button"
                                     onClick={handleTest}
                                     disabled={testing}
-                                    className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold transition-colors"
+                                    className="flex-1 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-900 border-2 border-slate-300 font-black transition-colors"
                                 >
                                     {testing ? 'Testando Conexão...' : 'Testar Conexão'}
                                 </button>
@@ -7218,10 +7210,10 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
                             <div>
-                                <h3 className="text-sm font-bold text-white">Apontar Não Conformidade (NC)</h3>
+                                <h3 className="text-sm font-black text-slate-900">Apontar Não Conformidade (NC)</h3>
                                 <p className="text-xs text-rose-400 font-semibold mt-0.5 truncate max-w-xs">{item.name}</p>
                             </div>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
@@ -7231,7 +7223,7 @@
 
                         <div className="space-y-4 my-4 text-xs">
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Tipo de Pendência / NC:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Tipo de Pendência / NC:</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {['FALTA', 'AVARIADO', 'VENCIDO', 'INOPERANTE'].map(t => (
                                         <button
@@ -7241,7 +7233,7 @@
                                             className={`py-2 px-3 rounded-xl font-bold border transition-all ${
                                                 ncType === t
                                                     ? 'bg-rose-600 text-white border-rose-500 shadow'
-                                                    : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                                                    : 'bg-white text-slate-700 border-2 border-slate-300 hover:bg-sand-50 font-bold'
                                             }`}
                                         >
                                             {t}
@@ -7251,18 +7243,18 @@
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Observações do Operador:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Observações do Operador:</label>
                                 <textarea
                                     rows="3"
                                     value={notes}
                                     onChange={(e) => setNotes(e.target.value)}
-                                    placeholder="Ex: Embalagem danificada, lacre/selo ausente ou data de validade expirada..."
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                                    placeholder="Ex: Embalagem danificada, violação ou data de validade expirada..."
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:border-rose-600"
                                 ></textarea>
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Registro Fotográfico (Opcional):</label>
+                                <label className="block font-bold text-slate-800 mb-1">Registro Fotográfico (Opcional):</label>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -7350,10 +7342,10 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
                             <div>
-                                <h3 className="text-sm font-bold text-white">Movimentação de Estoque</h3>
+                                <h3 className="text-sm font-black text-slate-900">Movimentação de Estoque</h3>
                                 <p className="text-xs text-rose-400 font-semibold truncate max-w-xs">{item.name}</p>
                             </div>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
@@ -7363,7 +7355,7 @@
 
                         <div className="space-y-4 my-4 text-xs">
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Tipo de Lançamento:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Tipo de Lançamento:</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {[
                                         { id: 'ENTRADA', label: 'Entrada (+)', color: 'emerald' },
@@ -7378,7 +7370,7 @@
                                             className={`py-2 px-2.5 rounded-xl font-bold border transition-all text-[11px] ${
                                                 type === t.id
                                                     ? 'bg-rose-600 text-white border-rose-500 shadow'
-                                                    : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                                                    : 'bg-white text-slate-700 border-2 border-slate-300 hover:bg-sand-50 font-bold'
                                             }`}
                                         >
                                             {t.label}
@@ -7389,7 +7381,7 @@
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">
+                                    <label className="block font-bold text-slate-800 mb-1">
                                         {type === 'AJUSTE' ? 'Novo Saldo Físico:' : 'Quantidade:'}
                                     </label>
                                     <input
@@ -7397,12 +7389,12 @@
                                         min="1"
                                         value={quantity}
                                         onChange={(e) => setQuantity(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
                                         required
                                     />
                                 </div>
 
-                                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800/80 flex flex-col justify-center">
+                                <div className="p-2.5 rounded-xl bg-sand-50 border border-sand-300 flex flex-col justify-center">
                                     <span className="text-[10px] text-slate-400">Saldo Projetado:</span>
                                     <div className="flex items-center gap-1.5 font-mono font-bold mt-0.5">
                                         <span className="text-slate-400">{curStock}</span>
@@ -7413,13 +7405,13 @@
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Motivo / Nº do RAPH / Destino:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Motivo / Nº do RAPH / Destino:</label>
                                 <input
                                     type="text"
                                     value={reason}
                                     onChange={(e) => setReason(e.target.value)}
                                     placeholder="Ex: RAPH 4921 / Abastecimento Mochila Spencer..."
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 placeholder-slate-500 focus:outline-none focus:border-rose-500"
                                 />
                             </div>
                         </div>
@@ -7481,9 +7473,9 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                            <h3 className="text-sm font-bold text-white">Cadastrar Novo Insumo Médico</h3>
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
+                            <h3 className="text-sm font-black text-slate-900">Cadastrar Novo Insumo Médico</h3>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
                                 <Icon name="x" className="w-5 h-5" />
                             </button>
@@ -7491,24 +7483,24 @@
 
                         <form onSubmit={handleSave} className="space-y-3 my-4 text-xs">
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Nome do Item / Fármaco:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Nome do Item / Fármaco:</label>
                                 <input
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Ex: CEFTRIAXONA 1G FRASCO"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     required
                                 />
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Categoria:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Categoria:</label>
                                     <select
                                         value={category}
                                         onChange={(e) => setCategory(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     >
                                         <option value="Medicamentos e Farmacos">Medicamentos</option>
                                         <option value="Vias Aereas e Oxigenio">Vias Aéreas</option>
@@ -7518,35 +7510,35 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Unidade:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Unidade:</label>
                                     <input
                                         type="text"
                                         value={unit}
                                         onChange={(e) => setUnit(e.target.value)}
                                         placeholder="un, amp, fr, pct"
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Estoque Inicial:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Estoque Inicial:</label>
                                     <input
                                         type="number"
                                         value={currentStock}
                                         onChange={(e) => setCurrentStock(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Estoque Mínimo (Ideal):</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Estoque Mínimo (Ideal):</label>
                                     <input
                                         type="number"
                                         value={minStock}
                                         onChange={(e) => setMinStock(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                         required
                                     />
                                 </div>
@@ -7554,22 +7546,22 @@
 
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">1ª Validade:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">1ª Validade:</label>
                                     <input
                                         type="date"
                                         value={expirationDate}
                                         onChange={(e) => setExpirationDate(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Lote:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Lote:</label>
                                     <input
                                         type="text"
                                         value={serialLot}
                                         onChange={(e) => setSerialLot(e.target.value)}
                                         placeholder="Ex: LOT-2026-X"
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     />
                                 </div>
                             </div>
@@ -7631,9 +7623,9 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                            <h3 className="text-sm font-bold text-white">Lançar Atendimento Aeromédico (RAPH / TIH)</h3>
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
+                            <h3 className="text-sm font-black text-slate-900">Lançar Atendimento Aeromédico (RAPH / TIH)</h3>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
                                 <Icon name="x" className="w-5 h-5" />
                             </button>
@@ -7642,22 +7634,22 @@
                         <form onSubmit={handleSave} className="space-y-3 my-4 text-xs">
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Nº do Chamado / Evento:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Nº do Chamado / Evento:</label>
                                     <input
                                         type="text"
                                         value={numEvento}
                                         onChange={(e) => setNumEvento(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Nº do RAPH / TIH:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Nº do RAPH / TIH:</label>
                                     <input
                                         type="text"
                                         value={raphTih}
                                         onChange={(e) => setRaphTih(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-400 focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-400 focus:outline-none focus:border-rose-500"
                                         required
                                     />
                                 </div>
@@ -7665,21 +7657,21 @@
 
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Nome do Paciente / Vítima:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Nome do Paciente / Vítima:</label>
                                     <input
                                         type="text"
                                         value={paciente}
                                         onChange={(e) => setPaciente(e.target.value)}
                                         placeholder="Nome completo ou Vítima 01"
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Triagem / Gravidade:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Triagem / Gravidade:</label>
                                     <select
                                         value={gravidade}
                                         onChange={(e) => setGravidade(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-3 py-2 text-xs font-extrabold text-slate-900 focus:outline-none focus:border-rose-500"
                                     >
                                         <option value="Vermelho">Vermelho (Prioridade Absoluta)</option>
                                         <option value="Amarelo">Amarelo (Urgente)</option>
@@ -7690,25 +7682,25 @@
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Tipo de Ocorrência / Diagnóstico:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Tipo de Ocorrência / Diagnóstico:</label>
                                 <input
                                     type="text"
                                     value={tipoOcorrencia}
                                     onChange={(e) => setTipoOcorrencia(e.target.value)}
                                     placeholder="Ex: TCE Grave / Parada Cardiorrespiratória revertida"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     required
                                 />
                             </div>
 
-                            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                            <div className="p-3 rounded-xl bg-sand-50 border border-sand-300 space-y-2">
                                 <label className="block font-semibold text-slate-300">Insumo Utilizado no Atendimento:</label>
                                 <div className="grid grid-cols-3 gap-2">
                                     <div className="col-span-2">
                                         <select
                                             value={selectedItemName}
                                             onChange={(e) => setSelectedItemName(e.target.value)}
-                                            className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                                            className="w-full bg-white border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
                                         >
                                             {almoxItems.map(item => (
                                                 <option key={item.id} value={item.name}>{item.name}</option>
@@ -7722,7 +7714,7 @@
                                             value={quantity}
                                             onChange={(e) => setQuantity(e.target.value)}
                                             placeholder="Qtd"
-                                            className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono"
+                                            className="w-full bg-white border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono"
                                             required
                                         />
                                     </div>
@@ -7733,7 +7725,7 @@
                                         type="checkbox"
                                         checked={reporAlmox}
                                         onChange={(e) => setReporAlmox(e.target.checked)}
-                                        className="rounded bg-slate-900 border-slate-700 text-rose-600 focus:ring-rose-500"
+                                        className="rounded bg-white border-2 border-slate-300 text-rose-600 focus:ring-rose-500"
                                     />
                                     <span>Dar baixa automática imediata no saldo do Almoxarifado</span>
                                 </label>
@@ -7798,9 +7790,9 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                            <h3 className="text-sm font-bold text-white">Registrar Missão Aérea</h3>
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
+                            <h3 className="text-sm font-black text-slate-900">Registrar Missão Aérea</h3>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
                                 <Icon name="x" className="w-5 h-5" />
                             </button>
@@ -7809,11 +7801,11 @@
                         <form onSubmit={handleSave} className="space-y-3 my-4 text-xs">
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Aeronave:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Aeronave:</label>
                                     <select
                                         value={aeronave}
                                         onChange={(e) => setAeronave(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-3 py-2 text-xs font-extrabold text-slate-900 focus:outline-none focus:border-rose-500"
                                     >
                                         <option value="Guardião 01 (Esquilo AS350)">Guardião 01</option>
                                         <option value="Guardião 02 (EC130 B4)">Guardião 02</option>
@@ -7822,83 +7814,83 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Nº Evento:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Nº Evento:</label>
                                     <input
                                         type="text"
                                         value={numEvento}
                                         onChange={(e) => setNumEvento(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-rose-600"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Paciente / Diagnóstico:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Paciente / Diagnóstico:</label>
                                 <input
                                     type="text"
                                     value={paciente}
                                     onChange={(e) => setPaciente(e.target.value)}
                                     placeholder="Nome do paciente"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500 mb-2"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500 mb-2"
                                 />
                                 <input
                                     type="text"
                                     value={diagnostico}
                                     onChange={(e) => setDiagnostico(e.target.value)}
                                     placeholder="Diagnóstico / Natureza"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                 />
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Origem / Local:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Origem / Local:</label>
                                     <input
                                         type="text"
                                         value={local}
                                         onChange={(e) => setLocal(e.target.value)}
                                         placeholder="Ex: Rodovia Rio-Santos"
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Hospital de Destino:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Hospital de Destino:</label>
                                     <input
                                         type="text"
                                         value={hospital}
                                         onChange={(e) => setHospital(e.target.value)}
                                         placeholder="Ex: HMMC / Alberto Torres"
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-3 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Decolagem:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Decolagem:</label>
                                     <input
                                         type="time"
                                         value={partida}
                                         onChange={(e) => setPartida(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono text-white focus:outline-none"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono text-white focus:outline-none"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Corte Motor:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Corte Motor:</label>
                                     <input
                                         type="time"
                                         value={regresso}
                                         onChange={(e) => setRegresso(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono text-white focus:outline-none"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono text-white focus:outline-none"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Minutos Voo:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Minutos Voo:</label>
                                     <input
                                         type="number"
                                         value={minutosVoo}
                                         onChange={(e) => setMinutosVoo(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono font-bold text-emerald-400 focus:outline-none"
+                                        className="w-full bg-sand-50 border border-slate-800 rounded-xl px-2 py-2 text-xs font-mono font-bold text-emerald-400 focus:outline-none"
                                     />
                                 </div>
                             </div>
@@ -7967,9 +7959,9 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                            <h3 className="text-sm font-bold text-white">Nova Passagem de Serviço (6 Blocos)</h3>
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
+                            <h3 className="text-sm font-black text-slate-900">Nova Passagem de Serviço (6 Blocos)</h3>
                             <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
                                 <Icon name="x" className="w-5 h-5" />
                             </button>
@@ -7978,11 +7970,11 @@
                         <form onSubmit={handleSave} className="space-y-3 my-4 text-xs">
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Turno de Plantão:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Turno de Plantão:</label>
                                     <select
                                         value={turno}
                                         onChange={(e) => setTurno(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
                                     >
                                         <option value="Plantão Alfa">Plantão Alfa</option>
                                         <option value="Plantão Bravo">Plantão Bravo</option>
@@ -7991,78 +7983,78 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Aeronave Principal:</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Aeronave Principal:</label>
                                     <input
                                         type="text"
                                         value={aeronave}
                                         onChange={(e) => setAeronave(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Equipe Transmite (Saiente):</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Equipe Transmite (Saiente):</label>
                                     <input
                                         type="text"
                                         value={equipeTransmite}
                                         onChange={(e) => setEquipeTransmite(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-semibold text-slate-300 mb-1">Equipe Assume (Entrante):</label>
+                                    <label className="block font-bold text-slate-800 mb-1">Equipe Assume (Entrante):</label>
                                     <input
                                         type="text"
                                         value={equipeAssume}
                                         onChange={(e) => setEquipeAssume(e.target.value)}
                                         placeholder="Ex: Maj Rodolfo"
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+                                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600 focus:outline-none focus:border-rose-500"
                                         required
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Eletrônicos & Oxigenoterapia:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Eletrônicos & Oxigenoterapia:</label>
                                 <input
                                     type="text"
                                     value={eletronicos}
                                     onChange={(e) => setEletronicos(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
                                 />
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Psicotrópicos:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Psicotrópicos:</label>
                                 <input
                                     type="text"
                                     value={psicotropicos}
                                     onChange={(e) => setPsicotropicos(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
                                 />
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Ocorrências Realizadas:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Ocorrências Realizadas:</label>
                                 <textarea
                                     rows="2"
                                     value={ocorrencias}
                                     onChange={(e) => setOcorrencias(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl p-2.5 text-xs text-slate-900 font-semibold focus:border-rose-600"
                                 ></textarea>
                             </div>
 
                             <div>
-                                <label className="block font-semibold text-slate-300 mb-1">Pendências Técnicas / Suprimentos:</label>
+                                <label className="block font-bold text-slate-800 mb-1">Pendências Técnicas / Suprimentos:</label>
                                 <input
                                     type="text"
                                     value={pendencias}
                                     onChange={(e) => setPendencias(e.target.value)}
                                     placeholder="Ex: Aguardando 2 equipos fotossensíveis"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:border-rose-600"
                                 />
                             </div>
 
@@ -8475,7 +8467,7 @@
             }
 
             return (
-                <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+                <div className="min-h-screen bg-sand-100 text-slate-900 flex flex-col">
                     {/* Cabeçalho Superior */}
                     <Header
                         operator={operator}
@@ -8563,7 +8555,7 @@
                     </div>
 
                     {/* Barra de Navegação Rápida Inferior para Smartphones */}
-                    <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-1.5 flex items-center justify-around z-40">
+                    <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-800 px-2 py-1.5 flex items-center justify-around z-40">
                         {[
                             { id: 'dashboard', label: 'Resumo', icon: 'dashboard' },
                             { id: 'checklist', label: 'Checklist', icon: 'checklist' },
