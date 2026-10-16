@@ -223,6 +223,8 @@ function doPost(e) {
       return jsonResponse(saveVoo(data));
     } else if (action === "savePassagem") {
       return jsonResponse(savePassagem(data));
+    } else if (action === "savePedidoMensal") {
+      return jsonResponse(savePedidoMensal(data));
     }
 
     return jsonResponse({ success: false, message: "Ação POST desconhecida: " + action });
@@ -1140,6 +1142,50 @@ function savePassagem(payload) {
     return { success: true, message: "Passagem de serviço registrada com sucesso!" };
   } catch (err) {
     return { success: false, message: "Erro ao registrar passagem de serviço: " + err.toString() };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Grava registro do Pedido Mensal de Material (DSE)
+ */
+function savePedidoMensal(payload) {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    var ss = getSpreadsheet();
+    var pedSheet = getOrCreateSheet(ss, "AM_PEDIDOS_MENSAIS", [
+      "DataHora Emissao", "Competencia", "OBM", "Data Pedido", "Militar Solicitante", 
+      "RG Solicitante", "Celular", "RAPH Inicial", "RAPH Final", "Total Itens", "Total Unidades", "Resumo Itens"
+    ]);
+
+    var ped = payload.pedido || payload || {};
+    var op = payload.operator || ped.operator || {};
+    var itensSolicitados = (ped.itens || []).filter(function(i) { return Number(i.solicitado) > 0; });
+    var resumoStr = itensSolicitados.map(function(i) {
+      return i.nome + " (" + i.solicitado + " un)";
+    }).join("; ");
+
+    var row = [
+      new Date().toISOString(),
+      ped.competencia || "",
+      ped.obm || "DBM 1/GOA",
+      ped.dataPedido || "",
+      op.warName ? (op.grad + " " + op.warName) : (ped.militarSolicitante || "Oficial Aeromédico"),
+      op.rg || ped.rg || "---",
+      ped.celularFuncional || "",
+      ped.raphInicial || "",
+      ped.raphFinal || "",
+      Number(ped.totalItens) || itensSolicitados.length,
+      Number(ped.totalUnidades) || 0,
+      resumoStr
+    ];
+
+    pedSheet.appendRow(row);
+    return { success: true, message: "Pedido mensal registrado com sucesso na planilha!" };
+  } catch (err) {
+    return { success: false, message: "Erro ao registrar pedido mensal: " + err.toString() };
   } finally {
     lock.releaseLock();
   }

@@ -6656,12 +6656,118 @@
         };
 
         // ====================================================================
+        // CATÁLOGO OFICIAL DO PEDIDO MENSAL DE MATERIAIS — DSE (94 Itens em 3 Blocos)
+        const PEDIDO_MENSAL_CATALOG = [
+            // MEDICAMENTOS — BLOCO 1 (34 itens)
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ÁCIDO ACETIL SALICÍLICO 100MG COMPRIMIDO (UNID)', ideal: 10, defaultSaldo: 10 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ÁCIDO TRANEXÂMICO 50MG/ML - AMPOLA', ideal: 16, defaultSaldo: 16 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ADRENALINA 1MG/ML - 1ML/AMPOLA (UNID)', ideal: 80, defaultSaldo: 94 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ÁGUA DESTILADA 10ML/AMPOLA (UNID)', ideal: 20, defaultSaldo: 0 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'AMIODARONA 50MG/ML 3ML/AMPOLA (UNID)', ideal: 12, defaultSaldo: 9 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ATROPINA 0,25MG/ML 1ML/AMPOLA (UNID)', ideal: 20, defaultSaldo: 30 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'BICARBONATO DE SÓDIO 8,4% 10ML-AMPOLA', ideal: 50, defaultSaldo: 37 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'DIPIRONA 500MG/ML 2ML/AMPOLA (UNID)', ideal: 20, defaultSaldo: 13 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'DOBUTAMINA 250MG/ML 20ML/AMPOLA (UNID)', ideal: 4, defaultSaldo: 11 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'FENOTEROL (BROMIDRATO) 5MG/ML - 20ML', ideal: null, defaultSaldo: 0 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'FUROSEMIDA 10MG/ML -2ML/AMPOLA (UNID)', ideal: 8, defaultSaldo: 12 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'GLICOSE HIPERTÔNICA 25% 10ML/AMPOLA (UNID)', ideal: 20, defaultSaldo: 19 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'HIDRALAZINA (CLORIDRATO) 20MG/ML 1ML - AMPOLA', ideal: 4, defaultSaldo: 3 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'IPRATRÓPIO (BROMETO) 0,25MG/ML - 20ML', ideal: 1, defaultSaldo: 0 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ISOSSORBIDA 5MG / COMPRIMIDO (UNID)', ideal: 10, defaultSaldo: 20 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'MAGNÉSIO (SULFATO) 10% 10mL - AMPOLA', ideal: 16, defaultSaldo: 17 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'METILPREDNISOLONA (SUCCINATO SÓDICO) PÓ LIÓFILO INJETÁVEL 125MG-AMPOLA (SOLU-CORTEF) (UNID)', ideal: 2, defaultSaldo: 2 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'METOPROLOL (SUCCINATO) SOLUÇÃO INJETÁVEL 1MG/ML AMPOLA (SELOKEN)', ideal: 4, defaultSaldo: 4 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'NITROGLICERINA SOLUÇÃO INJETÁVEL 5MG/ML 10ML-AMPOLA (TRIDIL)', ideal: 4, defaultSaldo: 4 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'NOREPINEFRINA (HEMITARTARATO) SOLUÇÃO INJETÁVEL 2MG/4ML 4ML-AMPOLA.(NORADRENALINA)', ideal: 4, defaultSaldo: 2 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ONDANSETRONA SOLUÇÃO INJETÁVEL 2 MG/ ML - 2 ML AMPOLA (NAUSEDRON) UNID', ideal: 10, defaultSaldo: 4 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'PROMETAZINA 25MG/ML 2ML/AMPOLA (UNID)', ideal: 4, defaultSaldo: 3 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'TENOXICAN PÓ LIÓFILO INJETÁVEL 20MG FRASCO-AMPOLA (TILATIL)', ideal: null, defaultSaldo: 1 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'SOLUÇÃO RINGER LACTATO 500ml BOLSA/FRASCO (UNID)', ideal: 15, defaultSaldo: 19 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'SOLUÇÃO FISIOLÓGICA 0,9% 500ml BOLSA/FRASCO (UNID)', ideal: 15, defaultSaldo: 8 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'AGULHA DESCARTÁVEL 25x07 (UNID)', ideal: 20, defaultSaldo: 23 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'AGULHA DESCARTÁVEL 40X12 (UNID)', ideal: 30, defaultSaldo: 14 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'ATADURA DE CREPOM 20CM (UNID)', ideal: 20, defaultSaldo: 17 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'AVENTAL DESCARTÁVEL (UNID)', ideal: 10, defaultSaldo: 20 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'BOUGIE DE INTUBAÇÃO (5cmX 60 OU 70 cm ), SEM LÚMEN', ideal: 2, defaultSaldo: 10 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'CÂNULAS NASOFARÍNGEAS Nº6 ( 2 ) Nº7 ( 1 )', ideal: 6, defaultSaldo: 3 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'CIRCUITO P/ ASPIRAÇÃO (UNID)', ideal: 10, defaultSaldo: 10 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'CIRCUITO P/ OXIGENOTERAPIA (UNID)', ideal: 5, defaultSaldo: 7 },
+            { bloco: 1, categoria: 'MEDICAMENTOS', nome: 'CLAMP UMBILICAL (UNID)', ideal: 2, defaultSaldo: 5 },
+
+            // INSUMOS — BLOCO 2 (32 itens)
+            { bloco: 2, categoria: 'INSUMOS', nome: 'ELETRODO DE ECG DESCARTÁVEL P/ MONITORIZAÇÃO CARDÍACA ADULTO/ INFANTIL.', ideal: 70, defaultSaldo: 130 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'EQUIPO DE SORO MACROGOTAS COM INJETOR LATERAL.(UNID)', ideal: 30, defaultSaldo: 41 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'ESPARADRAPO ROLO (UNID)', ideal: 2, defaultSaldo: 1 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'FITA DE HGT OKMETER MATCH II', ideal: 1, defaultSaldo: 2 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'FIXADOR DE TUBO OROTRAQUEAL AD/INF. (UNID)', ideal: 10, defaultSaldo: 16 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'FRASCO DE SECREÇÃO PARA VIAS AÉREAS', ideal: 4, defaultSaldo: 11 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'GAZE HIDRÓFILA ESTÉRIL 7,5 X 7,5.COMPRESSA (PCTE C/10 UNID)', ideal: 60, defaultSaldo: 48 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'GEL PARA ECG (UNID)', ideal: 2, defaultSaldo: 3 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'JELCO INTRAVENOSO Nº 14 (UNID)', ideal: 10, defaultSaldo: 17 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'JELCO INTRAVENOSO Nº 16 (UNID)', ideal: 10, defaultSaldo: 13 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'JELCO INTRAVENOSO Nº 18 (UNID)', ideal: 15, defaultSaldo: 29 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'JELCO INTRAVENOSO Nº 20 (UNID)', ideal: 20, defaultSaldo: 24 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'JELCO INTRAVENOSO Nº 22 (UNID)', ideal: 10, defaultSaldo: 9 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'JELCO INTRAVENOSO Nº 24 (UNID)', ideal: 5, defaultSaldo: 5 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'KIT DE IDENTIFICAÇÃO PARA RECÉM NASCIDO (UNID)', ideal: 2, defaultSaldo: 3 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'LÂMINA DE BISTURI COM CABO Nº10 (UNID)', ideal: 6, defaultSaldo: 1 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'LANCETA PARA PUNÇÃO MANUAL (UNID)', ideal: 30, defaultSaldo: 40 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'LENÇOL DESCARTAVÉL (PCTE C/10)', ideal: 2, defaultSaldo: 5 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'LUVA DE PROCEDIMENTO P', ideal: 3, defaultSaldo: 5 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'LUVA DE PROCEDIMENTO M', ideal: 7, defaultSaldo: 6 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'LUVA DE PROCEDIMENTO G', ideal: 5, defaultSaldo: 6 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'MANTA TÉRMICA ALUMINIZADA (UNID)', ideal: 15, defaultSaldo: 11 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'MÁSCARA N95', ideal: 20, defaultSaldo: 16 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'MÁSCARA DESCARTÁVEL (UNID)', ideal: 40, defaultSaldo: 70 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'POLIFIX EXTENSOR ADULTO (UNID)', ideal: 10, defaultSaldo: 24 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'SERINGA DESCARTÁVEL 10ML (UNID)', ideal: 20, defaultSaldo: 18 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'SERINGA DESCARTÁVEL 20ML (UNID)', ideal: 20, defaultSaldo: 13 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'SONDA ASPIRAÇÃO Nº 04 (UNID)', ideal: 4, defaultSaldo: 6 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'SONDA ASPIRAÇÃO Nº 06 (UNID)', ideal: 4, defaultSaldo: 4 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'SONDA ASPIRAÇÃO Nº 12 (UNID)', ideal: 10, defaultSaldo: 0 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'SONDA ASPIRAÇÃO Nº 16 (UNID)', ideal: 10, defaultSaldo: 0 },
+            { bloco: 2, categoria: 'INSUMOS', nome: 'TOT Nº2,0 (UNID)', ideal: 2, defaultSaldo: 2 },
+
+            // INSUMOS — BLOCO 3 (28 itens)
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº2,5 (UNID)', ideal: 2, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº3,0 (UNID)', ideal: 2, defaultSaldo: 5 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº3,5 (UNID)', ideal: 2, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº4,0 (UNID)', ideal: 2, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº4,5 (UNID)', ideal: 2, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº5,0 (UNID)', ideal: 6, defaultSaldo: 7 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº5,5 (UNID)', ideal: 6, defaultSaldo: 6 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº6,0 (UNID)', ideal: 6, defaultSaldo: 6 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº7,0 (UNID)', ideal: 10, defaultSaldo: 13 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº7,5 (UNID)', ideal: 10, defaultSaldo: 11 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº8,0 (UNID)', ideal: 10, defaultSaldo: 7 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'TOT Nº8,5 (UNID)', ideal: 6, defaultSaldo: 8 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'ÁLCOOL GEL ANTI-SÉPTICO REFIL 500ML (UNID)', ideal: 0, defaultSaldo: 0 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'ÁLCOOL 70% ALMOTOLIA 100ML', ideal: 10, defaultSaldo: 7 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'COLETOR DE PERFURO CORTANTE CAIXA 7 LTS', ideal: 2, defaultSaldo: 3 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'CLOREXIDINA ALCOÓLICA 0,5% ALMOTOLIA 100ML', ideal: 4, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'HIPOCLORITO DE SÓDIO 5LT', ideal: 1, defaultSaldo: 3 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'LUVA GROSSA PARA LIMPEZA (UNID)', ideal: 4, defaultSaldo: 3 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'MOP ÚMIDO ESCOVÃO (UNID)', ideal: 1, defaultSaldo: 8 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'PILHAS PEQUENAS (UNID)', ideal: 8, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'SABÃO LÍQUIDO NEUTRO 5LT', ideal: 1, defaultSaldo: 3 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'SACO DE LIXO BRANCO INFECTANTE 60 LT', ideal: 10, defaultSaldo: 0 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'REGISTRO DE ATENDIMENTO RAPH :', ideal: 2, defaultSaldo: 2 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'FOLHA DE REGISTRO DE TIH', ideal: 2, defaultSaldo: 4 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'REGISTRO DE CHECKLIST', ideal: 0, defaultSaldo: 0 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'REGISTRO DE RECOLHIMENTO DE VALORES', ideal: 1, defaultSaldo: 0 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'REGISTRO DE PSICOTRÓPICO', ideal: 4, defaultSaldo: 5 },
+            { bloco: 3, categoria: 'INSUMOS', nome: 'REGISTRO DE ÓBITO', ideal: 2, defaultSaldo: 5 }
+        ];
+
         // COMPONENTE: ABA ALMOXARIFADO MÉDICO (139 ITENS REAIS DO EXCEL)
         // ====================================================================
         const TabAlmoxarifado = ({ 
             almoxItems, 
             onOpenMovimento, 
-            onOpenNovoItem 
+            onOpenNovoItem,
+            onOpenPedidoMensal,
+            onOpenConferencia,
+            operator
         }) => {
             const [searchTerm, setSearchTerm] = useState('');
             const [categoryFilter, setCategoryFilter] = useState('TODOS');
@@ -6720,14 +6826,36 @@
                                 </div>
                             </div>
 
-                            <button
-                                type="button"
-                                onClick={onOpenNovoItem}
-                                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-900/30 transition-all flex items-center justify-center gap-2 shrink-0"
-                            >
-                                <Icon name="plus" className="w-4 h-4" />
-                                <span>Novo Insumo</span>
-                            </button>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <button
+                                    type="button"
+                                    onClick={onOpenPedidoMensal}
+                                    className="px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+                                    title="Abrir formulário e gerar PDF do Pedido de Material Mensal para a DSE"
+                                >
+                                    <span className="text-sm">📄</span>
+                                    <span>Pedido mensal</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={onOpenConferencia}
+                                    className="px-3.5 py-2.5 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-900 border-2 border-sand-300 font-extrabold text-xs transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                                    title="Consultar conferência do almoxarifado, entradas e saídas no período"
+                                >
+                                    <span className="text-sm">📊</span>
+                                    <span>Conferência do almoxarifado</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={onOpenNovoItem}
+                                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-900/30 transition-all flex items-center justify-center gap-2 shrink-0"
+                                >
+                                    <Icon name="plus" className="w-4 h-4" />
+                                    <span>Novo Insumo</span>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Filtros de Categoria */}
@@ -7816,6 +7944,851 @@
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            );
+        };
+
+        // ====================================================================
+        // COMPONENTE: MODAL PEDIDO DE MATERIAL MENSAL (DSE)
+        // ====================================================================
+        const ModalPedidoMensal = ({ 
+            isOpen, 
+            onClose, 
+            almoxItems, 
+            operator, 
+            pedidosEmitidos, 
+            onSavePedido 
+        }) => {
+            if (!isOpen) return null;
+
+            const [competencia, setCompetencia] = useState('2026-10');
+            const [dataPedido, setDataPedido] = useState(new Date().toISOString().split('T')[0]);
+            const [obm, setObm] = useState('DBM 1/GOA - Jacarepaguá');
+            const [celularFuncional, setCelularFuncional] = useState('(21) 98596-3344');
+            const [militarSolicitante, setMilitarSolicitante] = useState(
+                operator ? `${operator.grad} ${operator.warName} (RG: ${operator.rg})` : 'Cap BM Méd Petrus (RG: 49917)'
+            );
+            const [raphInicial, setRaphInicial] = useState('4921');
+            const [raphFinal, setRaphFinal] = useState('4980');
+            const [activeBlock, setActiveBlock] = useState('TODOS'); // 'TODOS', 1, 2, 3
+            const [isExporting, setIsExporting] = useState(false);
+
+            // Inicializa lista dos 94 itens com cruzamento automático do saldo do almoxarifado
+            const [itensPedido, setItensPedido] = useState(() => {
+                return (PEDIDO_MENSAL_CATALOG || []).map(catItem => {
+                    const match = (almoxItems || []).find(a => {
+                        const an = (a.name || '').toLowerCase().replace(/\s+/g, ' ').trim();
+                        const cn = (catItem.nome || '').toLowerCase().replace(/\s+/g, ' ').trim();
+                        return an === cn || an.includes(cn) || cn.includes(an);
+                    });
+                    const saldo = match ? (Number(match.currentStock) || 0) : catItem.defaultSaldo;
+                    const ideal = catItem.ideal;
+                    const sugerido = (ideal !== null && typeof ideal === 'number') ? Math.max(0, ideal - saldo) : '—';
+                    const solicitado = (sugerido !== '—' && typeof sugerido === 'number') ? sugerido : 0;
+
+                    return {
+                        ...catItem,
+                        saldo,
+                        sugerido,
+                        solicitado
+                    };
+                });
+            });
+
+            // Recalcula totais do pedido automaticamente
+            const totals = useMemo(() => {
+                let itensCount = 0;
+                let unidadesSum = 0;
+                itensPedido.forEach(it => {
+                    const sol = Number(it.solicitado) || 0;
+                    if (sol > 0) {
+                        itensCount++;
+                        unidadesSum += sol;
+                    }
+                });
+                return { itensCount, unidadesSum };
+            }, [itensPedido]);
+
+            // Atualiza solicitado de um item individual
+            const handleItemChange = (index, value) => {
+                const val = Math.max(0, parseInt(value) || 0);
+                setItensPedido(prev => {
+                    const next = [...prev];
+                    next[index] = { ...next[index], solicitado: val };
+                    return next;
+                });
+            };
+
+            // Botão "↺ Usar os sugeridos": redefine todos os solicitados para os valores sugeridos
+            const handleUsarSugeridos = () => {
+                setItensPedido(prev => prev.map(it => {
+                    const sug = (it.sugerido !== '—' && typeof it.sugerido === 'number') ? it.sugerido : 0;
+                    return { ...it, solicitado: sug };
+                }));
+            };
+
+            // Verifica se este mês já foi emitido
+            const emissaoRegistro = pedidosEmitidos ? pedidosEmitidos[competencia] : null;
+
+            // Geração de PDF no layout oficial da DSE
+            const handleGerarPDF = async () => {
+                setIsExporting(true);
+                const printContainer = document.createElement('div');
+                printContainer.style.padding = '12px 18px';
+                printContainer.style.background = '#ffffff';
+                printContainer.style.fontFamily = 'Arial, sans-serif';
+                printContainer.style.color = '#000000';
+
+                // Tabela de Itens para o PDF
+                const renderBlockRows = (blocoNum) => {
+                    return itensPedido.filter(it => it.bloco === blocoNum).map((it, idx) => {
+                        const isRequested = Number(it.solicitado) > 0;
+                        return `
+                            <tr style="background:${isRequested ? '#f1f5f9' : (idx % 2 === 0 ? '#ffffff' : '#fafafa')}; font-size: 8.5px;">
+                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; font-weight:${isRequested ? 'bold' : 'normal'}; text-align: left;">${it.nome}</td>
+                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center;">${it.ideal !== null ? it.ideal : '—'}</td>
+                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center;">${it.saldo}</td>
+                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; font-weight: bold; color: ${it.sugerido > 0 ? '#b45309' : '#000'};">${it.sugerido}</td>
+                                <td style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; font-weight: 800; color: ${isRequested ? '#dc2626' : '#64748b'};">${it.solicitado}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                };
+
+                const dataFormatada = new Date(dataPedido + 'T12:00:00').toLocaleDateString('pt-BR');
+                const agora = new Date();
+                const horaGeracao = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR');
+
+                printContainer.innerHTML = `
+                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px;">
+                        <img src="../assets/brasao_goa.png" style="height: 52px; float: left; margin-right: -52px;" alt="Brasão" />
+                        <h4 style="margin: 0; font-size: 11px; font-weight: bold; text-transform: uppercase;">GOVERNO DO ESTADO DO RIO DE JANEIRO • SECRETARIA DE DEFESA CIVIL</h4>
+                        <h3 style="margin: 2px 0; font-size: 12px; font-weight: bold;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h3>
+                        <h4 style="margin: 2px 0; font-size: 10px; font-weight: bold; color: #334155;">DIRETORIA DE SUPRIMENTO E EQUIPAMENTOS (DSE) • FARMÁCIA CENTRAL</h4>
+                        <h4 style="margin: 2px 0; font-size: 10.5px; font-weight: 800; color: #b91c1c;">GRUPAMENTO DE OPERAÇÕES AÉREAS (GOA) • SEÇÃO AEROMÉDICA</h4>
+                        <div style="margin-top: 5px; display: inline-block; background: #e2e8f0; border: 1px solid #94a3b8; padding: 2px 14px; font-weight: 800; font-size: 11px; border-radius: 4px;">
+                            PEDIDO DE MATERIAL MENSAL — COMPETÊNCIA: ${competencia}
+                        </div>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9px;">
+                        <tr>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; width: 18%; font-weight: bold;">OBM:</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; width: 32%; font-weight: bold;">${obm}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; width: 18%; font-weight: bold;">DATA DO PEDIDO:</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; width: 32%;">${dataFormatada}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">SOLICITANTE:</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; font-weight: bold;">${militarSolicitante}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">CELULAR FUNCIONAL:</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8;">${celularFuncional}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">FAIXA RAPH:</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8;">Nº ${raphInicial} até Nº ${raphFinal}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; background: #f8fafc; font-weight: bold;">TOTAL SOLICITADO:</td>
+                            <td style="padding: 3px 6px; border: 1px solid #94a3b8; font-weight: 800; color: #b91c1c;">${totals.itensCount} item(ns) · ${totals.unidadesSum} unidade(s)</td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-top: 6px;">
+                        <div style="background: #0f172a; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 9.5px; border-radius: 3px 3px 0 0;">
+                            MEDICAMENTOS — BLOCO 1
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+                            <thead>
+                                <tr style="background: #f1f5f9; font-size: 8.5px; font-weight: bold;">
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: left; width: 56%;">Item</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Ideal</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Saldo</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Sugerido</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Solicitado</th>
+                                </tr>
+                            </thead>
+                            <tbody>${renderBlockRows(1)}</tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 6px;">
+                        <div style="background: #0f172a; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 9.5px; border-radius: 3px 3px 0 0;">
+                            INSUMOS — BLOCO 2
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+                            <thead>
+                                <tr style="background: #f1f5f9; font-size: 8.5px; font-weight: bold;">
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: left; width: 56%;">Item</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Ideal</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Saldo</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Sugerido</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Solicitado</th>
+                                </tr>
+                            </thead>
+                            <tbody>${renderBlockRows(2)}</tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 6px;">
+                        <div style="background: #0f172a; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 9.5px; border-radius: 3px 3px 0 0;">
+                            INSUMOS — BLOCO 3
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+                            <thead>
+                                <tr style="background: #f1f5f9; font-size: 8.5px; font-weight: bold;">
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: left; width: 56%;">Item</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Ideal</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Saldo</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Sugerido</th>
+                                    <th style="padding: 3px 5px; border: 1px solid #94a3b8; text-align: center; width: 11%;">Solicitado</th>
+                                </tr>
+                            </thead>
+                            <tbody>${renderBlockRows(3)}</tbody>
+                        </table>
+                    </div>
+
+                    <!-- Rodapé Oficial com Informações do Usuário e Data/Hora da Geração -->
+                    <div style="margin-top: 14px; border-top: 1px solid #000; padding-top: 6px; font-size: 8.5px;">
+                        <div style="display: flex; justify-content: space-between; color: #334155;">
+                            <div>
+                                <strong>Documento Gerado Eletronicamente por:</strong> ${militarSolicitante}
+                            </div>
+                            <div>
+                                <strong>Data e Hora da Geração:</strong> ${horaGeracao}
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 36px; display: flex; justify-content: space-between; text-align: center; font-size: 8.5px;">
+                            <div style="width: 30%; border-top: 1px solid #000; padding-top: 4px;">
+                                <strong>${militarSolicitante}</strong><br/>Militar Solicitante (UASA/GOA)
+                            </div>
+                            <div style="width: 30%; border-top: 1px solid #000; padding-top: 4px;">
+                                <strong>Chefe da Seção de Saúde</strong><br/>DBM 1 / GOA
+                            </div>
+                            <div style="width: 30%; border-top: 1px solid #000; padding-top: 4px;">
+                                <strong>Diretoria de Suprimento (DSE)</strong><br/>Recebido em: ____/____/2026
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const opt = {
+                    margin: [6, 6, 6, 6],
+                    filename: `Pedido_Material_Mensal_${competencia}_DBM1_GOA.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                try {
+                    await html2pdf().set(opt).from(printContainer).save();
+                    onSavePedido({
+                        competencia,
+                        dataPedido,
+                        obm,
+                        celularFuncional,
+                        militarSolicitante,
+                        raphInicial,
+                        raphFinal,
+                        totalItens: totals.itensCount,
+                        totalUnidades: totals.unidadesSum,
+                        itens: itensPedido
+                    });
+                } catch(err) {
+                    console.error("Erro ao gerar PDF do pedido mensal:", err);
+                    alert("Erro ao gerar PDF. Verifique se o bloqueador de pop-ups está desativado.");
+                } finally {
+                    setIsExporting(false);
+                }
+            };
+
+            const displayedItens = useMemo(() => {
+                if (activeBlock === 'TODOS') return itensPedido;
+                return itensPedido.filter(it => it.bloco === Number(activeBlock));
+            }, [itensPedido, activeBlock]);
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-5xl w-full p-4 sm:p-6 shadow-2xl max-h-[94vh] flex flex-col">
+                        {/* Cabeçalho */}
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200 shrink-0">
+                            <div>
+                                <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                                    <span className="text-blue-600">📄</span>
+                                    <span>Pedido de Material Mensal — {competencia}</span>
+                                </h3>
+                                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                                    Preenchimento automático do impresso oficial da DSE baseado no ideal da planilha.
+                                </p>
+                            </div>
+                            <button type="button" onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-slate-800 text-2xl font-black leading-none">×</button>
+                        </div>
+
+                        {/* Mensagem Informativa e Status de Já Emitido */}
+                        <div className="my-3 p-3.5 rounded-xl bg-sand-50 border-2 border-sand-300 shrink-0 space-y-2 text-xs">
+                            <p className="text-slate-800 leading-relaxed font-semibold">
+                                O Sugerido é o que falta para o depósito voltar ao ideal da planilha. Ajuste o Solicitado onde quiser pedir mais (ou menos) e gere o PDF — ele sai no layout do impresso da DSE, com o brasão atualizado.
+                            </p>
+                            <div className="flex items-center gap-2 pt-1 border-t border-sand-200">
+                                {emissaoRegistro ? (
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-950 font-black text-[11px] border border-emerald-300">
+                                        <span>✓</span>
+                                        <span>Já emitido em {emissaoRegistro.data || '14/10/2026'} ({emissaoRegistro.militar || 'UASA'})</span>
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-900 font-bold text-[11px] border border-emerald-200">
+                                        <span>✓</span>
+                                        <span>Já emitido em 14/10/2026</span>
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Campos de Dados do Pedido */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 text-xs shrink-0 pb-3 border-b border-slate-200">
+                            <div>
+                                <label className="block font-bold text-slate-700 mb-0.5">Competência:</label>
+                                <select 
+                                    value={competencia} 
+                                    onChange={(e) => setCompetencia(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1.5 font-bold text-slate-900 focus:outline-none"
+                                >
+                                    <option value="2026-10">2026-10 (Out)</option>
+                                    <option value="2026-11">2026-11 (Nov)</option>
+                                    <option value="2026-12">2026-12 (Dez)</option>
+                                    <option value="2026-09">2026-09 (Set)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block font-bold text-slate-700 mb-0.5">Data do pedido:</label>
+                                <input 
+                                    type="date" 
+                                    value={dataPedido} 
+                                    onChange={(e) => setDataPedido(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1 text-slate-900 font-medium focus:outline-none"
+                                />
+                            </div>
+
+                            <div className="sm:col-span-2">
+                                <label className="block font-bold text-slate-700 mb-0.5">OBM:</label>
+                                <input 
+                                    type="text" 
+                                    value={obm} 
+                                    onChange={(e) => setObm(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1 text-slate-900 font-medium focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block font-bold text-slate-700 mb-0.5">Celular funcional:</label>
+                                <input 
+                                    type="text" 
+                                    value={celularFuncional} 
+                                    onChange={(e) => setCelularFuncional(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1 text-slate-900 font-medium focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block font-bold text-slate-700 mb-0.5">Nº inicial RAPH:</label>
+                                <input 
+                                    type="text" 
+                                    value={raphInicial} 
+                                    onChange={(e) => setRaphInicial(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1 text-slate-900 font-medium focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block font-bold text-slate-700 mb-0.5">Nº final RAPH:</label>
+                                <input 
+                                    type="text" 
+                                    value={raphFinal} 
+                                    onChange={(e) => setRaphFinal(e.target.value)}
+                                    className="w-full bg-white border-2 border-slate-300 rounded-xl px-2 py-1 text-slate-900 font-medium focus:outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Barra de Contagem e Filtro de Blocos */}
+                        <div className="py-2.5 shrink-0 flex items-center justify-between gap-3 flex-wrap">
+                            {/* Contador automático de Itens e Unidades */}
+                            <div className="px-3.5 py-1.5 rounded-xl bg-blue-50 border-2 border-blue-300 text-blue-950 font-black text-xs flex items-center gap-2 shadow-xs">
+                                <span>📦</span>
+                                <span>Pedido: <strong>{totals.itensCount} item(ns)</strong> · <strong>{totals.unidadesSum} unidade(s)</strong></span>
+                            </div>
+
+                            {/* Filtro dos Blocos */}
+                            <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
+                                {[
+                                    { id: 'TODOS', label: 'Todos os Blocos (94)' },
+                                    { id: 1, label: 'MEDICAMENTOS — bloco 1 (34)' },
+                                    { id: 2, label: 'INSUMOS — bloco 2 (32)' },
+                                    { id: 3, label: 'INSUMOS — bloco 3 (28)' }
+                                ].map(b => (
+                                    <button
+                                        key={b.id}
+                                        type="button"
+                                        onClick={() => setActiveBlock(b.id)}
+                                        className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap ${
+                                            activeBlock === b.id
+                                                ? 'bg-slate-900 text-white shadow-xs'
+                                                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-300'
+                                        }`}
+                                    >
+                                        {b.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Tabela dos Itens */}
+                        <div className="flex-1 overflow-y-auto custom-scrollbar border-2 border-slate-200 rounded-xl">
+                            <table className="w-full text-left text-xs border-collapse">
+                                <thead className="bg-slate-100 text-slate-800 font-black sticky top-0 z-10 border-b border-slate-300 shadow-xs">
+                                    <tr>
+                                        <th className="p-2.5 pl-3 w-1/2">Item</th>
+                                        <th className="p-2.5 text-center w-16">Ideal</th>
+                                        <th className="p-2.5 text-center w-16">Saldo</th>
+                                        <th className="p-2.5 text-center w-20">Sugerido</th>
+                                        <th className="p-2.5 text-center w-28">Solicitado</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {displayedItens.map((it, idx) => {
+                                        // Achar o índice real na lista completa para atualização correta
+                                        const realIndex = itensPedido.findIndex(p => p.nome === it.nome);
+                                        const isReq = Number(it.solicitado) > 0;
+
+                                        return (
+                                            <tr key={it.nome} className={`hover:bg-sand-50/80 transition-colors ${isReq ? 'bg-blue-50/30' : ''}`}>
+                                                <td className="p-2 pl-3">
+                                                    <span className="font-extrabold text-slate-900 block leading-tight">{it.nome}</span>
+                                                    <span className="text-[10px] text-slate-500 font-semibold">{it.categoria} — bloco {it.bloco}</span>
+                                                </td>
+                                                <td className="p-2 text-center font-bold text-slate-700">
+                                                    {it.ideal !== null ? it.ideal : '—'}
+                                                </td>
+                                                <td className="p-2 text-center font-bold text-slate-700">
+                                                    {it.saldo}
+                                                </td>
+                                                <td className="p-2 text-center font-black">
+                                                    <span className={it.sugerido > 0 ? 'text-amber-700 font-black' : 'text-slate-500'}>
+                                                        {it.sugerido}
+                                                    </span>
+                                                </td>
+                                                <td className="p-2 text-center">
+                                                    <div className="relative inline-flex items-center w-24">
+                                                        <input
+                                                            type="number"
+                                                            min="0"
+                                                            value={it.solicitado}
+                                                            onChange={(e) => handleItemChange(realIndex, e.target.value)}
+                                                            className={`w-full bg-white border-2 rounded-xl px-2.5 py-1 text-xs font-black text-center focus:outline-none ${
+                                                                isReq ? 'border-rose-500 text-rose-900 bg-rose-50/30 font-black' : 'border-slate-300 text-slate-800'
+                                                            }`}
+                                                        />
+                                                        <div className="absolute right-1 inset-y-1 flex flex-col justify-center">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleItemChange(realIndex, (Number(it.solicitado) || 0) + 1)}
+                                                                className="px-1 text-slate-500 hover:text-slate-900 leading-none text-[8px] font-black"
+                                                            >
+                                                                ▲
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleItemChange(realIndex, Math.max(0, (Number(it.solicitado) || 0) - 1))}
+                                                                className="px-1 text-slate-500 hover:text-slate-900 leading-none text-[8px] font-black"
+                                                            >
+                                                                ▼
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Botões do Rodapé */}
+                        <div className="pt-3 border-t-2 border-slate-200 shrink-0 flex items-center justify-between gap-3 flex-wrap">
+                            <button
+                                type="button"
+                                onClick={handleUsarSugeridos}
+                                className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-extrabold text-xs transition-all flex items-center gap-1.5 shadow-xs"
+                                title="Preencher automaticamente todos os campos Solicitado com os valores sugeridos"
+                            >
+                                <span>↺</span>
+                                <span>Usar os sugeridos</span>
+                            </button>
+
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-bold text-xs"
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handleGerarPDF}
+                                    disabled={isExporting}
+                                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs shadow-md transition-all flex items-center gap-1.5 disabled:opacity-50"
+                                >
+                                    <span>📄</span>
+                                    <span>{isExporting ? 'Gerando impresso DSE...' : 'Gerar PDF'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ====================================================================
+        // COMPONENTE: MODAL CONFERÊNCIA DO ALMOXARIFADO
+        // ====================================================================
+        const ModalConferenciaAlmox = ({ 
+            isOpen, 
+            onClose, 
+            almoxItems, 
+            almoxMovements, 
+            socorrosList, 
+            operator 
+        }) => {
+            if (!isOpen) return null;
+
+            // Período padrão: 30 dias atrás até hoje
+            const todayStr = new Date().toISOString().split('T')[0];
+            const thirtyAgo = new Date();
+            thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+            const thirtyAgoStr = thirtyAgo.toISOString().split('T')[0];
+
+            const [startDate, setStartDate] = useState(thirtyAgoStr);
+            const [endDate, setEndDate] = useState(todayStr);
+            const [soOQueSeMoveu, setSoOQueSeMoveu] = useState(false);
+            const [refreshTick, setRefreshTick] = useState(0);
+
+            // Consolidação das movimentações (manuais do almoxarifado + reposições/baixas de socorros)
+            const allMovements = useMemo(() => {
+                const list = [];
+                // 1. Movimentos manuais registrados
+                (almoxMovements || []).forEach(m => {
+                    list.push({
+                        id: m.id || `MOV-${Math.random()}`,
+                        dataHora: m.dataHora || new Date().toISOString(),
+                        item: m.itemName || m.item || 'Insumo',
+                        tipo: m.tipo || m.type || 'SAIDA',
+                        quantidade: Number(m.quantidade || m.quantity) || 1,
+                        saldoAnterior: m.curStock || m.saldoAnterior || '---',
+                        saldoNovo: m.newStock || m.saldoNovo || '---',
+                        motivo: m.reason || m.motivo || 'Movimentação Almoxarifado',
+                        responsavel: m.responsavel || (operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico')
+                    });
+                });
+
+                // 2. Movimentos gerados por reposição e socorros
+                (socorrosList || []).forEach(s => {
+                    const isReposto = s.reposto || s.jaRetirouDeposito || s.tipo === 'Reposição do depósito';
+                    if (isReposto && s.dataHora) {
+                        list.push({
+                            id: `SOC-${s.id}`,
+                            dataHora: s.dataHora,
+                            item: s.item || s.itemName || 'Insumo',
+                            tipo: 'SAIDA',
+                            quantidade: Number(s.qtdRetirada || s.quantidade) || 1,
+                            saldoAnterior: '---',
+                            saldoNovo: '---',
+                            motivo: `${s.tipo || 'Uso'} (${s.raphTih || 'Socorro'})`,
+                            responsavel: s.militar || 'UASA'
+                        });
+                    }
+                });
+
+                // Ordenar decrescente por data/hora
+                return list.sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora));
+            }, [almoxMovements, socorrosList, refreshTick, operator]);
+
+            // Filtragem por período
+            const filteredMovements = useMemo(() => {
+                return allMovements.filter(m => {
+                    if (m.dataHora) {
+                        const dateOnly = String(m.dataHora).split('T')[0];
+                        if (startDate && dateOnly < startDate) return false;
+                        if (endDate && dateOnly > endDate) return false;
+                    }
+                    return true;
+                });
+            }, [allMovements, startDate, endDate]);
+
+            // Estatísticas do período
+            const stats = useMemo(() => {
+                let entradas = 0;
+                let saidas = 0;
+                const distinctItems = new Set();
+
+                filteredMovements.forEach(m => {
+                    distinctItems.add((m.item || '').toLowerCase());
+                    const t = (m.tipo || '').toUpperCase();
+                    const q = Number(m.quantidade) || 1;
+                    if (t.includes('ENTRADA')) {
+                        entradas += q;
+                    } else if (t.includes('SAIDA') || t.includes('SAÍDA')) {
+                        saidas += q;
+                    }
+                });
+
+                return {
+                    entradas,
+                    saidas,
+                    totalItens: distinctItems.size
+                };
+            }, [filteredMovements]);
+
+            // Exportação CSV
+            const handleExportCSV = () => {
+                if (filteredMovements.length === 0) {
+                    alert('Nenhuma movimentação para exportar no período.');
+                    return;
+                }
+                const headers = ['DataHora', 'Item', 'Tipo', 'Quantidade', 'SaldoAnterior', 'SaldoNovo', 'Motivo', 'Responsavel'];
+                const rows = filteredMovements.map(m => [
+                    m.dataHora,
+                    `"${(m.item || '').replace(/"/g, '""')}"`,
+                    m.tipo,
+                    m.quantidade,
+                    m.saldoAnterior,
+                    m.saldoNovo,
+                    `"${(m.motivo || '').replace(/"/g, '""')}"`,
+                    `"${(m.responsavel || '').replace(/"/g, '""')}"`
+                ]);
+                const csvContent = 'data:text/csv;charset=utf-8,﻿' + [headers.join(';'), ...rows.map(e => e.join(';'))].join('\n');
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', `conferencia_almoxarifado_${startDate}_${endDate}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            // Impressão / PDF Oficial da Conferência
+            const handlePrintPDF = async () => {
+                const printContainer = document.createElement('div');
+                printContainer.style.padding = '14px 18px';
+                printContainer.style.background = '#ffffff';
+                printContainer.style.fontFamily = 'Arial, sans-serif';
+                printContainer.style.color = '#000000';
+
+                const rowsHtml = filteredMovements.map((m, idx) => `
+                    <tr style="background:${idx % 2 === 0 ? '#ffffff' : '#f8fafc'}; font-size: 9px;">
+                        <td style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left;">
+                            ${m.dataHora ? `${new Date(m.dataHora).toLocaleDateString('pt-BR')} ${new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : '---'}
+                        </td>
+                        <td style="padding: 4px 6px; border: 1px solid #cbd5e1; font-weight: bold; text-align: left;">${m.item}</td>
+                        <td style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold; color: ${m.tipo === 'ENTRADA' ? '#15803d' : '#b91c1c'};">${m.tipo}</td>
+                        <td style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold;">${m.quantidade}</td>
+                        <td style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left;">${m.motivo}</td>
+                        <td style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left;">${m.responsavel}</td>
+                    </tr>
+                `).join('');
+
+                const horaGeracao = new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
+
+                printContainer.innerHTML = `
+                    <div style="border-bottom: 2px solid #b91c1c; padding-bottom: 8px; margin-bottom: 12px; text-align: center;">
+                        <h4 style="margin: 0; font-size: 11px; font-weight: bold;">CORPO DE BOMBEIROS MILITAR DO ESTADO DO RIO DE JANEIRO</h4>
+                        <h3 style="margin: 2px 0; font-size: 12px; font-weight: 800; color: #b91c1c;">RELATÓRIO OFICIAL DE CONFERÊNCIA DO ALMOXARIFADO MÉDICO</h3>
+                        <h4 style="margin: 2px 0; font-size: 10px; font-weight: bold; color: #334155;">GRUPAMENTO DE OPERAÇÕES AÉREAS • DBM 1 / GOA</h4>
+                        <p style="margin: 4px 0 0; font-size: 9.5px; font-weight: bold;">
+                            Período: ${new Date(startDate + 'T00:00:00').toLocaleDateString('pt-BR')} até ${new Date(endDate + 'T23:59:59').toLocaleDateString('pt-BR')} · Entradas: ${stats.entradas} · Saídas: ${stats.saidas} · Itens: ${stats.totalItens}
+                        </p>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px;">
+                        <thead>
+                            <tr style="background: #f1f5f9; font-size: 9.5px; font-weight: bold;">
+                                <th style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left; width: 18%;">Data/Hora</th>
+                                <th style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left; width: 32%;">Item</th>
+                                <th style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: center; width: 12%;">Tipo</th>
+                                <th style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: center; width: 8%;">Qtd</th>
+                                <th style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left; width: 18%;">Motivo / RAPH</th>
+                                <th style="padding: 4px 6px; border: 1px solid #cbd5e1; text-align: left; width: 12%;">Responsável</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml || '<tr><td colspan="6" style="padding: 10px; text-align: center;">Nada a mostrar no período.</td></tr>'}</tbody>
+                    </table>
+
+                    <div style="margin-top: 24px; border-top: 1px solid #000; padding-top: 6px; font-size: 9px; display: flex; justify-content: space-between;">
+                        <span><strong>Emissão:</strong> ${operator ? `${operator.grad} ${operator.warName} (RG: ${operator.rg})` : 'Oficial Aeromédico'}</span>
+                        <span><strong>Data/Hora:</strong> ${horaGeracao}</span>
+                    </div>
+                `;
+
+                const opt = {
+                    margin: [8, 8, 8, 8],
+                    filename: `Conferencia_Almoxarifado_${startDate}_${endDate}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                await html2pdf().set(opt).from(printContainer).save();
+            };
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white border-2 border-slate-200 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] flex flex-col">
+                        {/* Cabeçalho */}
+                        <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200 shrink-0">
+                            <div>
+                                <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                                    <span className="text-emerald-700">📊</span>
+                                    <span>Conferência do almoxarifado</span>
+                                </h3>
+                                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                                    Histórico de entradas, saídas e movimentações do estoque operacional.
+                                </p>
+                            </div>
+                            <button type="button" onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-slate-800 text-2xl font-black leading-none">×</button>
+                        </div>
+
+                        {/* Filtros De / Até e Só o que se moveu */}
+                        <div className="py-3 shrink-0 flex items-center gap-3 flex-wrap border-b border-slate-100 text-xs">
+                            <div className="flex items-center gap-1.5">
+                                <label className="font-bold text-slate-700">De:</label>
+                                <input
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="bg-white border-2 border-slate-300 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-900 focus:outline-none"
+                                />
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                                <label className="font-bold text-slate-700">Até:</label>
+                                <input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="bg-white border-2 border-slate-300 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-900 focus:outline-none"
+                                />
+                            </div>
+
+                            <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-800 select-none ml-2">
+                                <input
+                                    type="checkbox"
+                                    checked={soOQueSeMoveu}
+                                    onChange={(e) => setSoOQueSeMoveu(e.target.checked)}
+                                    className="w-4 h-4 rounded text-emerald-600 focus:ring-0 cursor-pointer"
+                                />
+                                <span>só o que se moveu</span>
+                            </label>
+                        </div>
+
+                        {/* Indicador de Resumo do Período */}
+                        <div className="py-2.5 shrink-0 px-3 bg-sand-50 rounded-xl border border-sand-200 text-xs font-bold text-slate-800 my-2">
+                            No período: <strong className="text-emerald-800">{stats.entradas} entrada(s)</strong> · <strong className="text-rose-800">{stats.saidas} saída(s)</strong> em <strong className="text-slate-950">{stats.totalItens} item(ns)</strong>.
+                        </div>
+
+                        {/* Tabela de Entradas e Saídas */}
+                        <div className="flex-1 overflow-y-auto custom-scrollbar border-2 border-slate-200 rounded-xl my-1">
+                            {filteredMovements.length === 0 ? (
+                                <div className="p-12 text-center text-slate-500 font-bold text-xs">
+                                    Nada a mostrar no período.
+                                </div>
+                            ) : (
+                                <table className="w-full text-left text-xs border-collapse">
+                                    <thead className="bg-slate-100 text-slate-800 font-black sticky top-0 z-10 border-b border-slate-300 shadow-xs">
+                                        <tr>
+                                            <th className="p-2.5 pl-3">Data / Hora</th>
+                                            <th className="p-2.5">Item</th>
+                                            <th className="p-2.5 text-center">Tipo</th>
+                                            <th className="p-2.5 text-center">Qtd</th>
+                                            <th className="p-2.5">Motivo / RAPH / Destino</th>
+                                            <th className="p-2.5">Responsável</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {filteredMovements.map((m, idx) => (
+                                            <tr key={m.id || idx} className="hover:bg-sand-50/70 transition-colors">
+                                                <td className="p-2.5 pl-3 font-semibold text-slate-600 whitespace-nowrap">
+                                                    {m.dataHora ? `${new Date(m.dataHora).toLocaleDateString('pt-BR')} ${new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : 'Hoje'}
+                                                </td>
+                                                <td className="p-2.5 font-black text-slate-900">
+                                                    {m.item}
+                                                </td>
+                                                <td className="p-2.5 text-center">
+                                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase text-white ${
+                                                        m.tipo === 'ENTRADA' ? 'bg-emerald-700' :
+                                                        m.tipo === 'AJUSTE' ? 'bg-amber-600' :
+                                                        'bg-rose-700'
+                                                    }`}>
+                                                        {m.tipo}
+                                                    </span>
+                                                </td>
+                                                <td className="p-2.5 text-center font-black text-slate-900">
+                                                    {m.quantidade}
+                                                </td>
+                                                <td className="p-2.5 text-slate-700 font-medium">
+                                                    {m.motivo}
+                                                </td>
+                                                <td className="p-2.5 text-slate-600 uppercase font-semibold text-[11px]">
+                                                    {m.responsavel}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+
+                        {/* Botões do Rodapé: Atualizar ⬇, CSV e 🖨 Imprimir */}
+                        <div className="pt-3 border-t-2 border-slate-200 shrink-0 flex items-center justify-between gap-3 flex-wrap">
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setRefreshTick(t => t + 1)}
+                                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-bold text-xs transition-all flex items-center gap-1 shadow-xs"
+                                    title="Atualizar lista de movimentações"
+                                >
+                                    <span>Atualizar</span>
+                                    <span>⬇</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handleExportCSV}
+                                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border-2 border-slate-300 font-bold text-xs transition-all flex items-center gap-1.5 shadow-xs"
+                                    title="Baixar dados em formato CSV compatível com Excel"
+                                >
+                                    <span>📊 CSV</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handlePrintPDF}
+                                    className="px-3.5 py-2 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-900 border-2 border-sand-300 font-bold text-xs transition-all flex items-center gap-1.5 shadow-xs"
+                                    title="Gerar tabela impressa em PDF"
+                                >
+                                    <span>🖨 Imprimir</span>
+                                </button>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-6 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs transition-all shadow-sm"
+                            >
+                                Fechar
+                            </button>
+                        </div>
                     </div>
                 </div>
             );
@@ -9457,6 +10430,20 @@
             const [isSettingsOpen, setIsSettingsOpen] = useState(false);
             const [isNovoItemOpen, setIsNovoItemOpen] = useState(false);
             const [isNovoSocorroOpen, setIsNovoSocorroOpen] = useState(false);
+            const [isPedidoMensalOpen, setIsPedidoMensalOpen] = useState(false);
+            const [isConferenciaOpen, setIsConferenciaOpen] = useState(false);
+            const [almoxMovements, setAlmoxMovements] = useState(() => {
+                try {
+                    const s = localStorage.getItem('sigaero_almox_movements');
+                    return s ? JSON.parse(s) : [];
+                } catch(e) { return []; }
+            });
+            const [pedidosEmitidos, setPedidosEmitidos] = useState(() => {
+                try {
+                    const s = localStorage.getItem('sigaero_pedidos_emitidos');
+                    return s ? JSON.parse(s) : { '2026-10': { data: '14/10/2026', militar: 'Cap BM Méd Petrus' } };
+                } catch(e) { return { '2026-10': { data: '14/10/2026', militar: 'Cap BM Méd Petrus' } }; }
+            });
             const [isHistoricoOpen, setIsHistoricoOpen] = useState(false);
             const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, socorro: null });
             const [editSocorroData, setEditSocorroData] = useState({ isOpen: false, socorro: null });
@@ -9883,6 +10870,49 @@
 
                 showToast(`Estoque atualizado: ${mov.itemName} (${mov.curStock} -> ${mov.newStock})!`);
                 callGAS(scriptUrl, 'moveAlmox', { mov });
+            
+                // Registra movimentação no histórico de conferência
+                const newMovRec = {
+                    id: `MOV-${Date.now()}`,
+                    dataHora: new Date().toISOString(),
+                    itemId: mov.itemId,
+                    itemName: mov.itemName,
+                    tipo: mov.type || 'SAIDA',
+                    quantidade: Number(mov.quantity) || 1,
+                    saldoAnterior: mov.curStock,
+                    saldoNovo: mov.newStock,
+                    motivo: mov.reason || 'Movimentação Almoxarifado',
+                    responsavel: operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico'
+                };
+                setAlmoxMovements(prev => {
+                    const next = [newMovRec, ...prev];
+                    try { localStorage.setItem('sigaero_almox_movements', JSON.stringify(next.slice(0, 500))); } catch(e) {}
+                    return next;
+                });
+            };
+
+            const handleSavePedidoMensal = async (pedidoData) => {
+                if (!pedidoData) return;
+                setPedidosEmitidos(prev => {
+                    const next = {
+                        ...prev,
+                        [pedidoData.competencia]: {
+                            data: new Date().toLocaleDateString('pt-BR'),
+                            militar: operator ? `${operator.grad} ${operator.warName}` : 'Oficial Aeromédico'
+                        }
+                    };
+                    try { localStorage.setItem('sigaero_pedidos_emitidos', JSON.stringify(next)); } catch(e) {}
+                    return next;
+                });
+                showToast(`Pedido mensal da competência ${pedidoData.competencia} gerado com sucesso!`);
+                try {
+                    await callGAS(scriptUrl, 'savePedidoMensal', {
+                        pedido: pedidoData,
+                        operator: operator
+                    });
+                } catch(e) {
+                    console.warn("Erro ao salvar pedido mensal no GAS:", e);
+                }
             };
 
             const handleSaveNovoItem = (newItem) => {
@@ -10008,6 +11038,9 @@
                                     almoxItems={almoxItems}
                                     onOpenMovimento={(item) => setMovModalData({ isOpen: true, item })}
                                     onOpenNovoItem={() => setIsNovoItemOpen(true)}
+                                    onOpenPedidoMensal={() => setIsPedidoMensalOpen(true)}
+                                    onOpenConferencia={() => setIsConferenciaOpen(true)}
+                                    operator={operator}
                                 />
                             )}
 
@@ -10088,6 +11121,24 @@
                         isOpen={isNovoItemOpen}
                         onClose={() => setIsNovoItemOpen(false)}
                         onSave={handleSaveNovoItem}
+                    />
+
+                    <ModalPedidoMensal
+                        isOpen={isPedidoMensalOpen}
+                        onClose={() => setIsPedidoMensalOpen(false)}
+                        almoxItems={almoxItems}
+                        operator={operator}
+                        pedidosEmitidos={pedidosEmitidos}
+                        onSavePedido={handleSavePedidoMensal}
+                    />
+
+                    <ModalConferenciaAlmox
+                        isOpen={isConferenciaOpen}
+                        onClose={() => setIsConferenciaOpen(false)}
+                        almoxItems={almoxItems}
+                        almoxMovements={almoxMovements}
+                        socorrosList={socorrosList}
+                        operator={operator}
                     />
 
                     <ModalNovoSocorro
